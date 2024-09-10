@@ -10,7 +10,7 @@
     "prepack": "chmod +x ./pack.sh && ./pack.sh"
   },
   "devDependencies": {
-    "@types/node": "^22.2.0",
+    "@types/node": "^22.5.4",
     "dc-db-local": "file:../local/dc-db-local-1.0.0.tgz",
     "typescript": "^5.5.4"
   },
