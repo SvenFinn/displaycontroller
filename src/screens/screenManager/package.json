@@ -13,7 +13,7 @@
     "dc-db-local": "file:../../database/local/dc-db-local-1.0.0.tgz",
     "dotenv": "^16.4.5",
     "eventsource": "^2.0.2",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "pino": "^9.3.2",
     "pino-pretty": "^11.2.2"
   },
