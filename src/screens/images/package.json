@@ -14,7 +14,7 @@
     "express": "^4.19.2",
     "express-fileupload": "^1.5.1",
     "pdf2pic": "^3.1.1",
-    "pino": "^9.3.1",
+    "pino": "^9.4.0",
     "pino-pretty": "^11.2.1"
   },
   "devDependencies": {
