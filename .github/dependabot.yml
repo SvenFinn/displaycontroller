@@ -11,3 +11,7 @@ updates:
     target-branch: "development"
     schedule:
       interval: "weekly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
