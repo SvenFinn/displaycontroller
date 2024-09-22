@@ -14,7 +14,7 @@
     "dotenv": "^16.4.5",
     "eventsource": "^2.0.2",
     "express": "^4.19.2",
-    "jsdom": "^24.1.0",
+    "jsdom": "^25.0.1",
     "pino": "^9.3.1",
     "pino-pretty": "^11.2.1"
   },
