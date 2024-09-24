@@ -12,12 +12,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^5.19.1",
+    "@prisma/client": "^5.20.0",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@types/node": "^22.1.0",
-    "prisma": "^5.19.1",
+    "@types/node": "^22.6.1",
+    "prisma": "^5.20.0",
     "typescript": "^5.5.4"
   },
   "files": [
