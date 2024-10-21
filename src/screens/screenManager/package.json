@@ -14,8 +14,8 @@
     "dotenv": "^16.4.5",
     "eventsource": "^2.0.2",
     "express": "^4.21.1",
-    "pino": "^9.3.2",
-    "pino-pretty": "^11.2.2"
+    "pino": "^9.5.0",
+    "pino-pretty": "^11.3.0"
   },
   "devDependencies": {
     "@types/eventsource": "^1.1.15",
