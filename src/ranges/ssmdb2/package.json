@@ -16,7 +16,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "amqplib": "^0.10.4",
+    "amqplib": "^0.10.5",
     "dc-db-local": "file:../../database/local",
     "dc-db-ssmdb2": "file:../../database/ssmdb2",
     "dc-logger": "file:../../logger",

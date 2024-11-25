@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "amqplib": "^0.10.4",
+    "amqplib": "^0.10.5",
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dotenv": "^16.4.5",
