@@ -10,15 +10,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "amqplib": "^0.10.4",
+    "amqplib": "^0.10.5",
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dc-ranges-ttl": "file:../ttl",
     "dotenv": "^16.4.5",
-    "eventsource": "^2.0.2"
+    "eventsource": "^3.0.1"
   },
   "devDependencies": {
-    "@types/amqplib": "^0.10.5",
+    "@types/amqplib": "^0.10.6",
     "@types/eventsource": "^1.1.15",
     "@types/node": "^22.7.5",
     "tsc-alias": "^1.8.10",
