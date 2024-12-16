@@ -19,6 +19,6 @@
     "dc-db-smdb": "file:../database/smdb",
     "dc-logger": "file:../logger",
     "dotenv": "^16.4.5",
-    "eventsource": "^2.0.2"
+    "eventsource": "^3.0.2"
   }
 }

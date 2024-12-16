@@ -15,7 +15,7 @@
     "dc-logger": "file:../../logger",
     "dc-ranges-ttl": "file:../ttl",
     "dotenv": "^16.4.5",
-    "eventsource": "^3.0.1"
+    "eventsource": "^3.0.2"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.6",

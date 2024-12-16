@@ -24,7 +24,7 @@
     "node": ">=16.13"
   },
   "dependencies": {
-    "eventsource": "^3.0.1",
+    "eventsource": "^3.0.2",
     "pino": "^9.5.0"
   }
 }

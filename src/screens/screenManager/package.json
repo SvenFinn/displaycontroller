@@ -14,7 +14,7 @@
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dotenv": "^16.4.5",
-    "eventsource": "^3.0.1",
+    "eventsource": "^3.0.2",
     "express": "^4.21.2"
   },
   "devDependencies": {
