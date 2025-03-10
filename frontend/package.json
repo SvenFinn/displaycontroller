@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.6.0",
+    "@reduxjs/toolkit": "^2.6.1",
     "next": "^15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -17,7 +17,7 @@
     "smallest-enclosing-circle": "^1.0.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@types/smallest-enclosing-circle": "^1.0.3",
