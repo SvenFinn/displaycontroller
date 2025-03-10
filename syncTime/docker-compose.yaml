@@ -1,7 +1,7 @@
 services:
   dc-sync-time:
     container_name: dc-sync-time
-    image: ghcr.io/svenfinn/dc-sync-time
+    image: ghcr.io/svenfinn/dc-sync-time:${APP_VERSION}
     hostname: sync-time
     restart: unless-stopped
     build:

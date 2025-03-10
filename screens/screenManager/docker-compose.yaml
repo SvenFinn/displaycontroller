@@ -1,7 +1,7 @@
 services:
   dc-screens-man:
     container_name: dc-screens-man
-    image: ghcr.io/svenfinn/dc-screens-man
+    image: ghcr.io/svenfinn/dc-screens-man:${APP_VERSION}
     hostname: screens-manager
     restart: unless-stopped
     networks:

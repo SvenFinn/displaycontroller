@@ -62,7 +62,6 @@ jobs:
           MULTICAST_MSG_MIN_LENGTH: ${{ vars.MULTICAST_MSG_MIN_LENGTH }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
           APP_PORT: ${{ vars.APP_PORT }}
-          APP_PATH: ${{ vars.APP_PATH }}
           SELF_DB_HOST: ${{ vars.SELF_DB_HOST }}
           SELF_DB_USER: ${{ vars.SELF_DB_USER }}
           SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
@@ -85,7 +84,6 @@ jobs:
           echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
           echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args
           echo "APP_PORT=$APP_PORT" >> /tmp/args
-          echo "APP_PATH=$APP_PATH" >> /tmp/args
           echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
@@ -114,10 +112,10 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      #- name: Install yq
-      #  run: |
-      #    sudo apt-get update
-      #    sudo apt-get install yq jq -y
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq -y
 
       - name: Determine services
         id: services
@@ -140,10 +138,10 @@ jobs:
         service: ${{fromJson(needs.prep-matrix.outputs.matrix)}}
 
     steps:
-      #- name: Install yq
-      #  run: |
-      #    sudo apt-get update
-      #    sudo apt-get install yq jq -y
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq -y
 
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -159,7 +157,7 @@ jobs:
 
           config=$(docker compose config --format json ${{ matrix.service }} 2>/dev/null | jq -r '.services."${{ matrix.service }}"')
           echo $config
-          image=$(echo "$config" | jq -r -c .image)
+          image=$(echo "$config" | jq -r -c .image | cut -d':' -f1)
           context=$(echo "$config" | jq -r -c .build.context)
           dockerfile=$(echo "$config" | jq -r -c .build.dockerfile)
           if [ "$(echo "$config" | jq -r -c '.build.args')" = "null" ]; then
@@ -215,7 +213,7 @@ jobs:
           cache-to: type=gha,mode=max
           push: true
 
-  generate-compose:
+  generate-release:
     runs-on: ubuntu-latest
     needs: prep-args
 
@@ -228,20 +226,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install yq jq -y
 
-      - name: Generate docker-compose.yml
+      - name: Generate release tarball
         run: |
-          cd scripts
+          cd release
           args=$(echo "${{ needs.prep-args.outputs.args }}" | base64 --decode)
           for arg in $args; do
             export $arg
             echo "$arg"
           done
           echo "APP_VERSION=$APP_VERSION"
-          echo "APP_PATH=$APP_PATH"
-          ./generate-prod-compose.sh "$APP_VERSION" "$APP_PATH"
+          ./generate-release.sh "$APP_VERSION"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: docker-compose
-          path: scripts/docker-compose.yaml
+          name: release
+          path: release/displaycontroller-*.tar.xz

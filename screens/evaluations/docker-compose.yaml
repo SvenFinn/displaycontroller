@@ -1,7 +1,7 @@
 services:
   dc-evaluations:
     hostname: evaluations
-    image: ghcr.io/svenfinn/dc-evaluations
+    image: ghcr.io/svenfinn/dc-evaluations:${APP_VERSION}
     container_name: dc-evaluations
     restart: unless-stopped
     networks:

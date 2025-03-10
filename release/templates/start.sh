@@ -2,8 +2,14 @@
 
 cd "$(dirname "$0")"
 
-PROXY_NAME="dc-reverse-proxy"
-APP_PORT=${APP_PORT:-80}
+PROXY_NAME="%PROXY_NAME%"
+APP_PORT="%APP_PORT%"
+
+if [ -e ".REQ_UPDATE" ]; then
+    rm .REQ_UPDATE
+    export REBOOT=1
+    ./update.sh
+fi
 
 export COMPOSE_MENU=0
 

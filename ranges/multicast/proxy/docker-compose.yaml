@@ -1,7 +1,7 @@
 services:
   dc-ranges-multicast-proxy:
     container_name: dc-ranges-multicast-proxy
-    image: ghcr.io/svenfinn/dc-ranges-multicast-proxy
+    image: ghcr.io/svenfinn/dc-ranges-multicast-proxy:${APP_VERSION}
     network_mode: host
     restart: unless-stopped
     build:

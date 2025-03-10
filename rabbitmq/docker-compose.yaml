@@ -1,7 +1,7 @@
 services:
   dc-rabbitmq:
     container_name: dc-rabbitmq
-    image: ghcr.io/svenfinn/dc-rabbitmq
+    image: ghcr.io/svenfinn/dc-rabbitmq:${APP_VERSION}
     hostname: rabbitmq
     restart: unless-stopped
     build:

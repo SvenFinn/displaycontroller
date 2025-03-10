@@ -2,7 +2,7 @@ services:
   dc-check-server:
     container_name: dc-check-server
     hostname: check-server
-    image: ghcr.io/svenfinn/dc-check-server
+    image: ghcr.io/svenfinn/dc-check-server:${APP_VERSION}
     restart: unless-stopped
     networks:
       - displaycontroller
