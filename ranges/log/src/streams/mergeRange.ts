@@ -25,7 +25,7 @@ export class RangeMerger extends Transform {
             where: {
                 key: "FREE_RANGE_SHOT_TIMEOUT",
             }
-        })).numValue || 30 * 60) * 1000;
+        })).numValue || 30 * 60 * 1000);
     }
 
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
