@@ -108,7 +108,8 @@ function install_finished(){
         --begin $success_top 0 --title "\Z2Installation finished\Zn" --msgbox "The installation was finished successfully.\n\nThe Displaycontroller can be started from the application menu.$autostart_text" $success_height $width
     ) 
 
-    dialog "${dialog_options[@]}" 
+    dialog "${dialog_options[@]}"
+    clear
 
     exit 0
 }
@@ -166,6 +167,11 @@ fi
 
 # Run the installation steps
 total_steps=5
+
+if [ "$AUTO_START" -eq 1 ]; then
+    total_steps=$((total_steps+1))
+fi
+
 step_nr=1
 
 run_install_step $((step_nr++)) $total_steps "Installing Files" <<EOF
@@ -202,6 +208,12 @@ if [ $AUTOSTART -eq 1 ]; then
     echo "Linked DisplayController.desktop to /home/$USER/.config/autostart/DisplayController.desktop"
 fi
 EOF
+
+if [ "$AUTO_START" -eq 1 ]; then
+    run_install_step $((step_nr++)) $total_steps "Adding update script to sudoers" <<EOF
+echo "$USER ALL=(ALL) NOPASSWD: $INSTALL_DIR/update.sh, NOPASSWD: /usr/bin/true" > /etc/sudoers.d/displaycontroller
+EOF
+fi
 
 run_install_step $((step_nr++)) $total_steps "Installing Docker" <<EOF
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done

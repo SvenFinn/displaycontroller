@@ -28,6 +28,7 @@ function update_finished(){
                  --and-widget --colors --begin $reboot_top 0 --title "Rebooting..." --no-cancel --pause "Rebooting..." $reboot_height $width 10
         reboot
     fi
+    clear
     exit 0
 }
 
