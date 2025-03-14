@@ -1,0 +1,20 @@
+svg.rangeDraw {
+
+    text.text {
+        text-anchor: middle;
+        alignment-baseline: middle;
+        dominant-baseline: middle;
+        stroke-width: 0;
+    }
+
+    polygon.countsCorner {
+        fill: black;
+    }
+
+    circle.targetCircle {
+        fill: none;
+        stroke: yellow;
+    }
+
+
+}

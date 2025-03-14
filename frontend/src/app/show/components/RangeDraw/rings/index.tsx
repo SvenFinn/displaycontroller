@@ -10,7 +10,7 @@ export default function Rings({ layout, color }: RingsProps): React.JSX.Element 
     if (!layout) return <></>;
     const layoutCopy = layout.slice().reverse();
     return (
-        <g fill={color} stroke="black">
+        <g>
             {layoutCopy.map((ring, index) => (
                 <Ring key={index} ring={ring} printText={index < layoutCopy.length - 2} nextDiameter={layoutCopy[index + 1]?.diameter} color={color} />
             ))}

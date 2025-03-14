@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Rings from "./rings";
 import Hits from "./hits";
 import CountsCorner from "./CountsCorner";
+import styles from "./rangeDraw.module.css";
 
 interface DrawRangeProps {
     range: Range
@@ -44,7 +45,7 @@ export default function DrawRange({ range, className }: DrawRangeProps): React.J
     const viewBox = `${-size[0] / 2} ${-size[1] / 2} ${size[0]} ${size[1]}`;
 
     return (
-        <svg ref={ref} className={className} viewBox={viewBox} strokeWidth={strokeWidth}>
+        <svg ref={ref} className={`${className} ${styles.rangeDraw}`} viewBox={viewBox} strokeWidth={strokeWidth}>
             <Rings layout={layout} color={range.discipline.color} />
             <CountsCorner counts={round.counts} size={size} />
             <Hits range={range} strokeWidth={strokeWidth} />

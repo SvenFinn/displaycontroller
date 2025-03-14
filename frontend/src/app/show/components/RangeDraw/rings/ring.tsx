@@ -1,5 +1,6 @@
-import { DisciplineLayoutRing } from "@shared/ranges/discipline/layout"
+import { DisciplineLayoutRing } from "@shared/ranges/discipline/layout";
 import { idealTextColor } from "../../../lib/idealTextColor";
+import styles from "../rangeDraw.module.css";
 
 interface RingsProps {
     ring: DisciplineLayoutRing,
@@ -13,11 +14,11 @@ export default function Ring({ ring, nextDiameter, printText, color }: RingsProp
     const textColor = idealTextColor(ring.colored ? color : "#FFFFFF");
     return (
         <g key={ring.value}>
-            <circle cx="0" cy="0" r={ring.diameter * 50} fill={!ring.colored ? "#FFFFFF" : ""} stroke={textColor} />
-            {printText && <text x="0" y={ring.diameter * 50 - fontSize} textAnchor="middle" dominantBaseline="middle" strokeWidth={0} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
-            {printText && <text x={ring.diameter * 50 - fontSize} y="0" textAnchor="middle" dominantBaseline="middle" strokeWidth={0} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
-            {printText && <text x="0" y={-ring.diameter * 50 + fontSize} textAnchor="middle" dominantBaseline="middle" strokeWidth={0} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
-            {printText && <text x={-ring.diameter * 50 + fontSize} y="0" textAnchor="middle" dominantBaseline="middle" strokeWidth={0} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
+            <circle cx="0" cy="0" r={ring.diameter * 50} fill={!ring.colored ? "#FFFFFF" : color} stroke={textColor} />
+            {printText && <text x="0" y={ring.diameter * 50 - fontSize} className={styles.text} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
+            {printText && <text x={ring.diameter * 50 - fontSize} y="0" className={styles.text} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
+            {printText && <text x="0" y={-ring.diameter * 50 + fontSize} className={styles.text} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
+            {printText && <text x={-ring.diameter * 50 + fontSize} y="0" className={styles.text} fill={textColor} fontSize={fontSize}>{ring.value}</text>}
         </g>
     )
 }

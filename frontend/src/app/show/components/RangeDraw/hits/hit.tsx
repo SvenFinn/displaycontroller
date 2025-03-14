@@ -1,5 +1,6 @@
 import { Hit } from "@shared/ranges/hits";
 import { idealTextColor } from "../../../lib/idealTextColor";
+import styles from "../rangeDraw.module.css";
 
 interface HitProps {
     hit: Hit,
@@ -13,7 +14,7 @@ export default function DrawHit({ hit, gauge, isLatest }: HitProps): React.JSX.E
     return (
         <g key={hit.id}>
             <circle cx={hit.x * 100} cy={-hit.y * 100} r={gauge * 50} fill={color} stroke={textColor} />
-            <text x={hit.x * 100} y={-hit.y * 100} fontSize={gauge * 50} textAnchor="middle" dominantBaseline="central" fill={textColor}>
+            <text x={hit.x * 100} y={-hit.y * 100} fontSize={gauge * 50} className={styles.text} fill={textColor}>
                 {hit.id}
             </text>
         </g>
