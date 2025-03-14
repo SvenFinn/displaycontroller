@@ -17,6 +17,8 @@ services:
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
+    volumes:
+      - evaluations_data:/app/evaluations
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully
@@ -24,3 +26,6 @@ services:
         condition: service_started
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
+
+volumes:
+  evaluations_data:

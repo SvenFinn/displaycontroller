@@ -22,9 +22,6 @@ services:
         - logger=../../logger
     networks:
       - displaycontroller
-    #volumes:
-    #  - /etc/timezone:/etc/timezone:ro
-    #  - /etc/localtime:/etc/localtime:ro
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully

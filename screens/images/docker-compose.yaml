@@ -12,7 +12,10 @@ services:
       additional_contexts:
         - logger=../../logger
     volumes:
-      - "./files:/app/files"
+      - images_data:/app/files
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
       - SCREEN_RESOLUTION=${SCREEN_RESOLUTION}
+
+volumes:
+  images_data:
