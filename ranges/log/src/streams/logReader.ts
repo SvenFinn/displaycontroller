@@ -14,14 +14,13 @@ export class logReaderStream extends Duplex {
         this.localClient = prisma;
     }
 
-    _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
-        const serverState = chunk as boolean;
-        if (serverState == this.serverState) {
+    _write(chunk: boolean, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+        if (chunk == this.serverState) {
             callback();
             return;
         }
-        logger.info("Server state changed", serverState);
-        this.serverState = serverState;
+        logger.info("Server state changed", chunk);
+        this.serverState = chunk;
         this.startSSH();
         callback();
     }

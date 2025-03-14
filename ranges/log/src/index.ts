@@ -12,6 +12,7 @@ import { RangeMerger } from "./streams/mergeRange";
 import { AccumulateRanges } from "./streams/accumulateRanges";
 import { DebounceStream } from "./streams/debounce";
 import { RabbitSenderStream } from "./streams/rabbitSender";
+import { MulticastAccumulate } from "./streams/multicastAcc";
 
 
 async function main() {
@@ -19,18 +20,18 @@ async function main() {
     const connection = await amqp.connect("amqp://rabbitmq");
     const localClient = new LocalClient();
 
+    const merger = new RangeMerger(localClient);
+
     const serverState = new ServerStateStream();
     const logReader = new logReaderStream(localClient);
     const logParser = new LogParserStream();
     const accumulateRanges = new AccumulateRanges();
     const debounceRanges = new DebounceStream(300);
-    serverState.pipe(logReader).pipe(logParser).pipe(accumulateRanges).pipe(debounceRanges);
+    serverState.pipe(logReader).pipe(logParser).pipe(accumulateRanges).pipe(debounceRanges).pipe(merger);
 
     const multicastRecv = new MulticastStream(connection);
-
-    const merger = new RangeMerger(localClient);
-    accumulateRanges.on("data", (data) => merger.write(data));
-    multicastRecv.on("data", (data) => merger.write(data));
+    const multicastAccumulate = new MulticastAccumulate();
+    multicastRecv.pipe(multicastAccumulate).pipe(merger);
 
     const sender = new RabbitSenderStream(connection);
     merger.pipe(sender);

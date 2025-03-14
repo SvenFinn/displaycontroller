@@ -42,3 +42,7 @@ export type LogInternalRange = InternalRange & {
     targetId: number
     last_update: Date
 }
+
+export type MulticastInternalRange = InternalRange & {
+    onRangeSince: Date
+}

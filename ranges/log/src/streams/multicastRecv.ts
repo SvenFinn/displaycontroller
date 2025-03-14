@@ -3,7 +3,6 @@ import { ChannelModel } from "amqplib";
 import { logger } from "dc-logger";
 import { Readable } from "stream";
 
-
 export class MulticastStream extends Readable {
 
     constructor(connection: ChannelModel) {

@@ -20,7 +20,7 @@ export class RabbitSenderStream extends Writable {
         });
     }
 
-    _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+    _write(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
         if (this.channel === null) {
             logger.error("Channel not connected");
             callback();

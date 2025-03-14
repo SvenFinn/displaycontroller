@@ -11,16 +11,15 @@ export class DebounceStream extends Transform {
         this.debounceTime = debounceTime;
     }
 
-    _transform(chunk: any, encoding: BufferEncoding, callback: TransformCallback): void {
-        const range = chunk as InternalRange;
-        logger.debug(`Debouncing range ${range.rangeId}`);
-        if (this.ranges.has(range.rangeId)) {
-            clearTimeout(this.ranges.get(range.rangeId)!);
+    _transform(chunk: InternalRange, encoding: BufferEncoding, callback: TransformCallback): void {
+        logger.debug(`Debouncing range ${chunk.rangeId}`);
+        if (this.ranges.has(chunk.rangeId)) {
+            clearTimeout(this.ranges.get(chunk.rangeId)!);
         }
-        this.ranges.set(range.rangeId,
+        this.ranges.set(chunk.rangeId,
             setTimeout(() => {
-                this.push(range);
-                this.ranges.delete(range.rangeId);
+                this.push(chunk);
+                this.ranges.delete(chunk.rangeId);
             }, this.debounceTime)
         );
         callback();
