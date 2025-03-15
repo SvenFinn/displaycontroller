@@ -5,6 +5,7 @@ import evaluation from "./evaluation";
 import evaluationGallery from "./evaluationGallery";
 import imageViewer from "./imageViewer";
 import { logger } from "dc-logger";
+import systemMessage from "./systemMessage";
 
 export async function resolvePreset(screen: DbScreen): Promise<Array<Screen> | undefined> {
     switch (screen.preset) {
@@ -18,6 +19,8 @@ export async function resolvePreset(screen: DbScreen): Promise<Array<Screen> | u
             return await evaluationGallery(screen);
         case "drawTarget":
             return await drawTarget(screen);
+        case "systemMessage":
+            return await systemMessage(screen);
         default:
             const screenWType = screen as any;
             logger.warn(`Screen ${screenWType?.id || "unknown"} has an unknown preset ${screenWType?.preset || "unknown"}`);

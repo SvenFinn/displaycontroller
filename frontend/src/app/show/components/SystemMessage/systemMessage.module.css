@@ -3,4 +3,5 @@ div.systemMessage {
     width:100%;
     height: 100%;
     color: black;
+    text-align: center;
 }

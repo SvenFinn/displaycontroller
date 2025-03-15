@@ -1,9 +1,10 @@
 import { LocalClient } from "dc-db-local";
-import { isScreen, Screen } from "@shared/screens";
+import { isDbScreen, isScreen, Screen } from "@shared/screens";
 import { logger } from "dc-logger";
 import { sendSSEResponse } from "../server";
-import { loadNextScreen, loadScreen } from "./screens";
+import { loadNextScreen } from "./screens";
 import amqp from "amqplib"
+import { resolvePreset } from "./presets";
 
 const localClient: LocalClient = new LocalClient();
 
@@ -44,7 +45,20 @@ export async function gotoScreen(id: number, subId: number = 0) {
         clearTimeout(screenTimeout);
         screenTimeout = undefined;
     }
-    nextScreenList = await loadScreen(localClient, id);
+    const nextScreen = await localClient.screens.findFirst({
+        where: {
+            id: id
+        }
+    });
+    if (!nextScreen) {
+        logger.warn(`Screen ${id} not found`);
+        return
+    }
+    if (!isDbScreen(nextScreen)) {
+        logger.warn(`Screen ${id} is not a valid screen`);
+        return
+    }
+    nextScreenList = await resolvePreset(nextScreen) || [];
     if (nextScreenList.length <= subId) {
         subId = 0;
     }

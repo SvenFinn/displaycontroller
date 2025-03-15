@@ -1,0 +1,8 @@
+div.invalidScreen {
+    font-size:6vmin;
+    text-align:center;
+}
+
+div.invalidScreen p {
+    padding-top: 3%;
+}
