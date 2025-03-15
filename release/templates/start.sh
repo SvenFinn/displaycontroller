@@ -18,7 +18,7 @@ echo "Screen resolution is $screen_res"
 export SCREEN_RESOLUTION=$screen_res
 
 # Stop the containers if they are running
-docker compose stop
+docker compose down
 
 # Start the containers
 docker compose up --remove-orphans --no-build&
@@ -52,11 +52,12 @@ chromium-browser \
  --disable-gaia-services --gaia-url=http://0.0.0.0 \
  --disable-cache --disk-cache-dir=/dev/null --disk-cache-size=1 \
  --enable-logging --v=1 \
+ --password-store=basic \
     http://localhost:$APP_PORT/show
 
 # After chromium is closed, kill unclutter and the script
 killall unclutter
 
 # Stop the containers
-docker compose stop
+docker compose down
 

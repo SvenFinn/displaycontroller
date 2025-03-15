@@ -148,7 +148,7 @@ EOF
 
 run_update_step $((step_nr++)) $total_steps "Pruning docker images" <<EOF
 export COMPOSE_MENU=0
-docker compose stop
+docker compose down
 docker image prune -f
 EOF
 
