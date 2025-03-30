@@ -35,7 +35,7 @@ async function createFileList(path: string): Promise<string[]> {
         if (!contentType.includes("application/json")) return [];
         const fileList = await files.json();
         if (!isDirectoryListing(fileList)) return [];
-        return flattenFileList(fileList);
+        return flattenFileList(fileList, path);
     } catch (e) {
         logger.error(`Failed to fetch files for path ${path}`);
         return [];
