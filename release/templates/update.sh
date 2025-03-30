@@ -7,8 +7,21 @@ cd "$(dirname "$0")"
 APP_VERSION="%APP_VERSION%"
 GITHUB_REPO="%GITHUB_REPO%"
 
-REBOOT=${REBOOT:-0}
 BACK_TITLE="Displaycontroller Update ${APP_VERSION}"
+
+REBOOT=0
+
+for arg in "$@"; do
+    case "$arg" in
+        --reboot)
+            REBOOT=1
+            ;;
+        *)
+            echo "Unknown argument: $arg"
+            exit 1
+            ;;
+    esac
+done
 
 function update_finished(){
     local width=`tput cols`

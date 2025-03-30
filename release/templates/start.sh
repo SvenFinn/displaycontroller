@@ -5,10 +5,9 @@ cd "$(dirname "$0")"
 PROXY_NAME="%PROXY_NAME%"
 APP_PORT="%APP_PORT%"
 
-if [ -e ".REQ_UPDATE" ]; then
-    rm .REQ_UPDATE
-    export REBOOT=1
-    ./update.sh
+if [ -e ".UPDATE" ]; then
+    rm -f .UPDATE
+    ./update.sh --reboot
 fi
 
 export COMPOSE_MENU=0
