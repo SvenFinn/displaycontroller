@@ -18,9 +18,9 @@ services:
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
-        - EVALUATIONS_VOLUME_PATH=${EVALUATIONS_VOLUME_PATH}
+        - EVALUATIONS_VOLUME_PATH=/app/html
     volumes:
-      - evaluations_data:${EVALUATIONS_VOLUME_PATH}
+      - evaluations_data:/app/html
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully
