@@ -134,7 +134,7 @@ fi
 
 SRC_DIR="$(realpath "$(dirname "$0")")"
 INSTALL_DIR=$(pwd)
-USER=${$SUDO_USER:-$(id -nu $PKEXEC_UID)}
+USER=${SUDO_USER:-$(id -nu $PKEXEC_UID)}
 
 
 # Check if the DisplayController.desktop file exists in the users autostart directory
@@ -168,7 +168,7 @@ fi
 # Run the installation steps
 total_steps=5
 
-if [ "$AUTO_START" -eq 1 ]; then
+if [ "$AUTOSTART" -eq 1 ]; then
     total_steps=$((total_steps+1))
 fi
 
@@ -179,6 +179,8 @@ mkdir -p "$INSTALL_DIR"
 find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rfv {} +
 find "$SRC_DIR" -mindepth 1 -maxdepth 1 -exec cp -rv {} "$INSTALL_DIR" \;
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod -v +x {} \;
+chown -R $USER "$INSTALL_DIR"
+
 EOF
 
 run_install_step $((step_nr++)) $total_steps "Creating links" <<EOF
@@ -209,14 +211,19 @@ if [ $AUTOSTART -eq 1 ]; then
 fi
 EOF
 
-if [ "$AUTO_START" -eq 1 ]; then
-    run_install_step $((step_nr++)) $total_steps "Adding update script to sudoers" <<EOF
+if [ "$AUTOSTART" -eq 1 ]; then
+    run_install_step $((step_nr++)) $total_steps "Installing autostart" <<EOF
+mkdir -p "/home/$USER/.config/autostart"
+rm -f "/home/$USER/.config/autostart/DisplayController.desktop" || true
+ln -s "$INSTALL_DIR/DisplayController.desktop" "/home/$USER/.config/autostart/DisplayController.desktop"
+echo "Linked DisplayController.desktop to /home/$USER/.config/autostart/DisplayController.desktop"
 echo "$USER ALL=(ALL) NOPASSWD: $INSTALL_DIR/update.sh, NOPASSWD: /usr/bin/true" > /etc/sudoers.d/displaycontroller
+echo "Added $USER to sudoers"
 EOF
 fi
 
 run_install_step $((step_nr++)) $total_steps "Installing Docker" <<EOF
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove \$pkg; done
 
 # Add Docker's official GPG key:
 apt-get update
@@ -227,8 +234,8 @@ chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add the repository to Apt sources:
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  "deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  \$(. /etc/os-release && echo "\${UBUNTU_CODENAME:-\$VERSION_CODENAME}") stable" | \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
 
