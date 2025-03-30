@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "nodemon src/index.ts",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "author": "Sven Finn",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "@types/express": "^5.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.13.9",
+    "tsc-alias": "^1.8.11",
     "typescript": "^5.8.2"
   },
   "prisma": {

@@ -30,14 +30,11 @@ WORKDIR /app/screens/screenManager
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
 
-WORKDIR /app/screens/images
-COPY --from=images . .
-
-WORKDIR /app/screens/evaluations
-COPY --from=evaluations . .
-
 WORKDIR /app/ranges/types
 COPY --from=ranges . .
+
+WORKDIR /app/screens/types
+COPY --from=screen-types . .
 
 WORKDIR /app/screens/screenManager
 

@@ -6,11 +6,8 @@
         "strict": true,
         "outDir": "./dist",
         "paths": {
-            "@shared/images": [
-                "../images/types"
-            ],
-            "@shared/evaluations": [
-                "../evaluations/types"
+            "@shared/files": [
+                "../types/file"
             ],
             "@shared/screens": [
                 "./types"

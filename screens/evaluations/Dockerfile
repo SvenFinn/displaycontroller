@@ -27,6 +27,9 @@ RUN npm i --omit=dev --loglevel=info --install-links;
 
 FROM local-deps AS build
 
+WORKDIR /app/screens/types
+COPY --from=screen-types . .
+
 WORKDIR /app/screens/evaluations
 
 COPY package.json package-lock.json ./
@@ -38,6 +41,8 @@ RUN npm run build && \
 
 FROM base AS final
 
+WORKDIR /app
+
 RUN apk add --no-cache samba-client
 
 COPY --from=build /app/screens/evaluations/dist ./
@@ -48,4 +53,4 @@ EXPOSE 80
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "src/index.js"]
+CMD ["node", "/app/evaluations/src/index.js"]

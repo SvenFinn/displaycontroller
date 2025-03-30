@@ -11,10 +11,9 @@ services:
       dockerfile: ./Dockerfile
       additional_contexts:
         - local-db=../../database/local
-        - images=../images
-        - evaluations=../evaluations
         - ranges=../../ranges/types
         - logger=../../logger
+        - screen-types=../types
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}

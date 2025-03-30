@@ -5,6 +5,11 @@
         "moduleResolution": "NodeNext",
         "strict": true,
         "outDir": "./dist",
+        "paths": {
+            "@shared/files": [
+                "../types/file"
+            ],
+        }
     },
     "include": [
         "src/**/*.ts"

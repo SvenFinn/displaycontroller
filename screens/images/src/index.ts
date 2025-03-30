@@ -2,10 +2,20 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
-import { DirectoryListing } from "../types";
+import { scanDirectory } from "@shared/files";
 import { logger } from "dc-logger";
 
 const basePath = `/app/files`;
+
+if (!fs.existsSync(basePath)) {
+    logger.debug("Creating base path");
+    fs.mkdirSync(basePath, { recursive: true });
+}
+if (!fs.existsSync(`${basePath}/icon.png`)) {
+    logger.debug("Creating icon.png");
+
+    fs.copyFileSync(`${__dirname}/img/icon.png`, `${basePath}/icon.png`);
+}
 
 const app: Express = express();
 app.use(fileUpload({
@@ -13,33 +23,28 @@ app.use(fileUpload({
     useTempFiles: true,
 }));
 
-app.get("/api/images/?*", (req: Request, res) => {
+app.get("/api/images/?*", async (req: Request, res) => {
     logger.info(`GET ${req.params[0]}`);
     if (req.params[0].includes("..")) {
         logger.info("Found .. in path");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return;
     }
     const path = `${basePath}/${req.params[0]}`;
     if (!fs.existsSync(path)) {
         logger.info("File not found");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return
     }
     if (fs.lstatSync(path).isDirectory()) {
         logger.info("Scanning directory");
-        const files = fs.readdirSync(path);
-        const response: DirectoryListing = files.map((file) => {
-            return {
-                name: file,
-                type: fs.lstatSync(`${path}/${file}`).isDirectory() ? "folder" : "file"
-            }
-        });
-        res.status(200).send(response);
+        res.status(200).send(await scanDirectory(path));
+        return;
     } else {
         res.status(200).sendFile(path);
     }
 });
+
 
 async function handleFiles(files: fileUpload.FileArray, path: string) {
     for (const [key, file] of Object.entries(files)) {

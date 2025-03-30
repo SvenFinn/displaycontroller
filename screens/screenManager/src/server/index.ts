@@ -72,6 +72,7 @@ app.post('/api/screens/next(/)?', (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).send('Internal server error');
     }
+    res.end();
 });
 
 app.get('/api/screens/:screenId(/)?', async (req: Request, res: Response) => {
