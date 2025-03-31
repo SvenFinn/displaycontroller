@@ -14,7 +14,7 @@
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
