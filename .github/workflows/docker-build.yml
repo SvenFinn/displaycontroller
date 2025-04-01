@@ -73,9 +73,7 @@ jobs:
           echo "SELF_DB_PASS=$SELF_DB_PASS" >> /tmp/args
           echo "SELF_DB_NAME=$SELF_DB_NAME" >> /tmp/args
           echo "MIN_MEYTON_VERSION=$MIN_MEYTON_VERSION" >> /tmp/args
-          echo "MIN_MEYTON_VERSION_STR=$MIN_MEYTON_VERSION_STR" >> /tmp/args
           echo "MAX_MEYTON_VERSION=$MAX_MEYTON_VERSION" >> /tmp/args
-          echo "MAX_MEYTON_VERSION_STR=$MAX_MEYTON_VERSION_STR" >> /tmp/args
           echo "MEYTON_SSH_USER=$MEYTON_SSH_USER" >> /tmp/args
           echo "MEYTON_SSH_PASS=$MEYTON_SSH_PASS" >> /tmp/args
           echo "MEYTON_DB_USER=$MEYTON_DB_USER" >> /tmp/args

@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { LocalClient } from "dc-db-local";
 import { AdvServerState } from "./types";
 import { logger } from "dc-logger";
+import semver from "semver";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,11 +27,8 @@ export async function checkServiceAvailability(): Promise<AdvServerState> {
             online: false
         };
     }
-    const commands = 'echo "[VERSION]";' +
-        'cat /etc/meyton/shootmaster.version | grep -P "Date=";' +
-        'cat /etc/meyton/shootmaster.version | grep -P "Version=";' +
-        'echo "[DAEMONS]";' +
-        'cat /etc/meyton/shootmasterd.cfg | grep -P "RealServerDaemons=";';
+    const commands = 'echo -n "Version=" && sed -n "s/^Version=//p" /etc/meyton/shootmaster.version &&' +
+        'echo -n "Services=" && sed -n "s/^RealServerDaemons=//p" /etc/meyton/shootmasterd.cfg';
     let output = "";
     try {
         output = execSync(`sshpass -p "${process.env.MEYTON_SSH_PASS}" ssh -o ConnectTimeout=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${process.env.MEYTON_SSH_USER}@${server} '${commands}'`, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
@@ -49,31 +47,18 @@ export async function checkServiceAvailability(): Promise<AdvServerState> {
             ssmdb2: false
         }
     };
-    let key = "", linesSinceKey = 0;
     for (let i = 0; i < outLines.length; i++) {
-        linesSinceKey++;
-        if (outLines[i].match(/^\[.*\]/gi)) {
-            key = outLines[i].replace(/\[|\]/gi, "").toLowerCase();
-            linesSinceKey = 0;
-        } else {
-            if (key == "version") {
-                switch (linesSinceKey) {
-                    case 1:
-                        const versionStr = outLines[i].split("=")[1];
-                        const versionDate = new Date(0);
-                        const versionStrSplit = versionStr.split(".").map((value) => parseInt(value));
-                        versionDate.setFullYear(versionStrSplit[2], versionStrSplit[1] - 1, versionStrSplit[0]);
-                        serverState.compatible = checkServerCompatibility(versionDate);
-                        break;
-                    case 2:
-                        const versionText = outLines[i].split("=")[1]
-                        serverState.version = versionText
-                        break;
-                }
-            } else if (key == "daemons" && linesSinceKey == 1) {
-                const daemonStr = outLines[i].split("=")[1]
-                serverState.services.ssmdb2 = daemonStr.match("targetd_ssmdb2") != null;
-            }
+        const line = outLines[i].trim();
+        if (line.length == 0) {
+            continue;
+        }
+        const key = line.split("=")[0];
+        const value = line.split("=").slice(1).join("=");
+        if (key == "Version") {
+            serverState.version = value;
+            serverState.compatible = checkServerCompatibility(value);
+        } else if (key == "Services") {
+            serverState.services.ssmdb2 = value.match("targetd_ssmdb2") != null;
         }
     }
     return serverState;
@@ -97,14 +82,26 @@ export async function checkServerAvailable(): Promise<boolean> {
     }
 }
 
-function checkServerCompatibility(version: Date): boolean {
+function checkServerCompatibility(version: string): boolean {
     if (!process.env.MAX_MEYTON_VERSION || !process.env.MIN_MEYTON_VERSION) {
         logger.error("Environment variables MAX_MEYTON_VERSION and MIN_MEYTON_VERSION must be set");
         return false;
     }
-    if (version.getTime() <= parseInt(process.env.MAX_MEYTON_VERSION) && version.getTime() >= parseInt(process.env.MIN_MEYTON_VERSION)) {
+    const minVersion = semver.coerce(process.env.MIN_MEYTON_VERSION);
+    const maxVersion = semver.coerce(process.env.MAX_MEYTON_VERSION);
+    if (!minVersion || !maxVersion) {
+        logger.error("Environment variables MAX_MEYTON_VERSION and MIN_MEYTON_VERSION must be in the correct format");
+        return false;
+    }
+    // Check if the version is in the format X.Y.Z
+    const versionSemver = semver.coerce(version);
+    if (!versionSemver) {
+        logger.error("Version is not in the correct format");
+        return false;
+    }
+    if (semver.lte(versionSemver, maxVersion) && semver.gte(versionSemver, minVersion)) {
+        logger.debug("Meyton server version is compatible");
         return true;
-
     }
     logger.warn("Meyton server version is not compatible");
     return false;
