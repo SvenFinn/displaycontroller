@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 
 APP_VERSION="%APP_VERSION%"
 GITHUB_REPO="%GITHUB_REPO%"
@@ -24,22 +24,24 @@ for arg in "$@"; do
 done
 
 function update_finished(){
-    local width=`tput cols`
-    local height=`tput lines`
+    local width, height
+    width=$(tput cols)
+    height=$(tput lines)
 
     local success_top=2
     local success_height=5
-
 
     local reboot_height=7
     local reboot_top=$(( height - reboot_height - 3 ))
 
     if [ "$REBOOT" == "0" ]; then
-        dialog --colors --backtitle "$BACK_TITLE" --begin $success_top 0 --title "\Z2Update finished\Zn" --msgbox "The update was finished successfully." $success_height $width
+        dialog --colors --backtitle "$BACK_TITLE" --begin "$success_top" 0 --title "\Z2Update finished\Zn" --msgbox "The update was finished successfully." "$success_height" "$width"
     else 
-        dialog --colors --backtitle "$BACK_TITLE" --begin $success_top 0 --title "\Z2Update finished\Zn" --infobox "The update was finished successfully. The system will reboot shortly..." $success_height $width \
-                 --and-widget --colors --begin $reboot_top 0 --title "Rebooting..." --no-cancel --pause "Rebooting..." $reboot_height $width 10
+        dialog --colors --backtitle "$BACK_TITLE" --begin "$success_top" 0 --title "\Z2Update finished\Zn" --infobox "The update was finished successfully. The system will reboot shortly..." "$success_height" "$width" \
+                 --and-widget --colors --begin "$reboot_top" 0 --title "Rebooting..." --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 10
         reboot
+        # sleep to prevent the script from exiting before the reboot
+        sleep 1d
     fi
     clear
     exit 0
@@ -60,19 +62,21 @@ function run_update_step(){
     done 
     command+="set +e$nl"
 
-    local width=`tput cols`
-    local height=`tput lines`
+    local width, height
+    width=$(tput cols)
+    height=$(tput lines)
 
-
-    local bar_height=2
-    local bar_top=$(( height - bar_height - 3 ))
-    local bar_width=$(( width - 6 ))
-    local bar=$(for i in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
+    local bar_height, bar_top, bar_width, bar
+    bar_height=2
+    bar_top=$(( height - bar_height - 3 ))
+    bar_width=$(( width - 6 ))
+    bar=$(for _ in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
 
     local command_top=2
     local command_height=$(( bar_top - command_top - 3 ))
 
-    local tmp_log_file=$(mktemp)
+    local tmp_log_file
+    tmp_log_file=$(mktemp)
 
     eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
                                             --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
@@ -94,13 +98,13 @@ function run_update_step(){
 
         local dialog_options=(
             --colors --keep-window --backtitle "$BACK_TITLE"
-            --begin $error_top 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 $width
-            --and-widget --keep-window --colors --begin $log_top 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" $log_height $width
+            --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
+            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
         if [ "$REBOOT" == "0" ]; then
-            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" $reboot_height $width
+            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width"
         else
-            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." $reboot_height $width 30
+            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 30
         fi
 
         rm $tmp_log_file
@@ -108,6 +112,8 @@ function run_update_step(){
 
         if [ "$REBOOT" == "1" ]; then
             reboot
+            # sleep to prevent the script from exiting before the reboot
+            sleep 1d
         fi
 
         exit

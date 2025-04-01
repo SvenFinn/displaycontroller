@@ -19,18 +19,21 @@ function run_install_step(){
     done
     command+="set +e$nl"     
 
-    local width=`tput cols`
-    local height=`tput lines`
+    local width, height
+    width=$(tput cols)
+    height=$(tput lines)
 
-    local bar_height=2
-    local bar_top=$(( height - bar_height - 3 ))
-    local bar_width=$(( width - 6 ))
-    local bar=$(for i in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
+    local bar_height, bar_top, bar_width, bar
+    bar_height=2
+    bar_top=$(( height - bar_height - 3 ))
+    bar_width=$(( width - 6 ))
+    bar=$(for _ in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
 
     local command_top=2
     local command_height=$(( bar_top - command_top - 3 ))
 
-    local tmp_log_file=$(mktemp)
+    local tmp_log_file
+    tmp_log_file=$(mktemp)
 
     if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
         eval "$command" 2>&1 | tee $tmp_log_file
@@ -62,10 +65,10 @@ function run_install_step(){
 
         local dialog_options=(
             --colors --keep-window --backtitle "$BACK_TITLE"
-            --begin $error_top 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 $width
-            --and-widget --keep-window --colors --begin $log_top 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" $log_height $width
+            --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
+            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
-        cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" $reboot_height $width
+        cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width"
 
         rm $tmp_log_file
         tput cnorm
@@ -88,8 +91,9 @@ function install_finished(){
         exit 0
     fi
 
-    local width=`tput cols`
-    local height=`tput lines`
+    local width. height
+    width=$(tput cols)
+    height=$(tput lines)
 
     local success_top=2
     local success_height=7
@@ -105,7 +109,7 @@ function install_finished(){
 
     dialog_options=(
         --colors --backtitle "$BACK_TITLE"
-        --begin $success_top 0 --title "\Z2Installation finished\Zn" --msgbox "The installation was finished successfully.\n\nThe Displaycontroller can be started from the application menu.$autostart_text" $success_height $width
+        --begin "$success_top" 0 --title "\Z2Installation finished\Zn" --msgbox "The installation was finished successfully.\n\nThe Displaycontroller can be started from the application menu.$autostart_text" "$success_height" "$width"
     ) 
 
     dialog "${dialog_options[@]}"

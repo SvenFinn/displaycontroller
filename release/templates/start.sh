@@ -1,6 +1,6 @@
 #! /bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 
 PROXY_NAME="%PROXY_NAME%"
 APP_PORT="%APP_PORT%"
@@ -12,7 +12,8 @@ fi
 
 export COMPOSE_MENU=0
 
-screen_res=`xrandr --current | grep "*" | uniq | awk '{print $1}' | tail -n 1`
+# shellcheck disable=SC2063
+screen_res=$(xrandr --current | grep "*" | uniq | awk '{print $1}' | tail -n 1)
 echo "Screen resolution is $screen_res"
 export SCREEN_RESOLUTION=$screen_res
 
@@ -21,7 +22,6 @@ docker compose down
 
 # Start the containers
 docker compose up --remove-orphans --no-build&
-docker_pid=$!
 
 # Wait for the proxy to be healthy
 docker events --filter 'event=health_status' | while read event; do
