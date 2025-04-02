@@ -64,7 +64,7 @@ async function main() {
         logger.info("Evaluation sync is disabled");
         return;
     }
-    const serverStateEvents = new EventSource("http://check-server:80/api/serverState/sse");
+    const serverStateEvents = new EventSource("http://server-state:80/api/serverState/sse");
     serverStateEvents.onmessage = loop;
     serverStateEvents.onopen = () => {
         logger.info("Connected to server state events");

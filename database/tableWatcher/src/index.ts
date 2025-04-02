@@ -20,7 +20,7 @@ export class TableWatcher extends EventEmitter {
         for (let i = 0; i < this.tables.length; i++) {
             this.checksums[this.tables[i]] = 0n;
         }
-        const events = new EventSource("http://check-server:80/api/serverState/sse");
+        const events = new EventSource("http://server-state:80/api/serverState/sse");
         events.onopen = () => {
             logger.info("Connected to server state events");
         }

@@ -3,7 +3,7 @@ name: displaycontroller
 include:
   - proxy/docker-compose.yaml
   - database/local/docker-compose.yaml
-  - checkServer/docker-compose.yaml
+  - serverState/docker-compose.yaml
   - syncTime/docker-compose.yaml
   - screens/docker-compose.yaml
   - ranges/docker-compose.yaml

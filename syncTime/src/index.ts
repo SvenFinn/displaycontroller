@@ -19,7 +19,7 @@ async function main() {
     logger.info("Time sync is disabled")
     return;
   }
-  const eventSource = new EventSource("http://check-server:80/api/serverState/sse");
+  const eventSource = new EventSource("http://server-state:80/api/serverState/sse");
   eventSource.onopen = () => {
     logger.info("Connected to server state events")
   }

@@ -21,7 +21,7 @@ services:
     networks:
       - displaycontroller
     depends_on:
-      - dc-check-server
+      - dc-server-state
     cap_add:
       - SYS_TIME
     environment:

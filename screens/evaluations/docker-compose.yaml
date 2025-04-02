@@ -24,7 +24,7 @@ services:
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully
-      dc-check-server:
+      dc-server-state:
         condition: service_started
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
