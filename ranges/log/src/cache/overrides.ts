@@ -1,5 +1,6 @@
 import { isOverrideDiscipline } from "@shared/ranges/internal/startList";
 import { LocalClient } from "dc-db-local";
+import { mergeMaps } from "@shared/ranges/cache";
 
 const overrideToDiscipline = new Map<number, number>();
 
@@ -9,13 +10,14 @@ export async function updateOverrides(client: LocalClient) {
             type: "overrideDiscipline"
         }
     });
-    overrideToDiscipline.clear();
+    const overrideTempMap = new Map<number, number>();
     for (const override of overrides) {
         if (!isOverrideDiscipline(override.value)) {
             continue;
         }
-        overrideToDiscipline.set(Number(override.value.id), Number(override.value.disciplineId));
+        overrideTempMap.set(override.value.id, Number(override.value.disciplineId));
     }
+    mergeMaps(overrideToDiscipline, overrideTempMap);
 }
 
 export function getDisciplineId(overrideId: number): number | null {

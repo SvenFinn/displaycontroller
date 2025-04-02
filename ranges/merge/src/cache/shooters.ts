@@ -1,6 +1,7 @@
 import { LocalClient } from "dc-db-local";
 import { Shooter, isShooter } from "@shared/ranges/shooter";
 import { InternalShooter, isInternalShooterById } from "@shared/ranges/internal";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const shooters = new Map<number, Shooter>();
 
@@ -10,17 +11,17 @@ export async function updateShooters(localClient: LocalClient) {
             type: "shooter",
         },
     });
-    shooters.clear();
-    for (const shooterDb of newShooters) {
-        const shooter = shooterDb.value;
-        if (!isShooter(shooter)) {
+    const shooterTempMap = new Map<number, Shooter>();
+    for (const shooter of newShooters) {
+        if (!isShooter(shooter.value)) {
             continue;
         }
-        if (shooter.id == null) {
+        if (shooter.value.id === null) {
             continue;
         }
-        shooters.set(shooter.id, shooter);
+        shooterTempMap.set(shooter.value.id, shooter.value);
     }
+    mergeMaps(shooters, shooterTempMap);
 }
 
 export function getShooter(shooter: InternalShooter | null): Shooter | null {

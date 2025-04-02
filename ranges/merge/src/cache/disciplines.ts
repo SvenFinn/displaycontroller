@@ -3,6 +3,7 @@ import { Discipline, isDiscipline } from "@shared/ranges/discipline";
 import { isOverrideDiscipline } from "@shared/ranges/internal/startList";
 import { InternalDiscipline, isInternalOverrideDiscipline } from "@shared/ranges/internal";
 import { logger } from "dc-logger";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const disciplines = new Map<number, Discipline>();
 export const overrides = new Map<number, Discipline>();
@@ -13,15 +14,14 @@ export async function updateDisciplines(localClient: LocalClient) {
             type: "discipline",
         },
     });
-    disciplines.clear();
-    for (const disciplineDb of newDisciplines) {
-        const discipline = disciplineDb.value;
-        if (!isDiscipline(discipline)) {
-            logger.warn(`Invalid discipline ${disciplineDb.key}`);
+    const disciplineTempMap = new Map<number, Discipline>();
+    for (const discipline of newDisciplines) {
+        if (!isDiscipline(discipline.value)) {
             continue;
         }
-        disciplines.set(discipline.id, discipline);
+        disciplineTempMap.set(discipline.value.id, discipline.value);
     }
+    mergeMaps(disciplines, disciplineTempMap);
 }
 
 export async function updateOverrides(localClient: LocalClient) {
