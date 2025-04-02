@@ -170,7 +170,7 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
 fi
 
 # Run the installation steps
-total_steps=5
+total_steps=6
 
 if [ "$AUTOSTART" -eq 1 ]; then
     total_steps=$((total_steps+1))
@@ -252,6 +252,11 @@ EOF
 run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
 apt-get install -y chromium-browser unclutter
+EOF
+
+run_install_step $((step_nr++)) $total_steps "Disabling ntp" <<EOF
+timedatectl set-ntp false
+timedatectl set-local-rtc 1
 EOF
 
 run_install_step $((step_nr++)) $total_steps "Pulling latest docker images" <<EOF
