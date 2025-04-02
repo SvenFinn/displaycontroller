@@ -17,15 +17,18 @@ async function loop() {
     const serverOnline = await checkServerAvailable();
     if (serverState != serverOnline) {
         logger.info(`Server Availability changed to ${serverOnline}`)
-        serverState = serverOnline;
         if (serverOnline) {
             const serverInfo = await checkServiceAvailability();
+            if (!serverInfo) {
+                return
+            }
             updateServerInfo(serverInfo);
         } else {
             updateServerInfo({
                 online: false
             });
         }
+        serverState = serverOnline;
     }
 }
 

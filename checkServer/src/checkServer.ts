@@ -8,7 +8,7 @@ dotenv.config();
 
 const prismaClient = new LocalClient();
 
-export async function checkServiceAvailability(): Promise<AdvServerState> {
+export async function checkServiceAvailability(): Promise<AdvServerState | null> {
     logger.debug("Fetching server information");
     const server = (await prismaClient.parameter.findUnique({
         where: {
@@ -27,16 +27,14 @@ export async function checkServiceAvailability(): Promise<AdvServerState> {
             online: false
         };
     }
-    const commands = 'echo -n "Version=" && sed -n "s/^Version=//p" /etc/meyton/shootmaster.version &&' +
+    const commands = 'echo -n "Version=" && sed -n "s/^Version=//p" /etc/meyton/shootmaster.version && ' +
         'echo -n "Services=" && sed -n "s/^RealServerDaemons=//p" /etc/meyton/shootmasterd.cfg';
     let output = "";
     try {
         output = execSync(`sshpass -p "${process.env.MEYTON_SSH_PASS}" ssh -o ConnectTimeout=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${process.env.MEYTON_SSH_USER}@${server} '${commands}'`, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
     } catch (e) {
         logger.error("Error while checking server availability: " + e);
-        return {
-            online: false,
-        }
+        return null;
     }
     const outLines = output.split("\n");
     const serverState: AdvServerState = {
