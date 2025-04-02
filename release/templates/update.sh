@@ -143,6 +143,7 @@ step_nr=1
 total_steps=8
 
 run_update_step $((step_nr++)) $total_steps "Connecting to the internet" <<EOF
+resolvectl flush-caches
 while ! ping -c 1 github.com
 do
     sleep 1
