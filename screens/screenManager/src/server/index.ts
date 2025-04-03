@@ -19,7 +19,7 @@ export async function sendSSEResponse(data: Screen) {
     });
 }
 
-app.get('/api/screens(/)?', async (req: Request, res: Response) => {
+app.get('/api/screens', async (req: Request, res: Response) => {
     try {
         const screens = await localClient.screens.findMany();
         res.status(200).send(screens);
@@ -29,11 +29,11 @@ app.get('/api/screens(/)?', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/api/screens/current(/)?', (req: Request, res: Response) => {
+app.get('/api/screens/current', (req: Request, res: Response) => {
     res.status(200).send(getCurrentScreen());
 });
 
-app.get('/api/screens/current/sse(/)?', (req: Request, res: Response) => {
+app.get('/api/screens/current/sse', (req: Request, res: Response) => {
     logger.info("New screens events connection");
     const headers = {
         'Content-Type': 'text/event-stream',
@@ -52,11 +52,11 @@ app.get('/api/screens/current/sse(/)?', (req: Request, res: Response) => {
     });
 });
 
-app.get('/api/screens/pause(/)?', (req: Request, res: Response) => {
+app.get('/api/screens/pause', (req: Request, res: Response) => {
     res.status(200).send(getPaused());
 });
 
-app.post('/api/screens/pause(/)?', (req: Request, res: Response) => {
+app.post('/api/screens/pause', (req: Request, res: Response) => {
     try {
         pauseScreen();
         res.status(200).send('Screen paused');
@@ -65,7 +65,7 @@ app.post('/api/screens/pause(/)?', (req: Request, res: Response) => {
     }
 });
 
-app.post('/api/screens/next(/)?', (req: Request, res: Response) => {
+app.post('/api/screens/next', (req: Request, res: Response) => {
     try {
         nextScreen();
         res.status(200).send('Next screen switched');
@@ -75,7 +75,7 @@ app.post('/api/screens/next(/)?', (req: Request, res: Response) => {
     res.end();
 });
 
-app.get('/api/screens/:screenId(/)?', async (req: Request, res: Response) => {
+app.get('/api/screens/:screenId', async (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;
@@ -97,7 +97,7 @@ app.get('/api/screens/:screenId(/)?', async (req: Request, res: Response) => {
     });
 })
 
-app.put('/api/screens/:screenId(/)?', async (req: Request, res: Response) => {
+app.put('/api/screens/:screenId', async (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;
@@ -123,7 +123,7 @@ app.put('/api/screens/:screenId(/)?', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/api/screens/:screenId(/)?', (req: Request, res: Response) => {
+app.delete('/api/screens/:screenId', (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;
@@ -141,7 +141,7 @@ app.delete('/api/screens/:screenId(/)?', (req: Request, res: Response) => {
     }
 });
 
-app.get('/api/screens/:screenId/:subScreenId(/)?', async (req: Request, res: Response) => {
+app.get('/api/screens/:screenId/:subScreenId', async (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;
@@ -174,7 +174,7 @@ app.get('/api/screens/:screenId/:subScreenId(/)?', async (req: Request, res: Res
     res.status(200).send(resolved[subScreenId]);
 });
 
-app.post('/api/screens/:screenId/?:subScreenId?', (req: Request, res: Response) => {
+app.post('/api/screens/:screenId{/:subScreenId}', (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;

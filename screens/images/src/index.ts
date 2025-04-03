@@ -23,25 +23,26 @@ app.use(fileUpload({
     useTempFiles: true,
 }));
 
-app.get("/api/images/?*", async (req: Request, res) => {
-    logger.info(`GET ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.get("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`GET ${path}`);
+    if (path.includes("..")) {
         logger.info("Found .. in path");
         res.status(404).sendFile("img/404.svg", { root: __dirname });
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         logger.info("File not found");
         res.status(404).sendFile("img/404.svg", { root: __dirname });
         return
     }
-    if (fs.lstatSync(path).isDirectory()) {
+    if (fs.lstatSync(realPath).isDirectory()) {
         logger.info("Scanning directory");
-        res.status(200).send(await scanDirectory(path));
+        res.status(200).send(await scanDirectory(realPath));
         return;
     } else {
-        res.status(200).sendFile(path);
+        res.status(200).sendFile(realPath);
     }
 });
 
@@ -88,9 +89,10 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
     }
 }
 
-app.post("/api/images/?*", async (req: Request, res) => {
-    logger.info(`POST ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.post("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`POST ${path}`);
+    if (path.includes("..")) {
         logger.info("Found .. in path");
         res.status(400).send({
             code: 400,
@@ -98,10 +100,10 @@ app.post("/api/images/?*", async (req: Request, res) => {
         })
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         logger.debug("Creating folder");
-        await fs.promises.mkdir(path, { recursive: true });
+        await fs.promises.mkdir(realPath, { recursive: true });
     }
     if (!req.files) {
         res.status(400).send({
@@ -111,7 +113,7 @@ app.post("/api/images/?*", async (req: Request, res) => {
         return;
     }
     try {
-        await handleFiles(req.files, path);
+        await handleFiles(req.files, realPath);
         res.status(200).send({
             code: 200,
             message: "Files uploaded",
@@ -125,25 +127,26 @@ app.post("/api/images/?*", async (req: Request, res) => {
     }
 });
 
-app.delete("/api/images/?*", (req: Request, res) => {
-    logger.info(`DELETE ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.delete("/api/images{/*files}", (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`DELETE ${path}`);
+    if (path.includes("..")) {
         res.status(400).send({
             code: 400,
             message: "Invalid path",
         })
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         res.status(404).send({
             code: 404,
             message: "File not found",
         });
         return;
     }
-    if (fs.lstatSync(path).isDirectory()) {
-        fs.rm(path, { recursive: true }, (err) => {
+    if (fs.lstatSync(realPath).isDirectory()) {
+        fs.rm(realPath, { recursive: true }, (err) => {
             if (err) {
                 res.status(500).send({
                     code: 500,
@@ -157,7 +160,7 @@ app.delete("/api/images/?*", (req: Request, res) => {
             });
         });
     } else {
-        fs.unlink(path, (err) => {
+        fs.unlink(realPath, (err) => {
             if (err) {
                 res.status(500).send({
                     code: 500,

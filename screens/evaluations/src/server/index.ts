@@ -7,9 +7,10 @@ const basePath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
 
 const app: Express = express();
 
-app.get("/api/evaluations/?*", async (req: Request, res) => {
-    logger.info(`GET ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.get("/api/evaluations{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`GET ${path}`);
+    if (path.includes("..")) {
         logger.info("Found .. in path");
         res.status(404).send({
             code: 404,
@@ -17,8 +18,8 @@ app.get("/api/evaluations/?*", async (req: Request, res) => {
         });
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         logger.info("File not found");
         res.status(404).send({
             code: 404,
@@ -26,11 +27,11 @@ app.get("/api/evaluations/?*", async (req: Request, res) => {
         });
         return
     }
-    if (fs.lstatSync(path).isDirectory()) {
+    if (fs.lstatSync(realPath).isDirectory()) {
         logger.info("Scanning directory");
-        res.status(200).send(await scanDirectory(path));
+        res.status(200).send(await scanDirectory(realPath));
     } else {
-        res.status(200).sendFile(path);
+        res.status(200).sendFile(realPath);
     }
 });
 
