@@ -1,24 +1,24 @@
 #! /bin/bash
 
-cd "$(dirname "$0")" || exit 1
-
 PROXY_NAME="%PROXY_NAME%"
 APP_PORT="%APP_PORT%"
+
+cd "$(dirname "$0")" || exit 1
+
+export COMPOSE_MENU=0
+# Stop the containers if they are running
+docker compose down
 
 if [ -e ".UPDATE" ]; then
     rm -f .UPDATE
     ./update.sh --reboot
 fi
 
-export COMPOSE_MENU=0
 
 # shellcheck disable=SC2063
 screen_res=$(xrandr --current | grep "*" | uniq | awk '{print $1}' | tail -n 1)
 echo "Screen resolution is $screen_res"
 export SCREEN_RESOLUTION=$screen_res
-
-# Stop the containers if they are running
-docker compose down
 
 # Start the containers
 docker compose up --remove-orphans --no-build&
