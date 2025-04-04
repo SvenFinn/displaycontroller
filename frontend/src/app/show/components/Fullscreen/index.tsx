@@ -1,5 +1,6 @@
 "use client";
 
+import { FaExpandArrowsAlt } from "react-icons/fa";
 import styles from "./fullscreen.module.css";
 import icon from "./fullscreen.png";
 
@@ -10,6 +11,6 @@ export default function FullscreenButton(): React.JSX.Element {
     }
 
     return (
-        <img src={icon.src} className={styles.fullscreen} alt="Fullscreen" onClick={toggleFullscreen} />
+        <FaExpandArrowsAlt className={styles.fullscreen} onClick={toggleFullscreen} />
     );
 }
