@@ -1,5 +1,5 @@
 {
-  "name": "displaycontroller-sync-html",
+  "name": "dc-evaluations",
   "version": "0.0.1",
   "description": "Sync Evaluations for Displaycontroller",
   "main": "src/index.ts",

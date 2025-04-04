@@ -1,5 +1,5 @@
 {
-  "name": "displaycontroller-images",
+  "name": "dc-images",
   "version": "0.0.1",
   "description": "Image Server for displaycontroller",
   "main": "src/index.ts",
