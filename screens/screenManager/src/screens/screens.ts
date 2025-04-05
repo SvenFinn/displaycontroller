@@ -29,6 +29,7 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
             continue
         }
         if (!isDbScreen(nextScreen)) {
+            logger.warn("Failed type check")
             //@ts-ignore
             nextScreen = {
                 id: nextScreen.id,

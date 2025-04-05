@@ -52,7 +52,7 @@ div.currentShot {
     position:relative
 }
 
-img.shotArrow {
+svg.shotArrow {
     position:absolute;
     right:3%;
     height:100%;
