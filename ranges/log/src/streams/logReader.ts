@@ -19,7 +19,7 @@ export class logReaderStream extends Duplex {
             callback();
             return;
         }
-        logger.info("Server state changed", chunk);
+        logger.info(`Server state changed: ${chunk}`);
         this.serverState = chunk;
         this.startSSH();
         callback();
@@ -44,7 +44,7 @@ export class logReaderStream extends Duplex {
         this.sshThread = spawn("sshpass", ["-p", process.env.MEYTON_SSH_PASS as string, "ssh", "-o", "StrictHostKeyChecking=no", `${process.env.MEYTON_SSH_USER}@${serverIp}`, script]);
         this.sshThread.on("exit", (code) => {
             if (this.serverState) {
-                logger.warn("SSH exit", code);
+                logger.warn(`SSH exit: ${code}`);
                 this.startSSH();
             }
         });
@@ -61,7 +61,7 @@ export class logReaderStream extends Duplex {
         this.sshThread.stderr?.on("data", (data: any) => {
             const str = data.toString();
             if (str.length > 0) {
-                logger.warn("SSH error", str);
+                logger.warn(`SSH error: ${str}`);
             }
         });
     }
