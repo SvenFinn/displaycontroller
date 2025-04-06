@@ -38,6 +38,9 @@
       ],
       "@shared/screens/*": [
         "../screens/screenManager/types/*"
+      ],
+      "@shared/files" : [
+        "../screens/types/file.ts"
       ]
     }
   },

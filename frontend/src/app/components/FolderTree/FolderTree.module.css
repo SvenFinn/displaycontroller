@@ -1,0 +1,30 @@
+.folder {
+    margin-left: 1rem;
+}
+
+.expandSpan {
+    width: 1rem;
+    margin-right: 0.2rem;
+    display: inline-block;
+}
+
+.expandSpan > * {
+    cursor: pointer;
+}
+
+.folderName {
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+}
+
+.folderName:hover {
+    background-color: #f0f0f0;
+}
+
+.folderName.selected {
+    background-color: #e0e0e0;
+}
+
+.folderName .faIcon {
+    margin-right: 0.2rem;
+}
