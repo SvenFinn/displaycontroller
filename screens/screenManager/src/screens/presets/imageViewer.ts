@@ -2,7 +2,8 @@ import { Screens } from ".";
 import { ViewerDbScreen } from "@shared/screens/imageViewer";
 
 import { logger } from "dc-logger";
-import { DirectoryListing, isDirectoryListing } from "@shared/files";
+import { isDirectoryListing } from "@shared/files";
+import { flattenFileList } from "@shared/files/helpers";
 
 export default async function imageViewer(screen: ViewerDbScreen): Promise<Screens> {
     let fileList: string[];
@@ -45,13 +46,4 @@ async function createFileList(path: string): Promise<string[]> {
         logger.error(`Failed to fetch files for path ${path}`);
         return [];
     }
-}
-
-function flattenFileList(listing: DirectoryListing, path: string = ""): string[] {
-    return listing.flatMap((item) => {
-        if (item.type === "file") {
-            return `${path}/${item.name}`;
-        }
-        return flattenFileList(item.files, `${path}/${item.name}`);
-    });
 }

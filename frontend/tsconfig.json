@@ -40,8 +40,11 @@
         "../screens/screenManager/types/*"
       ],
       "@shared/files" : [
-        "../screens/types/file.ts"
-      ]
+        "../screens/types/files"
+      ],
+      "@shared/files/*" : [
+        "../screens/types/files/*"
+      ],
     }
   },
   "include": [

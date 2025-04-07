@@ -6,8 +6,11 @@
         "strict": true,
         "outDir": "./dist",
         "paths": {
+            "@shared/files/*": [
+                "../types/files/*"
+            ],
             "@shared/files": [
-                "../types/file"
+                "../types/files"
             ]
     }
     },

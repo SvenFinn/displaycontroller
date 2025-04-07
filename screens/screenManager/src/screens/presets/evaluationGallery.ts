@@ -1,7 +1,8 @@
 import { Screens } from ".";
 import { EvaluationGalleryDbScreen } from "@shared/screens/evaluationGallery";
 import { logger } from "dc-logger";
-import { DirectoryListing, isDirectoryListing } from "@shared/files";
+import { isDirectoryListing } from "@shared/files";
+import { flattenFileList } from "@shared/files/helpers";
 
 export default async function evaluationGallery(screen: EvaluationGalleryDbScreen): Promise<Screens> {
     const fileList = await createFileList(screen.options.path);
@@ -40,13 +41,4 @@ async function createFileList(path: string): Promise<string[]> {
         logger.error(`Failed to fetch files for path ${path}`);
         return [];
     }
-}
-
-function flattenFileList(listing: DirectoryListing, path: string = ""): string[] {
-    return listing.flatMap((item) => {
-        if (item.type === "file") {
-            return `${path}/${item.name}`;
-        }
-        return flattenFileList(item.files, `${path}/${item.name}`);
-    });
 }

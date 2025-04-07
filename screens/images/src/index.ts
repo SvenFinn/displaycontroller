@@ -2,7 +2,7 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
-import { scanDirectory } from "@shared/files";
+import { scanDirectory } from "@shared/files/helpers";
 import { logger } from "dc-logger";
 
 const basePath = `/app/files`;

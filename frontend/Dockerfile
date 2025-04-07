@@ -25,6 +25,9 @@ COPY --from=range-types . .
 WORKDIR /app/screens/screenManager/types
 COPY --from=screen-types . .
 
+WORKDIR /app/screens/types/files
+COPY --from=files-types . .
+
 WORKDIR /app/frontend
 COPY . .
 RUN export NEXT_PUBLIC_APP_PORT=$APP_PORT && \
