@@ -62,11 +62,11 @@ function run_update_step(){
     done 
     command+="set +e$nl"
 
-    local width, height
+    local width  height
     width=$(tput cols)
     height=$(tput lines)
 
-    local bar_height, bar_top, bar_width, bar
+    local bar_height bar_top bar_width bar
     bar_height=2
     bar_top=$(( height - bar_height - 3 ))
     bar_width=$(( width - 6 ))
@@ -163,7 +163,21 @@ apt-get autoremove -y
 EOF
 
 run_update_step $((step_nr++)) $total_steps "Updating snap packages" <<EOF
-snap refresh
+local snap_list=\$(snap refresh --list | cut -d' ' -f1 | tail -n +2)
+for snap in \$snap_list; do
+    local dot_count=0
+    snap refresh "\$snap"&
+    snap_pid=\$!
+    while kill -0 "\$snap_pid" 2>/dev/null; do
+        echo -n "Updating \$snap "
+        for i in \$(seq 1 \$dot_count); do
+            echo -n "."
+        done
+        echo ""        
+        dot_count=\$((dot_count + 1))
+        sleep 1
+    done    
+done
 EOF
 
 run_update_step $((step_nr++)) $total_steps "Pruning docker images" <<EOF
@@ -174,8 +188,16 @@ EOF
 
 run_update_step $((step_nr++)) $total_steps "Downloading latest release" <<EOF
 
+# Unset -e
+set +e
+
 if [ -e ".FREEZE" ]; then
     echo "Update is frozen"
+    exit 0
+fi
+
+if [ "$APP_VERSION" == "%APP_VERSION%" ] || [ "$APP_VERSION" == "development" ] || ["$GITHUB_REPO" == "%GITHUB_REPO%"]; then
+    echo "Development version, skipping update"
     exit 0
 fi
 
@@ -189,11 +211,6 @@ if [ -z "$APP_VERSION" ]; then
     exit 1
 fi
 
-if [ "$APP_VERSION" == "development" ]; then
-    echo "Development version, skipping update"
-    exit 0
-fi
-
 latest_release_json=\$(curl -fs "https://api.github.com/repos/$GITHUB_REPO/releases/latest")
 
 if [ \$? -ne 0 ]; then
@@ -203,7 +220,7 @@ fi
 
 latest_version=\$(echo "\$latest_release_json" | jq -r '.tag_name')
 
-if [ "\$latest_version" == "null" ]; then
+if [ "\$latest_version" == "null" ] || [ -z \$latest_version ]; then
     echo "Failed to parse latest release information"
     exit 1
 fi
