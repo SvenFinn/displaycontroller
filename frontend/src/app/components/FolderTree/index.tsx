@@ -69,7 +69,6 @@ function FolderTreeInternal({ files, path, currentPath, onSelect }: InternalFold
 }
 
 function getFoldersInPath(files: DirectoryListing, path: string): Array<string> {
-    console.log("getFoldersInPath", path);
     const pathArr = path.split("/");
     let currentFiles = files;
     for (const folder of pathArr) {

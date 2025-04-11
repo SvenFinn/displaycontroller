@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
+    "mime": "^4.0.7",
     "next": "^15.2.4",
     "react": "^19.1.0",
     "react-collapsed": "^4.2.0",

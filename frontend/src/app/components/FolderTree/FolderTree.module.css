@@ -1,4 +1,5 @@
 .folder {
+
     margin-left: 1rem;
 }
 
@@ -8,11 +9,13 @@
     display: inline-block;
 }
 
-.expandSpan > * {
+.expandSpan>* {
     cursor: pointer;
 }
 
 .folderName {
+    display: flex;
+    align-items: center;
     padding: 0.3rem;
     border-radius: 0.2rem;
 }

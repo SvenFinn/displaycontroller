@@ -5,9 +5,9 @@ import FolderTree from "@frontend/app/components/FolderTree";
 import { useEffect, useState } from "react";
 import { DirectoryListing, isDirectoryListing } from "@shared/files";
 import FileList from "@frontend/app/components/FileList";
+import FileManager from "@frontend/app/components/FileManagerNew";
 
 export default function Page() {
-    const [selectedPath, setSelectedPath] = useState<string>("");
     const [files, setFiles] = useState<DirectoryListing>([]);
 
     useEffect(() => {
@@ -27,14 +27,11 @@ export default function Page() {
         fetchFiles();
     }, []);
 
-    console.log(selectedPath);
-    return (
-        <ColumnResize initialSizes={[20, 80]} style={{ backgroundColor: "white" }}>
-            <FolderTree files={files} currentPath={selectedPath} onSelect={(path: string) => { setSelectedPath(path) }} />
-            <FileList files={files} currentPath={selectedPath} onPathChange={(path: string) => { setSelectedPath(path) }} onSelect={(path: string) => {
-                alert(`Selected file: ${path}`)
+    function onOpen(path: string) {
+        window.open(`http://localhost:80/api/images/${path}`, "_blank");
+    }
 
-            }} />
-        </ColumnResize>
+    return (
+        <FileManager files={files} initialPath="" onSelect={() => { }} onOpen={onOpen} />
     )
 }
