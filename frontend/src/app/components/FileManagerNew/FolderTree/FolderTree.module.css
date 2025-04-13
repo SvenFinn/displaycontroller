@@ -1,5 +1,5 @@
 .folder {
-
+    border-top: 1px solid #cfcfcf;
     margin-left: 1rem;
 }
 
@@ -16,8 +16,8 @@
 .folderName {
     display: flex;
     align-items: center;
-    padding: 0.3rem;
-    border-radius: 0.2rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 }
 
 .folderName:hover {
