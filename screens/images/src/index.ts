@@ -83,7 +83,18 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
             format: "png",
             preserveAspectRatio: true,
         });
-        await pdf.bulk(-1);
+        const converted = await pdf.bulk(-1);
+        const digitNumber = Math.floor(Math.log10(converted.length)) + 1;
+        for (let i = 0; i < converted.length; i++) {
+            const img = converted[i];
+            if (!img.page || !img.path) {
+                logger.warn("Image name is undefined");
+                continue;
+            }
+            const fileNumber = img.page.toString().padStart(digitNumber, "0");
+            const path = img.path.split("/").slice(0, -1).join("/");
+            await fs.promises.rename(img.path, `${path}/page-${fileNumber}.png`);
+        }
     } else {
         await file.mv(`${path}/${file.name}`);
     }
