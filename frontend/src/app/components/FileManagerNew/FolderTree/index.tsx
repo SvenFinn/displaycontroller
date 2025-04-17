@@ -53,7 +53,7 @@ function FolderTreeInternal({ files, path, currentPath, onSelect }: InternalFold
                     <span className={styles.expandSpan}></span>
                 }
                 {expanded ? <FaRegFolderOpen className={styles.faIcon} /> : <FaRegFolder className={styles.faIcon} />}
-                {folderName}
+                <span className={styles.folderName}>{folderName}</span>
             </div>
             {expanded && folders.map(folder => (
                 <FolderTreeInternal
