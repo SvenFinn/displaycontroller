@@ -8,6 +8,7 @@ import styles from "./FileManager.module.css";
 import ToolBar from "./ToolBar";
 import Loader from "./Loader";
 import { ActionsProvider, BaseCallback, MoveCopyCallback, PercentageFunction, PercentageMessageFunction } from "./Actions/context";
+import Actions from "./Actions";
 
 type FileManagerProps = {
     initialPath: string;
@@ -70,6 +71,7 @@ export default function FileManager({ files, initialPath, onSelect, onOpen, onRe
         <ActionsProvider>
             {loading && <Loader percentage={loadingPercentage} message={loadingMessage} />}
             <ToolBar refresh={refresh}>
+                <Actions />
             </ToolBar>
             <ColumnResize initialSizes={[20, 80]} className={styles.columns}>
                 <FolderTree files={files} currentPath={selectedPath} onSelect={onPathChange} />
