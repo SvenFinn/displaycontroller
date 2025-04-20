@@ -1,5 +1,3 @@
-import * as fs from "fs";
-
 export type FileResponse = FileActionResponse | DirectoryListing;
 
 export type FileActionResponse = {
@@ -16,14 +14,14 @@ export function isFileActionResponse(obj: any): obj is FileActionResponse {
 
 export type DirectoryListing = Array<File | Folder>;
 
-type File = {
+export type File = {
     name: string;
     size: number;
     lastModified: Date;
     type: "file";
 }
 
-type Folder = {
+export type Folder = {
     name: string;
     type: "folder";
     files: DirectoryListing;
@@ -42,29 +40,4 @@ export function isDirectoryListing(obj: any): obj is DirectoryListing {
         }
     }
     return true;
-}
-
-export async function scanDirectory(path: string): Promise<DirectoryListing> {
-    if (!fs.existsSync(path)) {
-        return [];
-    }
-    const files = await fs.promises.readdir(path);
-    return await Promise.all(
-        files.map(async (file) => {
-            const stats = await fs.promises.lstat(`${path}/${file}`);
-            if (stats.isDirectory()) {
-                return {
-                    name: file,
-                    type: "folder",
-                    files: await scanDirectory(`${path}/${file}`)
-                }
-            }
-            return {
-                name: file,
-                size: stats.size || 0,
-                lastModified: stats.mtime || new Date(),
-                type: "file"
-            }
-        })
-    );
 }

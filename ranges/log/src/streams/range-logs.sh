@@ -38,6 +38,7 @@ while true; do
         # Update the tail count and start a new tail process
         tail_count="$current_count"
         echo "LOG_RESET" # This is a signal for the log reader to reset its state
+
         # shellcheck disable=SC2046
         tail -n+2 -q -f $(find . -maxdepth 1 -name "log.*.txt" ! -name "log.0.txt") &
         tail_pid=$!

@@ -1,0 +1,42 @@
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+}
+
+.spinner {
+    width: 25%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(farthest-side, #ffffff 90%, #0000) top/12px 12px no-repeat,
+        conic-gradient(#0000 30%, #ffffff);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 12px), #000 0);
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 12px), #000 0);
+    animation: l13 1s infinite linear;
+}
+
+@keyframes l13 {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.message {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    text-align: center;
+    text-shadow: 0 0 5px #000000;
+}
+
+.progress {
+    width: 100%;
+    height: 1rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}

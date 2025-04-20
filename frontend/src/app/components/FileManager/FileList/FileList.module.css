@@ -1,0 +1,91 @@
+div.breadCrumb {
+    border-top: 1px solid #cfcfcf;
+    border-bottom: 1px solid #cfcfcf;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+
+    span.barFolder {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+    }
+}
+
+div.fileList {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+div.fileEntry {
+    position: relative;
+    width: 15%;
+    box-sizing: border-box;
+    aspect-ratio: 1.5;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.5rem;
+
+    input.checkBox {
+        z-index: 1;
+        align-self: baseline;
+        accent-color: white;
+        visibility: hidden;
+    }
+
+    .fileIcon {
+        flex-grow: 1;
+        width: unset;
+        height: unset;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
+
+    span.fileName {
+        padding-top: 0.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+        max-width: 80%;
+    }
+}
+
+div.fileEntry.selected {
+    background-color: #6155b4;
+    color: white;
+
+    input.checkBox {
+        visibility: visible;
+    }
+}
+
+/* Disable hover effect for selected files */
+div.fileEntry.selected:hover {
+    background-color: #6155b4;
+    color: white;
+
+    input.checkBox {
+        visibility: visible;
+        cursor: pointer;
+    }
+}
+
+div.fileEntry:hover {
+    background-color: #f0f0f0;
+    color: black;
+    cursor: pointer;
+
+    input.checkBox {
+        visibility: visible;
+        cursor: pointer;
+    }
+}

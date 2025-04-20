@@ -10,6 +10,7 @@
   "author": "Sven Finn",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^2.2.0",
     "dc-logger": "file:../../logger",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
