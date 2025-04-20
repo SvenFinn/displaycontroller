@@ -1,7 +1,7 @@
 import express, { Express, Request } from "express";
 import * as fs from "fs";
 import { logger } from "dc-logger";
-import { scanDirectory } from "@shared/files/helpers";
+import { scanDirectory } from "@shared/files/scanDir";
 
 const basePath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
 
