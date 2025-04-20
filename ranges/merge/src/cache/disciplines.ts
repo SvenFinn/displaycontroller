@@ -34,7 +34,7 @@ export async function updateOverrides(localClient: LocalClient) {
     for (const overrideDb of newOverrides) {
         const override = overrideDb.value;
         if (!isOverrideDiscipline(override)) {
-            logger.warn("Invalid override discipline", override);
+            logger.warn(`Invalid override discipline: ${override}`);
             continue;
         }
         const disciplineDb = await localClient.cache.findUnique({

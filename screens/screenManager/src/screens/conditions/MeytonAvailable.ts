@@ -12,7 +12,7 @@ export async function meyton_available(condition: ConditionNone): Promise<boolea
         return serverState;
     }
     catch (e) {
-        logger.error("Failed to parse server state", e);
+        logger.error(`Failed to parse server state: ${e}`);
         return false;
     }
 }

@@ -33,7 +33,7 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
     try {
         output = execSync(`sshpass -p "${process.env.MEYTON_SSH_PASS}" ssh -o ConnectTimeout=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${process.env.MEYTON_SSH_USER}@${server} '${commands}'`, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
     } catch (e) {
-        logger.error("Error while checking server availability: " + e);
+        logger.error(`Error while checking server availability: ${e}`);
         return null;
     }
     const outLines = output.split("\n");

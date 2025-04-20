@@ -29,7 +29,7 @@ export class RangeDataStream extends Transform {
                 where: {
                     timestamp:
                     {
-                        gt: new Date(localTime.getTime() - 1000)
+                        gt: new Date(localTime.getTime() - 5000)
                     }
                 },
                 select: {
