@@ -5,7 +5,7 @@ import { DirectoryListing, isDirectoryListing } from "@shared/files";
 import FileManager from "@frontend/app/components/FileManager";
 
 export default function Page() {
-    const baseURL = "http://localhost:80/api/images";
+    const baseURL = `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT}/api/images`;
     const [files, setFiles] = useState<DirectoryListing>([]);
 
     async function refresh() {
