@@ -13,14 +13,14 @@
     "amqplib": "^0.10.7",
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.14.0",
-    "tsc-alias": "^1.8.13",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.14.1",
+    "tsc-alias": "^1.8.15",
+    "typescript": "^5.8.3"
   }
 }

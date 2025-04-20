@@ -11,10 +11,10 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@prisma/client": "^6.5.0",
-    "@types/node": "^22.14.0",
-    "prisma": "^6.5.0",
-    "typescript": "^5.8.2"
+    "@prisma/client": "^6.6.0",
+    "@types/node": "^22.14.1",
+    "prisma": "^6.6.0",
+    "typescript": "^5.8.3"
   },
   "files": [
     "dist"

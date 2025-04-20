@@ -14,13 +14,13 @@
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dc-ranges-ttl": "file:../ttl",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "eventsource": "^3.0.6"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
-    "@types/node": "^22.14.0",
-    "tsc-alias": "^1.8.13",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.14.1",
+    "tsc-alias": "^1.8.15",
+    "typescript": "^5.8.3"
   }
 }

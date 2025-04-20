@@ -12,12 +12,12 @@
   "dependencies": {
     "amqplib": "^0.10.7",
     "dc-logger": "file:../../../logger",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "iconv-lite": "^0.6.3"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
-    "@types/node": "^22.14.0",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
   }
 }
