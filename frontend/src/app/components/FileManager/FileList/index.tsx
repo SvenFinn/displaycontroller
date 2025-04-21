@@ -29,7 +29,8 @@ export default function FileList({ files, currentPath, selectedFiles, onPathChan
     const list = [...folderList, ...fileList];
 
     function fileEntryOnOpen(path: string) {
-        const file = list.find((file) => file.name === path);
+        const pathName = path.split("/").pop();
+        const file = list.find((file) => file.name === pathName);
         if (file && file.type === "folder") {
             onPathChange(path);
         } else {

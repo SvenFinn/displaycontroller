@@ -77,7 +77,7 @@ export default function Page() {
         setMessage(`Renaming ${oldPath} to ${newPath}`);
         const response = await fetch(`${baseURL}/${oldPath}`, {
             method: "PUT",
-            body: JSON.stringify({ destination: newPath }),
+            body: JSON.stringify({ destination: newPath, mode: "move" }),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -93,7 +93,7 @@ export default function Page() {
             const file = files[i];
             const response = await fetch(`${baseURL}/${file}`, {
                 method: "PUT",
-                body: JSON.stringify({ destination: `${destination} / ${file.split("/").pop()}` }),
+                body: JSON.stringify({ destination: `${destination}/${file.split("/").pop()}`, mode: "move" }),
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -105,17 +105,37 @@ export default function Page() {
         }
     }
 
-    async function uploadWithProgress(file: File, destination: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
-        return new Promise((resolve, reject) => {
-            setMessage(`Uploading ${file.name}`);
+    async function onCopy(files: string[], destination: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
+        for (let i = 0; i < files.length; i++) {
+            setMessage(`Copying ${files[i]} to ${destination}`);
+            const file = files[i];
+            const response = await fetch(`${baseURL}/${file}`, {
+                method: "PUT",
+                body: JSON.stringify({ destination: `${destination}/${file.split("/").pop()}`, mode: "copy" }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Failed to copy file");
+            }
+            setPercentage(Math.round(((i + 1) / files.length) * 100));
+        }
+    }
+
+    async function onUpload(files: FileList, destination: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            setMessage(`Uploading ${files.length} files`);
             setPercentage(0);
             const formdata = new FormData();
-            formdata.append("file", file);
+            for (let i = 0; i < files.length; i++) {
+                formdata.append("file", files[i]);
+            }
             const request = new XMLHttpRequest();
             request.open("POST", `${baseURL}/${destination}`);
             request.onload = () => {
                 if (request.status === 200) {
-                    resolve(request.response);
+                    resolve();
                 } else {
                     reject(new Error("Failed to upload file"));
                 }
@@ -124,33 +144,19 @@ export default function Page() {
                 if (event.lengthComputable) {
                     const percentComplete = (event.loaded / event.total) * 100;
                     if (percentComplete === 100) {
-                        setMessage(`Processing ${file.name}`);
+                        setMessage(`Processing ${files.length} files`);
                     }
                     setPercentage(Math.round(percentComplete));
-
                 }
             }
             request.onerror = () => {
                 reject(new Error("Network error"));
             };
-
             request.send(formdata);
-        }
-        );
+        });
     }
-
-    async function onUpload(files: FileList, destination: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
-        for (let i = 0; i < files.length; i++) {
-            await uploadWithProgress(files[i], destination, setPercentage, setMessage);
-        }
-        setPercentage(100);
-    }
-
-
-
-
 
     return (
-        <FileManager files={files} initialPath="" onSelect={() => { }} onOpen={onOpen} onRefresh={refresh} onDownload={onDownload} onCreateFolder={onCreateFolder} onDelete={onDelete} onRename={onRename} onMove={onMove} onUpload={onUpload} />
+        <FileManager files={files} initialPath="" onSelect={() => { }} onOpen={onOpen} onRefresh={refresh} onDownload={onDownload} onCreateFolder={onCreateFolder} onDelete={onDelete} onRename={onRename} onMove={onMove} onCopy={onCopy} onUpload={onUpload} />
     )
 }

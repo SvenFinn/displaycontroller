@@ -149,7 +149,7 @@ app.post("/api/images{/*files}", async (req: Request, res) => {
     }
 });
 
-app.delete("/api/images{/*files}", (req: Request, res) => {
+app.delete("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`DELETE ${path}`);
     if (path.includes("..")) {
@@ -167,33 +167,18 @@ app.delete("/api/images{/*files}", (req: Request, res) => {
         });
         return;
     }
-    if (fs.lstatSync(realPath).isDirectory()) {
-        fs.rm(realPath, { recursive: true }, (err) => {
-            if (err) {
-                res.status(500).send({
-                    code: 500,
-                    message: "Error deleting folder",
-                });
-                return;
-            }
-            res.status(200).send({
-                code: 200,
-                message: "Folder deleted",
-            });
+    const stats = await fs.promises.lstat(realPath);
+    if (stats.isDirectory()) {
+        await fs.promises.rm(realPath, { recursive: true });
+        res.status(200).send({
+            code: 200,
+            message: "Folder deleted",
         });
     } else {
-        fs.unlink(realPath, (err) => {
-            if (err) {
-                res.status(500).send({
-                    code: 500,
-                    message: "Error deleting file",
-                });
-                return;
-            }
-            res.status(200).send({
-                code: 200,
-                message: "File deleted",
-            });
+        await fs.promises.unlink(realPath);
+        res.status(200).send({
+            code: 200,
+            message: "File deleted",
         });
     }
 });
@@ -216,11 +201,26 @@ app.put("/api/images{/*files}", async (req: Request, res) => {
         });
         return;
     }
+    const mode = req.body.mode;
+    if (!mode) {
+        res.status(400).send({
+            code: 400,
+            message: "No mode provided",
+        });
+        return;
+    }
+    if (mode !== "move" && mode !== "copy") {
+        res.status(400).send({
+            code: 400,
+            message: "Invalid mode",
+        });
+        return;
+    }
     const destination = req.body.destination;
     if (!destination) {
         res.status(400).send({
             code: 400,
-            message: "No new path provided",
+            message: "No destination provided",
         });
         return;
     }
@@ -235,7 +235,12 @@ app.put("/api/images{/*files}", async (req: Request, res) => {
     if (fs.existsSync(realDestination)) {
         await fs.promises.rm(realDestination, { recursive: true });
     }
-    await fs.promises.rename(realPath, realDestination);
+    if (mode === "copy") {
+        logger.info("Copying file");
+        await fs.promises.cp(realPath, realDestination, { recursive: true });
+    } else if (mode === "move") {
+        await fs.promises.rename(realPath, realDestination);
+    }
     res.status(200).send({
         code: 200,
         message: "File moved",
