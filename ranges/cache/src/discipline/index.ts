@@ -82,10 +82,12 @@ async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<
 }
 
 async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: number): Promise<DisciplineRound | undefined> {
-    const round = await smdbClient.rounds.findUnique({
+    const round = await smdbClient.round.findUnique({
         where: {
-            id: roundId,
-            disciplineId: disciplineId
+            disciplineId_id: {
+                id: roundId,
+                disciplineId: disciplineId
+            }
         },
         select: {
             hitsPerSum: true,
@@ -93,7 +95,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
             maxHits: true,
             mode: true,
             zoom: true,
-            targetLayoutId: true,
+            layoutId: true,
             name: true
         }
     });
@@ -107,7 +109,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
         maxHits: round.maxHits,
         hitsPerSum: round.hitsPerSum,
         hitsPerView: round.hitsPerView,
-        layoutId: round.targetLayoutId,
+        layoutId: round.layoutId,
         mode: getMode(round.mode),
         zoom: getZoom(round.zoom)
     }
@@ -169,7 +171,7 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
         include: {
             rounds: {
                 select: {
-                    targetLayoutId: true
+                    layoutId: true
                 }
             }
         }
@@ -177,7 +179,7 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
     if (!layoutDatabase) {
         return [];
     }
-    const layoutIds = layoutDatabase.rounds.map(round => round.targetLayoutId).filter((value, index, self) => self.indexOf(value) === index);
+    const layoutIds = layoutDatabase.rounds.map(round => round.layoutId).filter((value, index, self) => self.indexOf(value) === index);
     const layouts: DisciplineLayouts = {};
     for (let i = 0; i < layoutIds.length; i++) {
         const layout = await getLayout(smdbClient, layoutIds[i]);
@@ -189,13 +191,13 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
 }
 
 async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<DisciplineLayout | undefined> {
-    const layout = await smdbClient.targetLayout.findUnique({
+    const layout = await smdbClient.layout.findUnique({
         where: {
             id: layoutId
         },
         select: {
             innerTen: true,
-            holeSize: true,
+            diameter: true,
             rings: true
         }
     });
@@ -206,7 +208,7 @@ async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Disc
         return {
             value: ring.value / 10,
             diameter: ring.diameter / 10,
-            colored: ring.diameter <= layout.holeSize
+            colored: ring.diameter <= layout.diameter
         }
     });
     if (layout.innerTen > 0) {
@@ -214,7 +216,7 @@ async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Disc
         rings.push({
             value: maxValue,
             diameter: layout.innerTen / 10,
-            colored: layout.innerTen <= layout.holeSize
+            colored: layout.innerTen <= layout.diameter
         });
     }
 

@@ -1,93 +1,101 @@
 datasource db {
-  provider = "mysql"
-  url      = ""
+    provider = "mysql"
+    url      = "mysql://meyton:mc4hct@192.168.10.200:3306/SSMDB2"
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  output        = "./generated/client"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    provider      = "prisma-client-js"
+    output        = "./generated/client"
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
-enum GenderEnum {
-  male
-  female
-  unknown
-}
+/**
+ * This is the schema for the Meyton SSMDB2 database.
+ * For ShootMaster Version 4.9.7a - 5.3.x
+ * SSMDB2 Version 3 - 7
+ */
 
 model Target {
-  id               Int        @id @map("ScheibenID")
-  startListName    String     @map("Starterliste") @db.VarChar(36)
-  startListId      Int        @map("StarterlistenID")
-  //startTime         DateTime   @map("Startzeit") @db.DateTime(0)
-  startNr          Int        @map("StartNr")
-  lastName         String     @map("Nachname") @db.VarChar(36)
-  firstName        String     @map("Vorname") @db.VarChar(36)
-  gender           GenderEnum @default(unknown) @map("Geschlecht")
-  country          String     @map("Land") @db.VarChar(3)
-  shooterId        Int        @map("SportpassID")
-  rangeId          Int        @map("StandNr") @db.SmallInt
-  disciplineName   String     @map("Disziplin") @db.VarChar(36)
-  disciplineId     Int        @map("DisziplinID")
-  className        String     @map("Klasse") @db.VarChar(36)
-  classId          Int        @map("KlassenID")
-  clubName         String     @map("Verein") @db.VarChar(36)
-  clubId           Int        @map("VereinsID")
-  teamName         String     @map("Mannschaft") @db.VarChar(36)
-  teamId           Int        @map("MannschaftsID")
-  rankListName     String     @map("Rangliste") @db.VarChar(36)
-  rankListId       Int        @map("RanglistenID")
-  groupName        String     @map("Gruppe") @db.VarChar(36)
-  groupId          Int        @map("GruppenID")
-  shotCount        Int        @map("Trefferzahl") @db.SmallInt
-  totalRings       Int        @map("TotalRing")
-  totalRingsTenth  Int        @map("TotalRing01")
-  bestdividertenth Int        @map("BesterTeiler01")
-  timestamp        DateTime   @map("Zeitstempel") @db.DateTime(0)
+    id               Int      @id @map("ScheibenID")
+    startList        String   @map("Starterliste") @db.VarChar(36)
+    startListId      Int      @map("StarterlistenID")
+    startTime        DateTime @map("Startzeit") @db.DateTime(0)
+    startNo          Int      @map("StartNr")
+    lastName         String   @map("Nachname") @db.VarChar(36)
+    firstName        String   @map("Vorname") @db.VarChar(36)
+    gender           Gender   @default(unknown) @map("Geschlecht")
+    country          String   @map("Land") @db.VarChar(3)
+    shooterId        BigInt   @map("SportpassID")
+    rangeId          Int      @map("StandNr") @db.SmallInt
+    discipline       String   @map("Disziplin") @db.VarChar(36)
+    disciplineId     Int      @map("DisziplinID")
+    class            String   @map("Klasse") @db.VarChar(36)
+    classId          Int      @map("KlassenID")
+    club             String   @map("Verein") @db.VarChar(36)
+    clubId           Int      @map("VereinsID")
+    team             String   @map("Mannschaft") @db.VarChar(36)
+    teamId           Int      @map("MannschaftsID")
+    rankList         String   @map("Rangliste") @db.VarChar(36)
+    rankListId       Int      @map("RanglistenID")
+    group            String   @map("Gruppe") @db.VarChar(36)
+    groupId          Int      @map("GruppenID")
+    //status           String   @map("Status") @db.VarChar(72) // Added in SSMDB2 Version 7
+    hitsCount        Int      @map("Trefferzahl") @db.SmallInt
+    totalRings       Int      @map("TotalRing")
+    totalRingsTenth  Int      @map("TotalRing01")
+    bestDividerTenth Int      @map("BesterTeiler01")
+    timestamp        DateTime @map("Zeitstempel") @db.DateTime(0)
 
-  series Series[]
-  shots  Shot[]
+    series Series[]
+    hits   Hit[]
 
-  @@map("Scheiben")
+    @@map("Scheiben")
 }
 
 model Series {
-  id         Int @map("Serie")
-  targetId   Int @map("ScheibenID") @db.SmallInt
-  roundId    Int @map("Stellung") @db.SmallInt
-  rings      Int @map("Ring")
-  ringsTenth Int @map("Ring01")
+    targetId   Int @map("ScheibenID")
+    roundId    Int @map("Stellung") @db.SmallInt
+    id         Int @map("Serie") @db.SmallInt
+    rings      Int @map("Ring")
+    ringsTenth Int @map("Ring01")
 
-  target Target @relation(fields: [targetId], references: [id])
+    target Target @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "Serien_ibfk_1")
 
-  @@id([id, roundId, targetId])
-  @@map("Serien")
+    @@id([targetId, roundId, id])
+    @@map("Serien")
 }
 
-model Shot {
-  targetId         Int      @map("ScheibenID")
-  roundId          Int      @map("Stellung") @db.SmallInt
-  id               Int      @map("Treffer") @db.SmallInt
-  x                Int      @map("x")
-  y                Int      @map("y")
-  rings            Int      @map("Ring")
-  ringsTenth       Int      @map("Ring01")
-  dividerTenth     Int      @map("Teiler01")
-  dividerHundredth Int      @map("Teiler001")
-  text             String   @map("Text") @db.VarChar(36)
-  innerTen         Boolean  @map("Innenzehner")
-  evaluation       Int      @map("Wertung")
-  timestamp        DateTime @map("Zeitstempel") @db.DateTime(0)
-  millis           Int      @map("Millisekunden") @db.SmallInt
+model Hit {
+    targetId         Int      @map("ScheibenID")
+    roundId          Int      @map("Stellung") @db.SmallInt
+    id               Int      @map("Treffer") @db.SmallInt
+    x                Int      @map("x")
+    y                Int      @map("y")
+    innerTen         Boolean  @map("Innenzehner")
+    rings            Int      @map("Ring")
+    ringsTenth       Int      @map("Ring01")
+    dividerTenth     Int      @map("Teiler01")
+    dividerHundredth Int      @map("Teiler001")
+    // evalMode         Int      @map("Wertung") // Added in SSMDB2 Version 4
+    // text             String   @map("Text") @db.VarChar(36) // Added in SSMDB2 Version 4
+    timestamp        DateTime @map("Zeitstempel") @db.DateTime(0)
+    milliSeconds     Int      @map("Millisekunden") @db.SmallInt
 
-  target Target @relation(fields: [targetId], references: [id])
+    target Target @relation(fields: [targetId], references: [id], onDelete: Cascade, map: "Treffer_ibfk_1")
 
-  @@id([id, roundId, targetId])
-  @@map("Treffer")
+    @@id([targetId, roundId, id])
+    @@map("Treffer")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Version {
-  version Int @id @map("Versionsnummer")
+    Versionsnummer Int
 
-  @@map("Version")
+    @@ignore
+}
+
+enum Gender {
+    male
+    female
+    unknown
 }

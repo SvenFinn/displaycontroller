@@ -10,7 +10,7 @@ function install_dependencies() {
     rm -rf node_modules
     rm -rf dist
     npm install --loglevel=info
-    npm update -S --loglevel=info
+    #npm update -S --loglevel=info
     if [[ $folder == *"database"* ]] || [[ $folder == *"logger" ]] || [[ $folder == *"ttl" ]]; then
         npm run build
     fi

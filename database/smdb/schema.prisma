@@ -1,803 +1,863 @@
 datasource db {
-  provider = "mysql"
-  url      = ""
+    provider = "mysql"
+    url      = "mysql://meyton:mc4hct@192.168.10.200:3306/SMDB"
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  output        = "./generated/client"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    provider      = "prisma-client-js"
+    output        = "./generated/client"
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
-enum GenderEnum {
-  male    @map("maennlich")
-  female  @map("weiblich")
-  unknown @map("neutral")
-}
+/**
+ * This is the schema for the Meyton SMDB database.
+ * For ShootMaster Version 4.9.7a - 5.3.x
+ * SMDB Version 62 - 64
+ */
 
 model Evaluation {
-  id                       Int    @id @map("AuswertungsID")
-  name                     String @unique @map("AuswertungsName") @db.VarChar(72)
-  listId                   Int    @unique @map("ListenID")
-  mode                     Int    @map("AuswertungsModus")
-  modeOption1              Int    @map("AuswertungsModusOption1")
-  modeOption2              Int    @map("AuswertungsModusOption2")
-  flags                    Int    @map("AuswertungsModusFlags")
-  teamMode                 Int    @map("MannschaftsModus")
-  teamModeOption1          Int    @map("MannschaftsModusOption1")
-  teamModeOption2          Int    @map("MannschaftsModusOption2")
-  teamModeFlags            Int    @map("MannschaftsModusFlags")
-  teamSize                 Int    @map("MannschaftsGroesse")
-  mutipleTargets           Int    @map("MehrereScheiben")
-  multipleTargetsOption    String @map("MehrereScheibenOption") @db.VarChar(36)
-  minTargetCount           Int    @map("Mindestscheibenzahl")
-  hitEval1                 Int    @map("Trefferauswertung1")
-  hitEval2                 Int    @map("Trefferauswertung2")
-  hitsPerSeries            Int    @map("TrefferProSerie")
-  tie                      Int    @map("Gleichstand")
-  finalists                Int    @map("Finalteilnehmer")
-  resultsStartingPlace     Int    @map("ErgebnislisteVonPlatz")
-  resultsEndingPlace       Int    @map("ErgebnislisteBisPlatz")
-  hiddenStartingPlace      Int    @map("VerdecktVonPlatz")
-  hiddenEndingPlace        Int    @map("VerdecktBisPlatz")
-  certificateTemplate      Int    @map("UrkundenVorlage")
-  certificateStartingPlace Int    @map("UrkundeVonPlatz")
-  certificateEndingPlace   Int    @map("UrkundeBisPlatz")
-  certificateYOffset       Int    @map("UrkundeYOffset")
-  htmlInterval             Int    @map("HTMLExportIntervall")
-  htmlPath                 String @map("HTMLExportPfad") @db.VarChar(36)
+    id                    Int    @id @map("AuswertungsID")
+    name                  String @map("AuswertungsName") @db.VarChar(72)
+    listId                Int    @map("ListenID")
+    mode                  Int    @map("AuswertungsModus")
+    modeOption1           Int    @map("AuswertungsModusOption1")
+    modeOption2           Int    @map("AuswertungsModusOption2")
+    modeFlags             Int    @map("AuswertungsModusFlags")
+    teamMode              Int    @map("MannschaftsModus")
+    teamSize              Int    @map("MannschaftsGroesse")
+    teamModeOption1       Int    @map("MannschaftsModusOption1")
+    teamModeOption2       Int    @map("MannschaftsModusOption2")
+    teamModeFlags         Int    @map("MannschaftsModusFlags")
+    multipleTargets       Int    @map("MehrereScheiben")
+    multipleTargetsOption String @map("MehrereScheibenOption") @db.VarChar(36)
+    minTargetCount        Int    @map("Mindestscheibenzahl")
+    hitEval1              Int    @map("Trefferauswertung1")
+    hitEval2              Int    @map("Trefferauswertung2")
+    hitsPerSeries         Int    @map("TrefferProSerie")
+    tieBreak              Int    @map("Gleichstand")
+    finalists             Int    @map("Finalteilnehmer")
+    resultsListStart      Int    @map("ErgebnislisteVonPlatz")
+    resultsListEnd        Int    @map("ErgebnislisteBisPlatz")
+    hiddenStart           Int    @map("VerdecktVonPlatz")
+    hiddenEnd             Int    @map("VerdecktBisPlatz")
+    certificateTemplate   Int    @map("UrkundenVorlage")
+    certificateStart      Int    @map("UrkundeVonPlatz")
+    certificateEnd        Int    @map("UrkundeBisPlatz")
+    certificateYOffset    Int    @map("UrkundeYOffset")
+    htmlInterval          Int    @map("HTMLExportIntervall")
+    htmlPath              String @map("HTMLExportPfad") @db.VarChar(36)
 
-  filterDate          FilterDate[]
-  filterDiscipline    FilterDiscipline[]
-  filterBirthDate     FilterBirthDate[]
-  filterGender        FilterGender[]
-  filterGroup         FilterGroup[]
-  filterClass         FilterClass[]
-  filterTeam          FilterTeam[]
-  filterPriceShooting FilterPriceShooting[]
-  filterRankList      FilterRankList[]
-  filterShooter       FilterShooter[]
-  filterSQL           FilterSQL[]
-  filterRanges        FilterRanges[]
-  filterStartList     FilterStartList[]
-  // filterStartingTimes FilterStartingTimes[] @ignore
-  filterState         FilterState[]
-  filterHits          FilterHits[]
-  filterUnion         FilterUnion[]
-  filterClub          FilterClub[]
-  filterDayOfWeek     FilterDayOfWeek[]
-  filterTime          FilterTime[]
-  handiCap            HandiCap[]
-  priceList           PriceList[]
-  revision            Revision[]
-  certificateText     CertificateText[]
+    startList            StartList             @relation(fields: [listId], references: [id], onDelete: Cascade)
+    dateFilters          FilterDate[]
+    disciplineFilters    FilterDiscipline[]
+    birthDateFilters     FilterBirthDate[]
+    genderFilters        FilterGender[]
+    groupFilters         FilterGroup[]
+    classFilters         FilterClass[]
+    teamFilters          FilterTeam[]
+    priceShootingFilters FilterPriceShooting[]
+    rankListFilters      FilterRankList[]
+    sqlFilters           FilterSQL?
+    shooterFilters       FilterShooter[]
+    rangeFilters         FilterRange[]
+    startListFilters     FilterStartList[]
+    startTimeFilters     FilterStartTime[]
+    stateFilters         FilterState[]
+    hitFilters           FilterHits[]
+    unionFilters         FilterUnion[]
+    clubFilters          FilterClub[]
+    dayOfWeekFilters     FilterDayOfWeek[]
+    timeFilters          FilterTime[]
+    handiCaps            HandiCap[]
+    priceLists           PriceList[]
+    revisions            Revision[]
+    certificateTexts     CertificateText[]
 
-  @@map("Auswertung")
+    @@unique([listId, name])
+    @@map("Auswertung")
 }
 
 model District {
-  districtId   Int    @id @map("BezirksID")
-  districtName String @unique @map("BezirksName") @db.VarChar(36)
+    id   Int    @id @map("BezirksID")
+    name String @unique @map("BezirksName") @db.VarChar(36)
 
-  @@map("Bezirk")
-}
-
-enum TicketType {
-  base         @map("Grundeinlage")
-  postPurchase @map("Nachkauf")
-  inPayment    @map("Einzahlung")
-  payout       @map("Auszahlung")
+    @@map("Bezirk")
 }
 
 model Accounting {
-  ticketId        Int        @id @map("BuchungsID")
-  registerId      Int        @map("KassenID")
-  personalId      Int        @map("PersonalID")
-  listId          Int        @map("ListenID")
-  startId         Int        @map("StartID")
-  classId         Int        @map("KlassenID")
-  priceShootingId Int        @map("PreisscheibenID")
-  ticketType      TicketType @map("Buchungstyp")
-  change          Int        @map("Aenderung")
-  debit           Int        @map("Soll")
-  credit          Int        @map("Haben")
-  timestamp       DateTime   @map("Zeitstempel") @db.DateTime
-  ticketFlags     Int        @map("BuchungsFlags")
+    id              Int        @id @default(autoincrement()) @map("BuchungsID")
+    registerId      Int        @map("KassenID")
+    staffId         Int        @map("PersonalID")
+    listId          Int        @map("ListenID")
+    startId         Int        @map("StartID")
+    classId         Int        @map("KlassenID")
+    priceShootingId Int        @map("PreisscheibenID")
+    type            TicketType @map("Buchungstyp")
+    change          Int        @map("Aenderung")
+    debit           Int        @map("Soll")
+    credit          Int        @map("Haben")
+    timeStamp       DateTime   @map("Zeitstempel") @db.DateTime(0)
+    flags           Int        @map("BuchungsFlags")
 
-  personal      Personal      @relation(fields: [personalId], references: [id])
-  startList     StartList     @relation(fields: [listId], references: [id])
-  class         Class         @relation(fields: [classId], references: [id])
-  priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id])
+    personal      Staff          @relation(fields: [staffId], references: [id])
+    startList     StartListEntry @relation(fields: [listId, startId], references: [listId, startId])
+    class         Class          @relation(fields: [classId], references: [id])
+    priceShooting PriceShooting  @relation(fields: [priceShootingId], references: [id])
 
-  @@map("Buchungen")
+    @@index([classId])
+    @@index([listId, startId])
+    @@index([staffId])
+    @@index([priceShootingId])
+    @@map("Buchungen")
 }
 
 model Discipline {
-  id        Int     @id @map("DzplID")
-  name      String  @map("DzplName") @db.VarChar(36)
-  active    Boolean @map("aktiv") @db.TinyInt
-  lastRange Int     @map("Belegung") @db.SmallInt
-  gauge     Int     @map("Kaliber") @db.SmallInt
+    id        Int     @id @map("DzplID")
+    name      String  @map("DzplName") @db.VarChar(36)
+    active    Boolean @map("aktiv") @db.TinyInt
+    lastRange Int     @map("Belegung") @db.SmallInt
+    gauge     Int     @map("Kaliber") @db.SmallInt
 
-  rounds           Rounds[]
-  filterDiscipline FilterDiscipline[]
-  handiCap         HandiCap[]
-  priceShooting    PriceShooting[]
-  records          Records[]
-  targetData       TargetData[]
-  startListEntry   StartListEntry[]
-  time             Time[]
+    rounds            Round[]
+    disciplineFilters FilterDiscipline[]
+    handiCaps         HandiCap[]
+    priceShootings    PriceShooting[]
+    records           Record[]
+    targetData        TargetData[]
+    startListEntries  StartListEntry[]
+    times             Zeit[]
 
-  @@map("Disziplin")
+    @@map("Disziplin")
 }
 
-model Rounds {
-  disciplineId   Int    @id @map("DzplID")
-  id             Int    @map("StellungsIdx") @db.TinyInt
-  zoom           Int    @map("Zoom") @db.TinyInt
-  mode           Int    @map("Modus") @db.TinyInt
-  name           String @map("DurchgangsName") @db.VarChar(36)
-  targetLayoutId Int    @map("ScheiBesID")
-  maxHits        Int    @map("MaxTrefferZahl") @db.SmallInt
-  hitsPerSum     Int    @map("TrefferProSerie") @db.SmallInt
-  hitsPerView    Int    @map("TrefferProScheibe") @db.SmallInt
+model Round {
+    disciplineId Int    @map("DzplID")
+    id           Int    @map("StellungsIdx") @db.TinyInt
+    zoom         Int    @map("Zoom") @db.TinyInt
+    mode         Int    @map("Modus") @db.TinyInt
+    name         String @map("DurchgangsName") @db.VarChar(36)
+    layoutId     Int    @map("ScheiBesID")
+    maxHits      Int    @map("MaxTrefferZahl") @db.SmallInt
+    hitsPerSum   Int    @map("TrefferProSerie") @db.SmallInt
+    hitsPerView  Int    @map("TrefferProScheibe") @db.SmallInt
 
-  discipline   Discipline   @relation(fields: [disciplineId], references: [id])
-  targetLayout targetLayout @relation(fields: [targetLayoutId], references: [id])
+    discipline Discipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
+    layout     Layout     @relation(fields: [layoutId], references: [id])
 
-  @@unique([disciplineId, id])
-  @@map("Durchgang")
-}
-
-model targetLayout {
-  id        Int    @id @map("ScheiBesID")
-  name      String @map("ScheiBesTitel") @db.VarChar(72)
-  holeSize  Int    @map("Spiegel") @db.SmallInt
-  innerTen  Int    @map("Innenzehner") @db.SmallInt
-  funcIndex Int    @map("Funktionsindex") @db.TinyInt
-
-  rounds Rounds[]
-  rings  Rings[]
-
-  @@map("Scheibenbeschreibung")
+    @@id([disciplineId, id])
+    @@index([layoutId])
+    @@map("Durchgang")
 }
 
 model FilterDate {
-  evaluationId Int      @map("AuswertungsID")
-  dateStart    DateTime @map("DatumStart") @db.Date
-  dateEnd      DateTime @map("DatumEnde") @db.Date
+    evaluationId Int
+    startDate    DateTime @db.Date
+    endDate      DateTime @db.Date
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, dateStart, dateEnd])
-  @@map("FilterDatum")
+    @@id([evaluationId, startDate, endDate])
+    @@map("FilterDatum")
 }
 
 model FilterDiscipline {
-  evaluationId Int @map("AuswertungsID")
-  disciplineId Int @map("DzplID")
+    evaluationId Int
+    disciplineId Int
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  discipline Discipline @relation(fields: [disciplineId], references: [id])
+    Auswertung Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    Disziplin  Discipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, disciplineId])
-  @@map("FilterDisziplin")
+    @@id([evaluationId, disciplineId])
+    @@index([disciplineId])
+    @@map("FilterDisziplin")
 }
 
 model FilterBirthDate {
-  evaluationId   Int      @map("AuswertungsID")
-  birthDateStart DateTime @map("DatumStart") @db.Date
-  birthDateEnd   DateTime @map("DatumEnde") @db.Date
+    evaluationId Int      @map("AuswertungsID")
+    startDate    DateTime @map("DatumStart") @db.Date
+    endDate      DateTime @map("DatumEnde") @db.Date
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, birthDateStart, birthDateEnd])
-  @@map("FilterGeburtsdatum")
+    @@id([evaluationId, startDate, endDate])
+    @@map("FilterGeburtsdatum")
 }
 
 model FilterGender {
-  evaluationId Int @map("AuswertungsID")
-  gender       Int @map("Geschlecht") @db.TinyInt
+    evaluationId Int @map("AuswertungsID")
+    gender       Int @map("Geschlecht") @db.TinyInt
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, gender])
-  @@map("FilterGeschlecht")
+    @@id([evaluationId, gender])
+    @@map("FilterGeschlecht")
 }
 
 model FilterGroup {
-  evaluationId Int @map("AuswertungsID")
-  groupId      Int @map("GruppenID")
+    evaluationId Int @map("AuswertungsID")
+    groupId      Int @map("GruppenID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  group      Group      @relation(fields: [groupId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    group      Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, groupId])
-  @@map("FilterGruppe")
+    @@id([evaluationId, groupId])
+    @@index([groupId])
+    @@map("FilterGruppe")
 }
 
 model FilterClass {
-  evaluationId Int @map("AuswertungsID")
-  classId      Int @map("KlassenID")
+    evaluationId Int @map("AuswertungsID")
+    classId      Int @map("KlassenID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  class      Class      @relation(fields: [classId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    Klasse     Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, classId])
-  @@map("FilterKlasse")
+    @@id([evaluationId, classId])
+    @@index([classId])
+    @@map("FilterKlasse")
 }
 
 model FilterTeam {
-  evaluationId Int @map("AuswertungsID")
-  teamId       Int @map("MannschaftsID")
+    evaluationId Int @map("AuswertungsID")
+    teamId       Int @map("MannschaftsID")
 
-  team       Team       @relation(fields: [teamId], references: [id])
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    team       Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, teamId])
-  @@map("FilterMannschaft")
+    @@id([evaluationId, teamId])
+    @@index([teamId])
+    @@map("FilterMannschaft")
 }
 
 model FilterPriceShooting {
-  evaluationId    Int @map("AuswertungsID")
-  priceShootingId Int @map("PreisscheibenID")
+    evaluationId    Int @map("AuswertungsID")
+    priceShootingId Int @map("PreisscheibenID")
 
-  evaluation    Evaluation    @relation(fields: [evaluationId], references: [id])
-  priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id])
+    evaluation    Evaluation    @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, priceShootingId])
-  @@map("FilterPreisscheibe")
+    @@id([evaluationId, priceShootingId])
+    @@index([priceShootingId])
 }
 
 model FilterRankList {
-  evaluationId Int @map("AuswertungsID")
-  rankListId   Int @map("RanglistenID")
+    evaluationId Int @map("AuswertungsID")
+    rankListId   Int @map("RanglistenID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  rankList   RankList   @relation(fields: [rankListId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    rankList   RankList   @relation(fields: [rankListId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, rankListId])
-  @@map("FilterRangliste")
-}
-
-model FilterShooter {
-  evaluationId Int @map("AuswertungsID")
-  shooterId    Int @map("SportpassID")
-
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  shooter    Shooter    @relation(fields: [shooterId], references: [id])
-
-  @@id([evaluationId, shooterId])
-  @@map("FilterSchuetze")
+    @@id([evaluationId, rankListId])
+    @@index([rankListId])
 }
 
 model FilterSQL {
-  evaluationId Int    @id @map("AuswertungsID")
-  whereClause  String @map("WhereClause") @db.VarChar(1024)
+    evaluationId Int     @id @map("AuswertungsID")
+    whereClause  String? @map("WhereClause") @db.VarChar(1024)
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-
-  @@map("FilterSQL")
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 }
 
-model FilterRanges {
-  evaluationId Int @map("AuswertungsID")
-  rangeIdStart Int @map("StandbereichStart")
-  rangeIdEnd   Int @map("StandbereichEnde")
+model FilterShooter {
+    evaluationId Int    @map("AuswertungsID")
+    shooterId    BigInt @map("SportpassID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    shooter    Shooter    @relation(fields: [shooterId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, rangeIdStart, rangeIdEnd])
-  @@map("FilterStand")
+    @@id([evaluationId, shooterId])
+    @@index([shooterId])
+    @@map("FilterSchuetze")
+}
+
+model FilterRange {
+    evaluationId Int @map("AuswertungsID")
+    rangeStart   Int @map("StandbereichStart")
+    rangeEnd     Int @map("StandbereichEnde")
+
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+    @@id([evaluationId, rangeStart, rangeEnd])
+    @@map("FilterStand")
 }
 
 model FilterStartList {
-  evaluationId Int @map("AuswertungsID")
-  startListId  Int @map("ListenID")
+    evaluationId Int
+    startListId  Int
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  startList  StartList  @relation(fields: [startListId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    startList  StartList  @relation(fields: [startListId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, startListId])
-  @@map("FilterStarterliste")
+    @@id([evaluationId, startListId])
+    @@index([startListId])
+    @@map("FilterStarterliste")
 }
 
-// model FilterStartingTimes {
-//   evaluationId Int      @map("AuswertungsID") 
-//   startTime    DateTime @map("Startzeit") @db.DateTime // Could be 0, which is not a valid DateTime
+model FilterStartTime {
+    evaluationId Int      @map("AuswertungsID")
+    startTime    DateTime @map("Startzeit") @db.DateTime(0)
 
-//   evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-//   @@id([evaluationId, startTime])
-//   @@map("FilterStartzeit")
-//   @@ignore
-// }
+    @@id([evaluationId, startTime])
+    @@map("FilterStartzeit")
+}
 
 model FilterState {
-  evaluationId Int @map("AuswertungsID")
-  state        Int @map("StatusFlag")
+    evaluationId Int @map("AuswertungsID")
+    state        Int @map("StatusFlag")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, state])
-  @@map("FilterStatus")
+    @@id([evaluationId, state])
+    @@map("FilterStatus")
 }
 
 model FilterHits {
-  evaluationId Int    @map("AuswertungsID")
-  roundId      Int    @map("StellungsNr")
-  type         Int    @map("FilterTyp")
-  hitRange     String @map("Trefferbereich") @db.VarChar(72)
+    evaluationId Int    @map("AuswertungsID")
+    roundId      Int    @map("StellungsNr")
+    type         Int    @map("FilterTyp")
+    hitRange     String @map("Trefferbereich") @db.VarChar(72)
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id])
 
-  @@id([evaluationId, roundId])
-  @@map("FilterTreffer")
+    @@id([evaluationId, roundId])
+    @@map("FilterTreffer")
 }
 
 model FilterUnion {
-  evaluationId Int @map("AuswertungsID")
-  unionId      Int @map("VerbandsID")
+    evaluationId Int @map("AuswertungsID")
+    unionId      Int @map("VerbandsID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  union      Union      @relation(fields: [unionId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    union      Union      @relation(fields: [unionId], references: [id])
 
-  @@id([evaluationId, unionId])
-  @@map("FilterVerband")
+    @@id([evaluationId, unionId])
+    @@map("FilterVerband")
 }
 
 model FilterClub {
-  evaluationId Int @map("AuswertungsID")
-  clubId       Int @map("VereinsID")
+    evaluationId Int @map("AuswertungsID")
+    clubId       Int @map("VereinsID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
-  club       Club       @relation(fields: [clubId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    club       Club       @relation(fields: [clubId], references: [id])
+    Team       Team?      @relation(fields: [teamId], references: [id])
+    teamId     Int?
 
-  @@id([evaluationId, clubId])
-  @@map("FilterVerein")
+    @@id([evaluationId, clubId])
+    @@map("FilterVerein")
 }
 
 model FilterDayOfWeek {
-  evaluationId Int @map("AuswertungsID")
-  dayOfWeek    Int @map("WochentagsID")
+    evaluationId Int @map("AuswertungsID")
+    dayOfWeek    Int @map("WochentagsID")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id])
 
-  @@id([evaluationId, dayOfWeek])
-  @@map("FilterWochentag")
+    @@id([evaluationId, dayOfWeek])
+    @@map("FilterWochentag")
 }
 
 model FilterTime {
-  evaluationId Int      @map("AuswertungsID")
-  timeStart    DateTime @map("ZeitStart") @db.Time
-  timeEnd      DateTime @map("ZeitEnde") @db.Time
+    evaluationId Int      @map("AuswertungsID")
+    startTime    DateTime @map("ZeitStart") @db.Time
+    endTime      DateTime @map("ZeitEnde") @db.Time
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id])
 
-  @@id([evaluationId, timeStart, timeEnd])
-  @@map("FilterZeit")
+    @@id([evaluationId, startTime, endTime])
+    @@map("FilterZeit")
 }
 
 model FootNote {
-  id          Int    @id @map("FussnotenID")
-  type        Int    @map("FussnotenTyp")
-  punishment  Int    @map("FussnotenStrafe")
-  shortText   String @map("FussnotenKuerzel") @db.VarChar(20)
-  germanText  String @map("FussnotenText_de") @db.VarChar(72)
-  englishText String @map("FussnotenText_en") @db.VarChar(72)
-  frenchText  String @map("FussnotenText_fr") @db.VarChar(72)
+    id          Int    @id @map("FussnotenID")
+    type        Int    @map("FussnotenTyp")
+    punishment  Int    @map("FussnotenStrafe")
+    short       String @map("FussnotenKuerzel") @db.VarChar(20)
+    germanText  String @map("FussnotenText_de") @db.VarChar(72)
+    englishText String @map("FussnotenText_en") @db.VarChar(72)
+    frenchText  String @map("FussnotenText_fr") @db.VarChar(72)
 
-  @@map("Fussnote")
+    @@map("Fussnote")
 }
 
 model Area {
-  id   Int    @id @map("GauID")
-  name String @unique @map("GauName") @db.VarChar(36)
+    id   Int    @id @map("GauID")
+    name String @unique @map("GauName") @db.VarChar(36)
 
-  @@map("Gau")
+    @@map("Gau")
 }
 
-model BasicDeposit {
-  listId  Int @map("ListenID")
-  classId Int @map("KlassenID")
-  cost    Int @default(0) @map("KostenGrundeinlage")
+model BaseDeposit {
+    listId  Int @map("ListenID")
+    classId Int @map("KlassenID")
+    fee     Int @map("KostenGrundeinlage")
 
-  @@id([listId, classId])
-  @@map("Grundeinlagenkosten")
+    startList StartList @relation(fields: [listId], references: [id], onDelete: Cascade)
+    class     Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+    @@id([listId, classId])
+    @@index([classId])
+    @@map("Grundeinlagenkosten")
 }
 
 model Group {
-  id   Int    @id @map("GruppenID")
-  name String @unique @map("GruppenName") @db.VarChar(36)
+    id   Int    @id @map("GruppenID")
+    name String @unique @map("GruppenName") @db.VarChar(36)
 
-  filterGroup    FilterGroup[]
-  startListEntry StartListEntry[]
+    groupFilters     FilterGroup[]
+    startListEntries StartListEntry[]
 
-  @@map("Gruppe")
+    @@map("Gruppe")
 }
 
 model HandiCap {
-  evaluationId    Int @map("AuswertungsID")
-  disciplineId    Int @map("DzplID")
-  priceShootingId Int @map("PreisscheibenID")
-  operation       Int @map("Rechenart")
-  value           Int @map("Wert")
+    evaluationId    Int @map("AuswertungsID")
+    disciplineId    Int @map("DzplID")
+    priceShootingId Int @map("PreisscheibenID")
+    operation       Int @map("Rechenart")
+    value           Int @map("Wert") @db.SmallInt
 
-  evaluation    Evaluation    @relation(fields: [evaluationId], references: [id])
-  discipline    Discipline    @relation(fields: [disciplineId], references: [id])
-  priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id])
+    evaluation    Evaluation    @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+    discipline    Discipline    @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
+    priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, disciplineId, priceShootingId])
-  @@map("Handicap")
+    @@id([evaluationId, disciplineId, priceShootingId])
+    @@index([disciplineId])
+    @@index([priceShootingId])
+    @@map("Handicap")
 }
 
 model Class {
-  id     Int        @id @map("KlassenID")
-  name   String     @unique @map("KlassenName") @db.VarChar(36)
-  minAge Int        @default(0) @map("minAlter")
-  maxAge Int        @default(255) @map("maxAlter")
-  gender GenderEnum @map("Geschlecht")
+    id     Int    @id @map("KlassenID")
+    name   String @unique @map("KlassenName") @db.VarChar(36)
+    minAge Int    @map("minAlter")
+    maxAge Int    @map("maxAlter")
+    gender Gender @map("Geschlecht")
 
-  priceShootingClass PriceShootingClass[]
-  accounting         Accounting[]
-  filterClass        FilterClass[]
-  startListEntry     StartListEntry[]
-  startListClass     StartListClass[]
+    accounting           Accounting[]
+    classFilters         FilterClass[]
+    baseDeposit          BaseDeposit[]
+    priceShootingClasses PriceShootingClass[]
+    startListEntries     StartListEntry[]
+    startListClasses     StartListClass[]
 
-  @@map("Klasse")
+    @@map("Klasse")
 }
 
 model Country {
-  shortName   String @id @map("LandesKuerzel") @db.VarChar(3)
-  germanName  String @map("LandesName_de") @db.VarChar(36)
-  englishName String @map("LandesName_en") @db.VarChar(36)
-  frenchName  String @map("LandesName_fr") @db.VarChar(36)
+    short       String @id @map("LandesKuerzel") @db.VarChar(3)
+    germanName  String @map("LandesName_de") @db.VarChar(36)
+    englishName String @map("LandesName_en") @db.VarChar(36)
+    frenchName  String @map("LandesName_fr") @db.VarChar(36)
+    flag        Bytes? @map("LandesFlagge") @db.MediumBlob
 
-  countryRecords Records[] @relation("CountryRecords")
-  nationRecords  Records[] @relation("NationRecords")
-  shooter        Shooter[]
+    recordsCountry Record[]  @relation("Rekord_RekordLandToLand")
+    recordsNation  Record[]  @relation("Rekord_RekordNationToLand")
+    shooters       Shooter[]
 
-  @@map("Land")
+    @@map("Land")
 }
 
 model Team {
-  id     Int    @id @map("MannschaftsID")
-  name   String @unique @map("MannschaftsName") @db.VarChar(36)
-  clubId Int    @map("VereinsID")
+    id     Int    @id @map("MannschaftsID")
+    name   String @unique @map("MannschaftsName") @db.VarChar(36)
+    clubId Int    @map("VereinsID")
 
-  club           Club             @relation(fields: [clubId], references: [id])
-  filterTeam     FilterTeam[]
-  teamPosList    TeamPosList[]
-  startListEntry StartListEntry[]
+    filterClubs      FilterClub[]
+    club             Club             @relation(fields: [clubId], references: [id])
+    seedingLists     SeedingList[]
+    startListEntries StartListEntry[]
+    FilterTeam       FilterTeam[]
 
-  @@map("Mannschaft")
+    @@index([clubId])
+    @@map("Mannschaft")
 }
 
-model Personal {
-  id        Int    @id @map("PersonalID")
-  lastName  String @map("Nachname") @db.VarChar(36)
-  firstName String @map("Vorname") @db.VarChar(36)
-  userName  String @unique @map("Benutzername") @db.VarChar(36)
-  password  String @map("Passwort") @db.VarChar(72)
-  rights    Int    @map("Berechtigung")
+model Staff {
+    id        Int    @id @map("PersonalID")
+    lastName  String @map("Nachname") @db.VarChar(36)
+    firstName String @map("Vorname") @db.VarChar(36)
+    userName  String @unique @map("Benutzername") @db.VarChar(36)
+    password  String @map("Passwort") @db.VarChar(72)
+    rights    Int    @map("Berechtigung")
 
-  accounting Accounting[]
+    accounting Accounting[]
 
-  @@map("Personal")
+    @@map("Personal")
 }
 
 model PriceList {
-  evaluationId Int @map("AuswertungsID")
-  place        Int @map("Platz")
-  cash         Int @map("Geldpreis")
-  nonCash      Int @map("Sachpreis")
+    evaluationId  Int    @map("AuswertungsID")
+    place         Int    @map("Platz")
+    cash          Int    @map("Geldpreis")
+    materialPrice String @map("Sachpreis") @db.VarChar(72)
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, place])
-  @@map("Preisliste")
+    @@id([evaluationId, place])
+    @@map("Preisliste")
 }
 
 model PriceShooting {
-  id               Int    @id @map("PreisscheibenID")
-  listId           Int    @map("ListenID")
-  disciplineId     Int    @map("DzplID")
-  name             String @map("Aliasname") @db.VarChar(36)
-  color            String @map("Spiegelfarbe") @db.VarChar(7)
-  baseCost         Int    @map("Grundeinlage")
-  maxTargets       Int    @map("MaxNachkauf")
-  costPerTarget    Int    @map("KostenNachkauf")
-  alternativeGroup Int    @map("Alternativgruppe")
-  flags            Int    @map("PreisscheibenFlags")
+    id               Int    @id @map("PreisscheibenID")
+    listId           Int    @map("ListenID")
+    disciplineId     Int    @map("DzplID")
+    name             String @map("Aliasname") @db.VarChar(36)
+    color            String @map("Spiegelfarbe") @db.VarChar(7)
+    baseCost         Int    @map("Grundeinlage")
+    maxRebuy         Int    @map("MaxNachkauf")
+    rebuyCost        Int    @map("KostenNachkauf")
+    alternativeGroup Int    @map("Alternativgruppe")
+    flags            Int    @map("PreisscheibenFlags")
 
-  discipline          Discipline            @relation(fields: [disciplineId], references: [id])
-  startList           StartList             @relation(fields: [listId], references: [id])
-  classes             PriceShootingClass[]
-  targetData          TargetData[]
-  accounting          Accounting[]
-  filterPriceShooting FilterPriceShooting[]
-  handiCap            HandiCap[]
+    accounting           Accounting[]
+    filterPriceShootings FilterPriceShooting[]
+    handiCaps            HandiCap[]
+    startList            StartList             @relation(fields: [listId], references: [id], onDelete: Cascade)
+    discipline           Discipline            @relation(fields: [disciplineId], references: [id])
+    classes              PriceShootingClass[]
+    targetData           TargetData[]
 
-  @@unique([listId, name])
-  @@map("Preisscheiben")
+    @@unique([listId, name])
+    @@index([disciplineId])
+    @@map("Preisscheiben")
 }
 
 model PriceShootingClass {
-  priceShootingId Int @map("PreisscheibenID")
-  classId         Int @map("KlassenID")
+    priceShootingId Int @map("PreisscheibenID")
+    classId         Int @map("KlassenID")
 
-  priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id])
-  class         Class         @relation(fields: [classId], references: [id])
+    priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id], onDelete: Cascade)
+    class         Class         @relation(fields: [classId], references: [id], onDelete: Cascade)
 
-  @@id([priceShootingId, classId])
-  @@map("PreisscheibenKlassen")
+    @@id([priceShootingId, classId])
+    @@index([classId])
+    @@map("PreisscheibenKlassen")
 }
 
 model PrinterSettings {
-  name            String @id @map("PrinterName") @db.VarChar(72)
-  horizontalScale Float  @map("HScaleFactor")
-  verticalScale   Float  @map("VScaleFactor")
-
-  @@map("PrinterSettings")
+    name   String @id @map("PrinterName") @db.VarChar(72)
+    scaleX Float  @map("HScaleFactor") @db.Float
+    scaleY Float  @map("VScaleFactor") @db.Float
 }
 
 model RankList {
-  id   Int    @id @map("RanglistenID")
-  name String @unique @map("RanglistenName") @db.VarChar(36)
+    id   Int    @id @map("RanglistenID")
+    name String @unique @map("RanglistenName") @db.VarChar(36)
 
-  filterRankList FilterRankList[]
-  startListEntry StartListEntry[]
+    filterRankLists  FilterRankList[]
+    startListEntries StartListEntry[]
 
-  @@map("Rangliste")
+    @@map("Rangliste")
 }
 
-model Records {
-  id           Int      @id @map("RekordID")
-  disciplineId Int      @map("DzplID")
-  type         Int      @map("RekordTyp")
-  mode         Int      @map("RekordModus")
-  result       Int      @map("RekordErgebnis")
-  unit         Int      @map("RekordEinheit")
-  holder       String   @map("RekordInhaber") @db.VarChar(256)
-  nationShort  String   @map("RekordNation") @db.VarChar(3)
-  date         DateTime @map("RekordDatum") @db.Date
-  event        Int      @map("RekordVeranstaltung")
-  place        String   @map("RekordOrt") @db.VarChar(72)
-  countryShort String   @map("RekordLand") @db.VarChar(3)
+model Record {
+    id           Int      @id @map("RekordID")
+    disciplineId Int      @map("DzplID")
+    type         Int      @map("RekordTyp")
+    mode         Int      @map("RekordModus")
+    result       Int      @map("RekordErgebnis")
+    unit         Int      @map("RekordEinheit")
+    holder       String?  @map("RekordInhaber") @db.VarChar(256)
+    nationShort  String   @map("RekordNation") @db.VarChar(3)
+    date         DateTime @map("RekordDatum") @db.Date
+    event        Int      @map("RekordVeranstaltung")
+    place        String   @map("RekordOrt") @db.VarChar(72)
+    countryShort String   @map("RekordLand") @db.VarChar(3)
 
-  discipline Discipline @relation(fields: [disciplineId], references: [id])
-  country    Country    @relation("CountryRecords", fields: [countryShort], references: [shortName])
-  nation     Country    @relation("NationRecords", fields: [nationShort], references: [shortName])
+    discipline Discipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
+    country    Country    @relation("Rekord_RekordNationToLand", fields: [countryShort], references: [short])
+    nation     Country    @relation("Rekord_RekordLandToLand", fields: [nationShort], references: [short])
 
-  @@map("Rekord")
+    @@index([disciplineId])
+    @@index([countryShort])
+    @@index([nationShort])
+    @@map("Rekord")
 }
 
 model Revision {
-  evaluationId Int      @map("AuswertungsID")
-  id           Int      @map("RevisionsID")
-  timestamp    DateTime @map("Zeitstempel") @db.DateTime
-  resultStatus Int      @map("ErgebnisStatus")
-  protestUntil DateTime @map("ProtestzeitBis") @db.DateTime
-  commeent     String   @map("Kommentar") @db.VarChar(72)
-  flags        Int      @map("RevisionsFlags")
+    evaluationId Int      @map("AuswertungsID")
+    id           Int      @map("RevisionsID")
+    timeStamp    DateTime @map("Zeitstempel") @db.DateTime(0)
+    state        Int      @map("ErgebnisStatus")
+    protestUntil DateTime @map("ProtestzeitBis") @db.DateTime(0)
+    comment      String   @map("Kommentar") @db.VarChar(72)
+    data         Bytes?   @map("RevisionsDaten") @db.MediumBlob
+    flags        Int      @map("RevisionsFlags")
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, id])
-  @@map("Revision")
+    @@id([evaluationId, id])
+    @@map("Revision")
 }
 
-model Rings {
-  targetLayoutId Int @map("ScheiBesId")
-  id             Int @map("RingIdx")
-  diameter       Int @map("Ringdurchmesser")
-  value          Int @map("Wert")
+model Ring {
+    layoutId Int @map("ScheiBesID")
+    id       Int @map("RingIdx") @db.TinyInt
+    diameter Int @map("Ringdurchmesser") @db.SmallInt
+    value    Int @map("Wert") @db.SmallInt
 
-  targetLayout targetLayout @relation(fields: [targetLayoutId], references: [id])
+    layout Layout @relation(fields: [layoutId], references: [id], onDelete: Cascade)
 
-  @@id([targetLayoutId, id])
-  @@map("Ringe")
+    @@id([layoutId, id])
+    @@map("Ringe")
+}
+
+model Layout {
+    id       Int    @id @map("ScheiBesID")
+    name     String @map("ScheiBesTitel") @db.VarChar(36)
+    diameter Int    @map("Spiegel") @db.SmallInt
+    innerTen Int    @map("Innenzehner") @db.SmallInt
+    funcId   Int    @map("Funktionsindex") @db.TinyInt
+
+    rounds Round[]
+    rings  Ring[]
+
+    @@map("Scheibenbeschreibung")
 }
 
 model TargetData {
-  id              Int      @id @map("ScheibenID")
-  listId          Int      @map("ListenID")
-  startId         Int      @map("StartID")
-  disciplineId    Int      @map("DzplID")
-  priceShootingId Int      @map("PreisscheibenID")
-  rangeNo         Int      @map("StandNr")
-  shotCount       Int      @map("Trefferzahl")
-  timestamp       DateTime @map("Zeitstempel") @db.DateTime
-  timestamp_us    BigInt   @map("Zeitstempel_us")
-  emblem          Int      @map("Emblem")
-  version         Int      @map("Version")
-  flags           Int      @map("ScheibenFlags")
+    id              Int      @id @map("ScheibenID")
+    listId          Int      @map("ListenID")
+    startId         Int      @map("StartID")
+    disciplineId    Int      @map("DzplID")
+    priceShootingId Int      @map("PreisscheibenID")
+    rangeId         Int      @map("StandNr")
+    hitCount        Int      @map("Trefferzahl")
+    timeStamp       DateTime @map("Zeitstempel") @db.DateTime(0)
+    timeStamp_us    BigInt   @map("Zeitstempel_us")
+    emblem          Int      @map("Emblem")
+    version         Int      @map("Version")
+    flags           Int      @map("ScheibenFlags")
+    data            Bytes    @map("Mc5TargetData") @db.MediumBlob
 
-  discipline    Discipline    @relation(fields: [disciplineId], references: [id])
-  priceShooting PriceShooting @relation(fields: [priceShootingId], references: [id])
-  startList     StartList     @relation(fields: [listId], references: [id])
+    startListEntry StartListEntry @relation(fields: [listId, startId], references: [listId, startId], onDelete: Cascade)
+    discipline     Discipline     @relation(fields: [disciplineId], references: [id])
+    priceShooting  PriceShooting  @relation(fields: [priceShootingId], references: [id])
 
-  @@map("Scheibendaten")
+    @@index([disciplineId])
+    @@index([listId, startId])
+    @@index([priceShootingId])
+    @@map("Scheibendaten")
 }
 
 model Shooter {
-  id          Int        @id @map("SportpassID")
-  clubId      Int        @map("VereinsID")
-  lastName    String     @map("Nachname") @db.VarChar(36)
-  firstName   String     @map("Vorname") @db.VarChar(36)
-  gender      GenderEnum @map("Geschlecht")
-  //birthDate   DateTime   @map("Geburtsdatum") @db.Date // Could be null
-  nationShort String     @map("LandesKuerzel") @db.VarChar(3)
-  street      String     @map("Strasse") @db.VarChar(72)
-  zip         String     @map("PLZ") @db.VarChar(10)
-  city        String     @map("Ort") @db.VarChar(36)
-  phone       String     @map("Telefonnummer") @db.VarChar(36)
-  email       String     @map("EMail") @db.VarChar(72)
-  iban        String     @map("IBAN") @db.VarChar(34)
-  bic         String     @map("BIC") @db.VarChar(11)
+    id          BigInt   @id @map("SportpassID")
+    clubId      Int      @map("VereinsID")
+    lastName    String   @map("Nachname") @db.VarChar(36)
+    firstName   String   @map("Vorname") @db.VarChar(36)
+    gender      Gender   @map("Geschlecht")
+    birthDate   DateTime @map("Geburtsdatum") @db.Date
+    nationShort String   @map("LandesKuerzel") @db.VarChar(3)
+    street      String   @map("Strasse") @db.VarChar(72)
+    zip         String   @map("PLZ") @db.VarChar(10)
+    city        String   @map("Ort") @db.VarChar(36)
+    phone       String   @map("Telefonnummer") @db.VarChar(36)
+    email       String   @map("EMail") @db.VarChar(72) // length 72 since Ver. 64, but 36 can still be read using this schema
+    IBAN        String   @map("IBAN") @db.VarChar(34)
+    BIC         String   @map("BIC") @db.VarChar(11)
+    flags       Int      @map("SchuetzenFlags")
+    image       Bytes?   @map("SchuetzenFoto") @db.MediumBlob
 
-  nation         Country          @relation(fields: [nationShort], references: [shortName])
-  club           Club             @relation(fields: [clubId], references: [id])
-  filterShooter  FilterShooter[]
-  teamPosList    TeamPosList[]
-  startListEntry StartListEntry[]
-  clubShooter    ClubShooter[]
+    shooterFilters FilterShooter[]
+    club           Club               @relation(fields: [clubId], references: [id])
+    nation         Country            @relation(fields: [nationShort], references: [short])
+    seedingLists   SeedingList[]
+    startListEntry StartListEntry[]
+    clubShooters   Vereinszuordnung[]
 
-  @@map("Schuetze")
+    @@index([nationShort])
+    @@index([lastName])
+    @@index([clubId])
+    @@map("Schuetze")
 }
 
-model TeamPosList {
-  teamId    Int @map("MannschaftsID")
-  pos       Int @map("Position") @db.TinyInt
-  shooterId Int @map("SportpassID")
+model SeedingList {
+    teamId    Int    @map("MannschaftsID")
+    position  Int    @map("Position") @db.TinyInt
+    shooterId BigInt @map("SportpassID")
 
-  team    Team    @relation(fields: [teamId], references: [id])
-  shooter Shooter @relation(fields: [shooterId], references: [id])
+    team    Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+    shooter Shooter @relation(fields: [shooterId], references: [id], onDelete: Cascade)
 
-  @@id([teamId, pos, shooterId])
-  @@map("Setzliste")
+    @@id([teamId, position, shooterId])
+    @@index([shooterId])
+    @@map("Setzliste")
 }
 
 model StartListEntry {
-  listId       Int      @map("ListenID")
-  startId      Int      @map("StartID")
-  backNo       Int      @map("RueckenNr")
-  //startTime    DateTime @map("Startzeit") @db.DateTime  // Could be 0, which is not a valid DateTime
-  rangeNo      Int      @map("StandNr")
-  finalRangeNo String   @map("FinalStandNr") @db.VarChar(3)
-  shooterId    Int      @map("SportpassID")
-  teamId       Int      @map("MannschaftsID")
-  clubId       Int      @map("VereinsID")
-  unionId      Int      @map("VerbandsID")
-  classId      Int      @map("KlassenID")
-  disciplineId Int      @map("DzplID")
-  rankListId   Int      @map("RanglistenID")
-  preFight     Int      @map("Vorkampf") @db.SmallInt
-  result       Int      @map("Meldeergebnis") @db.SmallInt
-  groupId      Int      @map("GruppenID")
-  flags        Int      @map("StarterFlags")
-  timestamp    DateTime @map("Erfasst") @db.DateTime
+    listId        Int      @map("ListenID")
+    startId       Int      @map("StartID")
+    backNo        Int      @map("RueckenNr")
+    startTime     DateTime @map("Startzeit") @db.DateTime(0)
+    rangeId       Int      @map("StandNr")
+    finalrangeId  String   @map("FinalStandNr") @db.VarChar(3)
+    shooterId     BigInt   @map("SportpassID")
+    teamId        Int      @map("MannschaftsID")
+    clubId        Int      @map("VereinsID")
+    unionId       Int      @map("VerbandsID")
+    classId       Int      @map("KlassenID")
+    disciplineId  Int      @map("DzplID")
+    rankListId    Int      @map("RanglistenID")
+    qualification Int      @map("Vorkampf") @db.SmallInt
+    result        Int      @map("Meldeergebnis") @db.SmallInt
+    groupId       Int      @map("GruppenID")
+    flags         Int      @map("StarterFlags")
+    timeStamp     DateTime @map("Erfasst") @db.DateTime(0)
 
-  shooter    Shooter    @relation(fields: [shooterId], references: [id])
-  team       Team       @relation(fields: [teamId], references: [id])
-  class      Class      @relation(fields: [classId], references: [id])
-  discipline Discipline @relation(fields: [disciplineId], references: [id])
-  rankList   RankList   @relation(fields: [rankListId], references: [id])
-  group      Group      @relation(fields: [groupId], references: [id])
-  startList  StartList  @relation(fields: [listId], references: [id])
-  club       Club       @relation(fields: [clubId], references: [id])
-  union      Union      @relation(fields: [unionId], references: [id])
+    accounting Accounting[]
+    targetData TargetData[]
+    startList  StartList    @relation(fields: [listId], references: [id])
+    shooter    Shooter      @relation(fields: [shooterId], references: [id])
+    team       Team         @relation(fields: [teamId], references: [id])
+    club       Club         @relation(fields: [clubId], references: [id])
+    rankList   RankList     @relation(fields: [rankListId], references: [id])
+    union      Union        @relation(fields: [unionId], references: [id])
+    class      Class        @relation(fields: [classId], references: [id])
+    discipline Discipline   @relation(fields: [disciplineId], references: [id])
+    group      Group        @relation(fields: [groupId], references: [id])
 
-  @@id([listId, startId])
-  @@map("Starterliste")
-}
-
-enum StartListTypes {
-  default       @map("Standard")
-  priceShooting @map("PriceShooting")
-  league        @map("Liga")
-  final         @map("Final")
-  roundRobin    @map("RWK")
+    @@id([listId, startId])
+    @@index([disciplineId])
+    @@index([groupId])
+    @@index([classId])
+    @@index([teamId])
+    @@index([rankListId])
+    @@index([shooterId])
+    @@index([unionId])
+    @@index([clubId])
+    @@map("Starterliste")
 }
 
 model StartList {
-  id             Int            @id @map("ListenID")
-  name           String         @map("ListenName") @db.VarChar(36)
-  eventName      String         @map("VeranstaltungsName") @db.VarChar(36)
-  subEventName   String         @map("Untertitel") @db.VarChar(36)
-  startDate      DateTime       @map("DatumStart") @db.Date
-  endDate        DateTime       @map("DatumEnde") @db.Date
-  location       String         @map("Ort") @db.VarChar(36)
-  rangeStart     Int            @map("StandbereichStart") @db.SmallInt
-  rangeEnd       Int            @map("StandbereichEnde") @db.SmallInt
-  flags          Int            @map("StarterlistenFlags")
-  startInfoText  String         @map("StartInfoText") @db.VarChar(1024)
-  resultInfoText String         @map("ResultInfoText") @db.VarChar(1024)
-  type           StartListTypes @map("ListenTyp")
+    id             Int            @id @map("ListenID")
+    name           String         @unique() @db.VarChar(36)
+    type           StartListTypes @map("ListenTyp")
+    eventName      String         @map("VeranstaltungsName") @db.VarChar(36)
+    subTitle       String         @map("Untertitel") @db.VarChar(36)
+    startDate      DateTime       @map("DatumStart") @db.Date
+    endDate        DateTime       @map("DatumEnde") @db.Date
+    location       String         @map("Ort") @db.VarChar(36)
+    startrangeId   Int            @map("StandbereichStart") @db.SmallInt
+    endrangeId     Int            @map("StandbereichEnde") @db.SmallInt
+    flags          Int            @map("StarterlistenFlags")
+    startInfoText  String         @map("StartInfoText") @db.VarChar(1024)
+    resultInfoText String         @map("ResultInfoText") @db.VarChar(1024)
+    icon           Bytes?         @map("VeranstaltungsLogo") @db.MediumBlob
+    sponsorIcon    Bytes?         @map("SponsorenLogo") @db.MediumBlob
 
-  accounting      Accounting[]
-  filterStartList FilterStartList[]
-  priceShooting   PriceShooting[]
-  targetData      TargetData[]
-  startListClass  StartListClass[]
-  startListEntry  StartListEntry[]
+    evaluations      Evaluation[]
+    startListFilters FilterStartList[]
+    baseDeposits     BaseDeposit[]
+    priceShootings   PriceShooting[]
+    startListEntries StartListEntry[]
+    startListClasses StartListClass[]
 
-  @@map("Starterlisten")
+    @@map("Starterlisten")
 }
 
 model StartListClass {
-  startListId Int @map("ListenID")
-  classId     Int @map("KlassenID")
+    listId  Int @map("ListenID")
+    classId Int @map("KlassenID")
 
-  startList StartList @relation(fields: [startListId], references: [id])
-  class     Class     @relation(fields: [classId], references: [id])
+    startList StartList @relation(fields: [listId], references: [id], onDelete: Cascade)
+    class     Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
 
-  @@id([startListId, classId])
-  @@map("StarterlistenKlassen")
+    @@id([listId, classId])
+    @@index([classId])
+    @@map("StarterlistenKlassen")
 }
 
 model CertificateText {
-  evaluationId Int    @map("AuswertungsID")
-  textId       Int    @map("UrkundenTextID")
-  text         String @map("UrkundenText") @db.VarChar(72)
+    evaluationId Int    @map("AuswertungsID")
+    id           Int    @map("UrkundenTextID")
+    text         String @map("UrkundenText") @db.VarChar(72)
 
-  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+    evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
-  @@id([evaluationId, textId])
-  @@map("Urkundentexte")
+    @@id([evaluationId, id])
+    @@map("Urkundentexte")
 }
 
 model Union {
-  id    Int    @id @map("VerbandsID")
-  name  String @map("VerbandsName") @db.VarChar(36)
-  short String @map("VerbandsKuerzel") @db.VarChar(36)
+    id    Int    @id @map("VerbandsID")
+    name  String @unique() @db.VarChar(36)
+    short String @map("VerbandsKuerzel") @db.VarChar(36)
+    icon  Bytes? @map("VerbandsLogo") @db.MediumBlob
 
-  club           Club[]
-  filterUnion    FilterUnion[]
-  startListEntry StartListEntry[]
+    unionFilters     FilterUnion[]
+    startListEntries StartListEntry[]
+    clubs            Club[]
 
-  @@map("Verband")
+    @@map("Verband")
 }
 
 model Club {
-  id      Int    @id @map("VereinsID")
-  name    String @map("VereinsName") @db.VarChar(36)
-  unionId Int    @map("VerbandsID")
+    id      Int    @id @map("VereinsID")
+    name    String @map("VereinsName") @db.VarChar(36)
+    unionId Int    @map("VerbandsID")
+    icon    Bytes? @map("VereinsLogo") @db.MediumBlob
 
-  union          Union            @relation(fields: [unionId], references: [id])
-  clubShooter    ClubShooter[]
-  filterClub     FilterClub[]
-  shooter        Shooter[]
-  startListEntry StartListEntry[]
-  Team           Team[]
+    ClubFilters      FilterClub[]
+    teams            Team[]
+    shooters         Shooter[]
+    startListEntries StartListEntry[]
+    union            Union              @relation(fields: [unionId], references: [id])
+    clubShooter      Vereinszuordnung[]
 
-  @@map("Verein")
+    @@index([unionId])
+    @@map("Verein")
 }
 
-model ClubShooter {
-  shooterId Int @map("SportpassID")
-  clubId    Int @map("VereinsID")
+model Vereinszuordnung {
+    shooterId BigInt @map("SportpassID")
+    clubId    Int    @map("VereinsID")
 
-  shooter Shooter @relation(fields: [shooterId], references: [id])
-  club    Club    @relation(fields: [clubId], references: [id])
+    shooter Shooter @relation(fields: [shooterId], references: [id], onDelete: Cascade)
+    club    Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
 
-  @@id([shooterId, clubId])
-  @@map("Vereinszuordnung")
+    @@id([shooterId, clubId])
+    @@index([clubId])
+    @@map("Vereinszuordnung")
 }
 
+// Contains version numbers of the database
 model Version {
-  version Int @id @map("Versionsnummer")
+    Versionsnummer Int
 
-  @@map("Version")
+    @@ignore
 }
 
-model Time {
-  disciplineId Int @map("DzplID")
-  timeId       Int @map("ZeitIdx")
-  time         Int @map("Zeit")
+model Zeit {
+    disciplineId Int @map("DzplID")
+    timeId       Int @map("ZeitIdx") @db.TinyInt
+    time         Int @map("Zeit")
 
-  discipline Discipline @relation(fields: [disciplineId], references: [id])
+    discipline Discipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
 
-  @@id([disciplineId, timeId])
-  @@map("Zeit")
+    @@id([disciplineId, timeId])
+    @@map("Zeit")
+}
+
+enum StartListTypes {
+    default       @map("Standard")
+    priceShooting @map("PriceShooting")
+    league        @map("Liga")
+    roundRobin    @map("RWK")
+    final         @map("Final")
+}
+
+enum Gender {
+    female  @map("weiblich")
+    male    @map("maennlich")
+    unknown @map("neutral")
+}
+
+enum TicketType {
+    base     @map("Grundeinlage")
+    purchase @map("Nachkauf")
+    deposit  @map("Einzahlung")
+    payout   @map("Auszahlung")
 }

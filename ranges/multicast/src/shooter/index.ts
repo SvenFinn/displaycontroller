@@ -25,7 +25,7 @@ export async function updateShooters(client: LocalClient) {
                 lastName: shooter.value.lastName
             });
         } else {
-            shooterTempMap.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, Number(shooter.value.id));
+            shooterTempMap.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, shooter.value.id);
         }
     }
     mergeMaps(matchShooter, shooterTempMap);

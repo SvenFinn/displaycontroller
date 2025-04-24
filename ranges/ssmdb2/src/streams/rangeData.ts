@@ -57,7 +57,7 @@ export class RangeDataStream extends Transform {
         return {
             rangeId: data.rangeId,
             startListId: data.startListId,
-            shooter: data.shooterId,
+            shooter: data.shooterId ? Number(data.shooterId) : null,
             hits: hits,
             discipline: getDisciplineId(data.disciplineId, hits.length === 0 ? 0 : hits.length - 1),
             source: "ssmdb2",
@@ -66,7 +66,7 @@ export class RangeDataStream extends Transform {
     }
 
     private async getHits(targetId: number): Promise<Hits> {
-        const hits = await this.prisma.shot.findMany({
+        const hits = await this.prisma.hit.findMany({
             where: {
                 targetId: targetId
             }
