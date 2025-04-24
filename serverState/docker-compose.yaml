@@ -11,6 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - local-db=../database/local
+        - smdb=../database/smdb
         - screen-manager=../screens/screenManager/types
         - logger=../logger
       args:
@@ -18,6 +19,8 @@ services:
         - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
         - MEYTON_SSH_USER=${MEYTON_SSH_USER}
         - MEYTON_SSH_PASS=${MEYTON_SSH_PASS}
+        - MEYTON_DB_USER=${MEYTON_DB_USER}
+        - MEYTON_DB_PASS=${MEYTON_DB_PASS}
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}

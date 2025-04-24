@@ -4,6 +4,7 @@ import { AdvServerState } from "./types";
 import { logger } from "dc-logger";
 import semver from "semver";
 import dotenv from "dotenv";
+import { createSMDBClient } from "dc-db-smdb";
 dotenv.config();
 
 const prismaClient = new LocalClient();
@@ -42,7 +43,8 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
         version: "",
         compatible: false,
         services: {
-            ssmdb2: false
+            ssmdb2: false,
+            smdb: false
         }
     };
     for (let i = 0; i < outLines.length; i++) {
@@ -54,11 +56,12 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
         const value = line.split("=").slice(1).join("=");
         if (key == "Version") {
             serverState.version = value;
-            serverState.compatible = checkServerCompatibility(value);
         } else if (key == "Services") {
             serverState.services.ssmdb2 = value.match("targetd_ssmdb2") != null;
         }
     }
+    serverState.services.smdb = await checkDatabaseAvailability();
+    serverState.compatible = checkServerCompatibility(serverState);
     return serverState;
 }
 
@@ -80,7 +83,15 @@ export async function checkServerAvailable(): Promise<boolean> {
     }
 }
 
-function checkServerCompatibility(version: string): boolean {
+function checkServerCompatibility(serverState: AdvServerState): boolean {
+    if (!serverState.online) {
+        logger.error("Server is offline");
+        return false;
+    }
+    if (!serverState.services.smdb) {
+        logger.warn("SMDB service is not available");
+        return false;
+    }
     if (!process.env.MAX_MEYTON_VERSION || !process.env.MIN_MEYTON_VERSION) {
         logger.error("Environment variables MAX_MEYTON_VERSION and MIN_MEYTON_VERSION must be set");
         return false;
@@ -92,7 +103,7 @@ function checkServerCompatibility(version: string): boolean {
         return false;
     }
     // Check if the version is in the format X.Y.Z
-    const versionSemver = semver.coerce(version);
+    const versionSemver = semver.coerce(serverState.version);
     if (!versionSemver) {
         logger.error("Version is not in the correct format");
         return false;
@@ -103,4 +114,17 @@ function checkServerCompatibility(version: string): boolean {
     }
     logger.warn("Meyton server version is not compatible");
     return false;
+}
+
+async function checkDatabaseAvailability(): Promise<boolean> {
+    const client = await createSMDBClient(prismaClient);
+    try {
+        await client.$connect();
+        await client.$disconnect();
+        return true;
+    }
+    catch (e) {
+        logger.error("Error while checking database availability: " + e);
+        return false;
+    }
 }

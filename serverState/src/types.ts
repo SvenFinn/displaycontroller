@@ -6,6 +6,7 @@ type AdvServerStateOnline = {
     version: string;
     services: {
         ssmdb2: boolean;
+        smdb: boolean;
     }
 }
 

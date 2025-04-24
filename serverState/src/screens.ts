@@ -13,6 +13,21 @@ export async function sendSystemScreen(serverState: AdvServerState, channel: amq
         sendInterval = undefined;
     }
     if (!serverState.online) return;
+    if (!serverState.services.smdb) {
+        logger.info("SMDB not available");
+        const screen: Screen = {
+            available: true,
+            preset: "systemMessage",
+            options: {
+                type: "SMDBAccess"
+            },
+            duration: 30000,
+            id: MAX_DB_NUM,
+            subId: 0
+        };
+        sendInterval = setInterval(sendSystemScreenInternal, 5000, screen, channel);
+        return;
+    }
     if (!serverState.compatible) {
         const screen: Screen = {
             available: true,
