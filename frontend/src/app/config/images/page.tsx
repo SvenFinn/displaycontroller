@@ -5,8 +5,18 @@ import { DirectoryListing, isDirectoryListing } from "@shared/files";
 import FileManager from "@frontend/app/components/FileManager";
 
 export default function Page() {
-    const baseURL = `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT}/api/images`;
+    const [host, setHost] = useState<string>("");
     const [files, setFiles] = useState<DirectoryListing>([]);
+
+    useEffect(() => {
+        setHost(window.location.host.split(":")[0]);
+    }, []);
+
+    if (host === "") {
+        return <></>;
+    }
+
+    const baseURL = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images`;
 
     async function refresh() {
         setFiles([]);
