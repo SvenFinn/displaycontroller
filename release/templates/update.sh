@@ -81,7 +81,7 @@ function run_update_step(){
     eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
                                             --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
                                             --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height $width
-    
+
     local EXIT_CODE=$?
 
     if [ $EXIT_CODE -ne 0 ]; then
@@ -175,6 +175,9 @@ for snap in \$snap_list; do
         done
         echo ""        
         dot_count=\$((dot_count + 1))
+        if [ \$dot_count -gt 30 ]; then
+            dot_count=0
+        fi
         sleep 1
     done    
 done
