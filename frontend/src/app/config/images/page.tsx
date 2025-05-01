@@ -11,11 +11,6 @@ export default function Page() {
     useEffect(() => {
         setHost(window.location.host.split(":")[0]);
     }, []);
-
-    if (host === "") {
-        return <></>;
-    }
-
     const baseURL = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images`;
 
     async function refresh() {
@@ -32,8 +27,15 @@ export default function Page() {
     }
 
     useEffect(() => {
+        if (host === "") {
+            return;
+        }
         refresh();
-    }, []);
+    }, [host]);
+
+    if (host === "") {
+        return <></>;
+    }
 
     function onOpen(path: string) {
         window.open(`${baseURL}/${path}`, "_blank");

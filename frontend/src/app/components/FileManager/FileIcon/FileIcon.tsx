@@ -2,7 +2,12 @@ import { File, Folder } from "@shared/files";
 import { FaRegFileAudio, FaRegFileExcel, FaRegFileImage, FaRegFilePdf, FaRegFilePowerpoint, FaRegFileVideo, FaRegFileWord, FaRegFileZipper, FaRegFileCode, FaRegFile, FaRegFolderOpen } from "react-icons/fa6";
 import mime from "mime";
 
-export default function FileIcon({ file, className }: { file: File | Folder; className?: string }) {
+type FileIconProps = {
+    file: File | Folder;
+    className?: string;
+}
+
+export default function FileIcon({ file, className }: FileIconProps) {
     if (file.type === "folder") {
         return <FaRegFolderOpen className={className} />;
     }

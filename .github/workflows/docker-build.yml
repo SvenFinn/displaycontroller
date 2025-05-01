@@ -51,9 +51,7 @@ jobs:
         env:
           APP_VERSION: ${{ steps.app-version.outputs.app_version }}
           MIN_MEYTON_VERSION: ${{ vars.MIN_MEYTON_VERSION }}
-          MIN_MEYTON_VERSION_STR: ${{ vars.MIN_MEYTON_VERSION_STR }}
           MAX_MEYTON_VERSION: ${{ vars.MAX_MEYTON_VERSION }}
-          MAX_MEYTON_VERSION_STR: ${{ vars.MAX_MEYTON_VERSION_STR }}
           MEYTON_SSH_USER: ${{ vars.MEYTON_SSH_USER }}
           MEYTON_SSH_PASS: ${{ vars.MEYTON_SSH_PASS }}
           MEYTON_DB_USER: ${{ vars.MEYTON_DB_USER }}
