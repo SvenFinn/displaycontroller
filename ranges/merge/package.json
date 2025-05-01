@@ -12,7 +12,7 @@
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.3",
     "tsc-alias": "^1.8.15",
     "typescript": "^5.8.3"
   },
