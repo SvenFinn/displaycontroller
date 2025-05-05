@@ -12,11 +12,11 @@
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
     "@types/node": "^22.15.3",
-    "tsc-alias": "^1.8.15",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "amqplib": "^0.10.7",
+    "amqplib": "^0.10.8",
     "dc-db-local": "file:../../database/local",
     "dc-db-ssmdb2": "file:../../database/ssmdb2",
     "dc-logger": "file:../../logger",
