@@ -20,8 +20,8 @@
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/express-fileupload": "^1.5.1",
-    "@types/node": "^22.15.3",
-    "tsc-alias": "^1.8.15",
+    "@types/node": "^22.15.17",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
   }
 }

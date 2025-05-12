@@ -11,7 +11,7 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@types/node": "^22.15.3",
+        "@types/node": "^22.15.17",
         "typescript": "^5.8.3"
     },
     "dependencies": {
@@ -19,6 +19,6 @@
         "dc-db-smdb": "file:../database/smdb",
         "dc-logger": "file:../logger",
         "dotenv": "^16.5.0",
-        "eventsource": "^3.0.6"
+        "eventsource": "^3.0.7"
     }
 }
