@@ -1,0 +1,19 @@
+button.button {
+    border: none;
+    background-color: #F8F8F8;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    padding: 0.5% 1%;
+    font-size: 1em;
+    border-radius: 10%;
+}
+
+button.button>svg {
+    margin-right: 0.5em;
+}
+
+button.button:hover {
+    background-color: #E0E0E0;
+}

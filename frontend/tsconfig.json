@@ -38,7 +38,13 @@
       ],
       "@shared/screens/*": [
         "../screens/screenManager/types/*"
-      ]
+      ],
+      "@shared/files" : [
+        "../screens/types/files"
+      ],
+      "@shared/files/*" : [
+        "../screens/types/files/*"
+      ],
     }
   },
   "include": [

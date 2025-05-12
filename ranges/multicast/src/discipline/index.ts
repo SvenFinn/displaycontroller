@@ -2,6 +2,7 @@ import { LocalClient } from "dc-db-local";
 import { isDiscipline } from "@shared/ranges/discipline/index";
 import { InternalDiscipline } from "@shared/ranges/internal";
 import { getOverrideDiscipline } from "./overrides";
+import { mergeMaps } from "@shared/ranges/cache";
 
 const matchDiscipline = new Map<string, InternalDiscipline>();
 
@@ -11,16 +12,17 @@ export async function updateDisciplines(client: LocalClient) {
             type: "discipline"
         }
     });
-    matchDiscipline.clear();
+    const disciplineTempMap = new Map<string, InternalDiscipline>();
     for (const discipline of disciplines) {
         if (!isDiscipline(discipline.value)) {
             continue;
         }
-        matchDiscipline.set(`${discipline.value.name}\0`, {
+        disciplineTempMap.set(`${discipline.value.name}\0`, {
             disciplineId: Number(discipline.key),
             roundId: discipline.value.rounds.findIndex(round => round !== null)
         });
     }
+    mergeMaps(matchDiscipline, disciplineTempMap);
 }
 
 export function getDiscipline(startListId: number | null, message: string): InternalDiscipline | null {

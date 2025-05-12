@@ -1,16 +1,14 @@
-import { PassThrough, Stream, Transform } from "stream";
+import { Transform } from "stream";
 import { TTLHandler } from "dc-ranges-ttl";
 import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "@shared/ranges/internal";
-import { LogInternalRange } from "../types";
+import { LogInternalRange, MulticastInternalRange } from "../types";
 import { LocalClient } from "dc-db-local";
 import { isSameShooter } from "../cache/shooter";
 import { getDisciplineId } from "../cache/overrides";
-import { isOverrideDiscipline } from "@shared/ranges/internal/startList";
-import { log } from "console";
 import { logger } from "dc-logger";
 
 export class RangeMerger extends Transform {
-    private multicastStates: Map<number, TTLHandler<InternalRange>> = new Map();
+    private multicastStates: Map<number, TTLHandler<MulticastInternalRange>> = new Map();
     private logStates: Map<number, LogInternalRange> = new Map();
     private targetIdBlacklist: Set<number> = new Set();
     private freeTimeout: number = 30 * 60 * 1000;
@@ -25,18 +23,19 @@ export class RangeMerger extends Transform {
             where: {
                 key: "FREE_RANGE_SHOT_TIMEOUT",
             }
-        })).numValue || 30 * 60) * 1000;
+        })).numValue || 30 * 60 * 1000);
     }
 
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
         if (chunk.source == "multicast") {
-            logger.debug(`Received multicast range ${chunk.rangeId}`);
-            if (this.multicastStates.has(chunk.rangeId)) {
-                this.multicastStates.get(chunk.rangeId)?.setMessage(chunk);
+            const multicastChunk = chunk as MulticastInternalRange;
+            logger.debug(`Received multicast range ${multicastChunk.rangeId}`);
+            if (this.multicastStates.has(multicastChunk.rangeId)) {
+                this.multicastStates.get(multicastChunk.rangeId)?.setMessage(multicastChunk);
             } else {
-                const handler = new TTLHandler<InternalRange>();
-                handler.setMessage(chunk);
-                this.multicastStates.set(chunk.rangeId, handler);
+                const handler = new TTLHandler<MulticastInternalRange>();
+                handler.setMessage(multicastChunk);
+                this.multicastStates.set(multicastChunk.rangeId, handler);
             }
         } else {
             logger.debug(`Received log range ${chunk.rangeId}`);
@@ -75,19 +74,18 @@ export class RangeMerger extends Transform {
     }
 
 
-    private mergeStates(multicastState: InternalRange | null, logState: LogInternalRange | null): InternalRange | null {
+    private mergeStates(multicastState: MulticastInternalRange | null, logState: LogInternalRange | null): InternalRange | null {
         if (logState == null) return null; // Log state is absent, this wouldn't add any useful information
         if (multicastState == null) return null; // If range is offline
         if (logState.hits.flat().length == 0) return null; // If no hits are present (log wouldn't add any useful information)
-        if (this.targetIdBlacklist.has(logState.targetId)) {
-            return null;
-        }// If target is blacklisted
         // Checks for the following cases:
         // - Multicast says range is free, but log says it's not -> Blacklist target
         // - Multicast says range is busy, but log says it's free -> Blacklist target
         // - Multicast reports a different shooter than log -> Blacklist target
         if (!isSameShooter(multicastState.shooter, logState.shooter)) {
-            this.targetIdBlacklist.add(logState.targetId);
+            return null;
+        }
+        if (multicastState.onRangeSince > logState.last_update) {
             return null;
         }
         // If range is free and the last shot was more than freeTimeout ago, consider it free

@@ -2,9 +2,10 @@ import dotenv from "dotenv";
 import { Discipline } from "@shared/ranges/discipline";
 import { SmdbClient } from "dc-db-smdb";
 import { DisciplineRound, DisciplineRounds } from "@shared/ranges/discipline/round";
-import { DisciplineLayout, DisciplineLayouts } from "@shared/ranges/discipline/layout";
+import { DisciplineLayouts } from "@shared/ranges/discipline/layout";
 import { DisciplineRoundMode } from "@shared/ranges/discipline/round/mode";
 import { DisciplineRoundZoom } from "@shared/ranges/discipline/round/zoom";
+import { getLayout } from "./layout";
 
 dotenv.config();
 
@@ -82,10 +83,12 @@ async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<
 }
 
 async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: number): Promise<DisciplineRound | undefined> {
-    const round = await smdbClient.rounds.findUnique({
+    const round = await smdbClient.round.findUnique({
         where: {
-            id: roundId,
-            disciplineId: disciplineId
+            disciplineId_id: {
+                id: roundId,
+                disciplineId: disciplineId
+            }
         },
         select: {
             hitsPerSum: true,
@@ -93,7 +96,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
             maxHits: true,
             mode: true,
             zoom: true,
-            targetLayoutId: true,
+            layoutId: true,
             name: true
         }
     });
@@ -107,7 +110,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
         maxHits: round.maxHits,
         hitsPerSum: round.hitsPerSum,
         hitsPerView: round.hitsPerView,
-        layoutId: round.targetLayoutId,
+        layoutId: round.layoutId,
         mode: getMode(round.mode),
         zoom: getZoom(round.zoom)
     }
@@ -139,6 +142,8 @@ function getMode(mode: number): DisciplineRoundMode {
             return { mode: "divider", decimals: 2 };
         case 12:
             return { mode: "decimal" };
+        case 13: // Dart 501
+            return { mode: "target", decimals: 0, value: 501, exact: true };
         default:
             throw new Error("Invalid mode");
     }
@@ -169,7 +174,7 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
         include: {
             rounds: {
                 select: {
-                    targetLayoutId: true
+                    layoutId: true
                 }
             }
         }
@@ -177,7 +182,7 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
     if (!layoutDatabase) {
         return [];
     }
-    const layoutIds = layoutDatabase.rounds.map(round => round.targetLayoutId).filter((value, index, self) => self.indexOf(value) === index);
+    const layoutIds = layoutDatabase.rounds.map(round => round.layoutId).filter((value, index, self) => self.indexOf(value) === index);
     const layouts: DisciplineLayouts = {};
     for (let i = 0; i < layoutIds.length; i++) {
         const layout = await getLayout(smdbClient, layoutIds[i]);
@@ -186,37 +191,4 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
         }
     }
     return layouts;
-}
-
-async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<DisciplineLayout | undefined> {
-    const layout = await smdbClient.targetLayout.findUnique({
-        where: {
-            id: layoutId
-        },
-        select: {
-            innerTen: true,
-            holeSize: true,
-            rings: true
-        }
-    });
-    if (!layout) {
-        return undefined;
-    }
-    const rings: DisciplineLayout = layout.rings.map(ring => {
-        return {
-            value: ring.value / 10,
-            diameter: ring.diameter / 10,
-            colored: ring.diameter <= layout.holeSize
-        }
-    });
-    if (layout.innerTen > 0) {
-        const maxValue = Math.max(...rings.map(ring => ring.value));
-        rings.push({
-            value: maxValue,
-            diameter: layout.innerTen / 10,
-            colored: layout.innerTen <= layout.holeSize
-        });
-    }
-
-    return rings.sort((a, b) => a.diameter - b.diameter);
 }

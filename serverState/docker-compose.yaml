@@ -1,0 +1,34 @@
+services:
+  dc-server-state:
+    container_name: dc-server-state
+    hostname: server-state
+    image: ghcr.io/svenfinn/dc-server-state:${APP_VERSION}
+    restart: unless-stopped
+    networks:
+      - displaycontroller
+    build:
+      context: .
+      dockerfile: Dockerfile
+      additional_contexts:
+        - local-db=../database/local
+        - smdb=../database/smdb
+        - screen-manager=../screens/screenManager/types
+        - logger=../logger
+      args:
+        - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}
+        - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
+        - MEYTON_SSH_USER=${MEYTON_SSH_USER}
+        - MEYTON_SSH_PASS=${MEYTON_SSH_PASS}
+        - MEYTON_DB_USER=${MEYTON_DB_USER}
+        - MEYTON_DB_PASS=${MEYTON_DB_PASS}
+        - SELF_DB_HOST=${SELF_DB_HOST}
+        - SELF_DB_USER=${SELF_DB_USER}
+        - SELF_DB_PASS=${SELF_DB_PASS}
+        - SELF_DB_NAME=${SELF_DB_NAME}
+    depends_on:
+      dc-db-migrate:
+        condition: service_completed_successfully
+      dc-rabbitmq:
+        condition: service_healthy
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL}

@@ -13,9 +13,11 @@ services:
       POSTGRES_USER: ${SELF_DB_USER}
       POSTGRES_PASSWORD: ${SELF_DB_PASS}
       POSTGRES_DB: ${SELF_DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   dc-db-migrate:
     container_name: dc-db-migrate
-    image: ghcr.io/svenfinn/dc-db-migrate
+    image: ghcr.io/svenfinn/dc-db-migrate:${APP_VERSION}
     networks:
       - displaycontroller
     build:
@@ -26,3 +28,6 @@ services:
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
+
+volumes:
+  postgres_data:

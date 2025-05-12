@@ -1,7 +1,7 @@
 services:
   dc-images:
     container_name: dc-images
-    image: ghcr.io/svenfinn/dc-images
+    image: ghcr.io/svenfinn/dc-images:${APP_VERSION}
     hostname: images
     restart: unless-stopped
     networks:
@@ -11,8 +11,12 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - logger=../../logger
+        - screen-types=../types
     volumes:
-      - "./files:/app/files"
+      - images_data:/app/files
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
       - SCREEN_RESOLUTION=${SCREEN_RESOLUTION}
+
+volumes:
+  images_data:

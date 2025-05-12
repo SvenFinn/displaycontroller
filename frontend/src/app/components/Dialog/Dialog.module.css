@@ -1,0 +1,70 @@
+div.dialog {
+    background-color: white;
+    padding: 1%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    div.dialogHeader {
+        border-bottom: 1px solid #E0E0E0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        button.closeButton {
+            border: none;
+            background-color: transparent;
+            color: black;
+            width: 1.5em;
+            height: 1.5em;
+            padding: 1%;
+            box-sizing: content-box;
+        }
+
+        button.closeButton:hover {
+            background-color: #E0E0E0;
+        }
+    }
+}
+
+div.dialogFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+div.dialogFooter button {
+    border: none;
+    background-color: transparent;
+    color: black;
+    padding: 2%;
+    border-radius: 5px;
+    font-size: 1.1em;
+}
+
+div.dialogFooter button:hover {
+    background-color: #E0E0E0 !important;
+}
+
+div.dialogBody>* {
+    padding-bottom: 2%;
+}
+
+div.dialogBody ul {
+    list-style: inside;
+}
+
+div.dialogBody input,
+div.dialogBody select,
+div.dialogBody textarea,
+div.dialogBody button,
+div.dialogBody input::file-selector-button {
+    background-color: transparent;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    color: black;
+    padding: 5px;
+    width: 100%;
+}

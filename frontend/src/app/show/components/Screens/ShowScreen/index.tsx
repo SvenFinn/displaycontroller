@@ -8,7 +8,7 @@ import { screenReady } from "../store/screensReducer";
 import styles from "./showScreen.module.css";
 import ImageViewer from "../../../imageViewer/components/ImageViewer/imageViewer";
 import Evaluation from "../../../evaluation/components/Evaluation";
-import SystemMessage from "../../SystemMessage";
+import SystemMessage from "../../../systemMessage";
 
 interface ShowScreenProps {
     id: number

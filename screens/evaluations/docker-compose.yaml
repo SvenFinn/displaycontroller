@@ -1,7 +1,7 @@
 services:
   dc-evaluations:
     hostname: evaluations
-    image: ghcr.io/svenfinn/dc-evaluations
+    image: ghcr.io/svenfinn/dc-evaluations:${APP_VERSION}
     container_name: dc-evaluations
     restart: unless-stopped
     networks:
@@ -12,15 +12,22 @@ services:
       additional_contexts:
         - local-db=../../database/local
         - logger=../../logger
+        - screen-types=../types
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
+        - EVALUATIONS_VOLUME_PATH=/app/html
+    volumes:
+      - evaluations_data:/app/html
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully
-      dc-check-server:
+      dc-server-state:
         condition: service_started
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
+
+volumes:
+  evaluations_data:

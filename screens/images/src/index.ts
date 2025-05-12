@@ -2,44 +2,63 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
-import { DirectoryListing } from "../types";
+import { scanDirectory } from "@shared/files/scanDir";
 import { logger } from "dc-logger";
+import bodyParser from "body-parser";
+import { rateLimit } from "express-rate-limit";
 
 const basePath = `/app/files`;
 
+if (!fs.existsSync(basePath)) {
+    logger.debug("Creating base path");
+    fs.mkdirSync(basePath, { recursive: true });
+}
+if (!fs.existsSync(`${basePath}/icon.png`)) {
+    logger.debug("Creating icon.png");
+
+    fs.copyFileSync(`${__dirname}/img/icon.png`, `${basePath}/icon.png`);
+}
+
 const app: Express = express();
+
+app.use(bodyParser.json());
 app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
     useTempFiles: true,
 }));
+app.use(rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: {
+        code: 429,
+        message: "Too many requests",
+    },
+}));
+app.set("trust proxy", 1);
 
-app.get("/api/images/?*", (req: Request, res) => {
-    logger.info(`GET ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.get("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`GET ${path}`);
+    if (path.includes("..")) {
         logger.info("Found .. in path");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         logger.info("File not found");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return
     }
-    if (fs.lstatSync(path).isDirectory()) {
+    if (fs.lstatSync(realPath).isDirectory()) {
         logger.info("Scanning directory");
-        const files = fs.readdirSync(path);
-        const response: DirectoryListing = files.map((file) => {
-            return {
-                name: file,
-                type: fs.lstatSync(`${path}/${file}`).isDirectory() ? "folder" : "file"
-            }
-        });
-        res.status(200).send(response);
+        res.status(200).send(await scanDirectory(realPath));
+        return;
     } else {
-        res.status(200).sendFile(path);
+        res.status(200).sendFile(realPath);
     }
 });
+
 
 async function handleFiles(files: fileUpload.FileArray, path: string) {
     for (const [key, file] of Object.entries(files)) {
@@ -77,15 +96,27 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
             format: "png",
             preserveAspectRatio: true,
         });
-        await pdf.bulk(-1);
+        const converted = await pdf.bulk(-1);
+        const digitNumber = Math.floor(Math.log10(converted.length)) + 1;
+        for (let i = 0; i < converted.length; i++) {
+            const img = converted[i];
+            if (!img.page || !img.path) {
+                logger.warn("Image name is undefined");
+                continue;
+            }
+            const fileNumber = img.page.toString().padStart(digitNumber, "0");
+            const path = img.path.split("/").slice(0, -1).join("/");
+            await fs.promises.rename(img.path, `${path}/page-${fileNumber}.png`);
+        }
     } else {
         await file.mv(`${path}/${file.name}`);
     }
 }
 
-app.post("/api/images/?*", async (req: Request, res) => {
-    logger.info(`POST ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.post("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`POST ${path}`);
+    if (path.includes("..")) {
         logger.info("Found .. in path");
         res.status(400).send({
             code: 400,
@@ -93,12 +124,21 @@ app.post("/api/images/?*", async (req: Request, res) => {
         })
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    let created = false;
+    if (!fs.existsSync(realPath)) {
         logger.debug("Creating folder");
-        await fs.promises.mkdir(path, { recursive: true });
+        await fs.promises.mkdir(realPath, { recursive: true });
+        created = true;
     }
     if (!req.files) {
+        if (created) {
+            res.status(200).send({
+                code: 200,
+                message: "Folder created",
+            });
+            return;
+        }
         res.status(400).send({
             code: 400,
             message: "No files uploaded",
@@ -106,7 +146,7 @@ app.post("/api/images/?*", async (req: Request, res) => {
         return;
     }
     try {
-        await handleFiles(req.files, path);
+        await handleFiles(req.files, realPath);
         res.status(200).send({
             code: 200,
             message: "Files uploaded",
@@ -120,52 +160,102 @@ app.post("/api/images/?*", async (req: Request, res) => {
     }
 });
 
-app.delete("/api/images/?*", (req: Request, res) => {
-    logger.info(`DELETE ${req.params[0]}`);
-    if (req.params[0].includes("..")) {
+app.delete("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`DELETE ${path}`);
+    if (path.includes("..")) {
         res.status(400).send({
             code: 400,
             message: "Invalid path",
         })
         return;
     }
-    const path = `${basePath}/${req.params[0]}`;
-    if (!fs.existsSync(path)) {
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
         res.status(404).send({
             code: 404,
             message: "File not found",
         });
         return;
     }
-    if (fs.lstatSync(path).isDirectory()) {
-        fs.rm(path, { recursive: true }, (err) => {
-            if (err) {
-                res.status(500).send({
-                    code: 500,
-                    message: "Error deleting folder",
-                });
-                return;
-            }
-            res.status(200).send({
-                code: 200,
-                message: "Folder deleted",
-            });
+    const stats = await fs.promises.lstat(realPath);
+    if (stats.isDirectory()) {
+        await fs.promises.rm(realPath, { recursive: true });
+        res.status(200).send({
+            code: 200,
+            message: "Folder deleted",
         });
     } else {
-        fs.unlink(path, (err) => {
-            if (err) {
-                res.status(500).send({
-                    code: 500,
-                    message: "Error deleting file",
-                });
-                return;
-            }
-            res.status(200).send({
-                code: 200,
-                message: "File deleted",
-            });
+        await fs.promises.unlink(realPath);
+        res.status(200).send({
+            code: 200,
+            message: "File deleted",
         });
     }
+});
+
+app.put("/api/images{/*files}", async (req: Request, res) => {
+    const path = (req.params.files as unknown as string[] || []).join("/");
+    logger.info(`PUT ${path}`);
+    if (path.includes("..")) {
+        res.status(400).send({
+            code: 400,
+            message: "Invalid path",
+        })
+        return;
+    }
+    const realPath = `${basePath}/${path}`;
+    if (!fs.existsSync(realPath)) {
+        res.status(404).send({
+            code: 404,
+            message: "File not found",
+        });
+        return;
+    }
+    const mode = req.body.mode;
+    if (!mode) {
+        res.status(400).send({
+            code: 400,
+            message: "No mode provided",
+        });
+        return;
+    }
+    if (mode !== "move" && mode !== "copy") {
+        res.status(400).send({
+            code: 400,
+            message: "Invalid mode",
+        });
+        return;
+    }
+    const destination = req.body.destination;
+    if (!destination) {
+        res.status(400).send({
+            code: 400,
+            message: "No destination provided",
+        });
+        return;
+    }
+    if (destination.includes("..")) {
+        res.status(400).send({
+            code: 400,
+            message: "Invalid new path",
+        })
+        return;
+    }
+    const realDestination = `${basePath}/${destination}`;
+    if (fs.existsSync(realDestination)) {
+        await fs.promises.rm(realDestination, { recursive: true });
+    }
+    if (mode === "copy") {
+        logger.info("Copying file");
+        await fs.promises.cp(realPath, realDestination, { recursive: true });
+    } else if (mode === "move") {
+        await fs.promises.rename(realPath, realDestination);
+    }
+    res.status(200).send({
+        code: 200,
+        message: "File moved",
+    });
 });
 
 

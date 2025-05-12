@@ -14,14 +14,13 @@ export class logReaderStream extends Duplex {
         this.localClient = prisma;
     }
 
-    _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
-        const serverState = chunk as boolean;
-        if (serverState == this.serverState) {
+    _write(chunk: boolean, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+        if (chunk == this.serverState) {
             callback();
             return;
         }
-        logger.info("Server state changed", serverState);
-        this.serverState = serverState;
+        logger.info(`Server state changed: ${chunk}`);
+        this.serverState = chunk;
         this.startSSH();
         callback();
     }
@@ -45,7 +44,7 @@ export class logReaderStream extends Duplex {
         this.sshThread = spawn("sshpass", ["-p", process.env.MEYTON_SSH_PASS as string, "ssh", "-o", "StrictHostKeyChecking=no", `${process.env.MEYTON_SSH_USER}@${serverIp}`, script]);
         this.sshThread.on("exit", (code) => {
             if (this.serverState) {
-                logger.warn("SSH exit", code);
+                logger.warn(`SSH exit: ${code}`);
                 this.startSSH();
             }
         });
@@ -62,7 +61,7 @@ export class logReaderStream extends Duplex {
         this.sshThread.stderr?.on("data", (data: any) => {
             const str = data.toString();
             if (str.length > 0) {
-                logger.warn("SSH error", str);
+                logger.warn(`SSH error: ${str}`);
             }
         });
     }

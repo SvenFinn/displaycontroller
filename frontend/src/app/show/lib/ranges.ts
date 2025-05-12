@@ -28,6 +28,7 @@ export function getHitString(data: Range, roundId?: number, index?: number): Arr
 
     switch (round.mode.mode) {
         case "rings":
+        case "target":
             return [
                 `${hit.id}`,
                 `${floor(hit.rings, 1).toFixed(1)}${hit.innerTen ? '*' : ''}`]
@@ -98,7 +99,7 @@ export function getSeries(data: Range, roundId?: number, hitCount?: number, gaug
     if (!gauge) gauge = data.discipline.gauge;
     const series = [];
     for (let i = 0; i < hits.length; i += hitCount) {
-        series.push(accumulateHits(hits, round, gauge, i, i + hitCount));
+        series.push(accumulateHits(hits, round, gauge, i, i + hitCount, false));
     }
     return series;
 }
@@ -113,10 +114,10 @@ export function getTotal(data: Range, roundId?: number, gauge?: number): string 
     const hits = data.hits[roundId];
     if (!hits) return "";
     if (!gauge) gauge = data.discipline.gauge;
-    return accumulateHits(hits, round, gauge, 0, hits.length);
+    return accumulateHits(hits, round, gauge, 0, hits.length, true);
 }
 
-function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number, startId: number, endId: number): string {
+function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number, startId: number, endId: number, isTotal: boolean): string {
     const hitsToAccumulate = hits.slice(startId, endId);
     let sum = 0;
     if (round.mode.mode == "divider") {
@@ -150,6 +151,14 @@ function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number,
             case "circle":
                 sum = 0;
                 break;
+            case "target":
+                const value = floor(hit.rings, round.mode.decimals);
+                if (!round.mode.exact) {
+                    sum += value;
+                } else if (sum + value <= round.mode.value) {
+                    sum += value;
+                }
+                break;
             default:
                 throw new Error("Unsupported mode");
         }
@@ -167,6 +176,14 @@ function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number,
         case "circle":
             const radius = smallestEnclosingCircle(hitsToAccumulate).r;
             return mRound((isNaN(radius) ? 0 : radius * 2) + gauge, 1).toFixed(1);
+        case "target":
+            if (isTotal) {
+                const result = round.mode.value - sum;
+                if (result < 0) return "0";
+                return result.toFixed(round.mode.decimals);
+            } else {
+                return sum.toFixed(round.mode.decimals);
+            }
         default:
             return sum.toFixed(0);
     }

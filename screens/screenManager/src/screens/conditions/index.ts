@@ -1,4 +1,4 @@
-import { isDbScreen } from "@shared/screens";
+import { DbScreen, isDbScreen } from "@shared/screens";
 import { all_ranges_free } from "./AllRangesFree";
 import { meyton_available } from "./MeytonAvailable";
 import { range_free } from "./RangeFree";
@@ -8,17 +8,7 @@ import { ranges_online_count } from "./RangesOnlineCount";
 import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 
-export async function checkCondition(localClient: LocalClient, screenId: number): Promise<boolean> {
-    const screen = await localClient.screens.findFirst({
-        where: {
-            id: screenId
-        }
-    });
-    if (!screen) return false;
-    if (!isDbScreen(screen)) {
-        logger.warn(`Screen ${screenId} is not a valid screen`);
-        return false;
-    }
+export async function checkCondition(localClient: LocalClient, screen: DbScreen): Promise<boolean> {
     if (screen.visibleFrom && screen.visibleFrom > new Date()) return false;
     if (screen.visibleUntil) {
         screen.visibleUntil.setDate(screen.visibleUntil.getDate() + 1);

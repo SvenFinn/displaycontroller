@@ -1,7 +1,7 @@
 services:
   dc-sync-time:
     container_name: dc-sync-time
-    image: ghcr.io/svenfinn/dc-sync-time
+    image: ghcr.io/svenfinn/dc-sync-time:${APP_VERSION}
     hostname: sync-time
     restart: unless-stopped
     build:
@@ -21,7 +21,7 @@ services:
     networks:
       - displaycontroller
     depends_on:
-      - dc-check-server
+      - dc-server-state
     cap_add:
       - SYS_TIME
     environment:

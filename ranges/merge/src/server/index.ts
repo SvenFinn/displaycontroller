@@ -6,11 +6,11 @@ import { rangeManager } from '../rangeMan';
 const app: Express = express();
 const localClient: LocalClient = new LocalClient();
 
-app.get('/api/ranges(/)?', async (req: Request, res: Response) => {
+app.get('/api/ranges', async (req: Request, res: Response) => {
     res.status(200).send(rangeManager.getActiveRanges());
 });
 
-app.get('/api/ranges/free(/)?', async (req: Request, res: Response) => {
+app.get('/api/ranges/free', async (req: Request, res: Response) => {
     const freeRanges = rangeManager.getFreeRanges();
     res.status(200).send(freeRanges);
 });
@@ -35,12 +35,12 @@ app.get('/api/ranges/sse', async (req: Request, res: Response) => {
     });
 });
 
-app.get('/api/ranges/known(/)?', async (req: Request, res: Response) => {
+app.get('/api/ranges/known', async (req: Request, res: Response) => {
     const knownRanges = await localClient.knownRanges.findMany();
     res.status(200).send(knownRanges);
 });
 
-app.get('/api/ranges/known/:rangeIp(/)?', async (req: Request, res: Response) => {
+app.get('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
     const rangeIp: string = req.params.rangeIp;
     const knownRange = await localClient.knownRanges.findUnique(
         {
@@ -56,7 +56,7 @@ app.get('/api/ranges/known/:rangeIp(/)?', async (req: Request, res: Response) =>
     }
 });
 
-app.post('/api/ranges/known/:rangeIp(/)?', async (req: Request, res: Response) => {
+app.post('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
     const rangeIp: string = req.params.rangeIp;
     const rangeId = parseInt(req.body);
     if (isNaN(rangeId)) {
@@ -83,7 +83,7 @@ app.post('/api/ranges/known/:rangeIp(/)?', async (req: Request, res: Response) =
     res.status(200).send(knownRange);
 });
 
-app.delete('/api/ranges/known/:rangeIp(/)?', async (req: Request, res: Response) => {
+app.delete('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
     const rangeIp: string = req.params.rangeIp;
     const knownRange = await localClient.knownRanges.delete({
         where: {

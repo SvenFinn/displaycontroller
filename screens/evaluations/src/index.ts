@@ -1,26 +1,26 @@
-import { LocalClient, createLocalClient } from "dc-db-local";
+import { LocalClient } from "dc-db-local";
 import { EventSource } from 'eventsource';
 import { sync } from "./sync";
-import path from "path";
-import { startServer } from "./server";
+import "./server";
 import { logger } from "dc-logger";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 
-const htmlPath = path.resolve(`${__dirname}/../html`);
-const smbPath = path.resolve(`${__dirname}/../tmp/smb`);
-const convPath = path.resolve(`${__dirname}/../tmp/conv`);
+const htmlPath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
+const smbPath = fs.mkdtempSync("html")
+const convPath = fs.mkdtempSync("conv")
 if (!fs.existsSync(htmlPath)) {
     fs.mkdirSync(htmlPath, { recursive: true });
 }
-if (!fs.existsSync(smbPath)) {
-    fs.mkdirSync(smbPath, { recursive: true });
-}
-if (!fs.existsSync(convPath)) {
-    fs.mkdirSync(convPath, { recursive: true });
-}
+
+process.addListener("beforeExit", () => {
+    convPath && fs.rmdirSync(convPath, { recursive: true });
+    smbPath && fs.rmdirSync(smbPath, { recursive: true });
+});
 
 
-let localPrismaClient: LocalClient | null = null;
+const localClient = new LocalClient();
 let nextSyncTimeOut: NodeJS.Timeout | null = null;
 let serverState: boolean = false;
 
@@ -33,10 +33,7 @@ async function loop(event: MessageEvent | null = null) {
         if (nextSyncTimeOut) {
             clearTimeout(nextSyncTimeOut);
         }
-        if (!localPrismaClient) {
-            localPrismaClient = await createLocalClient();
-        }
-        const server = (await localPrismaClient.parameter.findUnique({
+        const server = (await localClient.parameter.findUnique({
             where: {
                 key: "MEYTON_SERVER_IP"
             }
@@ -44,7 +41,7 @@ async function loop(event: MessageEvent | null = null) {
         if (server) {
             await sync(server, smbPath, convPath, htmlPath);
         }
-        const syncInterval = (await localPrismaClient.parameter.findUnique({
+        const syncInterval = (await localClient.parameter.findUnique({
             where: {
                 key: "EVALUATION_SYNC_INTERVAL"
             }
@@ -58,8 +55,7 @@ async function loop(event: MessageEvent | null = null) {
 }
 
 async function main() {
-    localPrismaClient = await createLocalClient();
-    const syncEnabled = (await localPrismaClient.parameter.findUnique({
+    const syncEnabled = (await localClient.parameter.findUnique({
         where: {
             key: "ENABLE_EVALUATION_SYNC"
         }
@@ -68,8 +64,7 @@ async function main() {
         logger.info("Evaluation sync is disabled");
         return;
     }
-    startServer(htmlPath);
-    const serverStateEvents = new EventSource("http://check-server:80/api/serverState/sse");
+    const serverStateEvents = new EventSource("http://server-state:80/api/serverState/sse");
     serverStateEvents.onmessage = loop;
     serverStateEvents.onopen = () => {
         logger.info("Connected to server state events");

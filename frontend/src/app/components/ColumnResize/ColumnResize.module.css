@@ -1,0 +1,29 @@
+.container {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    width: 100%;
+
+}
+
+.container .column {
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.container .column>* {
+    overflow: auto;
+}
+
+.container .resizeHandle {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 5px;
+    cursor: col-resize;
+    z-index: 10;
+    border-right: 1px solid var(--column-resize-handle-border-color, #000);
+}

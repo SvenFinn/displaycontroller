@@ -1,6 +1,6 @@
 services:
   dc-pgadmin:
-    image: ghcr.io/svenfinn/dc-pgadmin
+    image: ghcr.io/svenfinn/dc-pgadmin:${APP_VERSION}
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,27 +1,29 @@
 {
-  "name": "displaycontroller-sync-html",
+  "name": "dc-evaluations",
   "version": "0.0.1",
   "description": "Sync Evaluations for Displaycontroller",
   "main": "src/index.ts",
   "scripts": {
     "test": "nodemon src/index.ts",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "author": "Sven Finn",
   "license": "ISC",
   "dependencies": {
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
-    "dotenv": "^16.4.7",
-    "eventsource": "^3.0.5",
-    "express": "^4.21.2",
-    "jsdom": "^26.0.0"
+    "dotenv": "^16.5.0",
+    "eventsource": "^3.0.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "jsdom": "^26.1.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.1",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.13.9",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.15.17",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.8.3"
   },
   "prisma": {
     "schema": "../../database/prisma/src/schema.prisma"

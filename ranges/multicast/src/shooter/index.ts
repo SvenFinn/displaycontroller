@@ -1,6 +1,7 @@
 import { LocalClient } from "dc-db-local";
 import { isShooter } from "@shared/ranges/shooter"
 import { InternalShooter } from "@shared/ranges/internal"
+import { mergeMaps } from "@shared/ranges/cache";
 
 const matchShooter = new Map<string, InternalShooter>();
 
@@ -10,7 +11,7 @@ export async function updateShooters(client: LocalClient) {
             type: "shooter"
         }
     });
-    matchShooter.clear();
+    const shooterTempMap = new Map<string, InternalShooter>();
     for (const shooter of shooters) {
         if (!isShooter(shooter.value)) {
             continue;
@@ -18,15 +19,16 @@ export async function updateShooters(client: LocalClient) {
         if (!shooter.value.id) {
             continue;
         }
-        if (matchShooter.has(`${shooter.value.lastName}, ${shooter.value.firstName}`)) {
-            matchShooter.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, {
+        if (shooterTempMap.has(`${shooter.value.lastName}, ${shooter.value.firstName}`)) {
+            shooterTempMap.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, {
                 firstName: shooter.value.firstName,
                 lastName: shooter.value.lastName
             });
         } else {
-            matchShooter.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, Number(shooter.value.id));
+            shooterTempMap.set(`${shooter.value.lastName}, ${shooter.value.firstName}`, shooter.value.id);
         }
     }
+    mergeMaps(matchShooter, shooterTempMap);
 }
 
 export function getShooters(message: string): InternalShooter | null {

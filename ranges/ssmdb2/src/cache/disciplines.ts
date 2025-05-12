@@ -1,5 +1,6 @@
 import { LocalClient } from "dc-db-local";
 import { InternalDiscipline } from "@shared/ranges/internal";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const disciplineIdToObj = new Map<number, InternalDiscipline>();
 
@@ -9,9 +10,9 @@ export async function updateDisciplines(client: LocalClient) {
             type: "overrideDiscipline"
         }
     });
-    disciplineIdToObj.clear();
+    const disciplineTempMap = new Map<number, InternalDiscipline>();
     for (const override of overrides) {
-        disciplineIdToObj.set(Number(override.key), {
+        disciplineTempMap.set(Number(override.key), {
             overrideId: Number(override.key),
             roundId: 0
         });
@@ -22,12 +23,13 @@ export async function updateDisciplines(client: LocalClient) {
         }
     });
     for (const discipline of disciplines) {
-        disciplineIdToObj.set(Number(discipline.key), {
+        disciplineTempMap.set(Number(discipline.key), {
             disciplineId: Number(discipline.key),
             roundId: 0
         });
 
     }
+    mergeMaps(disciplineIdToObj, disciplineTempMap);
 }
 
 export function getDisciplineId(id: number, round: number): InternalDiscipline | null {

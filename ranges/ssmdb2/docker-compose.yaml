@@ -1,7 +1,7 @@
 services:
   dc-ranges-ssmdb2:
     container_name: dc-ranges-ssmdb2
-    image: ghcr.io/svenfinn/dc-ranges-ssmdb2
+    image: ghcr.io/svenfinn/dc-ranges-ssmdb2:${APP_VERSION}
     hostname: ranges-ssmdb2
     restart: unless-stopped
     build:
@@ -22,9 +22,6 @@ services:
         - logger=../../logger
     networks:
       - displaycontroller
-    #volumes:
-    #  - /etc/timezone:/etc/timezone:ro
-    #  - /etc/localtime:/etc/localtime:ro
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully

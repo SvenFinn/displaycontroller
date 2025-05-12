@@ -1,8 +1,8 @@
-import { BaseScreenAvailable } from './base';
+import { BaseDbScreen, BaseScreenAvailable } from './base';
 
 export type SystemMessageScreen = BaseScreenAvailable & {
     preset: "systemMessage";
-    options: Ssmdb2MessageOptions | IncompatibleMessageOptions;
+    options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
 }
 
 export function isSystemMessageScreen(screen: any): screen is SystemMessageScreen {
@@ -11,6 +11,23 @@ export function isSystemMessageScreen(screen: any): screen is SystemMessageScree
     const screenWType = screen as SystemMessageScreen;
     if (isSsmdb2MessageOptions(screenWType.options)) return true;
     if (isIncompatibleMessageOptions(screenWType.options)) return true;
+    if (isInvalidScreenOptions(screenWType.options)) return true;
+    if (isSMDBAccessMessageOptions(screenWType.options)) return true;
+    return false;
+}
+
+export type SystemMessageDbScreen = BaseDbScreen & {
+    preset: "systemMessage";
+    options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
+}
+
+export function isSystemMessageDbScreen(screen: any): screen is SystemMessageDbScreen {
+    if (!screen) return false;
+    if (screen.preset !== "systemMessage") return false;
+    const screenWType = screen as SystemMessageDbScreen;
+    if (isSsmdb2MessageOptions(screenWType.options)) return true;
+    if (isIncompatibleMessageOptions(screenWType.options)) return true;
+    if (isInvalidScreenOptions(screenWType.options)) return true;
     return false;
 }
 
@@ -34,5 +51,30 @@ export function isIncompatibleMessageOptions(options: any): options is Incompati
     if (options.type !== "serverIncompatible") return false;
     const optionsWType = options as IncompatibleMessageOptions;
     if (typeof optionsWType.serverVersion !== "string") return false;
+    return true;
+}
+
+export type InvalidScreenOptions = {
+    type: "invalidScreen";
+    id: number;
+    preset: string;
+}
+
+export function isInvalidScreenOptions(options: any): options is InvalidScreenOptions {
+    if (!options) return false;
+    if (options.type !== "invalidScreen") return false;
+    const optionsWType = options as InvalidScreenOptions;
+    if (typeof optionsWType.id !== "number") return false;
+    if (typeof optionsWType.preset !== "string") return false;
+    return true;
+}
+
+export type SMDBAccessMessageOptions = {
+    type: "SMDBAccess";
+}
+
+export function isSMDBAccessMessageOptions(options: any): options is SMDBAccessMessageOptions {
+    if (!options) return false;
+    if (options.type !== "SMDBAccess") return false;
     return true;
 }

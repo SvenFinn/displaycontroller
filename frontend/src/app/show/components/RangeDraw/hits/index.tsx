@@ -8,6 +8,9 @@ export default function DrawHits({ range, strokeWidth }: { range: Range, strokeW
     const round = range.discipline.rounds[range.round];
     if (!round) return <></>;
     if (round.mode.mode == "fullHidden") return <></>;
+    const layout = range.discipline.layouts[round.layoutId];
+    if (!layout) return <></>;
+
     const hitsPerView = round.hitsPerView;
     if (!range.hits) return <></>;
     const hits = range.hits[range.round];
@@ -21,7 +24,7 @@ export default function DrawHits({ range, strokeWidth }: { range: Range, strokeW
     return (
         <g>
             {hitsCopy.map((hit, index) => (
-                <Hit key={index} hit={hit} gauge={gauge} isLatest={index == hitsCopy.length - 1} />
+                <Hit key={index} layout={layout} hit={hit} gauge={gauge} isLatest={index == hitsCopy.length - 1} />
             ))}
             {round.mode.mode == "circle" ? <TargetCircle hits={hitsCopy} gauge={gauge} strokeWidth={strokeWidth} /> : <></>}
         </g>

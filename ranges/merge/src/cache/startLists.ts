@@ -1,6 +1,7 @@
 import { LocalClient } from "dc-db-local";
 import { StartList } from "@shared/ranges/startList";
 import { InternalStartList, isInternalStartList } from "@shared/ranges/internal/startList";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const startLists = new Map<number, StartList>();
 
@@ -10,18 +11,18 @@ export async function updateStartLists(localClient: LocalClient) {
             type: "startList",
         },
     });
-    startLists.clear();
-    for (const startListDb of newStartLists) {
-        const startList = startListDb.value;
-        if (!isInternalStartList(startList)) {
+    const startListTempMap = new Map<number, StartList>();
+    for (const startList of newStartLists) {
+        if (!isInternalStartList(startList.value)) {
             continue;
         }
-        startLists.set(startList.id, {
-            id: startList.id,
-            name: startList.name,
-            type: startList.type,
+        startListTempMap.set(startList.value.id, {
+            id: startList.value.id,
+            name: startList.value.name,
+            type: startList.value.type,
         });
     }
+    mergeMaps(startLists, startListTempMap);
 }
 
 export function getStartList(startListId: number | null): StartList | null {

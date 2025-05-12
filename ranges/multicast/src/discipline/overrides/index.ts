@@ -2,6 +2,7 @@ import { LocalClient } from "dc-db-local";
 import { isDiscipline } from "@shared/ranges/discipline/index";
 import { InternalDiscipline } from "@shared/ranges/internal";
 import { isOverrideDiscipline, OverrideDiscipline } from "@shared/ranges/internal/startList";
+import { mergeMaps } from "@shared/ranges/cache";
 
 const overrideDisciplines = new Map<number, Map<string, InternalDiscipline>>();
 
@@ -11,7 +12,7 @@ export async function updateOverrides(client: LocalClient) {
             type: "overrideDiscipline"
         }
     });
-    overrideDisciplines.clear();
+    const overrideDisciplinesTempMap = new Map<number, Map<string, InternalDiscipline>>();
     for (const overrideDisciplineDb of overrideDisciplinesData) {
         if (!isOverrideDiscipline(overrideDisciplineDb.value)) {
             continue;
@@ -30,15 +31,15 @@ export async function updateOverrides(client: LocalClient) {
         }
         const minRoundId = originalDiscipline.value.rounds.findIndex(round => round !== null);
         const startListId = Number(overrideDiscipline.startListId);
-        if (!overrideDisciplines.has(startListId)) {
-            overrideDisciplines.set(startListId, new Map());
+        if (!overrideDisciplinesTempMap.has(startListId)) {
+            overrideDisciplinesTempMap.set(startListId, new Map());
         }
-        overrideDisciplines.get(startListId)!.set(overrideDiscipline.name, {
+        overrideDisciplinesTempMap.get(startListId)!.set(overrideDiscipline.name, {
             overrideId: Number(overrideDiscipline.id),
             roundId: minRoundId
         });
     }
-
+    mergeMaps(overrideDisciplines, overrideDisciplinesTempMap);
 }
 
 export function getOverrideDiscipline(startListId: number, message: string): InternalDiscipline | null {

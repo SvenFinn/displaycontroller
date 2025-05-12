@@ -30,14 +30,14 @@ async function main() {
         } catch (e) {
         }
         const address = client.address();
-        logger.info('UDP Client listening on ' + address.address + ":" + address.port);
+        logger.info(`UDP Client listening on ${address.address}:${address.port}`);
     });
     client.on("message", function (message: Buffer, remote: RemoteInfo) {
         if (remote.family !== "IPv4") {
             logger.warn("Received message from non-IPv4 address");
             return;
         }
-        logger.debug("Received message of length " + message.length + " from " + remote.address);
+        logger.debug(`Received message of length ${message.length} from ${remote.address}`);
         if (message.length < MESSAGE_MIN_LENGTH) {
             logger.warn(`Received short message (${message.length} < ${MESSAGE_MIN_LENGTH}) from ${remote.address}`);
             return;

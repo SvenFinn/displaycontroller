@@ -1,23 +1,24 @@
 {
-  "name": "dc-sync-time",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@types/node": "^22.13.9",
-    "typescript": "^5.8.2"
-  },
-  "dependencies": {
-    "dc-db-local": "file:../database/local",
-    "dc-db-smdb": "file:../database/smdb",
-    "dc-logger": "file:../logger",
-    "dotenv": "^16.4.7",
-    "eventsource": "^3.0.5"
-  }
+    "name": "dc-sync-time",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc",
+        "dev": "nodemon ./src/index.ts"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/node": "^22.15.17",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "dc-db-local": "file:../database/local",
+        "dc-db-smdb": "file:../database/smdb",
+        "dc-logger": "file:../logger",
+        "dotenv": "^16.5.0",
+        "eventsource": "^3.0.7"
+    }
 }

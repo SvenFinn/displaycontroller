@@ -33,7 +33,7 @@ export class LogParserStream extends Transform {
                 action: values[27] == "i" ? "insert" : "delete",
                 shooter: {
                     name: values[6],
-                    id: parseInt(values[7]),
+                    id: Number(values[7]),
                     team: values[8],
                     club: values[9],
                     class: {

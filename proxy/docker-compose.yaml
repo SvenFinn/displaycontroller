@@ -1,6 +1,6 @@
 services:
   dc-reverse-proxy:
-    image: ghcr.io/svenfinn/dc-reverse-proxy
+    image: ghcr.io/svenfinn/dc-reverse-proxy:${APP_VERSION}
     container_name: dc-reverse-proxy
     hostname: reverse_proxy
     restart: unless-stopped

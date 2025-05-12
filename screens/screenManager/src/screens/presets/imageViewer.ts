@@ -2,7 +2,8 @@ import { Screens } from ".";
 import { ViewerDbScreen } from "@shared/screens/imageViewer";
 
 import { logger } from "dc-logger";
-import { isDirectoryListing } from "@shared/images";
+import { isDirectoryListing } from "@shared/files";
+import { flattenFileList } from "@shared/files/helpers";
 
 export default async function imageViewer(screen: ViewerDbScreen): Promise<Screens> {
     let fileList: string[];
@@ -40,11 +41,7 @@ async function createFileList(path: string): Promise<string[]> {
         if (!contentType.includes("application/json")) return [];
         const fileList = await files.json();
         if (!isDirectoryListing(fileList)) return [];
-        const mappedList = fileList.map(async (file) => {
-            if (file.type === "folder") return await createFileList(`${path}/${file.name}`);
-            return `${path}/${file.name}`;
-        });
-        return (await Promise.all(mappedList)).flat();
+        return flattenFileList(fileList, path);
     } catch (e) {
         logger.error(`Failed to fetch files for path ${path}`);
         return [];

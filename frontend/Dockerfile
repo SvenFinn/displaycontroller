@@ -3,8 +3,8 @@ FROM node:alpine AS base
 WORKDIR /app
 
 ARG APP_PORT
-ARG MIN_MEYTON_VERSION_STR
-ARG MAX_MEYTON_VERSION_STR
+ARG MIN_MEYTON_VERSION
+ARG MAX_MEYTON_VERSION
 ARG APP_VERSION
 
 FROM base AS deps
@@ -25,11 +25,14 @@ COPY --from=range-types . .
 WORKDIR /app/screens/screenManager/types
 COPY --from=screen-types . .
 
+WORKDIR /app/screens/types/files
+COPY --from=files-types . .
+
 WORKDIR /app/frontend
 COPY . .
 RUN export NEXT_PUBLIC_APP_PORT=$APP_PORT && \
-    export NEXT_PUBLIC_MIN_MEYTON_VERSION=$MIN_MEYTON_VERSION_STR && \
-    export NEXT_PUBLIC_MAX_MEYTON_VERSION=$MAX_MEYTON_VERSION_STR && \
+    export NEXT_PUBLIC_MIN_MEYTON_VERSION=$MIN_MEYTON_VERSION && \
+    export NEXT_PUBLIC_MAX_MEYTON_VERSION=$MAX_MEYTON_VERSION && \
     export NEXT_PUBLIC_APP_VERSION=$APP_VERSION && \
     npm run build;
 

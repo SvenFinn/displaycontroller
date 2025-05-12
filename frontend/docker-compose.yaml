@@ -1,7 +1,7 @@
 services:
   dc-frontend:
     hostname: frontend
-    image: ghcr.io/svenfinn/dc-frontend
+    image: ghcr.io/svenfinn/dc-frontend:${APP_VERSION}
     container_name: dc-frontend
     restart: unless-stopped
     networks:
@@ -12,8 +12,9 @@ services:
       additional_contexts:
         - range-types=../ranges/types
         - screen-types=../screens/screenManager/types
+        - files-types=../screens/types/files
       args:
         - APP_PORT=${APP_PORT}
-        - MAX_MEYTON_VERSION_STR=${MAX_MEYTON_VERSION_STR}
-        - MIN_MEYTON_VERSION_STR=${MIN_MEYTON_VERSION_STR}
+        - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
+        - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}
         - APP_VERSION=${APP_VERSION}

@@ -16,7 +16,7 @@ export async function getShooterCache(smdbClient: SmdbClient): Promise<Array<Sho
     });
     return shooters.map(shooter => {
         return {
-            id: shooter.id,
+            id: Number(shooter.id),
             firstName: shooter.firstName,
             lastName: shooter.lastName
         }

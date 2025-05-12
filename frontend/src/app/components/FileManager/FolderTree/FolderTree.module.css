@@ -1,0 +1,46 @@
+.folderTree {
+    border-top: 1px solid #cfcfcf;
+}
+
+.folder {
+    margin-left: 1em;
+}
+
+.expandSpan {
+    width: 1rem;
+    margin-right: 0.2rem;
+    display: inline-block;
+}
+
+.expandSpan>* {
+    cursor: pointer;
+}
+
+div.folderName {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div.folderName:hover {
+    background-color: #f0f0f0;
+}
+
+span.folderName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+}
+
+.folderName.selected {
+    background-color: #e0e0e0;
+}
+
+.folderName .faIcon {
+    margin-right: 0.2rem;
+    width: 1em;
+    flex-shrink: 0;
+}
