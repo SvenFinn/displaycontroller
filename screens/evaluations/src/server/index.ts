@@ -2,10 +2,21 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import { logger } from "dc-logger";
 import { scanDirectory } from "@shared/files/scanDir";
+import { rateLimit } from "express-rate-limit";
 
 const basePath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
 
 const app: Express = express();
+
+app.use(rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: {
+        code: 429,
+        message: "Too many requests",
+    },
+}));
+app.set("trust proxy", 1);
 
 app.get("/api/evaluations{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");

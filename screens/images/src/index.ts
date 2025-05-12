@@ -5,6 +5,7 @@ import { fromPath } from "pdf2pic";
 import { scanDirectory } from "@shared/files/scanDir";
 import { logger } from "dc-logger";
 import bodyParser from "body-parser";
+import { rateLimit } from "express-rate-limit";
 
 const basePath = `/app/files`;
 
@@ -19,11 +20,21 @@ if (!fs.existsSync(`${basePath}/icon.png`)) {
 }
 
 const app: Express = express();
+
+app.use(bodyParser.json());
 app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
     useTempFiles: true,
 }));
-app.use(bodyParser.json());
+app.use(rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: {
+        code: 429,
+        message: "Too many requests",
+    },
+}));
+app.set("trust proxy", 1);
 
 app.get("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
