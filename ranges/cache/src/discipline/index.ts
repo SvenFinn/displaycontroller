@@ -2,9 +2,10 @@ import dotenv from "dotenv";
 import { Discipline } from "@shared/ranges/discipline";
 import { SmdbClient } from "dc-db-smdb";
 import { DisciplineRound, DisciplineRounds } from "@shared/ranges/discipline/round";
-import { DisciplineLayout, DisciplineLayouts } from "@shared/ranges/discipline/layout";
+import { DisciplineLayouts } from "@shared/ranges/discipline/layout";
 import { DisciplineRoundMode } from "@shared/ranges/discipline/round/mode";
 import { DisciplineRoundZoom } from "@shared/ranges/discipline/round/zoom";
+import { getLayout } from "./layout";
 
 dotenv.config();
 
@@ -141,6 +142,8 @@ function getMode(mode: number): DisciplineRoundMode {
             return { mode: "divider", decimals: 2 };
         case 12:
             return { mode: "decimal" };
+        case 13: // Dart 501
+            return { mode: "target", decimals: 0, value: 501, exact: true };
         default:
             throw new Error("Invalid mode");
     }
@@ -188,37 +191,4 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
         }
     }
     return layouts;
-}
-
-async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<DisciplineLayout | undefined> {
-    const layout = await smdbClient.layout.findUnique({
-        where: {
-            id: layoutId
-        },
-        select: {
-            innerTen: true,
-            diameter: true,
-            rings: true
-        }
-    });
-    if (!layout) {
-        return undefined;
-    }
-    const rings: DisciplineLayout = layout.rings.map(ring => {
-        return {
-            value: ring.value / 10,
-            diameter: ring.diameter / 10,
-            colored: ring.diameter <= layout.diameter
-        }
-    });
-    if (layout.innerTen > 0) {
-        const maxValue = Math.max(...rings.map(ring => ring.value));
-        rings.push({
-            value: maxValue,
-            diameter: layout.innerTen / 10,
-            colored: layout.innerTen <= layout.diameter
-        });
-    }
-
-    return rings.sort((a, b) => a.diameter - b.diameter);
 }

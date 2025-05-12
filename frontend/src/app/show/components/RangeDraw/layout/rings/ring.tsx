@@ -1,6 +1,5 @@
 import { DisciplineLayoutRing } from "@shared/ranges/discipline/layout";
-import { idealTextColor } from "../../../lib/idealTextColor";
-import styles from "../rangeDraw.module.css";
+import { idealTextColor } from "../../../../lib/idealTextColor";
 
 interface RingsProps {
     ring: DisciplineLayoutRing,
