@@ -64,6 +64,7 @@ jobs:
           SELF_DB_USER: ${{ vars.SELF_DB_USER }}
           SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
           SELF_DB_NAME: ${{ vars.SELF_DB_NAME }}
+          CACHE_REFRESH_INTERVAL: ${{ vars.CACHE_REFRESH_INTERVAL }}
         run: |
           echo "APP_VERSION=$APP_VERSION" > /tmp/args
           echo "SELF_DB_HOST=$SELF_DB_HOST" >> /tmp/args
