@@ -19,7 +19,7 @@ model Target {
     id               Int      @id @map("ScheibenID")
     startList        String   @map("Starterliste") @db.VarChar(36)
     startListId      Int      @map("StarterlistenID")
-    startTime        DateTime @map("Startzeit") @db.DateTime(0)
+    // startTime        DateTime @map("Startzeit") @db.DateTime(0) // This can contain 0000-00-00 00:00:00, which is not valid in Prisma
     startNo          Int      @map("StartNr")
     lastName         String   @map("Nachname") @db.VarChar(36)
     firstName        String   @map("Vorname") @db.VarChar(36)
