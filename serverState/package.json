@@ -16,7 +16,7 @@
     "dc-logger": "file:../logger",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "semver": "^7.7.1"
+    "semver": "^7.7.2"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
