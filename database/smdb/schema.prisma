@@ -150,9 +150,9 @@ model Round {
 }
 
 model FilterDate {
-    evaluationId Int
-    startDate    DateTime @db.Date
-    endDate      DateTime @db.Date
+    evaluationId Int      @map("AuswertungsID")
+    startDate    DateTime @map("DatumStart") @db.Date
+    endDate      DateTime @map("DatumEnde") @db.Date
 
     evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
 
@@ -161,8 +161,8 @@ model FilterDate {
 }
 
 model FilterDiscipline {
-    evaluationId Int
-    disciplineId Int
+    evaluationId Int @map("AuswertungsID")
+    disciplineId Int @map("DzplID")
 
     Auswertung Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
     Disziplin  Discipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
@@ -282,8 +282,8 @@ model FilterRange {
 }
 
 model FilterStartList {
-    evaluationId Int
-    startListId  Int
+    evaluationId Int @map("AuswertungsID")
+    startListId  Int @map("ListenID")
 
     evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
     startList  StartList  @relation(fields: [startListId], references: [id], onDelete: Cascade)
@@ -733,7 +733,7 @@ model StartListEntry {
 
 model StartList {
     id             Int            @id @map("ListenID")
-    name           String         @unique() @db.VarChar(36)
+    name           String         @unique() @map("ListenName") @db.VarChar(36)
     type           StartListTypes @map("ListenTyp")
     eventName      String         @map("VeranstaltungsName") @db.VarChar(36)
     subTitle       String         @map("Untertitel") @db.VarChar(36)
@@ -860,4 +860,16 @@ enum TicketType {
     purchase @map("Nachkauf")
     deposit  @map("Einzahlung")
     payout   @map("Auszahlung")
+}
+
+// FuncId for layout
+// Can't be used, because the values are integers, but prisma expects strings
+
+enum LayoutFunctions {
+    innerEdge     @map("0")
+    outerEdge     @map("11")
+    center        @map("1")
+    runningTarget @map("3")
+    djv_wild      @map("13")
+    custom        @map("12")
 }
