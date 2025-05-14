@@ -3,7 +3,7 @@ services:
     container_name: dc-ranges-merger
     hostname: ranges
     image: ghcr.io/svenfinn/dc-ranges-merger:${APP_VERSION}
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile
