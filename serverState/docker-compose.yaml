@@ -3,7 +3,7 @@ services:
     container_name: dc-server-state
     hostname: server-state
     image: ghcr.io/svenfinn/dc-server-state:${APP_VERSION}
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:

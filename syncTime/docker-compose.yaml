@@ -3,7 +3,7 @@ services:
     container_name: dc-sync-time
     image: ghcr.io/svenfinn/dc-sync-time:${APP_VERSION}
     hostname: sync-time
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile

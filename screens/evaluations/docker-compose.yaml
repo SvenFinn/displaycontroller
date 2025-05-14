@@ -3,7 +3,7 @@ services:
     hostname: evaluations
     image: ghcr.io/svenfinn/dc-evaluations:${APP_VERSION}
     container_name: dc-evaluations
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:
