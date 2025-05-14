@@ -5,8 +5,8 @@ import string
 # This script generates a dart svg graphic
 # based on the radius of the dartboard
 
-RADIUS = 4500  # 6249  # 4500
-FILE_NAME = "dartboard_lg.svg"  # "dartboard_lp.svg"  # "dartboard_lg.svg"
+RADIUS = 170  # 6249  # 4500
+FILE_NAME = "dartboard.svg"  # "dartboard_lp.svg"  # "dartboard_lg.svg"
 WHITE = "#f0d8b8"
 BLACK = "#000000"
 GREEN = "#28a040"
