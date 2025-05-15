@@ -25,8 +25,7 @@ export type DisciplineLayoutCustomCommon = {
 export type DisciplineLayoutChess = {
     mode: "chess";
     type: "rifle" | "pistol";
-    columns: number;
-    rows: number;
+    size: number;
 }
 
 export type DisciplineLayoutEaster = {
@@ -36,7 +35,6 @@ export type DisciplineLayoutEaster = {
 export function isDisciplineLayouts(disciplineLayouts: any): disciplineLayouts is DisciplineLayouts {
     if (typeof disciplineLayouts !== "object") return false;
     if (Array.isArray(disciplineLayouts)) return false;
-    if (Object.keys(disciplineLayouts).length === 0) return false;
     for (const layoutId in disciplineLayouts) {
         if (isNaN(Number(layoutId))) return false;
         if (!isDisciplineLayout(disciplineLayouts[layoutId])) return false;
@@ -74,8 +72,7 @@ export function isDisciplineLayoutChess(disciplineLayout: any): disciplineLayout
     if (Array.isArray(disciplineLayout)) return false;
     if (disciplineLayout.mode !== "chess") return false;
     if (disciplineLayout.type !== "rifle" && disciplineLayout.type !== "pistol") return false;
-    if (typeof disciplineLayout.columns !== "number") return false;
-    if (typeof disciplineLayout.rows !== "number") return false;
+    if (typeof disciplineLayout.size !== "number") return false;
     return true;
 }
 
