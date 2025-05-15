@@ -177,6 +177,9 @@ function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number,
             const radius = smallestEnclosingCircle(hitsToAccumulate).r;
             return mRound((isNaN(radius) ? 0 : radius * 2) + gauge, 1).toFixed(1);
         case "target":
+            if (sum > round.mode.value) {
+                sum = round.mode.value;
+            }
             if (isTotal) {
                 const result = round.mode.value - sum;
                 if (result < 0) return "0";
