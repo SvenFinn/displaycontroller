@@ -6,59 +6,51 @@ export function getCustomLayout(layoutId: number): DisciplineLayoutCustom | unde
             return {
                 mode: "chess",
                 type: "rifle",
-                columns: 6,
-                rows: 6
+                size: 6,
             };
         case 9001: // chess 6x6 lp
             return {
                 mode: "chess",
                 type: "pistol",
-                columns: 6,
-                rows: 6
+                size: 6,
             };
         case 9003: // chess 5x5 lg
             return {
                 mode: "chess",
                 type: "rifle",
-                columns: 5,
-                rows: 5
+                size: 5,
             };
         case 9004: // chess 5x5 lp
             return {
                 mode: "chess",
                 type: "pistol",
-                columns: 5,
-                rows: 5
+                size: 5,
             };
         case 9005: // chess 7x7 lg
         case 9007:
             return {
                 mode: "chess",
                 type: "rifle",
-                columns: 7,
-                rows: 7
+                size: 7,
             };
         case 9006: // chess 7x7 lp
         case 9008:
             return {
                 mode: "chess",
                 type: "pistol",
-                columns: 7,
-                rows: 7
+                size: 7,
             };
         case 9010: // chess 10x10 lg
             return {
                 mode: "chess",
                 type: "rifle",
-                columns: 10,
-                rows: 10
+                size: 10,
             };
         case 9011: // chess 10x10 lp
             return {
                 mode: "chess",
                 type: "pistol",
-                columns: 10,
-                rows: 10
+                size: 10,
             };
         case 9901: // dart lg
             return {

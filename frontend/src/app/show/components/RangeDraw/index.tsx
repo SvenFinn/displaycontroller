@@ -60,5 +60,5 @@ function getSize(range: Range, ref: SVGSVGElement): [number, number] {
     const diameters = getSizeLayout(range);
     const largestW = Math.max(diameters[0], diameters[1] / ref.clientHeight * ref.clientWidth);
     const sizes = [largestW, largestW / ref.clientWidth * ref.clientHeight];
-    return sizes.map(size => Math.round(size * 100)) as [number, number];
+    return sizes as [number, number];
 }
