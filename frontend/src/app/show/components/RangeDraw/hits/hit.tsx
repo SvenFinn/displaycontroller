@@ -15,8 +15,8 @@ export default function DrawHit({ layout, hit, gauge, isLatest }: HitProps): Rea
     const textColor = idealTextColor(color);
     return (
         <g key={hit.id}>
-            <circle cx={hit.x * 100} cy={-hit.y * 100} r={gauge * 50} fill={color} stroke={textColor} />
-            <text x={hit.x * 100} y={-hit.y * 100} fontSize={gauge * 50} fill={textColor}>
+            <circle cx={hit.x} cy={-hit.y} r={gauge / 2} fill={color} stroke={textColor} />
+            <text x={hit.x} y={-hit.y} fontSize={gauge / 2} fill={textColor}>
                 {hit.id}
             </text>
         </g>
