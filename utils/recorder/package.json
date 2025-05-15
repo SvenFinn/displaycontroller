@@ -12,7 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "eventsource": "^3.0.7"
+    "eventsource": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.18",
