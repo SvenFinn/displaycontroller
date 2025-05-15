@@ -783,7 +783,7 @@ model CertificateText {
 
 model Union {
     id    Int    @id @map("VerbandsID")
-    name  String @unique() @db.VarChar(36)
+    name  String @unique() @map("VerbandsName") @db.VarChar(36)
     short String @map("VerbandsKuerzel") @db.VarChar(36)
     icon  Bytes? @map("VerbandsLogo") @db.MediumBlob
 
