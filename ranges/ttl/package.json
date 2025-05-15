@@ -1,17 +1,17 @@
 {
-  "name": "dc-ranges-ttl",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "devDependencies": {
-    "@types/node": "^22.15.17",
-    "typescript": "^5.8.3"
-  },
-  "files": [
-    "dist"
-  ]
+    "name": "dc-ranges-ttl",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.18",
+        "typescript": "^5.8.3"
+    },
+    "files": [
+        "dist"
+    ]
 }
