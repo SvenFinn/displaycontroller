@@ -239,7 +239,7 @@ tmp_folder=\$(mktemp -d)
 trap 'rm -rf \$tmp_folder' EXIT
 
 for asset in \$(echo "\$latest_release_json" | jq -r '.assets[].browser_download_url'); do
-    if [[ "\$(basename \$asset)" == *".tar.xz" ]]; then
+    if [[ "\$(basename \$asset)" == *".run" ]]; then
         echo "Downloading \$asset"
         curl -f -L -o "\$tmp_folder/\$(basename \$asset)" "\$asset"
         if [ \$? -ne 0 ]; then
@@ -254,25 +254,15 @@ if [ "\$(ls -A \$tmp_folder)" == "" ]; then
     exit 1
 fi
 
-tar -C "\$tmp_folder" -xJf "\$tmp_folder"/*.tar.xz
-rm -rf "\$tmp_folder"/*.tar.xz
-
-echo "Checking for required files"
-
-if [ ! -e "\$tmp_folder/install.sh" ]; then
-    echo "Required install.sh script not found"
-    exit 1
-fi
-
 echo "Removing old version"
 
 find . -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rf {} +
 
 echo "Installing new version"
 
-chmod +x "\$tmp_folder/install.sh"
+chmod +x "\$tmp_folder"/*.run
 export DEBIAN_FRONTEND=noninteractive
-"\$tmp_folder/install.sh"
+"\$tmp_folder"/*.run --nox11
 
 echo "Done"
 EOF
