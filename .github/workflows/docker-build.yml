@@ -239,4 +239,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release
-          path: release/displaycontroller-*.tar.xz
+          path: release/displaycontroller-*.run

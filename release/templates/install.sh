@@ -132,8 +132,20 @@ fi
 
 # Check if dialog is installed
 if ! command -v dialog &> /dev/null; then
+    echo "This script requires the \"dialog\" package to be installed."
+    echo -n "Install it now? (y/n) "
+    read -r answer
+    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+        echo "Please install the \"dialog\" package and run the script again."
+        exit 1
+    fi
+
     apt-get update
     apt-get install -y dialog
+    if [ $? -ne 0 ]; then
+        echo "Failed to install dialog. Please install it manually and run the script again."
+        exit 1
+    fi
 fi
 
 SRC_DIR="$(realpath "$(dirname "$0")")"
@@ -152,7 +164,6 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
     width=$(tput cols)
     height=$(tput lines)
 
-    
     # Allow the user to choose the installation directory
     INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 $width \
         --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 $width "/opt/displaycontroller")
