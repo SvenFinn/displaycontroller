@@ -19,8 +19,8 @@
         "smallest-enclosing-circle": "^1.0.2"
     },
     "devDependencies": {
-        "@types/node": "^22.15.18",
-        "@types/react": "^19.1.4",
+        "@types/node": "^22.15.21",
+        "@types/react": "^19.1.5",
         "@types/react-dom": "^19.1.5",
         "@types/smallest-enclosing-circle": "^1.0.3",
         "typescript": "^5.8.3"
