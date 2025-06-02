@@ -21,6 +21,6 @@
     ],
     "dependencies": {
         "dc-logger": "file:../../logger",
-        "eventsource": "^3.0.7"
+        "eventsource": "^4.0.0"
     }
 }
