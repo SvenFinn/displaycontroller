@@ -19,9 +19,9 @@
         "jsdom": "^26.1.0"
     },
     "devDependencies": {
-        "@types/express": "^5.0.1",
+        "@types/express": "^5.0.2",
         "@types/jsdom": "^21.1.7",
-        "@types/node": "^22.15.18",
+        "@types/node": "^22.15.29",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }
