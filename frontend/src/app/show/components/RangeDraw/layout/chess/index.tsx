@@ -1,14 +1,13 @@
-import { DisciplineLayoutChess, DisciplineLayoutCustomCommon } from "@shared/ranges/discipline/layout";
 import { Range } from "@shared/ranges";
 
 import chessFive from "./5x5.svg";
 import chessSix from "./6x6.svg";
 import chessSeven from "./7x7.svg";
 import chessTen from "./10x10.svg";
-import { getSize } from "..";
+import { LayoutChess } from "@shared/ranges/discipline/layout/games";
 
 interface ChessLayoutProps {
-    layout: DisciplineLayoutChess
+    layout: LayoutChess
 }
 export default function ChessLayout({ layout }: ChessLayoutProps): React.JSX.Element {
     if (!layout) return <></>;
@@ -30,7 +29,7 @@ export default function ChessLayout({ layout }: ChessLayoutProps): React.JSX.Ele
     }
 }
 
-function getSizeLayout(layout: DisciplineLayoutChess): [number, number] {
+function getSizeLayout(layout: LayoutChess): [number, number] {
     if (layout.type === "rifle") {
         switch (layout.size) {
             case 5:

@@ -1,6 +1,6 @@
 import { Range } from "@shared/ranges";
 import { floor, round as mRound } from "./math";
-import { DisciplineRound } from "@shared/ranges/discipline/round";
+import { Round } from "@shared/ranges/discipline/round";
 import { Hit } from "@shared/ranges/hits";
 import smallestEnclosingCircle from "smallest-enclosing-circle";
 
@@ -117,7 +117,7 @@ export function getTotal(data: Range, roundId?: number, gauge?: number): string 
     return accumulateHits(hits, round, gauge, 0, hits.length, true);
 }
 
-function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number, startId: number, endId: number, isTotal: boolean): string {
+function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: number, endId: number, isTotal: boolean): string {
     const hitsToAccumulate = hits.slice(startId, endId);
     let sum = 0;
     if (round.mode.mode == "divider") {
@@ -192,7 +192,7 @@ function accumulateHits(hits: Array<Hit>, round: DisciplineRound, gauge: number,
     }
 }
 
-function getRound(data: Range, roundId?: number): DisciplineRound | null {
+function getRound(data: Range, roundId?: number): Round | null {
     if (!data.active) return null;
     if (!data.discipline) return null;
     if (!roundId) roundId = data.round;
