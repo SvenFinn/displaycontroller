@@ -35,7 +35,6 @@ enum ScreensPreset {
     cpcView
     imageViewer
     evaluation
-    evaluationGallery
 }
 
 model Cache {

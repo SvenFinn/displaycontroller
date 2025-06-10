@@ -2,7 +2,6 @@ import { DbScreen, Screen } from "@shared/screens";
 import cpcView from "./cpcView";
 import drawTarget from "./drawTarget";
 import evaluation from "./evaluation";
-import evaluationGallery from "./evaluationGallery";
 import imageViewer from "./imageViewer";
 import { logger } from "dc-logger";
 import systemMessage from "./systemMessage";
@@ -15,8 +14,6 @@ export async function resolvePreset(screen: DbScreen): Promise<Array<Screen> | u
             return await cpcView(screen);
         case "imageViewer":
             return await imageViewer(screen);
-        case "evaluationGallery":
-            return await evaluationGallery(screen);
         case "drawTarget":
             return await drawTarget(screen);
         case "systemMessage":

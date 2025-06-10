@@ -20,7 +20,7 @@ export default function ImageViewer({ options, onReady }: ImageViewerProps) {
         return <></>;
     }
 
-    const imageUrl = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/${options.file}`;
+    const imageUrl = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/${options.path}`;
     return (
         <div className={styles.imageViewer}>
             <img src={imageUrl} alt="image" onLoad={onReady} className={styles.imageViewer} />
