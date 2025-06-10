@@ -1,9 +1,9 @@
-import { DisciplineLayoutRings } from "@shared/ranges/discipline/layout";
+import { LayoutRings } from "@shared/ranges/discipline/layout/rings";
 import Ring from "./ring";
 import { Range } from "@shared/ranges";
 
 interface RingsProps {
-    layout: DisciplineLayoutRings,
+    layout: LayoutRings,
     color: string
 }
 

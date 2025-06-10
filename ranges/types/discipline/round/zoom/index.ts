@@ -1,22 +1,22 @@
-export type DisciplineRoundZoom = DisciplineRoundZoomFixed | DisciplineRoundZoomAuto | DisciplineRoundZoomNone;
+export type Zoom = ZoomFixed | ZoomAuto | ZoomNone;
 
-type DisciplineRoundZoomFixed = {
+type ZoomFixed = {
     mode: "fixed",
     value: number,
 }
 
-type DisciplineRoundZoomAuto = {
+type ZoomAuto = {
     mode: "auto",
 }
 
-type DisciplineRoundZoomNone = {
+type ZoomNone = {
     mode: "none",
 }
 
 
-export function isDisciplineRoundZoom(disciplineRoundZoom: any): disciplineRoundZoom is DisciplineRoundZoom {
-    if (typeof disciplineRoundZoom !== "object") return false;
-    if (typeof disciplineRoundZoom.mode !== "string") return false;
-    if (disciplineRoundZoom.mode === "fixed" && typeof disciplineRoundZoom.value !== "number") return false;
+export function isZoom(zoom: any): zoom is Zoom {
+    if (typeof zoom !== "object") return false;
+    if (typeof zoom.mode !== "string") return false;
+    if (zoom.mode === "fixed" && typeof zoom.value !== "number") return false;
     return true;
 }

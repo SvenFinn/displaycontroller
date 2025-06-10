@@ -1,6 +1,7 @@
-import { DisciplineLayoutCustom } from "@shared/ranges/discipline/layout";
+import { LayoutGames } from "@shared/ranges/discipline/layout/games";
+import { LayoutRectangle } from "@shared/ranges/discipline/layout/rectangle";
 
-export function getCustomLayout(layoutId: number): DisciplineLayoutCustom | undefined {
+export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle | undefined {
     switch (layoutId) {
         case 9000: // chess 6x6 lg
             return {

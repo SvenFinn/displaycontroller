@@ -1,4 +1,4 @@
-export type DisciplineRoundMode = ModeBase | ModeDecimals | ModeTarget;
+export type Mode = ModeBase | ModeDecimals | ModeTarget;
 
 type ModeDecimals = {
     mode: "rings" | "divider" | "ringsDiv",
@@ -16,31 +16,31 @@ type ModeTarget = {
     exact: boolean
 }
 
-export function isDisciplineRoundModeBase(disciplineRoundMode: any): disciplineRoundMode is ModeBase {
-    if (typeof disciplineRoundMode !== "object") return false;
-    if (typeof disciplineRoundMode.mode !== "string") return false;
-    if (disciplineRoundMode.mode !== "circle" && disciplineRoundMode.mode !== "fullHidden" && disciplineRoundMode.mode !== "hidden" && disciplineRoundMode.mode !== "hundred" && disciplineRoundMode.mode !== "decimal") return false;
+export function isModeBase(mode: any): mode is ModeBase {
+    if (typeof mode !== "object") return false;
+    if (typeof mode.mode !== "string") return false;
+    if (mode.mode !== "circle" && mode.mode !== "fullHidden" && mode.mode !== "hidden" && mode.mode !== "hundred" && mode.mode !== "decimal") return false;
     return true;
 }
 
-export function isDisciplineRoundModeDecimals(disciplineRoundMode: any): disciplineRoundMode is ModeDecimals {
-    if (typeof disciplineRoundMode !== "object") return false;
-    if (typeof disciplineRoundMode.mode !== "string") return false;
-    if (disciplineRoundMode.mode !== "rings" && disciplineRoundMode.mode !== "divider" && disciplineRoundMode.mode !== "ringsDiv") return false;
-    if (typeof disciplineRoundMode.decimals !== "number") return false;
+export function isModeDecimals(mode: any): mode is ModeDecimals {
+    if (typeof mode !== "object") return false;
+    if (typeof mode.mode !== "string") return false;
+    if (mode.mode !== "rings" && mode.mode !== "divider" && mode.mode !== "ringsDiv") return false;
+    if (typeof mode.decimals !== "number") return false;
     return true;
 }
 
-export function isDisciplineRoundModeTarget(disciplineRoundMode: any): disciplineRoundMode is ModeTarget {
-    if (typeof disciplineRoundMode !== "object") return false;
-    if (typeof disciplineRoundMode.mode !== "string") return false;
-    if (disciplineRoundMode.mode !== "target") return false;
-    if (typeof disciplineRoundMode.decimals !== "number") return false;
-    if (typeof disciplineRoundMode.value !== "number") return false;
-    if (typeof disciplineRoundMode.exact !== "boolean") return false;
+export function isModeTarget(mode: any): mode is ModeTarget {
+    if (typeof mode !== "object") return false;
+    if (typeof mode.mode !== "string") return false;
+    if (mode.mode !== "target") return false;
+    if (typeof mode.decimals !== "number") return false;
+    if (typeof mode.value !== "number") return false;
+    if (typeof mode.exact !== "boolean") return false;
     return true;
 }
 
-export function isDisciplineRoundMode(disciplineRoundMode: any): disciplineRoundMode is DisciplineRoundMode {
-    return isDisciplineRoundModeBase(disciplineRoundMode) || isDisciplineRoundModeDecimals(disciplineRoundMode) || isDisciplineRoundModeTarget(disciplineRoundMode);
+export function isMode(mode: any): mode is Mode {
+    return isModeBase(mode) || isModeDecimals(mode) || isModeTarget(mode);
 }

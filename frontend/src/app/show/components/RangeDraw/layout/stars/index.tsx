@@ -1,11 +1,11 @@
-import { DisciplineLayoutCustomCommon } from "@shared/ranges/discipline/layout";
 import starsRifle from "./starsLg.svg";
 import starsPistol from "./starsLp.svg";
 
 import { Range } from "@shared/ranges";
+import { LayoutGamesCommon } from "@shared/ranges/discipline/layout/games";
 
 interface StarsLayoutProps {
-    layout: DisciplineLayoutCustomCommon
+    layout: LayoutGamesCommon
 }
 export default function StarsLayout({ layout }: StarsLayoutProps): React.JSX.Element {
     if (!layout) return <></>;
