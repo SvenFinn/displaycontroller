@@ -19,7 +19,7 @@
         "pdf2pic": "^3.2.0"
     },
     "devDependencies": {
-        "@types/express": "^5.0.2",
+        "@types/express": "^5.0.3",
         "@types/express-fileupload": "^1.5.1",
         "@types/node": "^22.15.29",
         "tsc-alias": "^1.8.16",
