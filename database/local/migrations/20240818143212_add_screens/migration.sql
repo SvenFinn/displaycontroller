@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "ScreensPreset" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation', 'evaluationGallery');
+CREATE TYPE "ScreensPreset" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation');
 
 -- CreateTable
 CREATE TABLE "Screens" (
