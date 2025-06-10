@@ -34,12 +34,12 @@ export default function DrawRange({ range, className }: DrawRangeProps): React.J
     }, [range]);
 
     if (!range.active) return <></>
-    if (!range.discipline) return <></>
+    if (!range.discipline) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
     const round = range.discipline.rounds[range.round];
-    if (!round) return <></>
+    if (!round) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
 
     const layout = range.discipline.layouts[round.layoutId];
-    if (!layout) return <></>
+    if (!layout) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
 
     const viewBox = `${-size[0] / 2} ${-size[1] / 2} ${size[0]} ${size[1]}`;
 
