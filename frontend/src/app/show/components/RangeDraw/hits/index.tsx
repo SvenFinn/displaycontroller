@@ -9,7 +9,6 @@ export default function DrawHits({ range, strokeWidth }: { range: Range, strokeW
     if (!round) return <></>;
     if (round.mode.mode == "fullHidden") return <></>;
     const layout = range.discipline.layouts[round.layoutId];
-    if (!layout) return <></>;
 
     const hitsPerView = round.hitsPerView;
     if (!range.hits) return <></>;
