@@ -1,5 +1,6 @@
 "use client";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import Form from "@rjsf/react-bootstrap";
 import validator from "@rjsf/validator-ajv8";
