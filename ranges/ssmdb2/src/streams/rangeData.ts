@@ -5,6 +5,8 @@ import { Hits } from "@shared/ranges/hits";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 
+const INVALID_HIT_POS = [2147483647, 2147483647];
+
 export class RangeDataStream extends Transform {
     private prisma: Ssmdb2Client;
 
@@ -77,14 +79,22 @@ export class RangeDataStream extends Transform {
             if (result[roundId] === undefined) {
                 result[roundId] = [];
             }
-            result[roundId]?.push({
-                id: hit.id,
-                x: hit.x / 100,
-                y: hit.y / 100,
-                divisor: hit.dividerHundredth / 100,
-                rings: hit.ringsTenth / 10,
-                innerTen: hit.innerTen
-            });
+            if (hit.x >= INVALID_HIT_POS[0] && hit.y >= INVALID_HIT_POS[1]) {
+                result[roundId]?.push({
+                    id: hit.id,
+                    valid: false,
+                });
+            } else {
+                result[roundId]?.push({
+                    id: hit.id,
+                    x: hit.x / 100,
+                    y: hit.y / 100,
+                    divisor: hit.dividerHundredth / 100,
+                    rings: hit.ringsTenth / 10,
+                    innerTen: hit.innerTen,
+                    valid: true,
+                });
+            }
         }
         return result.map((round) => round?.sort((a, b) => a.id - b.id)).map((round) => round === undefined ? null : round);
     }

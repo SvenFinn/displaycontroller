@@ -2,6 +2,8 @@ import { Transform } from "stream";
 import { LogInternalRange, LogMessage } from "../types";
 import { InternalRange } from "@shared/ranges/internal";
 
+const INVALID_HIT_POS = [2147483647, 2147483647];
+
 export class AccumulateRanges extends Transform {
     private ranges: Map<number, LogInternalRange> = new Map();
 
@@ -42,15 +44,24 @@ export class AccumulateRanges extends Transform {
             if (rangeData.hits[chunk.round.id] === null) {
                 rangeData.hits[chunk.round.id] = [];
             }
-            // If hit id already exists, count up till we find a free id
-            rangeData.hits[chunk.round.id]?.splice(chunk.hit.id - 1, 0, {
-                id: chunk.hit.id,
-                x: chunk.hit.x,
-                y: chunk.hit.y,
-                divisor: chunk.hit.divisor,
-                rings: chunk.hit.rings,
-                innerTen: chunk.hit.innerRing,
-            })
+            if (chunk.hit.x >= INVALID_HIT_POS[0] && chunk.hit.y >= INVALID_HIT_POS[1]) {
+                // @ts-expect-error 
+                rangeData.hits[chunk.round.id].push({
+                    id: chunk.hit.id,
+                    valid: false,
+                });
+            } else {
+                // @ts-expect-error
+                rangeData.hits[chunk.round.id].push({
+                    id: chunk.hit.id,
+                    x: chunk.hit.x,
+                    y: chunk.hit.y,
+                    divisor: chunk.hit.divisor,
+                    rings: chunk.hit.rings,
+                    innerTen: chunk.hit.innerRing,
+                    valid: true
+                });
+            }
             rangeData.hits[chunk.round.id]?.forEach((hit, index) => {
                 hit.id = index + 1;
                 return hit;
