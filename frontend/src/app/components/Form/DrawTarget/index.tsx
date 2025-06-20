@@ -25,7 +25,10 @@ export default function DTEditRanges(props: WidgetProps) {
         }
     }, [values, rawValues, props]);
 
-    const [options, setOptions] = useState<Array<Value>>([]);
+    const [options, setOptions] = useState<Array<Value>>([{
+        label: "None",
+        value: null
+    }]);
     useEffect(() => {
         for (const value of values) {
             if (value !== null && !options.some(opt => opt.value === value)) {
@@ -90,6 +93,16 @@ export default function DTEditRanges(props: WidgetProps) {
                             options={options}
                             value={options.find(opt => opt.value === value) || null}
                             onChange={(newValue) => handleChange(index, newValue)}
+                            formatCreateLabel={(inputValue: string) => inputValue}
+                            isValidNewOption={(inputValue: string) => {
+                                if (Number.isNaN(Number(inputValue)))
+                                    return false; // Invalid input, do not allow creation
+                                if (options.some(opt => opt.value === Number(inputValue)))
+                                    return false; // Already exists, do not allow creation
+                                if (Number(inputValue) < 1)
+                                    return false; // Invalid range, do not allow creation
+                                return true;
+                            }}
                         />
                     </div>
                 ))}

@@ -5,8 +5,9 @@ import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import Form from "@rjsf/react-bootstrap";
 import validator from "@rjsf/validator-ajv8";
 import { useState } from "react";
-import DrawTargetEdit from "./ranges";
+import DrawTargetEdit from "../../../../components/Form/DrawTarget";
 import { DrawTargetOptions, isDrawTargetOptions } from "@shared/screens/drawTarget";
+import FormWrapper from '@frontend/app/components/Form';
 
 export interface DrawTargetEditProps {
     options?: DrawTargetOptions,
@@ -32,14 +33,12 @@ export default function Page({ options, onSubmit }: DrawTargetEditProps) {
                 title: "Rows",
                 default: 1,
                 minimum: 1,
-                maximum: 10,
             },
             "columns": {
                 type: "integer",
                 title: "Columns",
                 default: 1,
                 minimum: 1,
-                maximum: 10,
             },
             "ranges": {
                 type: "array",
@@ -123,7 +122,7 @@ export default function Page({ options, onSubmit }: DrawTargetEditProps) {
             },
         },
         "ranges": {
-            "ui:widget": DrawTargetEdit,
+            "ui:widget": "DTEditRanges",
             "ui:options": {
                 rows: formData.rows,
                 columns: formData.columns,
@@ -133,13 +132,13 @@ export default function Page({ options, onSubmit }: DrawTargetEditProps) {
     }
 
     return (
-        <Form schema={schema} uiSchema={uiSchema} validator={validator} formData={formData} onChange={(data) => setFormData(data.formData)
-        } onSubmit={(data) => {
-            if (!isDrawTargetOptions(data.formData)) {
-                console.error("Invalid form data for DrawTargetOptions", data.formData);
-                return;
-            }
-            onSubmit(data.formData as DrawTargetOptions);
-        }} />
-    );
+        <FormWrapper
+            schema={schema}
+            uiSchema={uiSchema}
+            initialData={formData}
+            typeCheck={isDrawTargetOptions}
+            onChange={(data) => setFormData(data)}
+            onSubmit={(data) => onSubmit(data as DrawTargetOptions)}
+        />
+    )
 }
