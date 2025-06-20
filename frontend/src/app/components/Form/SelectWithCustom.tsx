@@ -5,9 +5,13 @@ import CreateableSelect from "react-select/creatable";
 
 export default function SelectWithCustom({ value, onChange, options, schema }: WidgetProps) {
     const enumOptions = options.enumOptions || [];
-    let dataTypes = schema.type || ["string"];
-    if (!Array.isArray(dataTypes)) {
-        dataTypes = [dataTypes];
+    let dataTypes: string[] = [];
+    if (Array.isArray(schema.type)) {
+        dataTypes = schema.type as string[];
+    } else if (schema.type) {
+        dataTypes = [schema.type as string];
+    } else {
+        dataTypes = ["string"];
     }
     let enumValue = enumOptions.find((option) => option.value === value) || null;
     if (!enumValue) {
