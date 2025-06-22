@@ -8,8 +8,10 @@ svg.fullscreen {
     position: absolute;
     top: 7%;
     right: 0;
-    width: 2.5%;
-    height: unset;
+    height: 5%;
+    max-width: 5%;
+    aspect-ratio: 1 / 1;
+    width: unset;
     z-index: 1000;
     fill: white;
     padding: 0.35%;
