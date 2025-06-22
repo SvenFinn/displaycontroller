@@ -1,4 +1,4 @@
-import Overlay from "../../Overlay";
+import Overlay from "../../../Overlay";
 import { LoaderHook } from "./hook";
 import styles from "./Loader.module.css";
 
