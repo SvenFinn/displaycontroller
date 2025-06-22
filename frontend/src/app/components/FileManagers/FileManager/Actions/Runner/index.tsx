@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-import Dialog from "../../../Dialog";
 import { ActionsCallbacks } from "../CallbackWrapper";
 import { ActionKey } from "../hook";
 import { DirectoryListing } from "@shared/files";

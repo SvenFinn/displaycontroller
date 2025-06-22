@@ -1,7 +1,7 @@
 
 import { DirectoryListing } from "@shared/files";
 import { use, useState } from "react";
-import ColumnResize from "../ColumnResize";
+import ColumnResize from "../../ColumnResize";
 import FolderTree from "./FolderTree";
 import FileList from "./FileList";
 import styles from "./FileManager.module.css";
@@ -53,6 +53,9 @@ export default function FileManager({ files, allowMultiSelect, initialPath, onSe
     }
 
     function onPathChange(path: string) {
+        for (let i = 0; i < selectedFiles.length; i++) {
+            onSelect(selectedFiles[i]);
+        }
         setSelectedFiles([]);
         setCurrentPath(path);
     }
