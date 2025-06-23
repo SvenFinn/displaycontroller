@@ -14,6 +14,6 @@ div.content {
     overflow: hidden;
 }
 
-div.content>div {
+div.content:has(> div) {
     background-color: white;
 }
