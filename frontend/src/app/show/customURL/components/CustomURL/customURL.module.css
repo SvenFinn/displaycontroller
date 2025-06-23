@@ -1,0 +1,11 @@
+div.customURL {
+    width: 100%;
+    height: 100%;
+}
+
+iframe.customURL {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+}
