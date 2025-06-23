@@ -1,14 +1,14 @@
 "use client";
 
 import { WidgetProps } from "@rjsf/utils";
-import EvaluationManager from "../../FileManagers/evaluation";
+import ImageManager from "../../FileManagers/images";
 
 
-export default function EvaluationSelector(props: WidgetProps) {
+export default function ImageSelector(props: WidgetProps) {
 
     return (
         <>
-            <EvaluationManager allowMultiSelect={false} selectedFiles={[props.value]} onSelect={(file) => {
+            <ImageManager allowMultiSelect={false} selectedFiles={[props.value]} onSelect={(file) => {
                 if (props.value === file) {
                     props.onChange("");
                 } else {
