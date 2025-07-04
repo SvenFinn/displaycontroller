@@ -12,7 +12,7 @@
     "dependencies": {
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
-        "dotenv": "^16.5.0",
+        "dotenv": "^16.6.1",
         "eventsource": "^4.0.0",
         "express": "^5.1.0",
         "express-rate-limit": "^7.5.1",
@@ -21,7 +21,7 @@
     "devDependencies": {
         "@types/express": "^5.0.3",
         "@types/jsdom": "^21.1.7",
-        "@types/node": "^22.15.32",
+        "@types/node": "^22.16.0",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }

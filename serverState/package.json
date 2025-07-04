@@ -14,14 +14,14 @@
         "dc-db-local": "file:../database/local",
         "dc-db-smdb": "file:../database/smdb",
         "dc-logger": "file:../logger",
-        "dotenv": "^16.5.0",
+        "dotenv": "^16.6.1",
         "express": "^5.1.0",
         "semver": "^7.7.2"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
         "@types/express": "^5.0.3",
-        "@types/node": "^22.15.32",
+        "@types/node": "^22.16.0",
         "@types/semver": "^7.7.0",
         "typescript": "^5.8.3"
     }
