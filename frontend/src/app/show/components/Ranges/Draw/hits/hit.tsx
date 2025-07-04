@@ -1,5 +1,5 @@
 import { Hit } from "@shared/ranges/hits";
-import { idealTextColor } from "../../../lib/idealTextColor";
+import { idealTextColor } from "../../../../lib/idealTextColor";
 import { getHitColor } from "../layout";
 import { Layout } from "@shared/ranges/discipline/layout";
 
