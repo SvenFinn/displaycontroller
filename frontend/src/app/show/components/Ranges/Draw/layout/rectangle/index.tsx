@@ -1,5 +1,4 @@
-import { Range } from "@shared/ranges";
-import { LayoutRectangle } from "@shared/ranges/discipline/layout/rectangle";
+import { Range, LayoutRectangle } from "dc-ranges-types";
 
 interface RectangleLayoutProps {
     layout: LayoutRectangle,

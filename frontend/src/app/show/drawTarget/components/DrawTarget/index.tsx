@@ -1,6 +1,6 @@
 "use client";
 
-import { DrawTargetOptions } from "@shared/screens/drawTarget";
+import { DrawTargetOptions } from "dc-screens-types";
 import Ranges from "./ranges";
 import { Provider } from "react-redux";
 import { store } from "./ranges-store/store"

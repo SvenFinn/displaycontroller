@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { EvaluationOptions } from "@shared/screens/evaluation";
+import { EvaluationOptions } from "dc-screens-types";
 
 export const schema: RJSFSchema = {
     type: "object",

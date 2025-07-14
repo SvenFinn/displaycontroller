@@ -1,4 +1,4 @@
-import { ConditionNone } from "@shared/screens/conditions/base";
+import { ConditionNone } from "dc-screens-types";
 import { logger } from "dc-logger";
 
 export async function meyton_available(condition: ConditionNone): Promise<boolean> {

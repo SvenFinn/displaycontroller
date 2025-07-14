@@ -1,4 +1,4 @@
-import { SystemMessageDbScreen } from "@shared/screens/systemMessage";
+import { SystemMessageDbScreen } from "dc-screens-types";
 import { Screens } from ".";
 
 export default async function systemMessage(screen: SystemMessageDbScreen): Promise<Screens> {

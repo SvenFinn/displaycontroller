@@ -20,6 +20,11 @@ COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM local-deps AS deps
 
 WORKDIR /app/ranges/multicast
@@ -32,11 +37,6 @@ WORKDIR /app/ranges/multicast
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
-
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
-
-WORKDIR /app/ranges/multicast
 
 COPY . .
 RUN npm run build && \
@@ -53,4 +53,4 @@ COPY --from=deps /app/ranges/multicast/node_modules ./node_modules
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/multicast/src/index.js"]
+CMD ["node", "/app/src/index.js"]

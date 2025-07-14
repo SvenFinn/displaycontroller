@@ -1,4 +1,4 @@
-import { InternalRange } from "@shared/ranges/internal";
+import { InternalRange } from "dc-ranges-types";
 import { Transform, TransformCallback } from "stream";
 import { logger } from "dc-logger";
 

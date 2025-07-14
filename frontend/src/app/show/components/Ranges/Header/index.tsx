@@ -1,4 +1,4 @@
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import styles from "./header.module.css"
 
 

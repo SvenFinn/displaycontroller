@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - logger=../../logger
-        - screen-types=../types
+        - files-utils=../utils/files
     volumes:
       - images_data:/app/files
     environment:

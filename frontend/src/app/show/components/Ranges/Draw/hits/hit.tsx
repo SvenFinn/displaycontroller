@@ -1,7 +1,6 @@
-import { Hit } from "@shared/ranges/hits";
+import { Hit, Layout } from "dc-ranges-types";
 import { idealTextColor } from "../../../../lib/idealTextColor";
 import { getHitColor } from "../layout";
-import { Layout } from "@shared/ranges/discipline/layout";
 
 interface HitProps {
     hit: Hit,

@@ -1,4 +1,4 @@
-import { DbScreen, isDbScreen } from "@shared/screens";
+import { DbScreen } from "dc-screens-types";
 import { all_ranges_free } from "./AllRangesFree";
 import { meyton_available } from "./MeytonAvailable";
 import { range_free } from "./RangeFree";

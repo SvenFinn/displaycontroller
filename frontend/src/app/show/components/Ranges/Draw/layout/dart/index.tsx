@@ -1,6 +1,5 @@
-import { LayoutGames } from "@shared/ranges/discipline/layout/games";
+import { LayoutGames, Range } from "dc-ranges-types";
 import dart from "./dartboard.svg";
-import { Range } from "@shared/ranges";
 
 interface DartLayoutProps {
     layout: LayoutGames

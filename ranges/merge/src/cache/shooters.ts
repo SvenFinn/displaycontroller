@@ -1,8 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { Shooter, isShooter } from "@shared/ranges/shooter";
-import { InternalShooter, isInternalShooterById } from "@shared/ranges/internal";
-import { mergeMaps } from "@shared/ranges/cache";
-
+import { Shooter, isShooter, InternalShooter, isInternalShooterById, mergeMaps } from "dc-ranges-types";
 export const shooters = new Map<number, Shooter>();
 
 export async function updateShooters(localClient: LocalClient) {

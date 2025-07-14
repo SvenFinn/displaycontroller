@@ -33,6 +33,11 @@ COPY --from=table-watcher . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM local-deps AS deps
 
 WORKDIR /app/ranges/cache
@@ -45,9 +50,6 @@ WORKDIR /app/ranges/cache
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
-
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
 
 WORKDIR /app/ranges/cache
 
@@ -73,4 +75,4 @@ COPY --from=deps /app/ranges/cache/node_modules ./node_modules
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/cache/src/index.js"]
+CMD ["node", "/app/index.js"]

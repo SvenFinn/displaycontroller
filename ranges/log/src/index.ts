@@ -1,6 +1,5 @@
 import { logReaderStream } from "./streams/logReader";
 import amqp from "amqplib";
-import { isInternalRange } from "@shared/ranges/internal";
 import { logger } from "dc-logger";
 
 import "./cache/updater"; // Import the updater to start the caching

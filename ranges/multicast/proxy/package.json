@@ -17,7 +17,7 @@
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^22.16.0",
+        "@types/node": "^22.16.3",
         "typescript": "^5.8.3"
     }
 }
