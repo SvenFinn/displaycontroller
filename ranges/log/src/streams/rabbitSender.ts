@@ -1,6 +1,6 @@
 import { Writable } from "stream";
 import amqp, { ChannelModel } from "amqplib";
-import { InternalRange } from "@shared/ranges/internal";
+import { InternalRange } from "dc-ranges-types";
 import { logger } from "dc-logger";
 
 export class RabbitSenderStream extends Writable {

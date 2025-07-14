@@ -1,6 +1,6 @@
 import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import { schema as baseSchema, getUiSchema as getBaseUiSchema } from '.';
-import { ViewerOptions } from '@shared/screens/imageViewer';
+import { isViewerOptions, ViewerOptions } from 'dc-screens-types';
 
 export const schema: RJSFSchema = {
     ...baseSchema,
@@ -25,8 +25,9 @@ export type CustomViewerOptions = ViewerOptions & {
 };
 
 export function isCustomViewerOptions(
-    options: ViewerOptions
+    options: any
 ): options is CustomViewerOptions {
+    if (!isViewerOptions(options)) return false;
     return (
         //@ts-expect-error
         typeof options.duration === 'number' &&

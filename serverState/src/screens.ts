@@ -1,6 +1,6 @@
 import { AdvServerState } from "./types";
 import { logger } from "dc-logger";
-import { Screen } from "@shared/screens";
+import { Screen } from "dc-screens-types";
 import amqp from "amqplib";
 
 const MAX_DB_NUM = 2147483647;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ScreenAvailable, Screen } from '@shared/screens';
+import { ScreenAvailable, Screen } from 'dc-screens-types';
 
 export const screensSlice = createSlice({
     name: 'screens',

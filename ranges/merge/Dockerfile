@@ -25,6 +25,11 @@ COPY --from=range-ttl . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM local-deps AS deps
 
 WORKDIR /app/ranges/merger
@@ -37,9 +42,6 @@ WORKDIR /app/ranges/merger
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
-
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
 
 WORKDIR /app/ranges/merger
 
@@ -60,4 +62,4 @@ COPY --from=deps /app/ranges/merger/node_modules ./node_modules
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/merger/src/index.js"]
+CMD ["node", "/app/index.js"]

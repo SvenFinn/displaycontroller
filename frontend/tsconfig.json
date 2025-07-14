@@ -22,31 +22,16 @@
       {
         "name": "next"
       },
-      {
-        "transform": "typia/lib/transform"
-      }
     ],
     "paths": {
       "@frontend/*": [
         "./src/*"
       ],
-      "@shared/ranges": [
-        "../ranges/types"
-      ],
-      "@shared/ranges/*": [
-        "../ranges/types/*"
-      ],
-      "@shared/screens": [
-        "../screens/screenManager/types"
-      ],
-      "@shared/screens/*": [
-        "../screens/screenManager/types/*"
-      ],
       "@shared/files": [
-        "../screens/types/files"
+        "../screens/utils/files"
       ],
       "@shared/files/*": [
-        "../screens/types/files/*"
+        "../screens/utils/files/*"
       ]
     },
     "strictNullChecks": true

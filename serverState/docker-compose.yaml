@@ -12,7 +12,7 @@ services:
       additional_contexts:
         - local-db=../database/local
         - smdb=../database/smdb
-        - screen-manager=../screens/screenManager/types
+        - screen-types=../screens/types
         - logger=../logger
       args:
         - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}

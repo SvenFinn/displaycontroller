@@ -1,7 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { StartList } from "@shared/ranges/startList";
-import { InternalStartList, isInternalStartList } from "@shared/ranges/internal/startList";
-import { mergeMaps } from "@shared/ranges/cache";
+import { StartList, isInternalStartList, mergeMaps } from "dc-ranges-types";
 
 export const startLists = new Map<number, StartList>();
 

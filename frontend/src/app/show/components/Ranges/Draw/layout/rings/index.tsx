@@ -1,6 +1,5 @@
-import { LayoutRings } from "@shared/ranges/discipline/layout/rings";
+import { LayoutRings, Range } from "dc-ranges-types";
 import Ring from "./ring";
-import { Range } from "@shared/ranges";
 
 interface RingsProps {
     layout: LayoutRings,

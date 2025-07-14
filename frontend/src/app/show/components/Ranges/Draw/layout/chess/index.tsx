@@ -1,10 +1,9 @@
-import { Range } from "@shared/ranges";
+import { Range, LayoutChess } from "dc-ranges-types";
 
 import chessFive from "./5x5.svg";
 import chessSix from "./6x6.svg";
 import chessSeven from "./7x7.svg";
 import chessTen from "./10x10.svg";
-import { LayoutChess } from "@shared/ranges/discipline/layout/games";
 
 interface ChessLayoutProps {
     layout: LayoutChess

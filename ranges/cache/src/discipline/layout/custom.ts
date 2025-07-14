@@ -1,5 +1,4 @@
-import { LayoutGames } from "@shared/ranges/discipline/layout/games";
-import { LayoutRectangle } from "@shared/ranges/discipline/layout/rectangle";
+import { LayoutGames, LayoutRectangle } from "dc-ranges-types";
 
 export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle | undefined {
     switch (layoutId) {

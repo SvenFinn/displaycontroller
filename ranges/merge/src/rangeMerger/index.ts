@@ -1,9 +1,7 @@
-import { Range } from "@shared/ranges";
-import { InternalRange } from "@shared/ranges/internal";
+import { Range, InternalRange } from "dc-ranges-types";
 import { EventEmitter } from "events";
 import { TTLHandler } from "dc-ranges-ttl";
 import { mergeRange } from "./merge";
-import { clear } from "console";
 
 export class RangeMerger extends EventEmitter {
     private readonly rangeId: number;

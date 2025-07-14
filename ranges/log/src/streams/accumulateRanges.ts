@@ -1,6 +1,5 @@
 import { Transform } from "stream";
 import { LogInternalRange, LogMessage } from "../types";
-import { InternalRange } from "@shared/ranges/internal";
 
 const INVALID_HIT_POS = [2147483647, 2147483647];
 
@@ -45,7 +44,7 @@ export class AccumulateRanges extends Transform {
                 rangeData.hits[chunk.round.id] = [];
             }
             if (chunk.hit.x >= INVALID_HIT_POS[0] && chunk.hit.y >= INVALID_HIT_POS[1]) {
-                // @ts-expect-error 
+                // @ts-expect-error
                 rangeData.hits[chunk.round.id].push({
                     id: chunk.hit.id,
                     valid: false,

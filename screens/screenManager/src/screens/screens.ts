@@ -1,7 +1,6 @@
 import { LocalClient } from "dc-db-local";
 import { resolvePreset } from "./presets";
-import { isDbScreen, DbScreen } from "@shared/screens";
-import { Screen } from "@shared/screens";
+import { isDbScreen, DbScreen, Screen } from "dc-screens-types";
 import { checkCondition } from "./conditions";
 import { logger } from "dc-logger";
 

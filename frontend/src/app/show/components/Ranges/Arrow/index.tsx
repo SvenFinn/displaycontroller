@@ -1,6 +1,4 @@
-import { Hit } from "@shared/ranges/hits";
-import arrowImage from "./arrow.png";
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import { FaArrowUp } from "react-icons/fa6";
 
 interface ShotArrowProps {

@@ -1,4 +1,4 @@
-import { DbScreen, Screen } from "@shared/screens";
+import { DbScreen, Screen } from "dc-screens-types";
 import cpcView from "./cpcView";
 import drawTarget from "./drawTarget";
 import evaluation from "./evaluation";

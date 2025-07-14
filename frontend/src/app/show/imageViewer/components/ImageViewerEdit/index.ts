@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { ViewerOptions } from "@shared/screens/imageViewer";
+import { ViewerOptions } from "dc-screens-types";
 
 export const schema: RJSFSchema = {
     type: "object",

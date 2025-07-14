@@ -7,10 +7,10 @@
         "outDir": "./dist",
         "paths": {
             "@shared/files/*": [
-                "../types/files/*"
+                "../utils/files/*"
             ],
             "@shared/files": [
-                "../types/files"
+                "../utils/files"
             ]
     }
     },

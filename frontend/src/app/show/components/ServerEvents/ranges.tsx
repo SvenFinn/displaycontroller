@@ -2,7 +2,7 @@
 
 import ServerEvents from "./base";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { isRange, Range } from "@shared/ranges";
+import { isRange, Range } from "dc-ranges-types";
 import { useAppDispatch } from "../../drawTarget/components/DrawTarget/ranges-store/store";
 import { useEffect, useState } from "react";
 

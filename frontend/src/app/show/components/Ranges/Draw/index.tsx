@@ -1,6 +1,6 @@
 "use client";
 
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import { useEffect, useRef, useState } from "react";
 import Layout, { getSize as getSizeLayout } from "./layout";
 import Hits from "./hits";

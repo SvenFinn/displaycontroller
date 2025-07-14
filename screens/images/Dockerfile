@@ -17,8 +17,8 @@ RUN npm i --omit=dev --loglevel=info --install-links
 
 FROM local-deps AS build
 
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
+WORKDIR /app/screens/utils/files
+COPY --from=files-utils . .
 
 WORKDIR /app/screens/images
 

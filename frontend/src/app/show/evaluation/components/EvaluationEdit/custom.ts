@@ -1,6 +1,7 @@
 import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import { schema as baseSchema, getUiSchema as getBaseUiSchema } from '.';
-import { EvaluationOptions } from '@shared/screens/evaluation';
+import { EvaluationOptions } from 'dc-screens-types';
+import { isEvaluationOptions } from 'dc-screens-types/dist/evaluation';
 
 export const schema: RJSFSchema = {
     ...baseSchema,
@@ -25,8 +26,9 @@ export type CustomEvaluationOptions = EvaluationOptions & {
 };
 
 export function isCustomEvaluationOptions(
-    options: EvaluationOptions
+    options: any
 ): options is CustomEvaluationOptions {
+    if (!isEvaluationOptions(options)) return false;
     return (
         //@ts-expect-error
         typeof options.duration === 'number' &&

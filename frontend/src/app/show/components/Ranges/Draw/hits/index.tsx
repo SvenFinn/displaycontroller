@@ -1,5 +1,5 @@
 import Hit from "./hit"
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import TargetCircle from "./targetCircle";
 
 export default function DrawHits({ range, strokeWidth }: { range: Range, strokeWidth: number }): React.JSX.Element {

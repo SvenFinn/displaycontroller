@@ -1,5 +1,5 @@
 import { SmdbClient } from "dc-db-smdb";
-import { InternalStartList } from "@shared/ranges/internal/startList"
+import { InternalStartList } from "dc-ranges-types"
 import { StartListTypes } from "dc-db-smdb/generated/client";
 
 export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<InternalStartList>> {

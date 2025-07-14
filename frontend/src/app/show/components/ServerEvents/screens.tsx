@@ -2,7 +2,7 @@
 
 import { useDispatch } from "react-redux";
 import ServerEvents from "./base";
-import { isScreen, Screen } from "@shared/screens";
+import { isScreen, Screen } from "dc-screens-types";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 

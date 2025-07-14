@@ -1,6 +1,6 @@
 "use client";
 
-import { EvaluationScreen } from "@shared/screens/evaluation";
+import { EvaluationScreen } from "dc-screens-types";
 import styles from "./evaluation.module.css";
 import { useEffect, useState } from "react";
 

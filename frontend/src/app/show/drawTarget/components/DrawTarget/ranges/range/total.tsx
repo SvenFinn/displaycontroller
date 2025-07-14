@@ -1,4 +1,4 @@
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import { getTotal } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 

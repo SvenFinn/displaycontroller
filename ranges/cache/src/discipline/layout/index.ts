@@ -1,7 +1,6 @@
 import { SmdbClient } from "dc-db-smdb";
-import { Layout } from "@shared/ranges/discipline/layout";
+import { Layout, LayoutRings } from "dc-ranges-types";
 import { getCustomLayout } from "./custom";
-import { LayoutRings } from "@shared/ranges/discipline/layout/rings";
 
 export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Layout | undefined> {
     const layoutDb = await smdbClient.layout.findUnique({

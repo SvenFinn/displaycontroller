@@ -1,4 +1,4 @@
-import { isInternalRange } from "@shared/ranges/internal";
+import { isInternalRange } from "dc-ranges-types";
 import { ChannelModel } from "amqplib";
 import { logger } from "dc-logger";
 import { Readable } from "stream";

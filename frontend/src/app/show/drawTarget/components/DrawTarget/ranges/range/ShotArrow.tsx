@@ -1,4 +1,4 @@
-import { Range } from "@shared/ranges";
+import { Range } from "dc-ranges-types";
 import ShotArrow from "../../../../../components/Ranges/Arrow";
 import styles from "./range.module.css";
 
