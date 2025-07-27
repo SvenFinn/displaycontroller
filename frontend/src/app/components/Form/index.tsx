@@ -5,11 +5,13 @@ import root from "react-shadow";
 import Form from "@rjsf/react-bootstrap";
 import validator from "@rjsf/validator-ajv8";
 import bootstrapCss from '!!raw-loader!bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SingleRangeSelector from "./RangeSelector/single";
 import EvaluationSelector from "./EvaluationSelector";
 import ImageSelector from "./ImageSelector";
 import RangesGrid from "./RangesGrid";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
 
 export interface FormDefinition<T> {
     schema: RJSFSchema;
@@ -84,14 +86,23 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
     }
 
 
+    const ref = useRef<HTMLDivElement>(null);
+
+    const cache = createCache({
+        key: "css",
+        prepend: true,
+        container: ref.current || undefined,
+    });
 
     return (
         <root.div className={className || ""}>
-            <style>{parentStyles}</style>
-            <style>{bootstrapCss}</style>
-            <div data-bs-theme="light">
-                <Form schema={schema} uiSchema={uiSchemaFn ? uiSchemaFn(formData) : undefined} formData={formData} validator={validator} widgets={allWidgets} onChange={handleChange} onSubmit={handleSubmit} />
-            </div>
+            <CacheProvider value={cache}>
+                <style>{parentStyles}</style>
+                <style>{bootstrapCss}</style>
+                <div data-bs-theme="light" ref={ref} >
+                    <Form schema={schema} uiSchema={uiSchemaFn ? uiSchemaFn(formData) : undefined} formData={formData} validator={validator} widgets={allWidgets} onChange={handleChange} onSubmit={handleSubmit} />
+                </div>
+            </CacheProvider>
         </root.div>
     )
 }
