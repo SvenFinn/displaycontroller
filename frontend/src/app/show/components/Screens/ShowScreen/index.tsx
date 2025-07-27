@@ -10,6 +10,7 @@ import ImageViewer from "../../../imageViewer/components/ImageViewer";
 import Evaluation from "../../../evaluation/components/Evaluation";
 import SystemMessage from "../../../systemMessage";
 import CustomURL from "@frontend/app/show/customURL/components/CustomURL";
+import CpcView from "@frontend/app/show/cpcView/components/CpcView";
 
 interface ShowScreenProps {
     id: number
@@ -53,8 +54,11 @@ function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): Re
             return <SystemMessage options={screen.options} onReady={setIsReady} />;
         case "customURL":
             return <CustomURL options={screen.options} onReady={setIsReady} />;
+        case "cpcView":
+            return <CpcView options={screen.options} onReady={setIsReady} />;
         default:
             setTimeout(setIsReady, 500);
+            // @ts-expect-error
             return <h1>Unknown preset: {screen.preset}</h1>;
     }
 }

@@ -4,6 +4,7 @@ import { updateShooters } from "./shooters";
 import { updateStartLists } from "./startLists";
 import { logger } from "dc-logger";
 import dotenv from "dotenv";
+import { updateIpAddresses } from "./ipAddress";
 dotenv.config();
 
 const client = new LocalClient();
@@ -22,6 +23,7 @@ async function update() {
         updateOverrides(client),
         updateShooters(client),
         updateStartLists(client),
+        updateIpAddresses(client)
     ]);
     setTimeout(update, refreshInterval);
 }

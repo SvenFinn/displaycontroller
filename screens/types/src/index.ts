@@ -1,5 +1,5 @@
 import { ScreenUnavailable } from "./base";
-import { CpcViewScreen, CpcViewDbScreen, } from "./cpcView";
+import { CpcViewScreen, CpcViewDbScreen, CpcViewOptions, isCpcViewOptions } from "./cpcView";
 import { CustomURLDbScreen, CustomURLScreen, CustomURLOptions } from "./customURL";
 import { DrawTargetScreen, DrawTargetDbScreen, DrawTargetOptions, isDrawTargetOptions } from "./drawTarget";
 import { EvaluationScreen, EvaluationDbScreen, EvaluationOptions, isEvaluationOptions } from "./evaluation";
@@ -26,6 +26,8 @@ export {
     DrawTargetOptions,
     isDrawTargetOptions,
     CpcViewDbScreen,
+    CpcViewOptions,
+    isCpcViewOptions,
     CpcViewScreen,
     ViewerDbScreen,
     ViewerScreen,
