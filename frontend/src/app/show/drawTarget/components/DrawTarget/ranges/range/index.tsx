@@ -11,10 +11,13 @@ import { useEffect, useState, useRef } from "react"
 
 interface DrawTargetRangeProps {
     highlightAssign: boolean,
-    id: number
+    id: number | null
 }
 
 export default function Range({ highlightAssign, id }: DrawTargetRangeProps): React.JSX.Element {
+    if (!id) {
+        return <div></div>
+    }
     const range = useAppSelector((state) => state.ranges[id]);
     const [lastShooter, setLastShooter] = useState<null | Shooter>(null);
     const firstActiveRender = useRef(true);
