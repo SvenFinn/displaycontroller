@@ -4,6 +4,7 @@ import { InternalRange, Discipline, Shooter, StartList, Hits, Hit } from "dc-ran
 import { getDiscipline } from "../cache/disciplines";
 import { getShooter } from "../cache/shooters";
 import { getStartList } from "../cache/startLists";
+import { getIpAddress } from "../cache/ipAddress";
 
 type SourceData = Array<TTLHandler<InternalRange>>;
 
@@ -76,6 +77,7 @@ function mergeActiveRange(sourceData: SourceData, rangeId: number): ActiveRange 
         round: mergeRoundId(sourceData),
         startList: mergeStartList(sourceData),
         source: mergeSource(sourceData),
+        ipAddress: getIpAddress(rangeId),
     }
 }
 

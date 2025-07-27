@@ -1,0 +1,142 @@
+    div.infoPanel {
+        width: 30%;
+        height: 100%;
+        position: relative;
+        background-color: white;
+        text-align: center;
+
+
+        div.discipline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8%;
+            border-bottom: var(--sep-width) solid var(--bg-blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 4.5%;
+
+        }
+
+        div.round {
+            position: absolute;
+            top: 8%;
+            left: 0;
+            width: 100%;
+            height: 7%;
+            border-bottom: var(--sep-width) solid var(--bg-blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 3.825%;
+        }
+
+        div.total {
+            position: absolute;
+            top: 15%;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            border-bottom: var(--sep-width) solid var(--bg-blue);
+            display: flex;
+
+            .icon {
+                height: 100%;
+            }
+
+            .value {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 5.75%;
+            }
+        }
+
+        div.shotInfo {
+            position: absolute;
+            top: 25%;
+            left: 0;
+            width: 100%;
+            height: 75%;
+
+            div.shotTable {
+                width: 100%;
+                max-height: 65%;
+                overflow: hidden;
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    text-align: center;
+
+                    thead {
+                        font-size: 3%;
+                        background: linear-gradient(0deg, rgba(231, 231, 231, 1) 0%, rgba(235, 236, 236, 1) 10%, rgba(244, 244, 244, 1) 50%, rgba(255, 255, 255, 1) 62%);
+                        line-height: 1.5;
+                        border-bottom: 1px solid #00005b;
+
+                        th {
+                            width: 20%;
+                            border-left: 1px solid #d4d4d4;
+                        }
+
+                        th:nth-child(2) {
+                            width: 60%;
+                        }
+
+                        th:first-child {
+                            border-left: none;
+                        }
+                    }
+
+                    tbody {
+                        font-size: 3.5%;
+
+                        tr:first-child {
+                            font-weight: bold;
+
+                        }
+
+                        tr:nth-child(2n) {
+                            background-color: #f0f0f0;
+                        }
+                    }
+                }
+            }
+
+            div.seriesTable {
+                display: grid;
+                width: 100%;
+                height: 17%;
+                position: absolute;
+                top: 65%;
+                font-weight: bold;
+
+                div {
+                    font-size: 6%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+
+                div:last-child {
+                    background-color: #c0c0c0;
+                }
+            }
+
+            div.rangeStr {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 4%;
+                font-size: 2.5%;
+                color: #808080;
+            }
+        }
+    }

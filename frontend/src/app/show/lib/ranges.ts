@@ -11,14 +11,13 @@ export function getRoundName(data: Range, roundId?: number): string | null {
     return round.name;
 }
 
-export function getHitString(data: Range, roundId?: number, index?: number): Array<string> | null {
+export function getHitString(data: Range, roundId?: number, hit?: Hit): Array<string> | null {
     if (!data.active) return null;
     if (!data.hits) return null;
     if (!roundId) roundId = data.round;
     const roundHits = data.hits[roundId];
     if (!roundHits) return null;
-    if (!index) index = roundHits.length - 1;
-    const hit = roundHits[index];
+    if (hit == undefined) hit = roundHits[roundHits.length - 1];
     if (!hit) return null;
 
     if (!hit.valid) {
@@ -91,35 +90,30 @@ export function getHitString(data: Range, roundId?: number, index?: number): Arr
     }
 }
 
-export function getSeries(data: Range, roundId?: number, hitCount?: number, gauge?: number): Array<string> {
+export function getSeries(data: Range, roundId?: number): Array<string> {
     if (!data.active) return [];
     if (!data.hits) return [];
     if (!data.discipline) return [];
     if (!roundId) roundId = data.round;
     const round = getRound(data, roundId);
     if (!round) return [];
-    if (!hitCount) hitCount = round.hitsPerSum;
     const hits = data.hits[roundId];
     if (!hits) return [];
-    if (!gauge) gauge = data.discipline.gauge;
     const series = [];
-    for (let i = 0; i < hits.length; i += hitCount) {
-        series.push(accumulateHits(hits, round, gauge, i, i + hitCount, false));
+    for (let i = 0; i < hits.length; i += round.hitsPerSum) {
+        series.push(accumulateHits(hits, round, data.discipline.gauge, i, i + round.hitsPerSum, false));
     }
     return series;
 }
 
-export function getTotal(data: Range, roundId?: number, gauge?: number): string {
-    if (!data.active) return "";
-    if (!data.hits) return "";
-    if (!data.discipline) return "";
-    if (!roundId) roundId = data.round;
-    const round = getRound(data, roundId);
-    if (!round) return "";
-    const hits = data.hits[roundId];
-    if (!hits) return "";
-    if (!gauge) gauge = data.discipline.gauge;
-    return accumulateHits(hits, round, gauge, 0, hits.length, true);
+export function getTotal(data: Range): string {
+    if (!data.active) return "0";
+    if (!data.discipline) return "0";
+    const round = getRound(data, data.round);
+    if (!round) return "0";
+    const hits = data.hits?.[data.round] || [];
+    if (!hits) return "0";
+    return accumulateHits(hits, round, data.discipline.gauge, 0, hits.length, true);
 }
 
 function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: number, endId: number, isTotal: boolean): string {

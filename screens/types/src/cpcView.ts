@@ -1,21 +1,20 @@
+import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
 
 export type CpcViewDbScreen = BaseDbScreen & {
     preset: "cpcView";
-    options: CpcViewMultiOptions | CpcViewSingleOptions;
+    options: CpcViewOptions
 }
 
-type CpcViewSingleOptions = {
-    mode: "single";
-    range: number;
+export type CpcViewOptions = {
+    "rows": number;
+    "columns": number;
+    "ranges": Array<number | null>;
 }
 
-type CpcViewMultiOptions = {
-    mode: "multi";
-    ranges: Array<number>;
-}
+export const isCpcViewOptions = createIs<CpcViewOptions>();
 
 export type CpcViewScreen = BaseScreenAvailable & {
     preset: "cpcView";
-    options: CpcViewMultiOptions | CpcViewSingleOptions;
-}
+    options: CpcViewOptions;
+};
