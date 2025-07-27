@@ -9,7 +9,7 @@ export type DrawTargetDbScreen = BaseDbScreen & {
 export type DrawTargetOptions = {
     rows: number;
     columns: number;
-    ranges: Array<number>;
+    ranges: Array<number | null>;
     highlightAssign: boolean;
 }
 
