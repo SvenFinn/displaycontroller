@@ -1,5 +1,6 @@
 import { Transform } from "stream";
 import { LogInternalRange, LogMessage } from "../types";
+import { logger } from "dc-logger";
 
 const INVALID_HIT_POS = [2147483647, 2147483647];
 
@@ -40,6 +41,7 @@ export class AccumulateRanges extends Transform {
             rangeData.hits.push(null);
         }
         if (chunk.action === "insert") {
+            logger.info(`Adding hit ${chunk.hit.id} to range ${chunk.rangeId}`);
             if (rangeData.hits[chunk.round.id] === null) {
                 rangeData.hits[chunk.round.id] = [];
             }
@@ -67,6 +69,7 @@ export class AccumulateRanges extends Transform {
             })
 
         } else {
+            logger.info(`Removing hit ${chunk.hit.id} from range ${chunk.rangeId}`);
             if (rangeData.hits[chunk.round.id] === null) {
                 callback();
                 return;
