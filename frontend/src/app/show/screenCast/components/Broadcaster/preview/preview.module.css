@@ -1,0 +1,39 @@
+div.preview {
+    position: relative;
+    border: 3px solid #ccc;
+}
+
+div.preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+div.preview .playIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        width: min(50%, 100%);
+        aspect-ratio: 1 / 1;
+        height: unset;
+        fill: black;
+        object-fit: contain;
+        border-radius: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 5px solid rgba(255, 255, 255, 0.5);
+    }
+
+    svg:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 5px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+    }
+}

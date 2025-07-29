@@ -11,6 +11,7 @@ import Evaluation from "../../../evaluation/components/Evaluation";
 import SystemMessage from "../../../systemMessage";
 import CustomURL from "@frontend/app/show/customURL/components/CustomURL";
 import CpcView from "@frontend/app/show/cpcView/components/CpcView";
+import ScreenCastViewer from "@frontend/app/show/screenCast/components/Viewer";
 
 interface ShowScreenProps {
     id: number
@@ -56,9 +57,11 @@ function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): Re
             return <CustomURL options={screen.options} onReady={setIsReady} />;
         case "cpcView":
             return <CpcView options={screen.options} onReady={setIsReady} />;
+        case "screenCast":
+            return <ScreenCastViewer onReady={setIsReady} />;
         default:
             setTimeout(setIsReady, 500);
-            // @ts-expect-error
+            // @ts-ignore
             return <h1>Unknown preset: {screen.preset}</h1>;
     }
 }
