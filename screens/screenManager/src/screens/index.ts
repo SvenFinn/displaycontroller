@@ -33,6 +33,7 @@ async function main() {
         }, 5000);
     });
     logger.info("Screen manager started");
+    screenManager.nextScreen();
 }
 
 main();
