@@ -29,8 +29,7 @@ export default function DrawRangeW({ range }: DrawRangeProps): React.JSX.Element
                 if (cont.children[i] === ref.current) {
                     continue;
                 }
-                // @ts-expect-error help me
-                contentHeight += cont.children[i].offsetHeight;
+                contentHeight += (cont.children[i] as HTMLElement).offsetHeight;
             }
             setMaxHeight((containerHeight - contentHeight) * 0.95);
         }

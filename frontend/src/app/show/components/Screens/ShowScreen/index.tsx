@@ -61,7 +61,6 @@ function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): Re
             return <ScreenCastViewer onReady={setIsReady} />;
         default:
             setTimeout(setIsReady, 500);
-            // @ts-ignore
-            return <h1>Unknown preset: {screen.preset}</h1>;
+            return <h1>Unknown preset: {String((screen as any)?.preset)}</h1>;
     }
 }

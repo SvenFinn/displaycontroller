@@ -29,11 +29,8 @@ export function isCustomEvaluationOptions(
     options: any
 ): options is CustomEvaluationOptions {
     if (!isEvaluationOptions(options)) return false;
-    return (
-        //@ts-expect-error
-        typeof options.duration === 'number' &&
-        //@ts-expect-error
-        options.duration > 0 &&
-        Object.keys(options).includes('duration')
-    );
+    const anyOptions = options as any;
+    if (typeof anyOptions.duration !== 'number') return false;
+    if (anyOptions.duration <= 0) return false;
+    return true;
 }

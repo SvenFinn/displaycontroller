@@ -46,14 +46,13 @@ export class AccumulateRanges extends Transform {
                 rangeData.hits[chunk.round.id] = [];
             }
             if (chunk.hit.x >= INVALID_HIT_POS[0] && chunk.hit.y >= INVALID_HIT_POS[1]) {
-                // @ts-expect-error
-                rangeData.hits[chunk.round.id].push({
+
+                rangeData.hits[chunk.round.id]?.push({
                     id: chunk.hit.id,
                     valid: false,
                 });
             } else {
-                // @ts-expect-error
-                rangeData.hits[chunk.round.id].push({
+                rangeData.hits[chunk.round.id]?.push({
                     id: chunk.hit.id,
                     x: chunk.hit.x,
                     y: chunk.hit.y,
