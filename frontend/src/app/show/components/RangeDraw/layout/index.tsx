@@ -2,7 +2,6 @@ import { DisciplineLayout } from "@shared/ranges/discipline/layout";
 import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsHitColor } from "./rings";
 import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartHitColor } from "./dart";
 import { Range } from "@shared/ranges";
-import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColor } from "./chess";
 
 interface LayoutProps {
     layout: DisciplineLayout;
@@ -16,8 +15,6 @@ export default function Layout({ layout, color }: LayoutProps): React.JSX.Elemen
             return <Rings layout={layout} color={color} />;
         case "dart":
             return <DartLayout layout={layout} />;
-        case "chess":
-            return <ChessLayout layout={layout} />;
         default:
             return <></>;
     }
@@ -56,8 +53,6 @@ function getSizeFixed(range: Range): [number, number] {
             return getFixedRings(range);
         case "dart":
             return getFixedDarts(range);
-        case "chess":
-            return getFixedChess(range);
         default:
             return [0, 0];
     }
@@ -92,8 +87,6 @@ export function getHitColor(layout: DisciplineLayout, ring: number, isLatest: bo
             return getRingsHitColor(ring, isLatest);
         case "dart":
             return getDartHitColor(ring, isLatest);
-        case "chess":
-            return getChessColor(ring, isLatest);
         default:
             return "#000000";
     }
