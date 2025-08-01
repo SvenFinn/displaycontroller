@@ -36,11 +36,11 @@ function run_install_step(){
     tmp_log_file=$(mktemp)
 
     if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
-        eval "$command" 2>&1 | tee "$tmp_log_file"
+        eval "$command" 2>&1 | tee $tmp_log_file
     else
-        eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
-                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+        eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
+                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
+                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height $width
     fi
 
     local EXIT_CODE=$?
@@ -48,7 +48,7 @@ function run_install_step(){
     if [ $EXIT_CODE -ne 0 ]; then
         if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
             echo "ERROR: $step_title"
-            cat "$tmp_log_file"
+            cat $tmp_log_file
             exit 1
         fi
 
@@ -68,9 +68,9 @@ function run_install_step(){
             --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
             --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
-        dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
+        cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width"
 
-        rm "$tmp_log_file"
+        rm $tmp_log_file
         tput cnorm
 
         exit
@@ -79,7 +79,7 @@ function run_install_step(){
 
     sleep 1
 
-    rm "$tmp_log_file"
+    rm $tmp_log_file
     tput cnorm
 
 }
@@ -123,9 +123,9 @@ if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
     sudo -n true 2>/dev/null
     if [ $? -eq 1 ]; then
-        pkexec --keep-cwd "$0" "$@"
+        pkexec --keep-cwd $0 "$@"
     else
-        sudo "$0" "$@"
+        sudo $0 "$@"
     fi
     exit
 fi
@@ -141,7 +141,8 @@ if ! command -v dialog &> /dev/null; then
     fi
 
     apt-get update
-    if ! apt-get install -y dialog; then
+    apt-get install -y dialog
+    if [ $? -ne 0 ]; then
         echo "Failed to install dialog. Please install it manually and run the script again."
         exit 1
     fi
@@ -149,7 +150,7 @@ fi
 
 SRC_DIR="$(realpath "$(dirname "$0")")"
 INSTALL_DIR=$(pwd)
-USER=${SUDO_USER:-$(id -nu "$PKEXEC_UID")}
+USER=${SUDO_USER:-$(id -nu $PKEXEC_UID)}
 
 
 # Check if the DisplayController.desktop file exists in the users autostart directory
@@ -164,16 +165,14 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
     height=$(tput lines)
 
     # Allow the user to choose the installation directory
-    INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 "$width" \
-        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 "$width" "/opt/displaycontroller")
-    # shellcheck disable=SC2181
+    INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 $width \
+        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 $width "/opt/displaycontroller")
     if [ $? -ne 0 ]; then
         exit
     fi
 
     # Allow the user to choose if the DisplayController should start on boot
-    dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 "$width"
-    # shellcheck disable=SC2181
+    dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 $width
     if [ $? -eq 0 ]; then
         AUTOSTART=1
     else 

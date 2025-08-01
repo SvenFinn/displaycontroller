@@ -78,9 +78,9 @@ function run_update_step(){
     local tmp_log_file
     tmp_log_file=$(mktemp)
 
-    eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                            --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
-                                            --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+    eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
+                                            --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
+                                            --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height $width
 
     local EXIT_CODE=$?
 
@@ -102,12 +102,12 @@ function run_update_step(){
             --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
         if [ "$REBOOT" == "0" ]; then
-            dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
+            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width"
         else
-            dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 30 < "$tmp_log_file"
+            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 30
         fi
 
-        rm "$tmp_log_file"
+        rm $tmp_log_file
         tput cnorm
 
         if [ "$REBOOT" == "1" ]; then
@@ -122,7 +122,7 @@ function run_update_step(){
 
     sleep 1
 
-    rm "$tmp_log_file"
+    rm $tmp_log_file
     tput cnorm
 
 }
@@ -132,9 +132,9 @@ if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
     sudo -n true 2>/dev/null
     if [ $? -eq 1 ]; then
-        pkexec --keep-cwd "$0" "$@"
+        pkexec --keep-cwd $0 "$@"
     else
-        sudo "$0" "$@"
+        sudo $0 "$@"
     fi
     exit
 fi
