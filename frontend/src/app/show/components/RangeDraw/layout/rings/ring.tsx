@@ -1,4 +1,4 @@
-import { idealTextColor } from "../../../../../lib/idealTextColor";
+import { idealTextColor } from "../../../../lib/idealTextColor";
 import { LayoutRing } from "@shared/ranges/discipline/layout/rings";
 
 interface RingsProps {

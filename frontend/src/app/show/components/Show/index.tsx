@@ -1,8 +1,8 @@
 
-import Background from './Background';
-import Clock from './Clock';
-import FullscreenButton from './Fullscreen';
-import Logo from './Logo';
+import Background from '../Background';
+import Clock from '../Clock';
+import FullscreenButton from '../Fullscreen';
+import Logo from '../Logo';
 import ServerState from '../ServerEvents/serverState';
 import styles from './show.module.css';
 

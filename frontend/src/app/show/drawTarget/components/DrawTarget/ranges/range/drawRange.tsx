@@ -1,7 +1,8 @@
 "use client";
 
 import { Range } from "@shared/ranges";
-import DrawRange from "../../../../../components/Ranges/Draw"
+import DrawRange from "../../../../../components/RangeDraw"
+import { useAppSelector } from "../../ranges-store/store";
 import styles from "./range.module.css";
 import { useEffect, useRef, useState } from "react";
 
