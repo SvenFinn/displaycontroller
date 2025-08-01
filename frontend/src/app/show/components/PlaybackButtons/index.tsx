@@ -41,25 +41,13 @@ export default function Buttons(): React.JSX.Element {
 
     return (
         <>
-            <div className={styles.play}>
-                <div className={styles.vertical}>
-                    {paused ? (
-                        <FaRegCirclePlay onClick={() => togglePaused()} />
-                    ) : (
-                        <FaRegCirclePause onClick={() => togglePaused()} />
-                    )}
-                </div>
-            </div >
-            <div className={styles.next}>
-                <div className={styles.vertical}>
-                    <FaChevronRight onClick={() => nextScreen()} />
-                </div>
-            </div>
-            <div className={styles.previous}>
-                <div className={styles.vertical}>
-                    <FaChevronLeft onClick={() => previousScreen()} />
-                </div>
-            </div>
+            {paused ? (
+                <FaRegCirclePlay className={styles.play} onClick={() => togglePaused()} />
+            ) : (
+                <FaRegCirclePause className={styles.play} onClick={() => togglePaused()} />
+            )}
+            <FaChevronRight className={styles.next} onClick={() => nextScreen()} />
+            <FaChevronLeft className={styles.previous} onClick={() => previousScreen()} />
         </>
     );
 }

@@ -1,72 +1,49 @@
 @media all and (display-mode: fullscreen) {
 
-    div.play,
-    div.next,
-    div.previous {
-        display: none !important;
+    svg.play,
+    svg.next,
+    svg.previous {
+        display: none;
     }
 }
 
-div.play,
-div.next,
-div.previous {
+svg.play,
+svg.next,
+svg.previous {
     position: absolute;
     height: 5%;
-    width: 5%;
+    width: unset;
+    max-width: 5%;
+    aspect-ratio: 1 / 1;
     z-index: 1000;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-div.vertical {
-    height: 100%;
-    max-width: 100%;
-    aspect-ratio: 1 / 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-div.vertical svg {
-    width: 100%;
-    max-height: 100%;
-    aspect-ratio: 1 / 1;
     fill: white;
+    padding: 0.35%;
+    padding-right: 0.20%;
     background-color: #000000A8;
-    height: unset;
-    padding: 15%;
-    cursor: pointer;
-}
-
-
-div.play svg,
-div.next svg {
     border-top-left-radius: 30%;
     border-bottom-left-radius: 30%;
-
 }
 
-div.play {
+svg.play {
     top: 13%;
     right: 0;
 }
 
-div.next {
+svg.next {
     top: 50%;
     transform: translateY(-50%);
     right: 0;
 }
 
-div.previous svg {
-    border-top-right-radius: 30%;
-    border-bottom-right-radius: 30%;
-}
-
-div.previous {
+svg.previous {
     top: 50%;
     transform: translateY(-50%);
     left: 0;
-    justify-content: start;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    border-top-right-radius: 30%;
+    border-bottom-right-radius: 30%;
+    padding-right: 0.35%;
+    padding-left: 0.20%;
+
 }

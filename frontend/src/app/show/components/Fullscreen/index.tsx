@@ -10,10 +10,6 @@ export default function FullscreenButton(): React.JSX.Element {
     }
 
     return (
-        <div className={styles.fullscreenContainer}>
-            <div className={styles.fullscreenVertical}>
-                <FaExpandArrowsAlt className={styles.fullscreen} onClick={toggleFullscreen} />
-            </div>
-        </div>
+        <FaExpandArrowsAlt className={styles.fullscreen} onClick={toggleFullscreen} />
     );
 }
