@@ -4,7 +4,6 @@ import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartColor 
 import { Range } from "@shared/ranges";
 import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColor } from "./chess";
 import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColor } from "./stars";
-import RectangleLayout, { getSizeFixed as getFixedRectangle } from "./rectangle";
 
 interface LayoutProps {
     layout: Layout;
@@ -22,8 +21,6 @@ export default function LayoutComp({ layout, color }: LayoutProps): React.JSX.El
             return <ChessLayout layout={layout} />;
         case "stars":
             return <StarsLayout layout={layout} />;
-        case "rectangle":
-            return <RectangleLayout layout={layout} color={color} />;
         default:
             return <></>;
     }
@@ -66,8 +63,6 @@ function getSizeFixed(range: Range): [number, number] {
             return getFixedChess(range);
         case "stars":
             return getFixedStars(range);
-        case "rectangle":
-            return getFixedRectangle(range);
         default:
             return [0, 0];
     }
@@ -98,7 +93,6 @@ function getSizeAuto(range: Range): [number, number] {
 
 export function getHitColor(layout: Layout, ring: number, isLatest: boolean): string {
     switch (layout.mode) {
-        case "rectangle":
         case "rings":
             return getRingsColor(ring, isLatest);
         case "dart":
