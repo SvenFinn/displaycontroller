@@ -81,7 +81,6 @@ jobs:
           echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
           echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args
           echo "APP_PORT=$APP_PORT" >> /tmp/args
-          echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> /tmp/args
           echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
