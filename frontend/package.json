@@ -20,7 +20,7 @@
         "dc-ranges-types": "file:../ranges/types",
         "dc-screens-types": "file:../screens/types",
         "mime": "^4.0.7",
-        "next": "^15.4.4",
+        "next": "^15.3.5",
         "raw-loader": "^4.0.2",
         "react": "^19.1.0",
         "react-bootstrap": "^2.10.10",
@@ -32,7 +32,7 @@
         "smallest-enclosing-circle": "^1.0.2"
     },
     "devDependencies": {
-        "@types/node": "^22.16.5",
+        "@types/node": "^22.16.3",
         "@types/react": "^19.1.8",
         "@types/react-dom": "^19.1.6",
         "@types/smallest-enclosing-circle": "^1.0.3",
