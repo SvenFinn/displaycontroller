@@ -136,4 +136,3 @@ swagger-output.json
 *.pat
 *.tmp.json
 *.tmp
-*.run

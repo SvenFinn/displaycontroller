@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "$(dirname "$0")" || exit
+cd "$(dirname "$0")"
 
 APP_VERSION=$1
 PROXY_NAME="dc-reverse-proxy"
@@ -11,41 +11,6 @@ if [ -z "$APP_VERSION" ]; then
     echo "Usage: $0 <app_version>"
     exit 1
 fi
-
-function package(){
-    local source_path=$1
-    local executable_name=$2
-    local target_file=$3
-
-    local makeself_path
-    makeself_path=$(mktemp -d)
-    trap 'rm -rf $makeself_path' EXIT
-
-    source ../utils/makeself.sh
-    install_makeself "$makeself_path" "latest"
-    if [ $? -ne 0 ]; then
-        echo "Failed to install makeself" >&2
-        exit 1
-    fi
-
-    #cd "$source_path" || exit
-    local makeself_options
-    makeself_options=(
-        --gzip
-        --sha256
-        "${source_path}"
-        "$target_file"
-        "DisplayController"
-        "$executable_name"
-    )
-
-    $makeself_path/makeself.sh "${makeself_options[@]}"
-    if [ $? -ne 0 ]; then
-        echo "Failed to create self-extracting archive" >&2
-        exit 1
-    fi
-}
-
 
 function generate_compose(){
 
@@ -65,7 +30,7 @@ function generate_compose(){
 
     config=$(echo "$config" | sed 's/$$SCREEN_RESOLUTION/${SCREEN_RESOLUTION}/g')
 
-    cd - > /dev/null || exit
+    cd - > /dev/null
 
     echo "$config" > $target_path
 }
@@ -86,12 +51,12 @@ tmp_folder=$(mktemp -d)
 trap 'rm -rf $tmp_folder' EXIT
 
 # Generate docker compose file
-generate_compose "$tmp_folder/docker-compose.yaml"
+generate_compose $tmp_folder/docker-compose.yaml
 
 for script in templates/*.sh; do
-    generate_script "$script" "$tmp_folder/$(basename "$script")"
+    generate_script $script $tmp_folder/$(basename $script)
 done
 
-cp -v ./icon.png ../utils/sm5.3-SMDB.sh $tmp_folder
+cp -v ./icon.png $tmp_folder
 
-package "$tmp_folder" "./install.sh" "displaycontroller-$APP_VERSION.run"
+tar -cJf "displaycontroller-$APP_VERSION.tar.xz" -C $tmp_folder .
