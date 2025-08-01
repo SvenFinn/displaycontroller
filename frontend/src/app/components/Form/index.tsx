@@ -9,7 +9,6 @@ import DTEditRanges from "./DrawTarget";
 import { useEffect, useState } from "react";
 import SingleRangeSelector from "./RangeSelector/single";
 import EvaluationSelector from "./EvaluationSelector";
-import ImageSelector from "./ImageSelector";
 
 export interface FormDefinition<T> {
     schema: RJSFSchema;
@@ -29,7 +28,6 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
         "DTEditRanges": DTEditRanges,
         "SingleRangeSelector": SingleRangeSelector,
         "EvaluationSelector": EvaluationSelector,
-        "ImageSelector": ImageSelector,
         ...widgets
     };
 
