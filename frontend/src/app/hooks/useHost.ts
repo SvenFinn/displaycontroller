@@ -7,7 +7,6 @@ export function useHost(): string {
         const protocol = window.location.protocol;
         const port = protocol === "https:" ? process.env.NEXT_PUBLIC_HTTPS_PORT :
             process.env.NEXT_PUBLIC_APP_PORT;
-        console.log("Using port:", port);
         if (!port) {
             throw new Error("Port is not defined in environment variables");
         }

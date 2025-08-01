@@ -11,8 +11,6 @@ interface ClientTableProps {
 export function ClientTable({ peerConnections, className, clientCount }: ClientTableProps): React.JSX.Element {
     const [pcState, setPcState] = useState<Record<string, string>>({});
 
-    console.log("ClientTable rendered with peerConnections:", peerConnections);
-
     useEffect(() => {
         function updatePcState() {
             const newState: Record<string, string> = {};
@@ -33,9 +31,7 @@ export function ClientTable({ peerConnections, className, clientCount }: ClientT
         };
     }, [peerConnections, clientCount]);
 
-    console.log("ClientTable pcState:", pcState);
     const connected = Object.values(pcState).some(pc => pc === "connected");
-
 
     return (
         <>
