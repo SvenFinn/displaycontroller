@@ -5,6 +5,7 @@ import { WidgetProps } from "@rjsf/utils";
 import CreateableSelect from "react-select/creatable";
 import styles from "./ranges.module.css";
 import Grid from "@frontend/app/show/components/Ranges/Grid";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 interface Value {
     label: string;
@@ -12,6 +13,11 @@ interface Value {
 }
 
 export default function RangesGrid(props: WidgetProps) {
+    const host = useHost();
+    if (host === "") {
+        return <></>;
+    }
+
     const { rows = 1, columns = 1 } = props.options || {};
 
     const rawValues = props.value as Array<number | null> || [];
@@ -47,8 +53,7 @@ export default function RangesGrid(props: WidgetProps) {
 
     useEffect(() => {
         async function fetchRanges() {
-            const host = window.location.host.split(":")[0];
-            const url = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/ranges`;
+            const url = `${host}/api/ranges`;
             const response = await fetch(url);
             if (!response.ok) {
                 console.error("Failed to fetch ranges");

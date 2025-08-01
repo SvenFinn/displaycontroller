@@ -3,6 +3,7 @@
 import { EvaluationScreen } from "dc-screens-types";
 import styles from "./evaluation.module.css";
 import { useEffect, useState } from "react";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 interface EvaluationProps {
     options: EvaluationScreen["options"],
@@ -10,17 +11,9 @@ interface EvaluationProps {
 }
 
 export default function Evaluation({ options, onReady }: EvaluationProps) {
-    const [host, setHost] = useState<string>("");
-    useEffect(() => {
-        setHost(window.location.host);
-    }, []);
+    const host = useHost();
 
-    if (host === "") {
-        return <></>;
-    }
-
-    const hostWithoutPort = host.split(":")[0];
-    const evaluationUrl = `http://${hostWithoutPort}:${process.env.NEXT_PUBLIC_APP_PORT}/api/evaluations/${options.path}`;
+    const evaluationUrl = `${host}/api/evaluations/${options.path}`;
     return (
         <div className={styles.evaluation}>
             <iframe src={evaluationUrl} onLoad={onReady} className={styles.evaluation} />

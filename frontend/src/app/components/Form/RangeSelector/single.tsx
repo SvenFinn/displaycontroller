@@ -2,14 +2,18 @@ import { useEffect, useState } from "react"
 import SelectWithCustom from "../SelectWithCustom";
 import { WidgetProps } from "@rjsf/utils";
 import { JSONSchema7TypeName } from "json-schema";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 export default function SingleRangeSelector(props: WidgetProps) {
     const [ranges, setRanges] = useState<(number | null)[]>([]);
+    const host = useHost();
+    if (host === "") {
+        return <></>;
+    }
 
     useEffect(() => {
         async function fetchRanges() {
-            const host = window.location.host.split(":")[0];
-            const url = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/ranges`;
+            const url = `${host}/api/ranges`;
             const response = await fetch(url);
             if (!response.ok) {
                 console.error("Failed to fetch ranges");

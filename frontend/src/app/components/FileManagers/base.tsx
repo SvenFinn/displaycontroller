@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import FileManager from "./FileManager";
 
 export interface FileManagerBaseProps {
-    readonly baseURL: URL;
+    readonly baseURL: URL | string;
     readonly readonly: boolean;
     readonly allowMultiSelect?: boolean;
     selectedFiles: string[];

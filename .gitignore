@@ -137,3 +137,5 @@ swagger-output.json
 *.tmp.json
 *.tmp
 *.run
+
+certs

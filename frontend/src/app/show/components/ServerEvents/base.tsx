@@ -7,7 +7,7 @@ import Warning from "../Warning";
 type ServerEventsCallback = (data: any) => void;
 
 interface ServerEventsProps {
-    path: URL;
+    path: URL | string;
     canonicalName: string;
     action: ServerEventsCallback;
 }
