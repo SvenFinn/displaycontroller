@@ -5,20 +5,21 @@ import { useEffect, useState } from "react";
 import { createFileList } from "@shared/files/helpers";
 import SingleEdit from "../components/SingleEdit";
 import ImageViewer from "./components/ImageViewer";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 function EvaluationComponent({ options }: { options: CustomViewerOptions }) {
     const [files, setFiles] = useState<string[]>([]);
     const [index, setIndex] = useState(0);
+    const host = useHost();
 
     useEffect(() => {
-        const host = window.location.host.split(":")[0];
-        const baseURL = new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/`);
+        const baseURL = new URL(`${host}/api/images/`);
         if (options.path) {
             createFileList(options.path, baseURL).then((fileList) => {
                 setFiles(fileList);
             });
         }
-    }, [options.path]);
+    }, [options.path, host]);
 
     useEffect(() => {
         if (files.length > 0) {
@@ -31,6 +32,10 @@ function EvaluationComponent({ options }: { options: CustomViewerOptions }) {
         }, options.duration * 1000);
         return () => clearInterval(interval);
     }, [files]);
+
+    if (host === "") {
+        return <></>;
+    }
 
     return (
         <ImageViewer options={{ path: files[index] }} onReady={() => { }} />

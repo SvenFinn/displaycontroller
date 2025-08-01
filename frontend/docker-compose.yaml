@@ -15,6 +15,7 @@ services:
         - files-utils=../screens/utils/files
       args:
         - APP_PORT=${APP_PORT}
+        - HTTPS_PORT=${HTTPS_PORT}
         - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
         - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}
         - APP_VERSION=${APP_VERSION}

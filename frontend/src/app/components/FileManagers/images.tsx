@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import FileManagerBase from "./base";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 
 export interface ImageManagerProps {
@@ -10,19 +11,11 @@ export interface ImageManagerProps {
 
 
 export default function ImageManager({ selectedFiles = [], onSelect = () => { }, allowMultiSelect = true }: ImageManagerProps) {
-    const [host, setHost] = useState<string>();
-
-    useEffect(() => {
-        setHost(window.location.host.split(":")[0]);
-    }, []);
-
-    if (!host) {
-        return <div>Loading...</div>;
-    }
+    const host = useHost();
 
     return (
         <FileManagerBase
-            baseURL={new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/`)}
+            baseURL={`${host}/api/images/`}
             readonly={false}
             allowMultiSelect={allowMultiSelect}
             selectedFiles={selectedFiles}

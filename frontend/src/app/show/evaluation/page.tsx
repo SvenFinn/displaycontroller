@@ -5,20 +5,21 @@ import { useEffect, useState } from "react";
 import { createFileList } from "@shared/files/helpers";
 import SingleEdit from "../components/SingleEdit";
 import Evaluation from "./components/Evaluation";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 function EvaluationComponent({ options }: { options: CustomEvaluationOptions }) {
     const [files, setFiles] = useState<string[]>([]);
     const [index, setIndex] = useState(0);
+    const host = useHost();
 
     useEffect(() => {
-        const host = window.location.host.split(":")[0];
-        const baseURL = new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/evaluations/`);
+        const baseURL = new URL(`${host}/api/evaluations/`);
         if (options.path) {
             createFileList(options.path, baseURL).then((fileList) => {
                 setFiles(fileList);
             });
         }
-    }, [options.path]);
+    }, [options.path, host]);
 
     useEffect(() => {
         if (files.length > 0) {
@@ -31,6 +32,11 @@ function EvaluationComponent({ options }: { options: CustomEvaluationOptions }) 
         }, options.duration * 1000);
         return () => clearInterval(interval);
     }, [files]);
+
+    if (host === "") {
+        return <></>;
+    }
+
 
     return (
         <Evaluation options={{ path: files[index] }} onReady={() => { }} />

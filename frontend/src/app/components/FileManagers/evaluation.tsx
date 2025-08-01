@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import FileManagerBase from "./base";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 
 export interface EvaluationManagerProps {
@@ -10,19 +11,11 @@ export interface EvaluationManagerProps {
 
 
 export default function EvaluationManager({ selectedFiles = [], onSelect = () => { }, allowMultiSelect = true }: EvaluationManagerProps) {
-    const [host, setHost] = useState<string>();
-
-    useEffect(() => {
-        setHost(window.location.host.split(":")[0]);
-    }, []);
-
-    if (!host) {
-        return <div>Loading...</div>;
-    }
+    const host = useHost();
 
     return (
         <FileManagerBase
-            baseURL={new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/evaluations/`)}
+            baseURL={`${host}/api/evaluations`}
             readonly={true}
             allowMultiSelect={allowMultiSelect}
             selectedFiles={selectedFiles}
