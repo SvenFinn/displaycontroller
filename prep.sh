@@ -10,7 +10,6 @@ function install_dependencies() {
     rm -rf node_modules
     rm -rf dist
     npm install --loglevel=info
-    npm update -S --loglevel=info
     if grep -q '"types":' package.json; then
         npm run build --loglevel=info
     fi
@@ -30,5 +29,7 @@ function traverse_folder() {
         fi
     done
 }
+
+npx npm-check-updates --upgrade --loglevel=info --deep
 
 traverse_folder .

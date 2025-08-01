@@ -11,15 +11,15 @@
     "description": "",
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^22.17.0",
+        "@types/node": "^24.1.0",
         "tsc-alias": "^1.8.16",
-        "typescript": "^5.8.3"
+        "typescript": "^5.9.2"
     },
     "dependencies": {
         "amqplib": "^0.10.8",
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
         "dc-ranges-types": "file:../types",
-        "dotenv": "^16.6.1"
+        "dotenv": "^17.2.1"
     }
 }
