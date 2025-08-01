@@ -6,6 +6,7 @@ ARG SELF_DB_HOST
 ARG SELF_DB_USER
 ARG SELF_DB_PASS
 ARG SELF_DB_NAME
+ARG CACHE_REFRESH_INTERVAL
 
 FROM base AS local-deps
 
@@ -24,6 +25,11 @@ COPY --from=range-ttl . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM local-deps AS deps
 
 WORKDIR /app/ranges/merger
@@ -37,14 +43,12 @@ WORKDIR /app/ranges/merger
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
 
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
-
 WORKDIR /app/ranges/merger
 
 COPY . .
 RUN npm run build && \
-    echo "SELF_DB_URL=postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" > dist/.env;
+    echo "SELF_DB_URL=postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" > dist/.env && \
+    echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> dist/.env
 
 FROM base AS final
 
@@ -58,4 +62,4 @@ COPY --from=deps /app/ranges/merger/node_modules ./node_modules
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/merger/src/index.js"]
+CMD ["node", "/app/index.js"]

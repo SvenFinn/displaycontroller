@@ -60,10 +60,12 @@ jobs:
           MULTICAST_MSG_MIN_LENGTH: ${{ vars.MULTICAST_MSG_MIN_LENGTH }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
           APP_PORT: ${{ vars.APP_PORT }}
+          HTTPS_PORT: ${{ vars.HTTPS_PORT }}
           SELF_DB_HOST: ${{ vars.SELF_DB_HOST }}
           SELF_DB_USER: ${{ vars.SELF_DB_USER }}
           SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
           SELF_DB_NAME: ${{ vars.SELF_DB_NAME }}
+          CACHE_REFRESH_INTERVAL: ${{ vars.CACHE_REFRESH_INTERVAL }}
         run: |
           echo "APP_VERSION=$APP_VERSION" > /tmp/args
           echo "SELF_DB_HOST=$SELF_DB_HOST" >> /tmp/args
@@ -80,6 +82,8 @@ jobs:
           echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
           echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args
           echo "APP_PORT=$APP_PORT" >> /tmp/args
+          echo "HTTPS_PORT=$HTTPS_PORT" >> /tmp/args
+          echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> /tmp/args
           echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
@@ -237,4 +241,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release
-          path: release/displaycontroller-*.tar.xz
+          path: release/displaycontroller-*.run

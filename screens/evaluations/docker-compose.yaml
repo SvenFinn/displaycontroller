@@ -3,7 +3,7 @@ services:
     hostname: evaluations
     image: ghcr.io/svenfinn/dc-evaluations:${APP_VERSION}
     container_name: dc-evaluations
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:
@@ -12,7 +12,7 @@ services:
       additional_contexts:
         - local-db=../../database/local
         - logger=../../logger
-        - screen-types=../types
+        - files-utils=../utils/files
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}

@@ -1,7 +1,6 @@
 import { Transform, TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
-import { InternalRange } from "@shared/ranges/internal";
-import { Hits } from "@shared/ranges/hits";
+import { InternalRange, Hits, INVALID_HIT_POS } from "dc-ranges-types";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 
@@ -77,14 +76,22 @@ export class RangeDataStream extends Transform {
             if (result[roundId] === undefined) {
                 result[roundId] = [];
             }
-            result[roundId]?.push({
-                id: hit.id,
-                x: hit.x / 100,
-                y: hit.y / 100,
-                divisor: hit.dividerHundredth / 100,
-                rings: hit.ringsTenth / 10,
-                innerTen: hit.innerTen
-            });
+            if (hit.x >= INVALID_HIT_POS[0] && hit.y >= INVALID_HIT_POS[1]) {
+                result[roundId]?.push({
+                    id: hit.id,
+                    valid: false,
+                });
+            } else {
+                result[roundId]?.push({
+                    id: hit.id,
+                    x: hit.x / 100,
+                    y: hit.y / 100,
+                    divisor: hit.dividerHundredth / 100,
+                    rings: hit.ringsTenth / 10,
+                    innerTen: hit.innerTen,
+                    valid: true,
+                });
+            }
         }
         return result.map((round) => round?.sort((a, b) => a.id - b.id)).map((round) => round === undefined ? null : round);
     }

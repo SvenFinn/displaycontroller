@@ -1,28 +1,28 @@
 {
-  "name": "dc-images",
-  "version": "0.0.1",
-  "description": "Image Server for displaycontroller",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "nodemon src/index.ts",
-    "build": "tsc && tsc-alias"
-  },
-  "author": "Sven Finn",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^2.2.0",
-    "dc-logger": "file:../../logger",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "express-fileupload": "^1.5.1",
-    "express-rate-limit": "^7.5.0",
-    "pdf2pic": "^3.1.4"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.1",
-    "@types/express-fileupload": "^1.5.1",
-    "@types/node": "^22.15.17",
-    "tsc-alias": "^1.8.16",
-    "typescript": "^5.8.3"
-  }
+    "name": "dc-images",
+    "version": "0.0.1",
+    "description": "Image Server for displaycontroller",
+    "main": "src/index.ts",
+    "scripts": {
+        "test": "nodemon src/index.ts",
+        "build": "tsc && tsc-alias"
+    },
+    "author": "Sven Finn",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^2.2.0",
+        "dc-logger": "file:../../logger",
+        "dotenv": "^16.6.1",
+        "express": "^5.1.0",
+        "express-fileupload": "^1.5.2",
+        "express-rate-limit": "^7.5.1",
+        "pdf2pic": "^3.2.0"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.3",
+        "@types/express-fileupload": "^1.5.1",
+        "@types/node": "^22.17.0",
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.9.2"
+    }
 }

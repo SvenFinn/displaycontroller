@@ -3,34 +3,42 @@ FROM node:alpine AS base
 WORKDIR /app
 
 ARG APP_PORT
+ARG HTTPS_PORT
 ARG MIN_MEYTON_VERSION
 ARG MAX_MEYTON_VERSION
 ARG APP_VERSION
 
-FROM base AS deps
+FROM base AS local_deps
+
+WORKDIR /app/screens/types
+COPY --from=screen-types . .
+RUN npm ci --loglevel=info && \
+    npm run build
+
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
+RUN npm ci --loglevel=info && \
+    npm run build
+
+FROM local_deps AS deps
 
 WORKDIR /app/frontend
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --loglevel=info
 
-FROM base AS build
+FROM local_deps AS build
 
 WORKDIR /app/frontend
 COPY package.json package-lock.json ./
 RUN npm ci --loglevel=info
 
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
-
-WORKDIR /app/screens/screenManager/types
-COPY --from=screen-types . .
-
-WORKDIR /app/screens/types/files
-COPY --from=files-types . .
+WORKDIR /app/screens/utils/files
+COPY --from=files-utils . .
 
 WORKDIR /app/frontend
 COPY . .
 RUN export NEXT_PUBLIC_APP_PORT=$APP_PORT && \
+    export NEXT_PUBLIC_HTTPS_PORT=$HTTPS_PORT && \
     export NEXT_PUBLIC_MIN_MEYTON_VERSION=$MIN_MEYTON_VERSION && \
     export NEXT_PUBLIC_MAX_MEYTON_VERSION=$MAX_MEYTON_VERSION && \
     export NEXT_PUBLIC_APP_VERSION=$APP_VERSION && \

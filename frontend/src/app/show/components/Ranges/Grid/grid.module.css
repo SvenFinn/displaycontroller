@@ -1,0 +1,14 @@
+div.grid {
+    display: grid;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+
+div.grid>div {
+    border: 5px solid #888;
+    height: calc(100% + 5px);
+    width: calc(100% + 5px);
+    margin-bottom: -5px;
+    margin-right: -5px;
+    position: relative;
+}

@@ -1,0 +1,19 @@
+services:
+  dc-screen-cast:
+    hostname: screen-cast
+    image: ghcr.io/svenfinn/dc-screen-cast:${APP_VERSION}
+    container_name: dc-screen-cast
+    restart: on-failure
+    networks:
+      - displaycontroller
+    build:
+      context: .
+      dockerfile: Dockerfile
+      additional_contexts:
+        - logger=../../logger
+        - screen-types=../types
+    depends_on:
+      dc-rabbitmq:
+        condition: service_healthy
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL}

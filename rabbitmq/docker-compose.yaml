@@ -3,7 +3,7 @@ services:
     container_name: dc-rabbitmq
     image: ghcr.io/svenfinn/dc-rabbitmq:${APP_VERSION}
     hostname: rabbitmq
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile

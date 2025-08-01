@@ -19,12 +19,12 @@ function run_install_step(){
     done
     command+="set +e$nl"     
 
-    local width, height
+    local width height
     width=$(tput cols)
     height=$(tput lines)
 
-    local bar_height, bar_top, bar_width, bar
-    bar_height=2
+    local bar_height=2
+    local bar_top bar_width bar
     bar_top=$(( height - bar_height - 3 ))
     bar_width=$(( width - 6 ))
     bar=$(for _ in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
@@ -36,11 +36,11 @@ function run_install_step(){
     tmp_log_file=$(mktemp)
 
     if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
-        eval "$command" 2>&1 | tee $tmp_log_file
+        eval "$command" 2>&1 | tee "$tmp_log_file"
     else
-        eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
-                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height $width
+        eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
+                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
+                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
     fi
 
     local EXIT_CODE=$?
@@ -48,7 +48,7 @@ function run_install_step(){
     if [ $EXIT_CODE -ne 0 ]; then
         if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
             echo "ERROR: $step_title"
-            cat $tmp_log_file
+            cat "$tmp_log_file"
             exit 1
         fi
 
@@ -68,9 +68,9 @@ function run_install_step(){
             --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
             --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
-        cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width"
+        dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
 
-        rm $tmp_log_file
+        rm "$tmp_log_file"
         tput cnorm
 
         exit
@@ -79,7 +79,7 @@ function run_install_step(){
 
     sleep 1
 
-    rm $tmp_log_file
+    rm "$tmp_log_file"
     tput cnorm
 
 }
@@ -91,7 +91,7 @@ function install_finished(){
         exit 0
     fi
 
-    local width. height
+    local width height
     width=$(tput cols)
     height=$(tput lines)
 
@@ -123,22 +123,33 @@ if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
     sudo -n true 2>/dev/null
     if [ $? -eq 1 ]; then
-        pkexec --keep-cwd $0 "$@"
+        pkexec --keep-cwd "$0" "$@"
     else
-        sudo $0 "$@"
+        sudo "$0" "$@"
     fi
     exit
 fi
 
 # Check if dialog is installed
 if ! command -v dialog &> /dev/null; then
+    echo "This script requires the \"dialog\" package to be installed."
+    echo -n "Install it now? (y/n) "
+    read -r answer
+    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+        echo "Please install the \"dialog\" package and run the script again."
+        exit 1
+    fi
+
     apt-get update
-    apt-get install -y dialog
+    if ! apt-get install -y dialog; then
+        echo "Failed to install dialog. Please install it manually and run the script again."
+        exit 1
+    fi
 fi
 
 SRC_DIR="$(realpath "$(dirname "$0")")"
 INSTALL_DIR=$(pwd)
-USER=${SUDO_USER:-$(id -nu $PKEXEC_UID)}
+USER=${SUDO_USER:-$(id -nu "$PKEXEC_UID")}
 
 
 # Check if the DisplayController.desktop file exists in the users autostart directory
@@ -152,16 +163,29 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
     width=$(tput cols)
     height=$(tput lines)
 
-    
     # Allow the user to choose the installation directory
-    INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 $width \
-        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 $width "/opt/displaycontroller")
+    INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 "$width" \
+        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 "$width" "/opt/displaycontroller")
+    # shellcheck disable=SC2181
     if [ $? -ne 0 ]; then
         exit
     fi
 
+    #SSL certificate selection
+    dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --yes-label "Self-signed" --no-label "Own certificate" --yesno "The displaycontroller can be accessed via HTTPS. Do you want to use a self-signed certificate or provide your own?" 0 "$width"
+    # shellcheck disable=SC2181
+    if [ $? -eq 0 ]; then
+        # Use self-signed certificate
+        SSL_CERT_FILE=""
+        SSL_KEY_FILE=""
+    else
+        # Ask for the certificate and key files
+        SSL_CERT_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --inputbox "Please enter the path to the SSL certificate file" 0 "$width" "$(pwd)/displaycontroller.crt")
+        SSL_KEY_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Key" --inputbox "Please enter the path to the SSL key file" 0 "$width" "$(pwd)/displaycontroller.key")
+    fi
     # Allow the user to choose if the DisplayController should start on boot
-    dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 $width
+    dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 "$width"
+    # shellcheck disable=SC2181
     if [ $? -eq 0 ]; then
         AUTOSTART=1
     else 
@@ -170,7 +194,7 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
 fi
 
 # Run the installation steps
-total_steps=6
+total_steps=7
 
 if [ "$AUTOSTART" -eq 1 ]; then
     total_steps=$((total_steps+1))
@@ -180,11 +204,10 @@ step_nr=1
 
 run_install_step $((step_nr++)) $total_steps "Installing Files" <<EOF
 mkdir -p "$INSTALL_DIR" 
-find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rfv {} +
+find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 ! -name 'volumes' ! -name 'certs' -exec rm -rfv {} +
 find "$SRC_DIR" -mindepth 1 -maxdepth 1 -exec cp -rv {} "$INSTALL_DIR" \;
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod -v +x {} \;
 chown -R $USER "$INSTALL_DIR"
-
 EOF
 
 run_install_step $((step_nr++)) $total_steps "Creating links" <<EOF
@@ -200,6 +223,8 @@ Terminal=true
 Path=$INSTALL_DIR
 Categories=Utility;WebBrowser;
 EOT
+
+chown -v $USER "$INSTALL_DIR/DisplayController.desktop"
 chmod -v +x "$INSTALL_DIR/DisplayController.desktop"
 
 rm -f "/usr/share/applications/DisplayController.desktop" || true
@@ -253,6 +278,32 @@ run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
 apt-get install -y chromium-browser unclutter
 EOF
+
+if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
+    run_install_step $((step_nr++)) $total_steps "Installing SSL Certificate" <<EOF
+    echo "Installing SSL certificate..."
+    if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
+        if [ ! -f "$SSL_CERT_FILE" ] || [ ! -f "$SSL_KEY_FILE" ]; then
+            echo "SSL certificate or key file not found. Please check the paths."
+            exit 1
+        fi
+        mkdir -p "$INSTALL_DIR/certs"
+        cp -v "$SSL_CERT_FILE" "$INSTALL_DIR/certs/displaycontroller.crt"
+        cp -v "$SSL_KEY_FILE" "$INSTALL_DIR/certs/displaycontroller.key"
+        chmod -v 644 "$INSTALL_DIR/certs/displaycontroller.crt"
+        chmod -v 600 "$INSTALL_DIR/certs/displaycontroller.key"
+        echo "SSL certificate and key installed in $INSTALL_DIR/certs"
+    else
+        echo "Creating self-signed SSL certificate and key..."
+        mkdir -p "$INSTALL_DIR/certs"
+        openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout "$INSTALL_DIR/certs/displaycontroller.key"  -out "$INSTALL_DIR/certs/displaycontroller.crt" -subj "/CN=displaycontroller"
+        chown -v -R $USER "$INSTALL_DIR/certs"
+        chmod -v 644 "$INSTALL_DIR/certs/displaycontroller.crt"
+        chmod -v 600 "$INSTALL_DIR/certs/displaycontroller.key"
+        echo "Self-signed SSL certificate and key created in $INSTALL_DIR/certs"
+    fi
+EOF
+fi
 
 run_install_step $((step_nr++)) $total_steps "Disabling ntp" <<EOF
 timedatectl set-ntp false

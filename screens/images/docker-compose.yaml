@@ -3,7 +3,7 @@ services:
     container_name: dc-images
     image: ghcr.io/svenfinn/dc-images:${APP_VERSION}
     hostname: images
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:
@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - logger=../../logger
-        - screen-types=../types
+        - files-utils=../utils/files
     volumes:
       - images_data:/app/files
     environment:

@@ -1,0 +1,22 @@
+{
+    "name": "dc-ranges-types",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "ts-patch install",
+        "build": "typia generate --input src --output generated --project tsconfig.json && tsc -p tsconfig.build.json && rm -rf generated"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "ts-patch": "^3.3.0",
+        "typescript": "~5.8.3",
+        "typia": "^9.6.1"
+    },
+    "files": [
+        "dist"
+    ]
+}

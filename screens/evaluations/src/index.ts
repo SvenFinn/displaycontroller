@@ -39,7 +39,12 @@ async function loop(event: MessageEvent | null = null) {
             }
         }))?.strValue;
         if (server) {
-            await sync(server, smbPath, convPath, htmlPath);
+            try {
+                logger.info(`Syncing evaluations with server ${server}`);
+                await sync(server, smbPath, convPath, htmlPath);
+            } catch (error) {
+                logger.error(`Error during evaluation sync: ${error}`);
+            }
         }
         const syncInterval = (await localClient.parameter.findUnique({
             where: {

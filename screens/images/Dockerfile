@@ -17,8 +17,8 @@ RUN npm i --omit=dev --loglevel=info --install-links
 
 FROM local-deps AS build
 
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
+WORKDIR /app/screens/utils/files
+COPY --from=files-utils . .
 
 WORKDIR /app/screens/images
 
@@ -36,6 +36,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends inkscape
 
 RUN inkscape --export-type=png --export-dpi=288 icon.svg && \
+    inkscape --export-type=png --export-dpi=288 404.svg && \
+    rm 404.svg && \
     rm icon.svg
 
 FROM base AS final

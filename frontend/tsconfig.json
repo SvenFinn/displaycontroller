@@ -21,31 +21,20 @@
     "plugins": [
       {
         "name": "next"
-      }
+      },
     ],
     "paths": {
       "@frontend/*": [
         "./src/*"
       ],
-      "@shared/ranges": [
-        "../ranges/types"
+      "@shared/files": [
+        "../screens/utils/files"
       ],
-      "@shared/ranges/*": [
-        "../ranges/types/*"
-      ],
-      "@shared/screens": [
-        "../screens/screenManager/types"
-      ],
-      "@shared/screens/*": [
-        "../screens/screenManager/types/*"
-      ],
-      "@shared/files" : [
-        "../screens/types/files"
-      ],
-      "@shared/files/*" : [
-        "../screens/types/files/*"
-      ],
-    }
+      "@shared/files/*": [
+        "../screens/utils/files/*"
+      ]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",

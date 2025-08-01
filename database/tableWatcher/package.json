@@ -1,26 +1,26 @@
 {
-  "name": "dc-table-watcher",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "author": "Sven Finn",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@prisma/client": "^6.7.0",
-    "@types/node": "^22.15.17",
-    "prisma": "^6.7.0",
-    "typescript": "^5.8.3"
-  },
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "dc-logger": "file:../../logger",
-    "eventsource": "^3.0.7"
-  }
+    "name": "dc-table-watcher",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc"
+    },
+    "author": "Sven Finn",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@prisma/client": "^6.13.0",
+        "@types/node": "^22.17.0",
+        "prisma": "^6.13.0",
+        "typescript": "^5.9.2"
+    },
+    "files": [
+        "dist"
+    ],
+    "dependencies": {
+        "dc-logger": "file:../../logger",
+        "eventsource": "^4.0.0"
+    }
 }

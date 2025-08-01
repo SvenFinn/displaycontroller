@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+    width="85mm"
+    height="85mm"
+    viewBox="0 0 85 85"
+    version="1.1"
+    id="svg1"
+    inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+    sodipodi:docname="5x5.svg"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:svg="http://www.w3.org/2000/svg">
+    <style
+        id="style1">
+        .black {
+        fill:#000000;
+        stroke:none;
+        }
+        .text { font-family: Arial;dominant-baseline:central; fill:#000000; font-size:7px;
+        font-weight:200;
+        stroke:none; text-align:center; text-anchor:middle; text-orientation:upright;
+        writing-mode:upright; }
+        .chess { stroke-width:0.5; }
+</style>
+
+    <g
+        inkscape:label="Layer 1"
+        inkscape:groupmode="layer"
+        id="layer1">
+        <rect
+            style="display:inline;fill:#ffffff;stroke:#000000;stroke-opacity:1"
+            id="rect1"
+            width="85"
+            height="85"
+            x="0"
+            y="0"
+            class="chess" />
+    </g>
+    <g
+        inkscape:groupmode="layer"
+        id="layer2"
+        inkscape:label="Grid">
+        <rect
+            style="stroke-width:0.264583"
+            id="rect27"
+            width="17.1"
+            height="17.1"
+            x="0"
+            y="-1.7763568e-15"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect27-36"
+            width="17.1"
+            height="17.1"
+            x="17.1"
+            y="17.1"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect27-36-1"
+            width="17.1"
+            height="17.1"
+            x="51.299999"
+            y="17.1"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect27-3"
+            width="17.1"
+            height="17.1"
+            x="34.200001"
+            y="0"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect27-3-1"
+            width="17.1"
+            height="17.1"
+            x="68.400002"
+            y="0"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect28"
+            width="17.1"
+            height="17.1"
+            x="0"
+            y="34.200001"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect29"
+            width="17.1"
+            height="17.1"
+            x="17.1"
+            y="51.299999"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect30"
+            width="17.1"
+            height="17.1"
+            x="51.299999"
+            y="51.299999"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect31"
+            width="17.1"
+            height="17.1"
+            x="34.200001"
+            y="34.200001"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect32"
+            width="17.1"
+            height="17.1"
+            x="68.400002"
+            y="34.200001"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect33"
+            width="17.1"
+            height="17.1"
+            x="0"
+            y="68.400002"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect36"
+            width="17.1"
+            height="17.1"
+            x="34.200001"
+            y="68.400002"
+            class="black" />
+        <rect
+            style="stroke-width:0.264583"
+            id="rect37"
+            width="17.1"
+            height="17.1"
+            x="68.400002"
+            y="68.400002"
+            class="black" />
+    </g>
+    <g
+        inkscape:label="Texts"
+    >
+        <text
+            class="text"
+            x="8.5"
+            y="8.5"
+            style="fill:#ffffff"
+        >22</text>
+        <text
+            class="text"
+            x="25.6"
+            y="8.5"
+        >6</text>
+        <text
+            class="text"
+            x="42.7"
+            y="8.5"
+            style="fill:#ffffff"
+        >19</text>
+        <text
+            class="text"
+            x="59.8"
+            y="8.5"
+        >5</text>
+        <text
+            class="text"
+            x="76.9"
+            y="8.5"
+            style="fill:#ffffff"
+        >21</text>
+        <text
+            class="text"
+            x="8.5"
+            y="25.6"
+        >3</text>
+        <text
+            class="text"
+            x="25.6"
+            y="25.6"
+            style="fill:#ffffff"
+        >15</text>
+        <text
+            class="text"
+            x="42.7"
+            y="25.6"
+        >10</text>
+        <text
+            class="text"
+            x="59.8"
+            y="25.6"
+            style="fill:#ffffff"
+        >16</text>
+        <text
+            class="text"
+            x="76.9"
+            y="25.6"
+        >4</text>
+        <text
+            class="text"
+            x="8.5"
+            y="42.7"
+            style="fill:#ffffff"
+        >18</text>
+        <text
+            class="text"
+            x="25.6"
+            y="42.7"
+        >11</text>
+        <text
+            class="text"
+            x="42.7"
+            y="42.7"
+            style="fill:#ffffff"
+        >-10</text>
+        <text
+            class="text"
+            x="59.8"
+            y="42.7"
+        >9</text>
+        <text
+            class="text"
+            x="76.9"
+            y="42.7"
+            style="fill:#ffffff"
+        >20</text>
+        <text
+            class="text"
+            x="8.5"
+            y="59.8"
+        >2</text>
+        <text
+            class="text"
+            x="25.6"
+            y="59.8"
+            style="fill:#ffffff"
+        >14</text>
+        <text
+            class="text"
+            x="42.7"
+            y="59.8"
+        >12</text>
+        <text
+            class="text"
+            x="59.8"
+            y="59.8"
+            style="fill:#ffffff"
+        >13</text>
+        <text
+            class="text"
+            x="76.9"
+            y="59.8"
+        >1</text>
+        <text
+            class="text"
+            x="8.5"
+            y="76.9"
+            style="fill:#ffffff"
+        >23</text>
+        <text
+            class="text"
+            x="25.6"
+            y="76.9"
+        >7</text>
+        <text
+            class="text"
+            x="42.7"
+            y="76.9"
+            style="fill:#ffffff"
+        >17</text>
+        <text
+            class="text"
+            x="59.8"
+            y="76.9"
+        >8</text>
+        <text
+            class="text"
+            x="76.9"
+            y="76.9"
+            style="fill:#ffffff"
+        >24</text>
+    </g>
+</svg>

@@ -1,7 +1,6 @@
 import { LocalClient } from "dc-db-local";
 import { resolvePreset } from "./presets";
-import { isDbScreen, DbScreen } from "@shared/screens";
-import { Screen } from "@shared/screens";
+import { isDbScreen, DbScreen, Screen } from "dc-screens-types";
 import { checkCondition } from "./conditions";
 import { logger } from "dc-logger";
 
@@ -30,7 +29,7 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
         }
         if (!isDbScreen(nextScreen)) {
             logger.warn("Failed type check")
-            //@ts-ignore
+            // @ts-expect-error The invalid screen is not in the original type returned by the database, so we need to cast it
             nextScreen = {
                 id: nextScreen.id,
 

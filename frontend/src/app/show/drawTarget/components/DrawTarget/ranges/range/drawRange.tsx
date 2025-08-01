@@ -1,8 +1,7 @@
 "use client";
 
-import { Range } from "@shared/ranges";
-import DrawRange from "../../../../../components/RangeDraw"
-import { useAppSelector } from "../../ranges-store/store";
+import { Range } from "dc-ranges-types";
+import DrawRange from "../../../../../components/Ranges/Draw"
 import styles from "./range.module.css";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,8 +29,7 @@ export default function DrawRangeW({ range }: DrawRangeProps): React.JSX.Element
                 if (cont.children[i] === ref.current) {
                     continue;
                 }
-                // @ts-expect-error help me
-                contentHeight += cont.children[i].offsetHeight;
+                contentHeight += (cont.children[i] as HTMLElement).offsetHeight;
             }
             setMaxHeight((containerHeight - contentHeight) * 0.95);
         }

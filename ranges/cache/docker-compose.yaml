@@ -3,7 +3,7 @@ services:
     container_name: dc-ranges-cache
     hostname: ranges-cache
     image: ghcr.io/svenfinn/dc-ranges-cache:${APP_VERSION}
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:
@@ -23,6 +23,7 @@ services:
         - DISCIPLINE_DEFAULT_COLOR=${DISCIPLINE_DEFAULT_COLOR}
         - MEYTON_DB_USER=${MEYTON_DB_USER}
         - MEYTON_DB_PASS=${MEYTON_DB_PASS}
+        - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
     depends_on:
       dc-db-migrate:
         condition: service_completed_successfully

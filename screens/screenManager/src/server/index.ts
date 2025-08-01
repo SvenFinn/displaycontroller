@@ -2,9 +2,9 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { logger } from "dc-logger";
 import { LocalClient } from 'dc-db-local';
-import { getCurrentScreen, getPaused, gotoScreen, nextScreen, pauseScreen } from '../screens';
+import { screenManager } from '../screens/screenManager';
 import { resolvePreset } from '../screens/presets';
-import { DbScreen, Screen } from '@shared/screens';
+import { DbScreen, Screen } from 'dc-screens-types';
 dotenv.config();
 
 const app: Express = express();
@@ -30,7 +30,7 @@ app.get('/api/screens', async (req: Request, res: Response) => {
 });
 
 app.get('/api/screens/current', (req: Request, res: Response) => {
-    res.status(200).send(getCurrentScreen());
+    res.status(200).send(screenManager.getCurrentScreen());
 });
 
 app.get('/api/screens/current/sse', (req: Request, res: Response) => {
@@ -43,7 +43,7 @@ app.get('/api/screens/current/sse', (req: Request, res: Response) => {
     };
     res.writeHead(200, headers);
 
-    res.write(`data: ${JSON.stringify(getCurrentScreen())}\n\n`);
+    res.write(`data: ${JSON.stringify(screenManager.getCurrentScreen())}\n\n`);
 
     sseConnections.push(res);
 
@@ -53,12 +53,12 @@ app.get('/api/screens/current/sse', (req: Request, res: Response) => {
 });
 
 app.get('/api/screens/pause', (req: Request, res: Response) => {
-    res.status(200).send(getPaused());
+    res.status(200).send(screenManager.getPaused());
 });
 
 app.post('/api/screens/pause', (req: Request, res: Response) => {
     try {
-        pauseScreen();
+        screenManager.pauseScreen();
         res.status(200).send('Screen paused');
     } catch (error) {
         res.status(500).send('Internal server error');
@@ -67,8 +67,18 @@ app.post('/api/screens/pause', (req: Request, res: Response) => {
 
 app.post('/api/screens/next', (req: Request, res: Response) => {
     try {
-        nextScreen();
+        screenManager.nextScreen();
         res.status(200).send('Next screen switched');
+    } catch (error) {
+        res.status(500).send('Internal server error');
+    }
+    res.end();
+});
+
+app.post('/api/screens/previous', (req: Request, res: Response) => {
+    try {
+        screenManager.previousScreen();
+        res.status(200).send('Previous screen switched');
     } catch (error) {
         res.status(500).send('Internal server error');
     }
@@ -189,7 +199,7 @@ app.post('/api/screens/:screenId{/:subScreenId}', (req: Request, res: Response) 
         subScreenId = Number(req.params.subScreenId);
     }
     try {
-        gotoScreen(screenId, subScreenId);
+        screenManager.gotoScreen(screenId, subScreenId);
         res.status(200).send('Screen switched');
     } catch (error) {
         res.status(500).send('Internal server error');

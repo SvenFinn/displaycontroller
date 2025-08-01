@@ -3,7 +3,7 @@ services:
     hostname: frontend
     image: ghcr.io/svenfinn/dc-frontend:${APP_VERSION}
     container_name: dc-frontend
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - displaycontroller
     build:
@@ -11,10 +11,11 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - range-types=../ranges/types
-        - screen-types=../screens/screenManager/types
-        - files-types=../screens/types/files
+        - screen-types=../screens/types
+        - files-utils=../screens/utils/files
       args:
         - APP_PORT=${APP_PORT}
+        - HTTPS_PORT=${HTTPS_PORT}
         - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
         - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}
         - APP_VERSION=${APP_VERSION}

@@ -1,13 +1,10 @@
 import { TTLHandler } from "dc-ranges-ttl";
-import { ActiveRange, InactiveRange, Source } from "@shared/ranges";
-import { InternalRange } from "@shared/ranges/internal";
-import { Discipline } from "@shared/ranges/discipline";
+import { ActiveRange, InactiveRange, Source } from "dc-ranges-types";
+import { InternalRange, Discipline, Shooter, StartList, Hits, Hit } from "dc-ranges-types";
 import { getDiscipline } from "../cache/disciplines";
-import { Shooter } from "@shared/ranges/shooter";
 import { getShooter } from "../cache/shooters";
-import { StartList } from "@shared/ranges/startList";
 import { getStartList } from "../cache/startLists";
-import { Hit, Hits } from "@shared/ranges/hits";
+import { getIpAddress } from "../cache/ipAddress";
 
 type SourceData = Array<TTLHandler<InternalRange>>;
 
@@ -65,9 +62,9 @@ function mergeRoundId(sourceData: SourceData): number {
     return getFirstNotNull(sourceData.map((source) => source.getMessage()?.discipline?.roundId)) || 0;
 }
 
-function mergeSource(sourceData: SourceData): Source | null {
+function mergeSource(sourceData: SourceData): Source {
     const sources = sourceData.map((source) => source.getMessage()?.source);
-    return getFirstNotNull(sources) || null;
+    return getFirstNotNull(sources) || "multicast"; // Default to multicast if no source is found
 }
 
 function mergeActiveRange(sourceData: SourceData, rangeId: number): ActiveRange {
@@ -80,6 +77,7 @@ function mergeActiveRange(sourceData: SourceData, rangeId: number): ActiveRange 
         round: mergeRoundId(sourceData),
         startList: mergeStartList(sourceData),
         source: mergeSource(sourceData),
+        ipAddress: getIpAddress(rangeId),
     }
 }
 

@@ -7,22 +7,10 @@
         "outDir": "./dist",
         "paths": {
             "@shared/files/*": [
-                "../types/files/*"
+                "../utils/files/*"
             ],
             "@shared/files": [
-                "../types/files"
-            ],
-            "@shared/screens": [
-                "./types"
-            ],
-            "@shared/screens/*": [
-                "./types/*",
-            ],
-            "@shared/ranges": [
-                "../../ranges/types"
-            ],
-            "@shared/ranges/*": [
-                "../../ranges/types/*"
+                "../utils/files"
             ]
         }
     },

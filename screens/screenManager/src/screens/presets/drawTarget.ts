@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { DrawTargetDbScreen } from "@shared/screens/drawTarget";
+import { DrawTargetDbScreen } from "dc-screens-types";
 
 export default async function drawTarget(screen: DrawTargetDbScreen): Promise<Screens> {
     return [

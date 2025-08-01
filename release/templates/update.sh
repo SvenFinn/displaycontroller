@@ -24,7 +24,7 @@ for arg in "$@"; do
 done
 
 function update_finished(){
-    local width, height
+    local width height
     width=$(tput cols)
     height=$(tput lines)
 
@@ -78,9 +78,9 @@ function run_update_step(){
     local tmp_log_file
     tmp_log_file=$(mktemp)
 
-    eval "$command" 2>&1 | tee $tmp_log_file | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                            --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height $width \
-                                            --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height $width
+    eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
+                                            --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
+                                            --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
 
     local EXIT_CODE=$?
 
@@ -102,12 +102,12 @@ function run_update_step(){
             --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
         )
         if [ "$REBOOT" == "0" ]; then
-            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width"
+            dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
         else
-            cat $tmp_log_file | dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 30
+            dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --title "\Z1The system will reboot shortly...\Zn" --no-cancel --pause "Rebooting..." "$reboot_height" "$width" 30 < "$tmp_log_file"
         fi
 
-        rm $tmp_log_file
+        rm "$tmp_log_file"
         tput cnorm
 
         if [ "$REBOOT" == "1" ]; then
@@ -122,7 +122,7 @@ function run_update_step(){
 
     sleep 1
 
-    rm $tmp_log_file
+    rm "$tmp_log_file"
     tput cnorm
 
 }
@@ -132,9 +132,9 @@ if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
     sudo -n true 2>/dev/null
     if [ $? -eq 1 ]; then
-        pkexec --keep-cwd $0 "$@"
+        pkexec --keep-cwd "$0" "$@"
     else
-        sudo $0 "$@"
+        sudo "$0" "$@"
     fi
     exit
 fi
@@ -239,7 +239,7 @@ tmp_folder=\$(mktemp -d)
 trap 'rm -rf \$tmp_folder' EXIT
 
 for asset in \$(echo "\$latest_release_json" | jq -r '.assets[].browser_download_url'); do
-    if [[ "\$(basename \$asset)" == *".tar.xz" ]]; then
+    if [[ "\$(basename \$asset)" == *".run" ]]; then
         echo "Downloading \$asset"
         curl -f -L -o "\$tmp_folder/\$(basename \$asset)" "\$asset"
         if [ \$? -ne 0 ]; then
@@ -254,25 +254,15 @@ if [ "\$(ls -A \$tmp_folder)" == "" ]; then
     exit 1
 fi
 
-tar -C "\$tmp_folder" -xJf "\$tmp_folder"/*.tar.xz
-rm -rf "\$tmp_folder"/*.tar.xz
-
-echo "Checking for required files"
-
-if [ ! -e "\$tmp_folder/install.sh" ]; then
-    echo "Required install.sh script not found"
-    exit 1
-fi
-
 echo "Removing old version"
 
 find . -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rf {} +
 
 echo "Installing new version"
 
-chmod +x "\$tmp_folder/install.sh"
+chmod +x "\$tmp_folder"/*.run
 export DEBIAN_FRONTEND=noninteractive
-"\$tmp_folder/install.sh"
+"\$tmp_folder"/*.run --nox11
 
 echo "Done"
 EOF

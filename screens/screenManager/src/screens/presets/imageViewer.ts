@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { ViewerDbScreen } from "@shared/screens/imageViewer";
+import { ViewerDbScreen } from "dc-screens-types";
 
 import { logger } from "dc-logger";
 import { isDirectoryListing } from "@shared/files";
@@ -24,7 +24,7 @@ export default async function imageViewer(screen: ViewerDbScreen): Promise<Scree
             subId: index,
             preset: "imageViewer",
             options: {
-                file: file
+                path: file
             },
             duration: screen.duration
         }
@@ -34,16 +34,16 @@ export default async function imageViewer(screen: ViewerDbScreen): Promise<Scree
 async function createFileList(path: string): Promise<string[]> {
     try {
         const files = await fetch(`http://images/api/images/${path}`);
-        if (!files.ok) return [];
+        if (!files.ok) return [path];
         // Check if the response is a JSON object or HTML
         const contentType = files.headers.get("content-type");
-        if (!contentType) return [];
-        if (!contentType.includes("application/json")) return [];
+        if (!contentType) return [path];
+        if (!contentType.includes("application/json")) return [path];
         const fileList = await files.json();
-        if (!isDirectoryListing(fileList)) return [];
+        if (!isDirectoryListing(fileList)) return [path];
         return flattenFileList(fileList, path);
     } catch (e) {
         logger.error(`Failed to fetch files for path ${path}`);
-        return [];
+        return [path];
     }
 }

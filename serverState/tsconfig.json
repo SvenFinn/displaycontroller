@@ -5,10 +5,6 @@
         "moduleResolution": "NodeNext",
         "strict": true,
         "outDir": "./dist",
-        "paths": {
-            "@shared/screens": ["../screens/screenManager/types"],
-            "@shared/screens/*": ["../screens/screenManager/types/*"],
-        },
         "resolveJsonModule": true
     },
     "include": [

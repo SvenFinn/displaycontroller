@@ -5,11 +5,10 @@ import { createSMDBClient, SmdbClient } from "dc-db-smdb";
 import { TableWatcher } from "dc-table-watcher"
 import { LocalClient, createLocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
-import { Discipline } from "@shared/ranges/discipline";
-import { StartList } from "@shared/ranges/startList";
-import { Shooter } from "@shared/ranges/shooter";
+import { Discipline, StartList, Shooter, OverrideDiscipline } from "dc-ranges-types";
 import { getOverrideDisciplines } from "./overrideDisciplines";
-import { OverrideDiscipline } from "@shared/ranges/internal/startList";
+import dotenv from "dotenv";
+dotenv.config();
 
 const tables = [
     "Starterlisten", // startList
@@ -21,12 +20,18 @@ const tables = [
     "Schuetze", // shooter
 ]
 
+if (!process.env.CACHE_REFRESH_INTERVAL) {
+    logger.error("CACHE_REFRESH_INTERVAL is not set");
+    process.exit(1);
+}
+
+const refreshInterval = parseInt(process.env.CACHE_REFRESH_INTERVAL);
 
 async function init() {
     logger.info("Starting cache");
     const localClient = await createLocalClient();
     const smdbClient = await createSMDBClient(localClient);
-    const tableWatcher = new TableWatcher(smdbClient, tables, 10000);
+    const tableWatcher = new TableWatcher(smdbClient, tables, refreshInterval);
     tableWatcher.on("change", async (tables: string[]) => {
         await Promise.all([
             updateDisciplineCache(localClient, smdbClient),

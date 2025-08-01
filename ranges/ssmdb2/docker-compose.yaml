@@ -3,7 +3,7 @@ services:
     container_name: dc-ranges-ssmdb2
     image: ghcr.io/svenfinn/dc-ranges-ssmdb2:${APP_VERSION}
     hostname: ranges-ssmdb2
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,6 +14,7 @@ services:
         - SELF_DB_NAME=${SELF_DB_NAME}
         - MEYTON_DB_USER=${MEYTON_DB_USER}
         - MEYTON_DB_PASS=${MEYTON_DB_PASS}
+        - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
         - local-db=../../database/local
         - ssmdb2=../../database/ssmdb2

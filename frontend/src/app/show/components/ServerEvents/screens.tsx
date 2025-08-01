@@ -2,9 +2,10 @@
 
 import { useDispatch } from "react-redux";
 import ServerEvents from "./base";
-import { isScreen, Screen } from "@shared/screens";
+import { isScreen, Screen } from "dc-screens-types";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
+import { useHost } from "@frontend/app/hooks/useHost";
 
 interface ScreenEventsProps {
     action: ActionCreatorWithPayload<Screen>;
@@ -12,18 +13,10 @@ interface ScreenEventsProps {
 
 export default function ScreenEvents({ action }: ScreenEventsProps) {
     const dispatch = useDispatch();
-    const [host, setHost] = useState<string>("");
-
-    useEffect(() => {
-        setHost(window.location.host.split(":")[0]);
-    }, []);
-
-    if (host === "") {
-        return <></>;
-    }
+    const host = useHost();
 
 
-    const path = new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/screens/current/sse`);
+    const path = `${host}/api/screens/current/sse`;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function screensAction(data: any) {

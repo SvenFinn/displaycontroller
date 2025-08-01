@@ -1,10 +1,6 @@
 import dotenv from "dotenv";
-import { Discipline } from "@shared/ranges/discipline";
+import { Discipline, Round, Rounds, Mode, Zoom, Layouts } from "dc-ranges-types";
 import { SmdbClient } from "dc-db-smdb";
-import { DisciplineRound, DisciplineRounds } from "@shared/ranges/discipline/round";
-import { DisciplineLayouts } from "@shared/ranges/discipline/layout";
-import { DisciplineRoundMode } from "@shared/ranges/discipline/round/mode";
-import { DisciplineRoundZoom } from "@shared/ranges/discipline/round/zoom";
 import { getLayout } from "./layout";
 
 dotenv.config();
@@ -50,7 +46,7 @@ async function getDiscipline(smdbClient: SmdbClient, disciplineId: number): Prom
     };
 }
 
-async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<DisciplineRounds> {
+async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<Rounds> {
     const roundsDb = await smdbClient.discipline.findUnique({
         where: {
             id: disciplineId
@@ -67,7 +63,7 @@ async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<
         return [];
     }
     const roundIds = roundsDb.rounds.map(round => round.id);
-    const rounds: DisciplineRounds = [];
+    const rounds: Rounds = [];
     for (const roundId of roundIds) {
         const round = await getRound(smdbClient, disciplineId, roundId);
         if (round) {
@@ -82,7 +78,7 @@ async function getRounds(smdbClient: SmdbClient, disciplineId: number): Promise<
     return rounds;
 }
 
-async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: number): Promise<DisciplineRound | undefined> {
+async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: number): Promise<Round | undefined> {
     const round = await smdbClient.round.findUnique({
         where: {
             disciplineId_id: {
@@ -116,7 +112,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
     }
 }
 
-function getMode(mode: number): DisciplineRoundMode {
+function getMode(mode: number): Mode {
     switch (mode) {
         case 1:
             return { mode: "rings", decimals: 1 };
@@ -149,7 +145,7 @@ function getMode(mode: number): DisciplineRoundMode {
     }
 }
 
-function getZoom(zoom: number): DisciplineRoundZoom {
+function getZoom(zoom: number): Zoom {
     switch (zoom) {
         case 0:
             return { mode: "none" };
@@ -166,7 +162,7 @@ function getZoom(zoom: number): DisciplineRoundZoom {
     }
 }
 
-async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise<DisciplineLayouts> {
+async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise<Layouts> {
     const layoutDatabase = await smdbClient.discipline.findUnique({
         where: {
             id: disciplineId
@@ -183,7 +179,7 @@ async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise
         return [];
     }
     const layoutIds = layoutDatabase.rounds.map(round => round.layoutId).filter((value, index, self) => self.indexOf(value) === index);
-    const layouts: DisciplineLayouts = {};
+    const layouts: Layouts = {};
     for (let i = 0; i < layoutIds.length; i++) {
         const layout = await getLayout(smdbClient, layoutIds[i]);
         if (layout) {
