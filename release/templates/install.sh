@@ -19,12 +19,12 @@ function run_install_step(){
     done
     command+="set +e$nl"     
 
-    local width height
+    local width, height
     width=$(tput cols)
     height=$(tput lines)
 
-    local bar_height=2
-    local bar_top bar_width bar
+    local bar_height, bar_top, bar_width, bar
+    bar_height=2
     bar_top=$(( height - bar_height - 3 ))
     bar_width=$(( width - 6 ))
     bar=$(for _ in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
@@ -91,7 +91,7 @@ function install_finished(){
         exit 0
     fi
 
-    local width height
+    local width. height
     width=$(tput cols)
     height=$(tput lines)
 

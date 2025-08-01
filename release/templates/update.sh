@@ -24,7 +24,7 @@ for arg in "$@"; do
 done
 
 function update_finished(){
-    local width height
+    local width, height
     width=$(tput cols)
     height=$(tput lines)
 
