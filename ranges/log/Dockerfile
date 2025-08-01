@@ -24,7 +24,7 @@ RUN npm ci --loglevel=info && \
 
 WORKDIR /app/ranges/ttl
 COPY --from=range-ttl . .
-RUN npm ci --loglevel=ifno && \
+RUN npm ci --loglevel=info && \
     npm run build;
 
 WORKDIR /app/ranges/types
