@@ -1,7 +1,7 @@
 "use client";
 
 import { DrawTargetOptions, isDrawTargetOptions } from "@shared/screens/drawTarget";
-import DrawTarget from "./components/DrawTarget";
+import DrawTarget from "./components/DrawTarget/drawTarget";
 import SingleEdit from "../components/SingleEdit";
 import { schema, getUiSchema } from "./components/DrawTargetEdit";
 
