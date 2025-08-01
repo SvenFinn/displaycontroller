@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { logger } from "dc-logger";
 import { LocalClient } from 'dc-db-local';
-import { getCurrentScreen, getPaused, gotoScreen, nextScreen, pauseScreen, previousScreen } from '../screens';
+import { getCurrentScreen, getPaused, gotoScreen, nextScreen, pauseScreen } from '../screens';
 import { resolvePreset } from '../screens/presets';
 import { DbScreen, Screen } from '@shared/screens';
 dotenv.config();
@@ -69,16 +69,6 @@ app.post('/api/screens/next', (req: Request, res: Response) => {
     try {
         nextScreen();
         res.status(200).send('Next screen switched');
-    } catch (error) {
-        res.status(500).send('Internal server error');
-    }
-    res.end();
-});
-
-app.post('/api/screens/previous', (req: Request, res: Response) => {
-    try {
-        previousScreen();
-        res.status(200).send('Previous screen switched');
     } catch (error) {
         res.status(500).send('Internal server error');
     }

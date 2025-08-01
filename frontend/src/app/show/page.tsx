@@ -1,14 +1,22 @@
+import ServerState from "./components/ServerEvents/serverState"
+import Clock from "./components/Clock"
+import Logo from "./components/Logo"
+import FullscreenButton from "./components/Fullscreen";
+import styles from "./show.module.css";
 import ShowScreens from "./components/Screens";
-import Show from "./components/Show";
-import PlayBackButtons from "./components/PlaybackButtons";
 import { Metadata } from "next";
+import Background from "./components/Background";
 
-export default function Page(): React.JSX.Element {
+export default function Show(): React.JSX.Element {
     return (
-        <Show>
+        <div className={styles.show}>
+            <Background />
             <ShowScreens />
-            <PlayBackButtons />
-        </Show>
+            <FullscreenButton />
+            <Clock />
+            <Logo />
+            <ServerState />
+        </div >
     )
 }
 

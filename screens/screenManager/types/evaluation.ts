@@ -9,17 +9,13 @@ export function isEvaluationDbScreen(screen: any): screen is EvaluationDbScreen 
     if (!isBaseDbScreen(screen)) return false;
     if (screen.preset !== "evaluation") return false;
     const screenWType = screen as EvaluationDbScreen;
-    return isEvaluationOptions(screenWType.options);
-}
-
-export type EvaluationOptions = {
-    path: string;
-}
-
-export function isEvaluationOptions(options: any): options is EvaluationOptions {
-    if (typeof options !== "object") return false;
-    if (typeof options.path !== "string") return false;
+    if (typeof screenWType.options !== "object") return false;
+    if (typeof screenWType.options.path !== "string") return false;
     return true;
+}
+
+type EvaluationOptions = {
+    path: string;
 }
 
 export type EvaluationScreen = BaseScreenAvailable & {
@@ -31,5 +27,7 @@ export function isEvaluationScreen(screen: any): screen is EvaluationScreen {
     if (!isBaseScreenAvailable(screen)) return false;
     if (screen.preset !== "evaluation") return false;
     const screenWType = screen as EvaluationScreen;
-    return isEvaluationOptions(screenWType.options);
+    if (typeof screenWType.options !== "object") return false;
+    if (typeof screenWType.options.path !== "string") return false;
+    return true;
 }
