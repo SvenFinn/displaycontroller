@@ -13,3 +13,7 @@ div.content {
     height: 100%;
     overflow: hidden;
 }
+
+div.content:has(> div) {
+    background-color: white;
+}
