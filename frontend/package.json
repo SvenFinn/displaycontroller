@@ -20,7 +20,7 @@
         "dc-ranges-types": "file:../ranges/types",
         "dc-screens-types": "file:../screens/types",
         "mime": "^4.0.7",
-        "next": "^15.4.4",
+        "next": "^15.4.5",
         "raw-loader": "^4.0.2",
         "react": "^19.1.1",
         "react-bootstrap": "^2.10.10",
