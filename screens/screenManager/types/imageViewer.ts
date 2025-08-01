@@ -19,7 +19,7 @@ export function isViewerDbScreen(screen: any): screen is ViewerDbScreen {
 export type ViewerScreen = BaseScreenAvailable & {
     preset: "imageViewer";
     options: {
-        path: string;
+        file: string;
     }
 }
 
@@ -28,6 +28,6 @@ export function isViewerScreen(screen: any): screen is ViewerScreen {
     if (screen.preset !== "imageViewer") return false;
     const screenWType = screen as ViewerScreen;
     if (typeof screenWType.options !== "object") return false
-    if (typeof screenWType.options.path !== "string") return false;
+    if (typeof screenWType.options.file !== "string") return false;
     return true;
 }

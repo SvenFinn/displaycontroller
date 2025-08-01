@@ -1,39 +1,34 @@
 import { Screens } from ".";
-import { ViewerDbScreen } from "@shared/screens/imageViewer";
-
+import { EvaluationGalleryDbScreen } from "@shared/screens/evaluationGallery";
 import { logger } from "dc-logger";
 import { isDirectoryListing } from "@shared/files";
 import { flattenFileList } from "@shared/files/helpers";
 
-export default async function imageViewer(screen: ViewerDbScreen): Promise<Screens> {
-    let fileList: string[];
-    try {
-        fileList = await createFileList(screen.options.path);
-    } catch (e) {
-        logger.error(`Failed to fetch files for screen ${screen.id}`);
-        return [];
-    }
-    if (fileList.length < 1) return [];
-    // Length of fileList is larger than 1, so this map always
-    // returns at least one element
-    // @ts-ignore
-    return fileList.map((file: string, index: number) => {
+export default async function evaluationGallery(screen: EvaluationGalleryDbScreen): Promise<Screens> {
+    const fileList = await createFileList(screen.options.path);
+    const screens = fileList.map((file: string, index: number) => {
         return {
             available: true,
             id: screen.id,
             subId: index,
-            preset: "imageViewer",
+            preset: "evaluation",
             options: {
                 file: file
             },
             duration: screen.duration
         }
     });
+    if (screens.length === 0) {
+        logger.warn(`No files found in path ${screen.options.path}`);
+        return []
+    }
+    /*@ts-ignore*/
+    return screens;
 }
 
 async function createFileList(path: string): Promise<string[]> {
     try {
-        const files = await fetch(`http://images/api/images/${path}`);
+        const files = await fetch(`http://evaluations/api/evaluations/${path}`);
         if (!files.ok) return [];
         // Check if the response is a JSON object or HTML
         const contentType = files.headers.get("content-type");

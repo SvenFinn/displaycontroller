@@ -20,7 +20,7 @@ export default function Evaluation({ options, onReady }: EvaluationProps) {
     }
 
     const hostWithoutPort = host.split(":")[0];
-    const evaluationUrl = `http://${hostWithoutPort}:${process.env.NEXT_PUBLIC_APP_PORT}/api/evaluations/${options.path}`;
+    const evaluationUrl = `http://${hostWithoutPort}:${process.env.NEXT_PUBLIC_APP_PORT}/api/evaluations/${options.file}`;
     return (
         <div className={styles.evaluation}>
             <iframe src={evaluationUrl} onLoad={onReady} className={styles.evaluation} />
