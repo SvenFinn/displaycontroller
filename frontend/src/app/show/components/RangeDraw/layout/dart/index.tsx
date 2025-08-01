@@ -1,18 +1,22 @@
 import { DisciplineLayoutCustomCommon } from "@shared/ranges/discipline/layout";
-import dart from "./dartboard.svg";
+import pistol from "./pistol.svg";
+import rifle from "./rifle.svg";
 import { Range } from "@shared/ranges";
 
 interface DartLayoutProps {
     layout: DisciplineLayoutCustomCommon
 }
 export default function DartLayout({ layout }: DartLayoutProps): React.JSX.Element {
+    console.log(pistol);
     if (!layout) return <></>;
     if (layout.mode !== "dart") return <></>;
 
-    const size = layout.type === "pistol" ? 12500 : 9000;
-    const corner = -size / 2;
-
-    return <image href={dart.src} x={corner} y={corner} width={size} height={size} />
+    if (layout.type === "pistol") {
+        return <image href={pistol.src} x={-6250} y={-6250} width={12500} height={12500} />
+    }
+    else {
+        return <image href={rifle.src} x={-4500} y={-4500} width={9000} height={9000} />
+    }
 }
 
 export function getSizeFixed(range: Range): [number, number] {
