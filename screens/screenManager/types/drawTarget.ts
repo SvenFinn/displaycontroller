@@ -8,8 +8,12 @@ export type DrawTargetDbScreen = BaseDbScreen & {
 export function isDrawTargetDbScreen(screen: any): screen is DrawTargetDbScreen {
     if (!isBaseDbScreen(screen)) return false;
     if (screen.preset !== "drawTarget") return false;
-    if (typeof screen.options !== "object") return false;
-    if (!isDrawTargetOptions(screen.options)) return false;
+    const screenWType = screen as DrawTargetDbScreen;
+    if (typeof screenWType.options !== "object") return false;
+    if (!Array.isArray(screenWType.options.ranges)) return false;
+    if (typeof screenWType.options.highlightAssign !== "boolean") return false;
+    if (typeof screenWType.options.rows !== "number") return false;
+    if (typeof screenWType.options.columns !== "number") return false;
     return true;
 }
 
@@ -18,15 +22,6 @@ export type DrawTargetOptions = {
     columns: number;
     ranges: Array<number>;
     highlightAssign: boolean;
-}
-
-export function isDrawTargetOptions(options: any): options is DrawTargetOptions {
-    if (typeof options !== "object") return false;
-    if (typeof options.rows !== "number") return false;
-    if (typeof options.columns !== "number") return false;
-    if (!Array.isArray(options.ranges)) return false;
-    if (typeof options.highlightAssign !== "boolean") return false;
-    return true;
 }
 
 export type DrawTargetScreen = BaseScreenAvailable & {
@@ -39,6 +34,9 @@ export function isDrawTargetScreen(screen: any): screen is DrawTargetScreen {
     if (screen.preset !== "drawTarget") return false;
     const screenWType = screen as DrawTargetScreen;
     if (typeof screenWType.options !== "object") return false;
-    if (!isDrawTargetOptions(screenWType.options)) return false;
+    if (!Array.isArray(screenWType.options.ranges)) return false;
+    if (typeof screenWType.options.highlightAssign !== "boolean") return false;
+    if (typeof screenWType.options.rows !== "number") return false;
+    if (typeof screenWType.options.columns !== "number") return false;
     return true;
 }

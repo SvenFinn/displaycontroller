@@ -23,8 +23,6 @@ export default function RangeEvents({ action, ranges }: RangeEventsProps): React
         return <></>;
     }
 
-    ranges = ranges.filter((range) => typeof range === "number" && !isNaN(range));
-
     const path = new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/ranges/sse`);
     path.searchParams.append("ranges", JSON.stringify(ranges));
 
