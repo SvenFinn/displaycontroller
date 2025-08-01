@@ -1,6 +1,7 @@
-import { InternalRange, Range } from "dc-ranges-types";
+import { InternalRange } from "@shared/ranges/internal";
 import { RangeMerger } from "../rangeMerger";
 import { Response } from "express";
+import { Range } from "@shared/ranges/index";
 import { logger } from "dc-logger";
 
 export class RangeManager {

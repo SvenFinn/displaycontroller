@@ -12,7 +12,7 @@ services:
       additional_contexts:
         - local-db=../../database/local
         - logger=../../logger
-        - files-utils=../utils/files
+        - screen-types=../types
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}

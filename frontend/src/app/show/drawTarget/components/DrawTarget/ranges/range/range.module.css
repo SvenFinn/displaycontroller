@@ -45,8 +45,7 @@ div.currentShot {
     width: 100%;
     text-align: center;
     font-size: 87.5%;
-    position: relative;
-    margin-top: 5%;
+    position: relative
 }
 
 svg.shotArrow {

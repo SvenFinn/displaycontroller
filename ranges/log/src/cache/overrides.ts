@@ -1,5 +1,6 @@
-import { isOverrideDiscipline, mergeMaps } from "dc-ranges-types";
+import { isOverrideDiscipline } from "@shared/ranges/internal/startList";
 import { LocalClient } from "dc-db-local";
+import { mergeMaps } from "@shared/ranges/cache";
 
 const overrideToDiscipline = new Map<number, number>();
 

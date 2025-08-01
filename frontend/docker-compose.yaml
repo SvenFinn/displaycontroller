@@ -11,8 +11,8 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - range-types=../ranges/types
-        - screen-types=../screens/types
-        - files-utils=../screens/utils/files
+        - screen-types=../screens/screenManager/types
+        - files-types=../screens/types/files
       args:
         - APP_PORT=${APP_PORT}
         - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}

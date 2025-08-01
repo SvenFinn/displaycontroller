@@ -1,6 +1,6 @@
 "use client";
 
-import { DrawTargetOptions, isDrawTargetOptions } from "dc-screens-types";
+import { DrawTargetOptions, isDrawTargetOptions } from "@shared/screens/drawTarget";
 import DrawTarget from "./components/DrawTarget";
 import SingleEdit from "../components/SingleEdit";
 import { schema, getUiSchema } from "./components/DrawTargetEdit";

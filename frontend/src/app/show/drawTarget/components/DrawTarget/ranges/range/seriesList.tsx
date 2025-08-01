@@ -1,7 +1,7 @@
 import ScaleText from "@frontend/app/show/components/ScaleText";
 import { getSeries } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
-import { Range } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
 
 export default function SeriesList({ range }: { range: Range }): React.JSX.Element {
     const series = getSeries(range);

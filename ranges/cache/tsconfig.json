@@ -4,7 +4,15 @@
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "strict": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "paths": {
+            "@shared/ranges": [
+                "../types"
+            ],
+            "@shared/ranges/*": [
+                "../types/*",
+            ],
+        }
     },
     "include": [
         "src/**/*.ts"

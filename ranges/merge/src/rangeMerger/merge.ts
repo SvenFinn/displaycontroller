@@ -1,9 +1,13 @@
 import { TTLHandler } from "dc-ranges-ttl";
-import { ActiveRange, InactiveRange, Source } from "dc-ranges-types";
-import { InternalRange, Discipline, Shooter, StartList, Hits, Hit } from "dc-ranges-types";
+import { ActiveRange, InactiveRange, Source } from "@shared/ranges";
+import { InternalRange } from "@shared/ranges/internal";
+import { Discipline } from "@shared/ranges/discipline";
 import { getDiscipline } from "../cache/disciplines";
+import { Shooter } from "@shared/ranges/shooter";
 import { getShooter } from "../cache/shooters";
+import { StartList } from "@shared/ranges/startList";
 import { getStartList } from "../cache/startLists";
+import { Hit, Hits } from "@shared/ranges/hits";
 
 type SourceData = Array<TTLHandler<InternalRange>>;
 
@@ -61,9 +65,9 @@ function mergeRoundId(sourceData: SourceData): number {
     return getFirstNotNull(sourceData.map((source) => source.getMessage()?.discipline?.roundId)) || 0;
 }
 
-function mergeSource(sourceData: SourceData): Source {
+function mergeSource(sourceData: SourceData): Source | null {
     const sources = sourceData.map((source) => source.getMessage()?.source);
-    return getFirstNotNull(sources) || "multicast"; // Default to multicast if no source is found
+    return getFirstNotNull(sources) || null;
 }
 
 function mergeActiveRange(sourceData: SourceData, rangeId: number): ActiveRange {

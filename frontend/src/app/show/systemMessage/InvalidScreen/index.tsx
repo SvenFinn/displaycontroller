@@ -1,3 +1,4 @@
+import { InvalidScreenOptions } from "@shared/screens/systemMessage";
 import styles from "./invalidScreen.module.css";
 
 

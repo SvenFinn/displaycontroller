@@ -6,7 +6,7 @@ import CurrentHit from "./currentHit"
 import DrawRange from "./drawRange"
 import SeriesList from "./seriesList"
 import Total from "./total"
-import { Shooter } from "dc-ranges-types"
+import { Shooter } from "@shared/ranges/shooter"
 import { useEffect, useState, useRef } from "react"
 
 interface DrawTargetRangeProps {

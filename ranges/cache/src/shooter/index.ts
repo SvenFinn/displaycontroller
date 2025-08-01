@@ -1,5 +1,5 @@
 import { SmdbClient } from "dc-db-smdb";
-import { Shooter } from "dc-ranges-types"
+import { Shooter } from "@shared/ranges/shooter"
 
 export async function getShooterCache(smdbClient: SmdbClient): Promise<Array<Shooter>> {
     const shooters = await smdbClient.shooter.findMany({

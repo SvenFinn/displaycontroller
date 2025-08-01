@@ -1,7 +1,11 @@
 import dotenv from "dotenv";
-import { Discipline, Round, Rounds, Mode, Zoom, Layouts } from "dc-ranges-types";
+import { Discipline } from "@shared/ranges/discipline";
 import { SmdbClient } from "dc-db-smdb";
 import { getLayout } from "./layout";
+import { Round, Rounds } from "@shared/ranges/discipline/round";
+import { Mode } from "@shared/ranges/discipline/round/mode";
+import { Zoom } from "@shared/ranges/discipline/round/zoom";
+import { Layouts } from "@shared/ranges/discipline/layout";
 
 dotenv.config();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewerScreen } from "dc-screens-types";
+import { ViewerScreen } from "@shared/screens/imageViewer";
 import styles from "./imageViewer.module.css"
 import { useEffect, useState } from "react";
 

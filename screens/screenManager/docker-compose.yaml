@@ -13,7 +13,6 @@ services:
         - local-db=../../database/local
         - ranges=../../ranges/types
         - logger=../../logger
-        - file-utils=../utils/files
         - screen-types=../types
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

@@ -1,7 +1,8 @@
 import { LocalClient } from "dc-db-local";
-import { isDiscipline, InternalDiscipline } from "dc-ranges-types";
+import { isDiscipline } from "@shared/ranges/discipline/index";
+import { InternalDiscipline } from "@shared/ranges/internal";
 import { getOverrideDiscipline } from "./overrides";
-import { mergeMaps } from "dc-ranges-types";
+import { mergeMaps } from "@shared/ranges/cache";
 
 const matchDiscipline = new Map<string, InternalDiscipline>();
 

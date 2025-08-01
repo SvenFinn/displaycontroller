@@ -1,7 +1,7 @@
-import { Layout } from "dc-ranges-types";
+import { Layout } from "@shared/ranges/discipline/layout";
 import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsColor } from "./rings";
 import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartColor } from "./dart";
-import { Range } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
 import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColor } from "./chess";
 import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColor } from "./stars";
 import RectangleLayout, { getSizeFixed as getFixedRectangle } from "./rectangle";

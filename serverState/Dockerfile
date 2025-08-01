@@ -30,12 +30,6 @@ COPY --from=smdb . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
-RUN npm ci --loglevel=info && \
-    npm run build;
-
-
 FROM local-deps AS deps
 
 WORKDIR /app/checkServer
@@ -48,6 +42,9 @@ WORKDIR /app/checkServer
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
+
+WORKDIR /app/screens/screenManager/types
+COPY --from=screen-manager . .
 
 WORKDIR /app/checkServer
 
@@ -75,4 +72,4 @@ EXPOSE 80
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/index.js"]
+CMD ["node", "/app/checkServer/src/index.js"]

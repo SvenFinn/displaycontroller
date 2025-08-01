@@ -1,5 +1,5 @@
 import { SmdbClient } from "dc-db-smdb";
-import { OverrideDiscipline } from "dc-ranges-types"
+import { OverrideDiscipline } from "@shared/ranges/internal/startList"
 
 export async function getOverrideDisciplines(smdbClient: SmdbClient): Promise<Array<OverrideDiscipline>> {
     const overrideDisciplinesDb = await smdbClient.priceShooting.findMany({

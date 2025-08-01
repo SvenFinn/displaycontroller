@@ -1,6 +1,6 @@
 "use client";
 
-import { Range } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
 import DrawRange from "../../../../../components/Ranges/Draw"
 import styles from "./range.module.css";
 import { useEffect, useRef, useState } from "react";

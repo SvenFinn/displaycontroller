@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Range } from "dc-ranges-types"
+import { Range } from "@shared/ranges"
 
 export const rangesSlice = createSlice({
     name: 'ranges',

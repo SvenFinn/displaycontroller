@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { CustomURLDbScreen } from "dc-screens-types";
+import { CustomURLDbScreen } from "@shared/screens/customURL";
 
 export default async function customURL(screen: CustomURLDbScreen): Promise<Screens> {
     return [

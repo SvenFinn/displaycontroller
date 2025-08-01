@@ -2,7 +2,7 @@ import ScaleText from "@frontend/app/show/components/ScaleText";
 import { getHitString, getRoundName } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import ShotArrowW from "./ShotArrow";
-import { Range } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
 
 interface CurrentHitProps {
     range: Range

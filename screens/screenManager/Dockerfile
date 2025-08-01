@@ -17,16 +17,6 @@ COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
-RUN npm ci --loglevel=info && \
-    npm run build;
-
-WORKDIR /app/ranges/types
-COPY --from=ranges . .
-RUN npm ci --loglevel=info && \
-    npm run build;
-
 FROM local-deps AS deps
 
 WORKDIR /app/screens/screenManager
@@ -40,8 +30,11 @@ WORKDIR /app/screens/screenManager
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
 
-WORKDIR /app/screens/utils/files
-COPY --from=file-utils . .
+WORKDIR /app/ranges/types
+COPY --from=ranges . .
+
+WORKDIR /app/screens/types
+COPY --from=screen-types . .
 
 WORKDIR /app/screens/screenManager
 
@@ -61,4 +54,4 @@ EXPOSE 80
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/screenManager/src/index.js"]
+CMD ["node", "/app/screens/screenManager/src/index.js"]

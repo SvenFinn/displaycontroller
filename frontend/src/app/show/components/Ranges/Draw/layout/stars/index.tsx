@@ -1,7 +1,8 @@
 import starsRifle from "./starsLg.svg";
 import starsPistol from "./starsLp.svg";
 
-import { Range, LayoutGamesCommon } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
+import { LayoutGamesCommon } from "@shared/ranges/discipline/layout/games";
 
 interface StarsLayoutProps {
     layout: LayoutGamesCommon

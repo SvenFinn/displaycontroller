@@ -1,6 +1,9 @@
 import { LocalClient } from "dc-db-local";
-import { Discipline, isDiscipline, isOverrideDiscipline, InternalDiscipline, isInternalOverrideDiscipline, mergeMaps } from "dc-ranges-types";
+import { Discipline, isDiscipline } from "@shared/ranges/discipline";
+import { isOverrideDiscipline } from "@shared/ranges/internal/startList";
+import { InternalDiscipline, isInternalOverrideDiscipline } from "@shared/ranges/internal";
 import { logger } from "dc-logger";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const disciplines = new Map<number, Discipline>();
 export const overrides = new Map<number, Discipline>();

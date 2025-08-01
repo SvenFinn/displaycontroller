@@ -32,11 +32,6 @@ COPY --from=table-watcher . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-WORKDIR /app/ranges/types
-COPY --from=range-types . .
-RUN npm ci --loglevel=info && \
-    npm run build;
-
 FROM local-deps AS deps
 
 WORKDIR /app/ranges/ssmdb2
@@ -49,6 +44,9 @@ WORKDIR /app/ranges/ssmdb2
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
+
+WORKDIR /app/ranges/types
+COPY --from=range-types . .
 
 WORKDIR /app/ranges/ssmdb2
 
@@ -71,4 +69,4 @@ ENV NODE_ENV=production
 ENV TZ=Europe/Berlin
 ENV LOG_LEVEL=info
 
-CMD ["node", "/app/index.js"]
+CMD ["node", "/app/ssmdb2/src/index.js"]

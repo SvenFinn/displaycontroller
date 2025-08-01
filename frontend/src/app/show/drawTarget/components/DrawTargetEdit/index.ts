@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { DrawTargetOptions } from "dc-screens-types";
+import { DrawTargetOptions, isDrawTargetOptions } from "@shared/screens/drawTarget";
 
 export const schema: RJSFSchema = {
     type: "object",

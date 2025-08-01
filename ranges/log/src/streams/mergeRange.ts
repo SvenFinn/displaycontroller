@@ -1,6 +1,6 @@
 import { Transform } from "stream";
 import { TTLHandler } from "dc-ranges-ttl";
-import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "dc-ranges-types";
+import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "@shared/ranges/internal";
 import { LogInternalRange, MulticastInternalRange } from "../types";
 import { LocalClient } from "dc-db-local";
 import { isSameShooter } from "../cache/shooter";

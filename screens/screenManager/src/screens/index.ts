@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { isDbScreen, isScreen, Screen } from "dc-screens-types";
+import { isDbScreen, isScreen, Screen } from "@shared/screens";
 import { logger } from "dc-logger";
 import { sendSSEResponse } from "../server";
 import { loadNextScreen } from "./screens";

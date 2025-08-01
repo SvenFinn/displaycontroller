@@ -1,4 +1,4 @@
-import { CustomURLOptions } from "dc-screens-types";
+import { CustomURLOptions } from "@shared/screens/customURL";
 import styles from "./customURL.module.css"
 
 interface ImageViewerProps {

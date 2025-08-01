@@ -1,4 +1,4 @@
-import { InternalRange } from "dc-ranges-types"
+import { InternalRange } from "@shared/ranges/internal"
 
 export type LogMessage = LogLine | {
     action: "reset",

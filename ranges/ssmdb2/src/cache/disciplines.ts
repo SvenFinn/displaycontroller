@@ -1,5 +1,6 @@
 import { LocalClient } from "dc-db-local";
-import { InternalDiscipline, mergeMaps } from "dc-ranges-types";
+import { InternalDiscipline } from "@shared/ranges/internal";
+import { mergeMaps } from "@shared/ranges/cache";
 
 export const disciplineIdToObj = new Map<number, InternalDiscipline>();
 

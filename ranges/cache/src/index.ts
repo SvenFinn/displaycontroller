@@ -5,8 +5,11 @@ import { createSMDBClient, SmdbClient } from "dc-db-smdb";
 import { TableWatcher } from "dc-table-watcher"
 import { LocalClient, createLocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
-import { Discipline, StartList, Shooter, OverrideDiscipline } from "dc-ranges-types";
+import { Discipline } from "@shared/ranges/discipline";
+import { StartList } from "@shared/ranges/startList";
+import { Shooter } from "@shared/ranges/shooter";
 import { getOverrideDisciplines } from "./overrideDisciplines";
+import { OverrideDiscipline } from "@shared/ranges/internal/startList";
 import dotenv from "dotenv";
 dotenv.config();
 

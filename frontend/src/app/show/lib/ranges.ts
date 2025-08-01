@@ -1,5 +1,7 @@
-import { Range, Round, Hit } from "dc-ranges-types";
+import { Range } from "@shared/ranges";
 import { floor, round as mRound } from "./math";
+import { Round } from "@shared/ranges/discipline/round";
+import { Hit } from "@shared/ranges/hits";
 import smallestEnclosingCircle from "smallest-enclosing-circle";
 
 export function getRoundName(data: Range, roundId?: number): string | null {

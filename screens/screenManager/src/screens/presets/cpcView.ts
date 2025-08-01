@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { CpcViewDbScreen } from "dc-screens-types";
+import { CpcViewDbScreen } from "@shared/screens/cpcView";
 
 export default async function cpcView(screen: CpcViewDbScreen): Promise<Screens> {
     return [

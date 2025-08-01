@@ -1,4 +1,4 @@
-import { ConditionMinMax } from "dc-screens-types";
+import { ConditionMinMax } from "@shared/screens/conditions/base";
 import { logger } from "dc-logger";
 
 export async function ranges_free_count(condition: ConditionMinMax): Promise<boolean> {

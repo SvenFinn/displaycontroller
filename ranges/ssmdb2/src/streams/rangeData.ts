@@ -1,6 +1,7 @@
 import { Transform, TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
-import { InternalRange, Hits } from "dc-ranges-types";
+import { InternalRange } from "@shared/ranges/internal";
+import { Hits } from "@shared/ranges/hits";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 

@@ -1,5 +1,7 @@
 import { LocalClient } from "dc-db-local";
-import { isShooter, InternalShooter, mergeMaps } from "dc-ranges-types"
+import { isShooter } from "@shared/ranges/shooter"
+import { InternalShooter } from "@shared/ranges/internal"
+import { mergeMaps } from "@shared/ranges/cache";
 
 const matchShooter = new Map<string, InternalShooter>();
 

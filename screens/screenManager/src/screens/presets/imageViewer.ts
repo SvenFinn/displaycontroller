@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { ViewerDbScreen } from "dc-screens-types";
+import { ViewerDbScreen } from "@shared/screens/imageViewer";
 
 import { logger } from "dc-logger";
 import { isDirectoryListing } from "@shared/files";

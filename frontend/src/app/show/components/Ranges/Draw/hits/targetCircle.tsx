@@ -1,4 +1,4 @@
-import { Hit } from "dc-ranges-types";
+import { Hit } from "@shared/ranges/hits";
 import enclosingCircle from "smallest-enclosing-circle";
 import styles from "../rangeDraw.module.css";
 

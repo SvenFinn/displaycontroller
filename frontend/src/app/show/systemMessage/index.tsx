@@ -1,6 +1,6 @@
 "use client";
 
-import { SystemMessageScreen } from "dc-screens-types";
+import { SystemMessageScreen } from "@shared/screens/systemMessage";
 import Ssmdb2Message from "./Ssmdb2";
 import ServerIncompatibleMessage from "./ServerIncompatible";
 import styles from "./systemMessage.module.css";

@@ -13,12 +13,11 @@
         "dc-db-local": "file:../../database/local",
         "dc-db-smdb": "file:../../database/smdb",
         "dc-logger": "file:../../logger",
-        "dc-ranges-types": "file:../types",
         "dc-table-watcher": "file:../../database/tableWatcher",
         "dotenv": "^16.6.1"
     },
     "devDependencies": {
-        "@types/node": "^22.16.3",
+        "@types/node": "^22.16.0",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }
