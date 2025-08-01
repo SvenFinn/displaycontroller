@@ -7,13 +7,12 @@ import { ViewerScreen, ViewerDbScreen, ViewerOptions, isViewerOptions } from "./
 import { SystemMessageDbScreen, SystemMessageScreen } from "./systemMessage";
 import { ConditionNone, ConditionNumber, ConditionMinMax } from "./conditions/base";
 import { createIs } from "typia";
-import { ScreenCastDbScreen, ScreenCastScreen } from "./screenCast";
 
-export type ScreenAvailable = ViewerScreen | CpcViewScreen | DrawTargetScreen | EvaluationScreen | SystemMessageScreen | CustomURLScreen | ScreenCastScreen;
+export type ScreenAvailable = ViewerScreen | CpcViewScreen | DrawTargetScreen | EvaluationScreen | SystemMessageScreen | CustomURLScreen;
 
 export type Screen = ScreenAvailable | ScreenUnavailable;
 
-export type DbScreen = ViewerDbScreen | CpcViewDbScreen | DrawTargetDbScreen | EvaluationDbScreen | SystemMessageDbScreen | CustomURLDbScreen | ScreenCastDbScreen;
+export type DbScreen = ViewerDbScreen | CpcViewDbScreen | DrawTargetDbScreen | EvaluationDbScreen | SystemMessageDbScreen | CustomURLDbScreen;
 
 export const isDbScreen = createIs<DbScreen>();
 export const isScreen = createIs<Screen>();

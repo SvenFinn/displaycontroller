@@ -38,7 +38,7 @@ async function main() {
     await amqpChannel.assertQueue("screens.systemScreens", {
         durable: false,
         autoDelete: true,
-        messageTtl: 10000
+        messageTtl: 30000
     });
 
     setInterval(loop, 2000);
