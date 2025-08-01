@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../drawTarget/components/DrawTarget/ranges-st
 import { useEffect, useState } from "react";
 
 interface RangeEventsProps {
-    ranges: Array<number | null>;
+    ranges: Array<number>;
     action: ActionCreatorWithPayload<Range>;
 }
 
