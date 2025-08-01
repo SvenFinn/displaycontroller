@@ -3,7 +3,7 @@ services:
     container_name: dc-ranges-ssmdb2
     image: ghcr.io/svenfinn/dc-ranges-ssmdb2:${APP_VERSION}
     hostname: ranges-ssmdb2
-    restart: on-failure
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile

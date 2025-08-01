@@ -3,7 +3,7 @@ services:
     container_name: dc-ranges-log
     hostname: ranges-log
     image: ghcr.io/svenfinn/dc-ranges-log:${APP_VERSION}
-    restart: on-failure
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile

@@ -6,7 +6,7 @@ services:
     image: postgres:alpine
     container_name: dc-database
     hostname: ${SELF_DB_HOST}
-    restart: on-failure
+    restart: unless-stopped
     networks:
       - displaycontroller
     environment:

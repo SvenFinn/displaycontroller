@@ -6,7 +6,7 @@ services:
     container_name: dc-ranges-multicast
     image: ghcr.io/svenfinn/dc-ranges-multicast:${APP_VERSION}
     hostname: multicast
-    restart: on-failure
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
