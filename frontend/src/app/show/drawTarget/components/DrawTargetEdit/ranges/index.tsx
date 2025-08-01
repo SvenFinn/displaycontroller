@@ -14,6 +14,7 @@ export default function DTEditRanges(props: WidgetProps) {
     const { rows = 1, columns = 1 } = props.options || {};
 
     const rawValues = props.value as Array<number | null> || [];
+    rawValues.length = rows * columns; // Ensure we have enough space for the grid
     const values = Array.from({ length: rows * columns }, (_, i) =>
         typeof rawValues[i] === "number" ? rawValues[i] : null
     );
