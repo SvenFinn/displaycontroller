@@ -9,7 +9,7 @@ export default function DartLayout({ layout }: DartLayoutProps): React.JSX.Eleme
     if (!layout) return <></>;
     if (layout.mode !== "dart") return <></>;
 
-    const size = layout.type === "pistol" ? 125 : 90;
+    const size = layout.type === "pistol" ? 12500 : 9000;
     const corner = -size / 2;
 
     return <image href={dart.src} x={corner} y={corner} width={size} height={size} />
