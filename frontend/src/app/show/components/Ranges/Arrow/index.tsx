@@ -4,7 +4,7 @@ import { FaArrowUp } from "react-icons/fa6";
 interface ShotArrowProps {
     hitIndex: number;
     range: Range | null;
-    className?: string;
+    className: string;
 }
 
 export default function ShotArrow({ hitIndex, className, range }: ShotArrowProps): React.JSX.Element {
@@ -23,6 +23,6 @@ export default function ShotArrow({ hitIndex, className, range }: ShotArrowProps
     if (!hit.valid) return <></>;
     const angle = -Math.atan2(hit.y, hit.x) + Math.PI / 2;
     return (
-        <FaArrowUp className={className || ""} style={{ rotate: `${angle}rad` }} />
+        <FaArrowUp className={className} style={{ rotate: `${angle}rad` }} />
     )
 }

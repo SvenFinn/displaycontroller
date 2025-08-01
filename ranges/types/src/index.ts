@@ -35,7 +35,6 @@ export type ActiveRange = BaseRange & {
     startList: StartList | null;
     discipline: Discipline | null;
     hits: Hits | null;
-    ipAddress: string | null;
     source: Source;
 }
 
