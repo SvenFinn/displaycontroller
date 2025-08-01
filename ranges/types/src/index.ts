@@ -92,3 +92,8 @@ export {
     Hits,
     isInternalStartList
 }
+
+// The ShootMaster software represents a invalid hit as the maximum 32-bit integer value.
+// This is used to detect invalid hits in the log & ssmdb2 streams.
+const MAX_32_BIT_INT = 2147483647;
+export const INVALID_HIT_POS = [MAX_32_BIT_INT, MAX_32_BIT_INT];

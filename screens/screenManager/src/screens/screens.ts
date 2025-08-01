@@ -29,6 +29,7 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
         }
         if (!isDbScreen(nextScreen)) {
             logger.warn("Failed type check")
+            // @ts-expect-error The invalid screen is not in the original type returned by the database, so we need to cast it
             nextScreen = {
                 id: nextScreen.id,
 

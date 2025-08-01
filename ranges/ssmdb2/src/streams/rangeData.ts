@@ -1,10 +1,8 @@
 import { Transform, TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
-import { InternalRange, Hits } from "dc-ranges-types";
+import { InternalRange, Hits, INVALID_HIT_POS } from "dc-ranges-types";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
-
-const INVALID_HIT_POS = [2147483647, 2147483647];
 
 export class RangeDataStream extends Transform {
     private prisma: Ssmdb2Client;

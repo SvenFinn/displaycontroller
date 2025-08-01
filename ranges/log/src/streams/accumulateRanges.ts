@@ -1,8 +1,7 @@
 import { Transform } from "stream";
 import { LogInternalRange, LogMessage } from "../types";
 import { logger } from "dc-logger";
-
-const INVALID_HIT_POS = [2147483647, 2147483647];
+import { INVALID_HIT_POS } from "dc-ranges-types";
 
 export class AccumulateRanges extends Transform {
     private ranges: Map<number, LogInternalRange> = new Map();
