@@ -20,7 +20,7 @@ export interface FormDefinition<T> {
     className?: string;
 }
 
-export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, onSubmit, typeCheck, initialData, className }: FormDefinition<T>) {
+export default function FormWrapper<T>({ schema, uiSchema, widgets, onChange, onSubmit, typeCheck, initialData, className }: FormDefinition<T>) {
     const [parentStyles, setParentStyles] = useState<string>("");
     const [formData, setFormData] = useState<T>(initialData);
     const allWidgets: RegistryWidgetsType = {
@@ -84,9 +84,7 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
         <root.div className={className || ""}>
             <style>{parentStyles}</style>
             <style>{bootstrapCss}</style>
-            <div data-bs-theme="light">
-                <Form schema={schema} uiSchema={uiSchemaFn ? uiSchemaFn(formData) : undefined} formData={formData} validator={validator} widgets={allWidgets} onChange={handleChange} onSubmit={handleSubmit} />
-            </div>
+            <Form schema={schema} uiSchema={uiSchema} formData={formData} validator={validator} widgets={allWidgets} onChange={handleChange} onSubmit={handleSubmit} />
         </root.div>
     )
 }

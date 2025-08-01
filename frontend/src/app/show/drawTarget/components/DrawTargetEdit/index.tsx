@@ -1,40 +1,61 @@
+"use client";
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
+import Form from "@rjsf/react-bootstrap";
+import validator from "@rjsf/validator-ajv8";
+import { useState } from "react";
+import DrawTargetEdit from "../../../../components/Form/DrawTarget";
 import { DrawTargetOptions, isDrawTargetOptions } from "@shared/screens/drawTarget";
+import FormWrapper from '@frontend/app/components/Form';
 
-export const schema: RJSFSchema = {
-    type: "object",
-    title: "Draw Target",
-    required: ["rows", "columns", "ranges", "highlightAssign"],
-    properties: {
-        "rows": {
-            type: "integer",
-            title: "Rows",
-            default: 1,
-            minimum: 1,
-        },
-        "columns": {
-            type: "integer",
-            title: "Columns",
-            default: 1,
-            minimum: 1,
-        },
-        "ranges": {
-            type: "array",
-            title: "Ranges",
-            items: {
-                type: ["number", "null"],
+export interface DrawTargetEditProps {
+    options?: DrawTargetOptions,
+    onSubmit: (data: DrawTargetOptions) => void;
+}
+
+export default function Page({ options, onSubmit }: DrawTargetEditProps) {
+    const [formData, setFormData] = useState<DrawTargetOptions>(options || {
+        rows: 1,
+        columns: 1,
+        ranges: [],
+        highlightAssign: false
+    } as DrawTargetOptions
+    )
+
+    const schema: RJSFSchema = {
+        type: "object",
+        title: "Draw Target",
+        required: ["rows", "columns", "ranges", "highlightAssign"],
+        properties: {
+            "rows": {
+                type: "integer",
+                title: "Rows",
+                default: 1,
+                minimum: 1,
+            },
+            "columns": {
+                type: "integer",
+                title: "Columns",
+                default: 1,
+                minimum: 1,
+            },
+            "ranges": {
+                type: "array",
+                title: "Ranges",
+                items: {
+                    type: ["number", "null"],
+                }
+            },
+            "highlightAssign": {
+                type: "boolean",
+                title: "Highlight newly assigned ranges",
+                default: false
             }
-        },
-        "highlightAssign": {
-            type: "boolean",
-            title: "Highlight newly assigned ranges",
-            default: false
         }
-    }
-};
+    };
 
-export function getUiSchema(formData: DrawTargetOptions): UiSchema {
-    return {
+    const uiSchema: UiSchema = {
         "ui:field": "LayoutGridField",
         "ui:layoutGrid": {
             "ui:row": {
@@ -109,4 +130,15 @@ export function getUiSchema(formData: DrawTargetOptions): UiSchema {
         },
 
     }
+
+    return (
+        <FormWrapper
+            schema={schema}
+            uiSchema={uiSchema}
+            initialData={formData}
+            typeCheck={isDrawTargetOptions}
+            onChange={(data) => setFormData(data)}
+            onSubmit={(data) => onSubmit(data as DrawTargetOptions)}
+        />
+    )
 }
