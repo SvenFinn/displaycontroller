@@ -47,7 +47,7 @@ async function main() {
             ip: remote.address,
             message: Buffer.from(messageStr).toString("base64")
         }
-        logger.debug(`Received message from ${remote.address}`);
+        logger.info(`Received message from ${remote.address}`);
         channel.sendToQueue("ranges.multicast.proxy", Buffer.from(JSON.stringify(proxiedMessage)));
     });
     client.on("error", function (error) {

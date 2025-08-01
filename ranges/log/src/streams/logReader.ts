@@ -53,14 +53,10 @@ export class logReaderStream extends Duplex {
             logger.debug("Received log data");
             dataBuffer += data.toString();
             const splitBuffer = dataBuffer.split("\n");
-            dataBuffer = splitBuffer.pop() || "";
-            while (splitBuffer.length > 0) {
-                const line = splitBuffer.shift() || "";
-                if (line.length === 0) {
-                    continue;
-                }
-                this.push(line);
+            while (splitBuffer.length > 1) {
+                this.push(splitBuffer.shift());
             }
+            dataBuffer = splitBuffer.join("\n");
         });
         this.sshThread.stderr?.on("data", (data: any) => {
             const str = data.toString();
