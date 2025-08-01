@@ -243,13 +243,6 @@ app.put("/api/images{/*files}", async (req: Request, res) => {
         return;
     }
     const realDestination = `${basePath}/${destination}`;
-    if (realPath === realDestination) {
-        res.status(400).send({
-            code: 400,
-            message: "Source and destination are the same",
-        });
-        return;
-    }
     if (fs.existsSync(realDestination)) {
         await fs.promises.rm(realDestination, { recursive: true });
     }

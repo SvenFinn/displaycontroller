@@ -1,5 +1,5 @@
 import { ActionsCallbacks } from "../CallbackWrapper";
-import Dialog from "../../../../Dialog";
+import Dialog from "../../../Dialog";
 
 type DeleteProps = {
     actionCallbacks: ActionsCallbacks;

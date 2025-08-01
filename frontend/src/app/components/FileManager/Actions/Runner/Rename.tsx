@@ -22,19 +22,6 @@ export default function Rename({ selectedFiles, closeDialog, actionCallbacks }: 
             }
         }
     }, [index, selectedFiles.length, closeDialog]);
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") {
-                    e.preventDefault();
-                    renameFile();
-                }
-            });
-        }
-    }, [inputRef]);
-
     const file = selectedFiles[index];
     const renameFile = async () => {
         if (!actionCallbacks.renameAction) {
@@ -56,7 +43,7 @@ export default function Rename({ selectedFiles, closeDialog, actionCallbacks }: 
     return (
         <Dialog title="Rename file" onCancel={closeDialog} onConfirm={renameFile} confirmText="Rename" >
             <p>Enter the new name for the file:</p>
-            <input type="text" ref={inputRef} defaultValue={file.split("/").pop()} onSubmit={renameFile} />
+            <input type="text" ref={inputRef} defaultValue={file.split("/").pop()} />
         </Dialog>
     )
 }

@@ -8,11 +8,10 @@ import bootstrapCss from '!!raw-loader!bootstrap/dist/css/bootstrap.min.css';
 import DTEditRanges from "./DrawTarget";
 import { useEffect, useState } from "react";
 import SingleRangeSelector from "./RangeSelector/single";
-import EvaluationSelector from "./EvaluationSelector";
 
 export interface FormDefinition<T> {
     schema: RJSFSchema;
-    uiSchemaFn?: (data: T) => UiSchema;
+    uiSchema: UiSchema | undefined;
     widgets?: RegistryWidgetsType;
     onSubmit: (data: any) => void;
     onChange?: (data: any) => void;
@@ -27,7 +26,6 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
     const allWidgets: RegistryWidgetsType = {
         "DTEditRanges": DTEditRanges,
         "SingleRangeSelector": SingleRangeSelector,
-        "EvaluationSelector": EvaluationSelector,
         ...widgets
     };
 
@@ -80,7 +78,6 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
         }
         onSubmit(formData);
     }
-
 
 
     return (
