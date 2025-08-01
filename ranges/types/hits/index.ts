@@ -11,28 +11,8 @@ export function isHits(hits: any): hits is Hits {
     return true;
 }
 
-export type Hit = InvalidHit | ValidHit;
-
-export function isHit(hit: any): hit is Hit {
-    return isInvalidHit(hit) || isValidHit(hit);
-}
-
-export type InvalidHit = {
+export type Hit = {
     id: number;
-    valid: false; // Always false for invalid hits
-}
-
-export function isInvalidHit(hit: any): hit is InvalidHit {
-    if (typeof hit !== "object") return false;
-    if (typeof hit.id !== "number") return false;
-    if (typeof hit.valid !== "boolean") return false;
-    if (hit.valid !== false) return false; // Must be false for invalid hits
-    return true;
-}
-
-export type ValidHit = {
-    id: number;
-    valid: true; // Always true for valid hits
     x: number;
     y: number;
     divisor: number;
@@ -40,11 +20,9 @@ export type ValidHit = {
     innerTen: boolean;
 }
 
-export function isValidHit(hit: any): hit is ValidHit {
+export function isHit(hit: any): hit is Hit {
     if (typeof hit !== "object") return false;
     if (typeof hit.id !== "number") return false;
-    if (typeof hit.valid !== "boolean") return false;
-    if (hit.valid !== true) return false; // Must be true for valid hits
     if (typeof hit.x !== "number") return false;
     if (typeof hit.y !== "number") return false;
     if (typeof hit.divisor !== "number") return false;

@@ -23,13 +23,6 @@ export function getHitString(data: Range, roundId?: number, index?: number): Arr
     const hit = roundHits[index];
     if (!hit) return null;
 
-    if (!hit.valid) {
-        return [
-            `${hit.id}`,
-            "Ungültig"
-        ];
-    }
-
     const round = getRound(data, roundId);
     if (!round) return null;
 
@@ -133,7 +126,6 @@ function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: 
     let hitId = 0;
     for (const hit of hitsToAccumulate) {
         if (!hit) continue;
-        if (!hit.valid) continue;
         switch (round.mode.mode) {
             case "divider":
                 if (hit.divisor < sum) {
@@ -182,7 +174,7 @@ function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: 
             if (round.counts) return "***";
             return sum.toFixed(0);
         case "circle":
-            const radius = smallestEnclosingCircle(hitsToAccumulate.filter((hit) => hit.valid)).r;
+            const radius = smallestEnclosingCircle(hitsToAccumulate).r;
             return mRound((isNaN(radius) ? 0 : radius * 2) + gauge, 1).toFixed(1);
         case "target":
             if (sum > round.mode.value) {

@@ -89,10 +89,7 @@ function getSizeAuto(range: Range): [number, number] {
         startingIndex = Math.floor((hits.length - 1) / hitsPerView) * hitsPerView;
 
     }
-    const hitsCopy = hits.slice(startingIndex).filter(hit => hit.valid);
-    if (hitsCopy.length === 0) {
-        return getSizeFixed(range);
-    }
+    const hitsCopy = hits.slice(startingIndex)
     const sizes = [Math.max(...hitsCopy.map(hit => Math.abs(hit.x))),
     Math.max(...hitsCopy.map(hit => Math.abs(hit.y)))];
     return sizes.map((s) => s * 2 + gauge) as [number, number];

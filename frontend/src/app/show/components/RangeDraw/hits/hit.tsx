@@ -11,7 +11,6 @@ interface HitProps {
 }
 
 export default function DrawHit({ layout, hit, gauge, isLatest }: HitProps): React.JSX.Element {
-    if (!hit.valid) return <></>;
     const color = getHitColor(layout, hit.rings, isLatest);
     const textColor = idealTextColor(color);
     return (
