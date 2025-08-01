@@ -5,7 +5,6 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { isRange, Range } from "dc-ranges-types";
 import { useAppDispatch } from "../../drawTarget/components/DrawTarget/ranges-store/store";
 import { useEffect, useState } from "react";
-import { useHost } from "@frontend/app/hooks/useHost";
 
 interface RangeEventsProps {
     ranges: Array<number | null>;
@@ -14,16 +13,19 @@ interface RangeEventsProps {
 
 export default function RangeEvents({ action, ranges }: RangeEventsProps): React.JSX.Element {
     const dispatch = useAppDispatch();
-    const host = useHost();
+    const [host, setHost] = useState<string>("");
 
-
-    ranges = ranges.filter((range) => typeof range === "number" && !isNaN(range));
+    useEffect(() => {
+        setHost(window.location.host.split(":")[0]);
+    }, []);
 
     if (host === "") {
         return <></>;
     }
 
-    const path = new URL(`${host}/api/ranges/sse`);
+    ranges = ranges.filter((range) => typeof range === "number" && !isNaN(range));
+
+    const path = new URL(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/ranges/sse`);
     path.searchParams.append("ranges", JSON.stringify(ranges));
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -21,7 +21,6 @@ function package(){
     makeself_path=$(mktemp -d)
     trap 'rm -rf $makeself_path' EXIT
 
-    # shellcheck source=/dev/null
     source ../utils/makeself.sh
     install_makeself "$makeself_path" "latest"
     if [ $? -ne 0 ]; then
@@ -40,7 +39,7 @@ function package(){
         "$executable_name"
     )
 
-    "$makeself_path"/makeself.sh "${makeself_options[@]}"
+    $makeself_path/makeself.sh "${makeself_options[@]}"
     if [ $? -ne 0 ]; then
         echo "Failed to create self-extracting archive" >&2
         exit 1
@@ -56,16 +55,15 @@ function generate_compose(){
 
     export SCREEN_RESOLUTION="\$SCREEN_RESOLUTION"
 
-    config=$(docker compose config --no-path-resolution)
+    config=$(docker compose config)
 
     # Remove all build-related configuration
     config=$(echo "$config" | yq 'del(.services[].build)' -y )
 
-    # Replace proxy/certs with ./certs
-    config=${config//proxy\/certs/./certs}
+    # Replace all occurrences of cwd with $PROD_PATH
+    config=$(echo "$config" | yq --arg CWD "$(pwd)" '.services |= map_values(.volumes[]?.source |= gsub("^" + $CWD; "./volumes"))' -y)
 
-    # Replace the SCREEN_RESOLUTION variable
-    config=${config//\$\$SCREEN_RESOLUTION/\${SCREEN_RESOLUTION\}}
+    config=$(echo "$config" | sed 's/$$SCREEN_RESOLUTION/${SCREEN_RESOLUTION}/g')
 
     cd - > /dev/null || exit
 
@@ -76,11 +74,11 @@ function generate_script(){
     local script_path=$1
     local target_path=$2
 
-    cp -v "$script_path" "$target_path"
-    sed -i "s/%APP_VERSION%/$APP_VERSION/g" "$target_path"
-    sed -i "s/%PROXY_NAME%/$PROXY_NAME/g" "$target_path"
-    sed -i "s/%APP_PORT%/$APP_PORT/g" "$target_path"
-    sed -i "s#%GITHUB_REPO%#$GITHUB_REPO#g" "$target_path"
+    cp -v $script_path $target_path
+    sed -i "s/%APP_VERSION%/$APP_VERSION/g" $target_path
+    sed -i "s/%PROXY_NAME%/$PROXY_NAME/g" $target_path
+    sed -i "s/%APP_PORT%/$APP_PORT/g" $target_path
+    sed -i "s#%GITHUB_REPO%#$GITHUB_REPO#g" $target_path
 }
     
 
@@ -94,6 +92,6 @@ for script in templates/*.sh; do
     generate_script "$script" "$tmp_folder/$(basename "$script")"
 done
 
-cp -v ./icon.png ../utils/sm5.3-SMDB.sh "$tmp_folder"
+cp -v ./icon.png ../utils/sm5.3-SMDB.sh $tmp_folder
 
 package "$tmp_folder" "./install.sh" "displaycontroller-$APP_VERSION.run"

@@ -3,7 +3,6 @@
 import { ViewerScreen } from "dc-screens-types";
 import styles from "./imageViewer.module.css"
 import { useEffect, useState } from "react";
-import { useHost } from "@frontend/app/hooks/useHost";
 
 interface ImageViewerProps {
     options: ViewerScreen["options"],
@@ -11,9 +10,17 @@ interface ImageViewerProps {
 }
 
 export default function ImageViewer({ options, onReady }: ImageViewerProps) {
-    const host = useHost();
+    const [host, setHost] = useState<string>("");
 
-    const imageUrl = `${host}/api/images/${options.path}`;
+    useEffect(() => {
+        setHost(window.location.host.split(":")[0]);
+    }, []);
+
+    if (host === "") {
+        return <></>;
+    }
+
+    const imageUrl = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/${options.path}`;
     return (
         <div className={styles.imageViewer}>
             <img src={imageUrl} alt="image" onLoad={onReady} className={styles.imageViewer} />

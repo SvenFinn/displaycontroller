@@ -1,40 +1,13 @@
 import { FaSpinner } from "react-icons/fa6";
 import styles from "./clientTable.module.css";
-import { useEffect, useState } from "react";
 
 interface ClientTableProps {
     peerConnections: Record<string, RTCPeerConnection>;
     className?: string;
-    clientCount: number;
 }
 
-export function ClientTable({ peerConnections, className, clientCount }: ClientTableProps): React.JSX.Element {
-    const [pcState, setPcState] = useState<Record<string, string>>({});
-
-    console.log("ClientTable rendered with peerConnections:", peerConnections);
-
-    useEffect(() => {
-        function updatePcState() {
-            const newState: Record<string, string> = {};
-            Object.entries(peerConnections).forEach(([id, pc]) => {
-                newState[id] = pc.connectionState;
-            });
-            setPcState(newState);
-        }
-        updatePcState();
-
-        for (const pc of Object.values(peerConnections)) {
-            pc.addEventListener("connectionstatechange", updatePcState);
-        }
-        return () => {
-            for (const pc of Object.values(peerConnections)) {
-                pc.removeEventListener("connectionstatechange", updatePcState);
-            }
-        };
-    }, [peerConnections, clientCount]);
-
-    console.log("ClientTable pcState:", pcState);
-    const connected = Object.values(pcState).some(pc => pc === "connected");
+export function ClientTable({ peerConnections, className }: ClientTableProps): React.JSX.Element {
+    const connected = Object.values(peerConnections).some(pc => pc.connectionState === "connected");
 
 
     return (
@@ -51,10 +24,10 @@ export function ClientTable({ peerConnections, className, clientCount }: ClientT
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(pcState).map(([id, pc]) => (
+                        {Object.entries(peerConnections).map(([id, pc]) => (
                             <tr key={id}>
                                 <td>{id}</td>
-                                <td>{pc}</td>
+                                <td>{pc.connectionState}</td>
                             </tr>
                         ))}
                     </tbody>

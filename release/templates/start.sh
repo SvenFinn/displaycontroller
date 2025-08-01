@@ -63,7 +63,6 @@ chromium_options=(
     --enable-logging
     --v=1
     --password-store=basic
-    --ignore-certificate-errors
 )
 
 if [ $AUTOSTART -eq 1 ]; then

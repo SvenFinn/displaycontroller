@@ -171,18 +171,6 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
         exit
     fi
 
-    #SSL certificate selection
-    dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --yes-label "Self-signed" --no-label "Own certificate" --yesno "The displaycontroller can be accessed via HTTPS. Do you want to use a self-signed certificate or provide your own?" 0 "$width"
-    # shellcheck disable=SC2181
-    if [ $? -eq 0 ]; then
-        # Use self-signed certificate
-        SSL_CERT_FILE=""
-        SSL_KEY_FILE=""
-    else
-        # Ask for the certificate and key files
-        SSL_CERT_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --inputbox "Please enter the path to the SSL certificate file" 0 "$width" "$(pwd)/displaycontroller.crt")
-        SSL_KEY_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Key" --inputbox "Please enter the path to the SSL key file" 0 "$width" "$(pwd)/displaycontroller.key")
-    fi
     # Allow the user to choose if the DisplayController should start on boot
     dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 "$width"
     # shellcheck disable=SC2181
@@ -194,7 +182,7 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
 fi
 
 # Run the installation steps
-total_steps=7
+total_steps=6
 
 if [ "$AUTOSTART" -eq 1 ]; then
     total_steps=$((total_steps+1))
@@ -204,10 +192,11 @@ step_nr=1
 
 run_install_step $((step_nr++)) $total_steps "Installing Files" <<EOF
 mkdir -p "$INSTALL_DIR" 
-find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 ! -name 'volumes' ! -name 'certs' -exec rm -rfv {} +
+find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rfv {} +
 find "$SRC_DIR" -mindepth 1 -maxdepth 1 -exec cp -rv {} "$INSTALL_DIR" \;
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod -v +x {} \;
 chown -R $USER "$INSTALL_DIR"
+
 EOF
 
 run_install_step $((step_nr++)) $total_steps "Creating links" <<EOF
@@ -223,8 +212,6 @@ Terminal=true
 Path=$INSTALL_DIR
 Categories=Utility;WebBrowser;
 EOT
-
-chown -v $USER "$INSTALL_DIR/DisplayController.desktop"
 chmod -v +x "$INSTALL_DIR/DisplayController.desktop"
 
 rm -f "/usr/share/applications/DisplayController.desktop" || true
@@ -278,32 +265,6 @@ run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
 apt-get install -y chromium-browser unclutter
 EOF
-
-if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
-    run_install_step $((step_nr++)) $total_steps "Installing SSL Certificate" <<EOF
-    echo "Installing SSL certificate..."
-    if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
-        if [ ! -f "$SSL_CERT_FILE" ] || [ ! -f "$SSL_KEY_FILE" ]; then
-            echo "SSL certificate or key file not found. Please check the paths."
-            exit 1
-        fi
-        mkdir -p "$INSTALL_DIR/certs"
-        cp -v "$SSL_CERT_FILE" "$INSTALL_DIR/certs/displaycontroller.crt"
-        cp -v "$SSL_KEY_FILE" "$INSTALL_DIR/certs/displaycontroller.key"
-        chmod -v 644 "$INSTALL_DIR/certs/displaycontroller.crt"
-        chmod -v 600 "$INSTALL_DIR/certs/displaycontroller.key"
-        echo "SSL certificate and key installed in $INSTALL_DIR/certs"
-    else
-        echo "Creating self-signed SSL certificate and key..."
-        mkdir -p "$INSTALL_DIR/certs"
-        openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout "$INSTALL_DIR/certs/displaycontroller.key"  -out "$INSTALL_DIR/certs/displaycontroller.crt" -subj "/CN=displaycontroller"
-        chown -v -R $USER "$INSTALL_DIR/certs"
-        chmod -v 644 "$INSTALL_DIR/certs/displaycontroller.crt"
-        chmod -v 600 "$INSTALL_DIR/certs/displaycontroller.key"
-        echo "Self-signed SSL certificate and key created in $INSTALL_DIR/certs"
-    fi
-EOF
-fi
 
 run_install_step $((step_nr++)) $total_steps "Disabling ntp" <<EOF
 timedatectl set-ntp false

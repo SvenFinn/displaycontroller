@@ -1,24 +1,15 @@
 "use client";
 
-import { useHost } from "@frontend/app/hooks/useHost";
 import styles from "./buttons.module.css";
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaRegCirclePause, FaRegCirclePlay } from "react-icons/fa6";
 
 export default function Buttons(): React.JSX.Element {
     const [paused, setPaused] = useState(false);
-    const host = useHost();
-
-    useEffect(() => {
-        fetchPausedState();
-    }, [host]);
-
-    if (host === "") {
-        return <></>;
-    }
 
     async function fetchPausedState() {
-        const response = await fetch(`${host}/api/screens/pause`);
+        const host = window.location.host.split(":")[0];
+        const response = await fetch(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/screens/pause`);
         if (response.ok) {
             const data = await response.json();
             setPaused(data);
@@ -27,17 +18,25 @@ export default function Buttons(): React.JSX.Element {
         }
     }
 
+
+    useEffect(() => {
+        fetchPausedState();
+    }, []);
+
     async function togglePaused() {
-        await fetch(`${host}/api/screens/pause`, { method: "POST" });
+        const host = window.location.host.split(":")[0];
+        await fetch(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/screens/pause`, { method: "POST" });
         fetchPausedState();
     }
 
     async function nextScreen() {
-        await fetch(`${host}/api/screens/next`, { method: "POST" });
+        const host = window.location.host.split(":")[0];
+        await fetch(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/screens/next`, { method: "POST" });
     }
 
     async function previousScreen() {
-        await fetch(`${host}/api/screens/previous`, { method: "POST" });
+        const host = window.location.host.split(":")[0];
+        await fetch(`http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/screens/previous`, { method: "POST" });
     }
 
     return (

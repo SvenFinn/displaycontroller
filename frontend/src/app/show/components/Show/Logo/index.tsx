@@ -2,14 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import styles from './logo.module.css';
-import { useHost } from '@frontend/app/hooks/useHost';
 
 export default function Logo(): React.JSX.Element {
-    const [cacheBlock, setCacheBlock] = useState<number>(0);
-    const host = useHost();
+    const [host, setHost] = useState<string>("");
+    const [cacheBlock, setCacheBlock] = useState<number>(Date.now());
 
+    useEffect(() => {
+        setHost(window.location.host.split(":")[0]);
+    }, []);
 
-    const logo = `${host}/api/images/icon.png?cache=${cacheBlock}`;
+    if (host === "") {
+        return <></>;
+    }
+
+    const logo = `http://${host}:${process.env.NEXT_PUBLIC_APP_PORT}/api/images/icon.png?cache=${cacheBlock}`;
 
     function onImageError(event: React.SyntheticEvent<HTMLImageElement, Event>) {
         if (event.currentTarget.naturalHeight === 0 && event.currentTarget.naturalWidth === 0) {
@@ -18,6 +24,6 @@ export default function Logo(): React.JSX.Element {
     }
 
     return (
-        <img key={cacheBlock} src={logo} alt="Logo" className={styles.logo} onError={onImageError} />
+        <img src={logo} alt="Logo" className={styles.logo} onError={onImageError} />
     );
 }

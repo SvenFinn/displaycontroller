@@ -15,7 +15,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
 
     const [mediaStream, setMediaStream] = useState<MediaStream | undefined>(undefined);
     const [isTransmitting, setIsTransmitting] = useState(false);
-    const [clientCount, setClientCount] = useState(0);
+    const [connected, setConnected] = useState(false);
 
     // Socket handlers for transmission
     useEffect(() => {
@@ -30,7 +30,6 @@ export const ScreenCastBroadcaster: React.FC = () => {
 
             const pc = new RTCPeerConnection(config);
             peerConnections.current[id] = pc;
-            setClientCount(Object.keys(peerConnections.current).length);
 
             const stream = mediaStream;
             if (!stream) return;
@@ -42,6 +41,13 @@ export const ScreenCastBroadcaster: React.FC = () => {
                     socket.emit("candidate", id, event.candidate);
                 }
             };
+
+            pc.addEventListener("connectionstatechange", () => {
+                //Loop through all peer connections and check if any are connected
+                const allDisconnected = Object.values(peerConnections.current).every(pc => pc.connectionState !== "connected");
+                setConnected(!allDisconnected);
+            });
+
 
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
@@ -58,7 +64,6 @@ export const ScreenCastBroadcaster: React.FC = () => {
         function handleViewerDisconnected(id: string) {
             peerConnections.current[id]?.close();
             delete peerConnections.current[id];
-            setClientCount(Object.keys(peerConnections.current).length);
         }
 
         socket.on("answer", handleAnswer);
@@ -132,7 +137,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
             <div className={styles.previewContainer}>
                 <div className={styles.clients}>
                     {isTransmitting && (
-                        <ClientTable peerConnections={peerConnections.current} clientCount={clientCount} className={styles.clientTable} />
+                        <ClientTable peerConnections={peerConnections.current} className={styles.clientTable} />
                     )}
                 </div>
                 <Preview onPlay={startPreview} mediaStream={mediaStream} className={styles.preview} />
