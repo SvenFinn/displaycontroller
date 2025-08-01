@@ -20,7 +20,6 @@
     "dc-db-local": "file:../../database/local",
     "dc-db-ssmdb2": "file:../../database/ssmdb2",
     "dc-logger": "file:../../logger",
-    "dc-table-watcher": "file:../../database/tableWatcher",
-    "dotenv": "^16.5.0"
+    "dc-table-watcher": "file:../../database/tableWatcher"
   }
 }

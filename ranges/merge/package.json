@@ -21,7 +21,6 @@
     "dc-db-local": "file:../../database/local",
     "dc-logger": "file:../../logger",
     "dc-ranges-ttl": "file:../ttl",
-    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   }
 }
