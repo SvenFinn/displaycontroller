@@ -21,9 +21,6 @@
     "plugins": [
       {
         "name": "next"
-      },
-      {
-        "transform": "typia/lib/transform"
       }
     ],
     "paths": {
@@ -42,14 +39,13 @@
       "@shared/screens/*": [
         "../screens/screenManager/types/*"
       ],
-      "@shared/files": [
+      "@shared/files" : [
         "../screens/types/files"
       ],
-      "@shared/files/*": [
+      "@shared/files/*" : [
         "../screens/types/files/*"
-      ]
-    },
-    "strictNullChecks": true
+      ],
+    }
   },
   "include": [
     "next-env.d.ts",

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import SelectWithCustom from "../SelectWithCustom";
 import { WidgetProps } from "@rjsf/utils";
-import { JSONSchema7TypeName } from "json-schema";
 
 export default function SingleRangeSelector(props: WidgetProps) {
     const [ranges, setRanges] = useState<(number | null)[]>([]);
@@ -26,7 +25,7 @@ export default function SingleRangeSelector(props: WidgetProps) {
     });
 
     const options = { ...props.options, enumOptions };
-    const schema = { ...props.schema, type: ["number", "null"] as JSONSchema7TypeName[] };
+    const schema = { ...props.schema, type: ["number", "null"] };
     props = { ...props, options, schema };
     return <SelectWithCustom {...props} />
 }
