@@ -14,9 +14,9 @@
         "@rjsf/react-bootstrap": "^6.0.0-beta.10",
         "@rjsf/utils": "^6.0.0-beta.8",
         "@rjsf/validator-ajv8": "^6.0.0-beta.8",
-        "bootstrap": "^5.3.7",
+        "bootstrap": "^5.3.6",
         "mime": "^4.0.7",
-        "next": "^15.3.4",
+        "next": "^15.3.3",
         "raw-loader": "^4.0.2",
         "react": "^19.1.0",
         "react-bootstrap": "^2.10.10",
@@ -28,7 +28,7 @@
         "smallest-enclosing-circle": "^1.0.2"
     },
     "devDependencies": {
-        "@types/node": "^22.15.32",
+        "@types/node": "^22.15.31",
         "@types/react": "^19.1.8",
         "@types/react-dom": "^19.1.6",
         "@types/smallest-enclosing-circle": "^1.0.3",
