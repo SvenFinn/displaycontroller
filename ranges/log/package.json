@@ -15,11 +15,11 @@
         "dc-logger": "file:../../logger",
         "dc-ranges-ttl": "file:../ttl",
         "dotenv": "^16.5.0",
-        "eventsource": "^4.0.0"
+        "eventsource": "^3.0.7"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^22.15.29",
+        "@types/node": "^22.15.18",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }

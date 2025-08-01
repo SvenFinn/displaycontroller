@@ -13,15 +13,15 @@
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
         "dotenv": "^16.5.0",
-        "eventsource": "^4.0.0",
+        "eventsource": "^3.0.7",
         "express": "^5.1.0",
         "express-rate-limit": "^7.5.0",
         "jsdom": "^26.1.0"
     },
     "devDependencies": {
-        "@types/express": "^5.0.2",
+        "@types/express": "^5.0.1",
         "@types/jsdom": "^21.1.7",
-        "@types/node": "^22.15.29",
+        "@types/node": "^22.15.18",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }
