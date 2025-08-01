@@ -41,13 +41,13 @@ app.get("/api/images{/*files}", async (req: Request, res) => {
     logger.info(`GET ${path}`);
     if (path.includes("..")) {
         logger.info("Found .. in path");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return;
     }
     const realPath = `${basePath}/${path}`;
     if (!fs.existsSync(realPath)) {
         logger.info("File not found");
-        res.status(404).sendFile("img/404.png", { root: __dirname });
+        res.status(404).sendFile("img/404.svg", { root: __dirname });
         return
     }
     if (fs.lstatSync(realPath).isDirectory()) {
