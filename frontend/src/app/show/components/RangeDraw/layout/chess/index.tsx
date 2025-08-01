@@ -74,5 +74,5 @@ export function getSizeFixed(range: Range): [number, number] {
 }
 
 export function getHitColor(ring: number, isLatest: boolean): string {
-    return "#0000FF";
+    return "#FFFF00";
 }

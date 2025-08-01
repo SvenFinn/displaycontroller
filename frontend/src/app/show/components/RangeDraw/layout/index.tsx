@@ -1,9 +1,8 @@
 import { DisciplineLayout } from "@shared/ranges/discipline/layout";
-import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsColor } from "./rings";
-import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartColor } from "./dart";
+import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsHitColor } from "./rings";
+import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartHitColor } from "./dart";
 import { Range } from "@shared/ranges";
 import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColor } from "./chess";
-import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColor } from "./stars";
 
 interface LayoutProps {
     layout: DisciplineLayout;
@@ -19,8 +18,6 @@ export default function Layout({ layout, color }: LayoutProps): React.JSX.Elemen
             return <DartLayout layout={layout} />;
         case "chess":
             return <ChessLayout layout={layout} />;
-        case "stars":
-            return <StarsLayout layout={layout} />;
         default:
             return <></>;
     }
@@ -61,8 +58,6 @@ function getSizeFixed(range: Range): [number, number] {
             return getFixedDarts(range);
         case "chess":
             return getFixedChess(range);
-        case "stars":
-            return getFixedStars(range);
         default:
             return [0, 0];
     }
@@ -94,13 +89,11 @@ function getSizeAuto(range: Range): [number, number] {
 export function getHitColor(layout: DisciplineLayout, ring: number, isLatest: boolean): string {
     switch (layout.mode) {
         case "rings":
-            return getRingsColor(ring, isLatest);
+            return getRingsHitColor(ring, isLatest);
         case "dart":
-            return getDartColor(ring, isLatest);
+            return getDartHitColor(ring, isLatest);
         case "chess":
             return getChessColor(ring, isLatest);
-        case "stars":
-            return getStarsColor(ring, isLatest);
         default:
             return "#000000";
     }

@@ -18,6 +18,8 @@ export default function DrawRange({ range, className }: DrawRangeProps): React.J
     const [strokeWidth, setStrokeWidth] = useState<number>(0);
 
     useEffect(() => {
+        console.log(range);
+
         if (!ref.current) return;
         const observer = new ResizeObserver(handleResize);
         observer.observe(ref.current);
