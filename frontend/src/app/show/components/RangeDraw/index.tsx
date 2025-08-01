@@ -28,7 +28,7 @@ export default function DrawRange({ range, className }: DrawRangeProps): React.J
             const newSize = getSize(range, ref.current);
             if (newSize !== size) {
                 setSize(newSize);
-                const strokeWidth = newSize[0] / ref.current.clientWidth;
+                const strokeWidth = Math.round(newSize[0] / ref.current.clientWidth);
                 setStrokeWidth(isNaN(strokeWidth) ? 0 : strokeWidth);
             }
         }
