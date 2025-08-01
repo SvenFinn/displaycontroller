@@ -7,7 +7,7 @@ import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColo
 import RectangleLayout, { getSizeFixed as getFixedRectangle } from "./rectangle";
 
 interface LayoutProps {
-    layout: Layout | null;
+    layout: Layout;
     color: string;
 }
 
@@ -56,7 +56,8 @@ function getSizeFixed(range: Range): [number, number] {
     const round = range.discipline.rounds[range.round];
     if (!round) return [0, 0];
     const layout = range.discipline.layouts[round.layoutId];
-    switch (layout?.mode) {
+    if (!layout) return [0, 0];
+    switch (layout.mode) {
         case "rings":
             return getFixedRings(range);
         case "dart":
@@ -68,7 +69,7 @@ function getSizeFixed(range: Range): [number, number] {
         case "rectangle":
             return getFixedRectangle(range);
         default:
-            return getSizeAuto(range);
+            return [0, 0];
     }
 }
 
@@ -95,18 +96,19 @@ function getSizeAuto(range: Range): [number, number] {
     return sizes.map((s) => s * 2 + gauge) as [number, number];
 }
 
-export function getHitColor(layout: Layout | null, ring: number, isLatest: boolean): string {
-    switch (layout?.mode) {
+export function getHitColor(layout: Layout, ring: number, isLatest: boolean): string {
+    switch (layout.mode) {
+        case "rectangle":
+        case "rings":
+            return getRingsColor(ring, isLatest);
         case "dart":
             return getDartColor(ring, isLatest);
         case "chess":
             return getChessColor(ring, isLatest);
         case "stars":
             return getStarsColor(ring, isLatest);
-        case "rectangle":
-        case "rings":
         default:
-            return getRingsColor(ring, isLatest);
+            return "#000000";
     }
 }
 

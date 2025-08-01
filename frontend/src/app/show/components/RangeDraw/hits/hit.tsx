@@ -5,7 +5,7 @@ import { Layout } from "@shared/ranges/discipline/layout";
 
 interface HitProps {
     hit: Hit,
-    layout: Layout | null,
+    layout: Layout,
     gauge: number,
     isLatest: boolean
 }
