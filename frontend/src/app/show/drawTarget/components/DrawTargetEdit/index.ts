@@ -101,7 +101,7 @@ export function getUiSchema(formData: DrawTargetOptions): UiSchema {
             },
         },
         "ranges": {
-            "ui:widget": "RangesGrid",
+            "ui:widget": "DTEditRanges",
             "ui:options": {
                 rows: formData.rows,
                 columns: formData.columns,

@@ -5,11 +5,11 @@ import root from "react-shadow";
 import Form from "@rjsf/react-bootstrap";
 import validator from "@rjsf/validator-ajv8";
 import bootstrapCss from '!!raw-loader!bootstrap/dist/css/bootstrap.min.css';
+import DTEditRanges from "./DrawTarget";
 import { useEffect, useState } from "react";
 import SingleRangeSelector from "./RangeSelector/single";
 import EvaluationSelector from "./EvaluationSelector";
 import ImageSelector from "./ImageSelector";
-import RangesGrid from "./RangesGrid";
 
 export interface FormDefinition<T> {
     schema: RJSFSchema;
@@ -26,7 +26,7 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
     const [parentStyles, setParentStyles] = useState<string>("");
     const [formData, setFormData] = useState<T>(initialData);
     const allWidgets: RegistryWidgetsType = {
-        "RangesGrid": RangesGrid,
+        "DTEditRanges": DTEditRanges,
         "SingleRangeSelector": SingleRangeSelector,
         "EvaluationSelector": EvaluationSelector,
         "ImageSelector": ImageSelector,

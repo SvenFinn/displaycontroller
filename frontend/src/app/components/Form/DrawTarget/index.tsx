@@ -4,14 +4,13 @@ import { useEffect, useState } from "react"
 import { WidgetProps } from "@rjsf/utils";
 import CreateableSelect from "react-select/creatable";
 import styles from "./ranges.module.css";
-import Grid from "@frontend/app/show/components/Ranges/Grid";
 
 interface Value {
     label: string;
     value: number | null;
 }
 
-export default function RangesGrid(props: WidgetProps) {
+export default function DTEditRanges(props: WidgetProps) {
     const { rows = 1, columns = 1 } = props.options || {};
 
     const rawValues = props.value as Array<number | null> || [];
@@ -83,29 +82,31 @@ export default function RangesGrid(props: WidgetProps) {
     };
 
     return (
-        <Grid rows={rows} columns={columns} >
-            {values.map((value, index) => (
-                <div key={index} className={styles.editItem}>
+        <>
+            <div style={{ gridTemplateColumns: `repeat(${columns}, 1fr)`, gridTemplateRows: `repeat(${rows}, 1fr)` }} className={styles.drawTargetEdit}>
+                {values.map((value, index) => (
+                    <div key={index} className={styles.drawTargetEditItem}>
 
-                    <CreateableSelect
-                        isClearable={false}
-                        isMulti={false}
-                        options={options}
-                        value={options.find(opt => opt.value === value) || null}
-                        onChange={(newValue) => handleChange(index, newValue)}
-                        formatCreateLabel={(inputValue: string) => inputValue}
-                        isValidNewOption={(inputValue: string) => {
-                            if (Number.isNaN(Number(inputValue)))
-                                return false; // Invalid input, do not allow creation
-                            if (options.some(opt => opt.value === Number(inputValue)))
-                                return false; // Already exists, do not allow creation
-                            if (Number(inputValue) < 1)
-                                return false; // Invalid range, do not allow creation
-                            return true;
-                        }}
-                    />
-                </div>
-            ))}
-        </Grid>
+                        <CreateableSelect
+                            isClearable={false}
+                            isMulti={false}
+                            options={options}
+                            value={options.find(opt => opt.value === value) || null}
+                            onChange={(newValue) => handleChange(index, newValue)}
+                            formatCreateLabel={(inputValue: string) => inputValue}
+                            isValidNewOption={(inputValue: string) => {
+                                if (Number.isNaN(Number(inputValue)))
+                                    return false; // Invalid input, do not allow creation
+                                if (options.some(opt => opt.value === Number(inputValue)))
+                                    return false; // Already exists, do not allow creation
+                                if (Number(inputValue) < 1)
+                                    return false; // Invalid range, do not allow creation
+                                return true;
+                            }}
+                        />
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }
