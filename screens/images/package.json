@@ -12,7 +12,7 @@
     "dependencies": {
         "body-parser": "^2.2.0",
         "dc-logger": "file:../../logger",
-        "dotenv": "^16.6.1",
+        "dotenv": "^16.5.0",
         "express": "^5.1.0",
         "express-fileupload": "^1.5.1",
         "express-rate-limit": "^7.5.1",
@@ -21,7 +21,7 @@
     "devDependencies": {
         "@types/express": "^5.0.3",
         "@types/express-fileupload": "^1.5.1",
-        "@types/node": "^22.16.0",
+        "@types/node": "^22.15.32",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     }
