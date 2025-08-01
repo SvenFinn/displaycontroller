@@ -1,9 +1,9 @@
-import { LayoutGames } from "@shared/ranges/discipline/layout/games";
+import { DisciplineLayoutCustomCommon } from "@shared/ranges/discipline/layout";
 import dart from "./dartboard.svg";
 import { Range } from "@shared/ranges";
 
 interface DartLayoutProps {
-    layout: LayoutGames
+    layout: DisciplineLayoutCustomCommon
 }
 export default function DartLayout({ layout }: DartLayoutProps): React.JSX.Element {
     if (!layout) return <></>;

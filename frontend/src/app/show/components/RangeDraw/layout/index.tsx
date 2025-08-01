@@ -1,4 +1,4 @@
-import { Layout } from "@shared/ranges/discipline/layout";
+import { DisciplineLayout } from "@shared/ranges/discipline/layout";
 import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsColor } from "./rings";
 import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartColor } from "./dart";
 import { Range } from "@shared/ranges";
@@ -6,11 +6,11 @@ import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColo
 import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColor } from "./stars";
 
 interface LayoutProps {
-    layout: Layout;
+    layout: DisciplineLayout;
     color: string;
 }
 
-export default function LayoutComp({ layout, color }: LayoutProps): React.JSX.Element {
+export default function Layout({ layout, color }: LayoutProps): React.JSX.Element {
     if (!layout) return <></>;
     switch (layout.mode) {
         case "rings":
@@ -88,10 +88,10 @@ function getSizeAuto(range: Range): [number, number] {
     const hitsCopy = hits.slice(startingIndex)
     const sizes = [Math.max(...hitsCopy.map(hit => Math.abs(hit.x))),
     Math.max(...hitsCopy.map(hit => Math.abs(hit.y)))];
-    return sizes.map((s) => s * 2 + gauge) as [number, number];
+    return sizes.map((s) => s * 2) as [number, number];
 }
 
-export function getHitColor(layout: Layout, ring: number, isLatest: boolean): string {
+export function getHitColor(layout: DisciplineLayout, ring: number, isLatest: boolean): string {
     switch (layout.mode) {
         case "rings":
             return getRingsColor(ring, isLatest);

@@ -1,42 +1,42 @@
-import { Mode, isMode } from './mode';
-import { Zoom, isZoom } from './zoom';
+import { DisciplineRoundMode, isDisciplineRoundMode } from './mode';
+import { DisciplineRoundZoom, isDisciplineRoundZoom } from './zoom';
 
-export type Rounds = Array<Round | null>;
+export type DisciplineRounds = Array<DisciplineRound | null>;
 
-export function isRounds(rounds: any): rounds is Rounds {
-    if (!Array.isArray(rounds)) return false;
-    for (const round of rounds) {
-        if (round === null) continue;
-        if (!isRound(round)) return false;
+export function isDisciplineRounds(disciplineRounds: any): disciplineRounds is DisciplineRounds {
+    if (!Array.isArray(disciplineRounds)) return false;
+    for (const disciplineRound of disciplineRounds) {
+        if (disciplineRound === null) continue;
+        if (!isDisciplineRound(disciplineRound)) return false;
     }
     return true;
 }
 
-export type Round = {
+export type DisciplineRound = {
     id: number;
     name: string;
 
-    mode: Mode;
+    mode: DisciplineRoundMode;
     maxHits: number;
     counts: boolean;
 
-    zoom: Zoom;
+    zoom: DisciplineRoundZoom;
     layoutId: number;
     hitsPerSum: number;
     hitsPerView: number;
 
 }
 
-export function isRound(round: any): round is Round {
-    if (typeof (round) !== "object") return false;
-    if (typeof (round.id) !== "number") return false;
-    if (typeof (round.name) !== "string") return false;
-    if (!isMode(round.mode)) return false;
-    if (typeof (round.maxHits) !== "number") return false;
-    if (typeof (round.counts) !== "boolean") return false;
-    if (!isZoom(round.zoom)) return false;
-    if (typeof (round.layoutId) !== "number") return false;
-    if (typeof (round.hitsPerSum) !== "number") return false;
-    if (typeof (round.hitsPerView) !== "number") return false;
+export function isDisciplineRound(disciplineRound: any): disciplineRound is DisciplineRound {
+    if (typeof (disciplineRound) !== "object") return false;
+    if (typeof (disciplineRound.id) !== "number") return false;
+    if (typeof (disciplineRound.name) !== "string") return false;
+    if (!isDisciplineRoundMode(disciplineRound.mode)) return false;
+    if (typeof (disciplineRound.maxHits) !== "number") return false;
+    if (typeof (disciplineRound.counts) !== "boolean") return false;
+    if (!isDisciplineRoundZoom(disciplineRound.zoom)) return false;
+    if (typeof (disciplineRound.layoutId) !== "number") return false;
+    if (typeof (disciplineRound.hitsPerSum) !== "number") return false;
+    if (typeof (disciplineRound.hitsPerView) !== "number") return false;
     return true;
 }

@@ -1,8 +1,8 @@
+import { DisciplineLayoutRing } from "@shared/ranges/discipline/layout";
 import { idealTextColor } from "../../../../lib/idealTextColor";
-import { LayoutRing } from "@shared/ranges/discipline/layout/rings";
 
 interface RingsProps {
-    ring: LayoutRing,
+    ring: DisciplineLayoutRing,
     nextDiameter: number | undefined,
     printText: boolean,
     color: string

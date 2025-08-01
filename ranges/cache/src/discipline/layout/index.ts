@@ -1,9 +1,8 @@
 import { SmdbClient } from "dc-db-smdb";
-import { Layout } from "@shared/ranges/discipline/layout";
+import { DisciplineLayout, DisciplineLayoutRings } from "@shared/ranges/discipline/layout";
 import { getCustomLayout } from "./custom";
-import { LayoutRings } from "@shared/ranges/discipline/layout/rings";
 
-export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Layout | undefined> {
+export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<DisciplineLayout | undefined> {
     const layoutDb = await smdbClient.layout.findUnique({
         where: {
             id: layoutId
@@ -22,7 +21,7 @@ export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promi
     }
 }
 
-async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise<LayoutRings | undefined> {
+async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise<DisciplineLayoutRings | undefined> {
     const layoutDb = await smdbClient.layout.findUnique({
         where: {
             id: layoutId
@@ -36,7 +35,7 @@ async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise
     if (!layoutDb) {
         return undefined;
     }
-    const layout: LayoutRings = {
+    const layout: DisciplineLayoutRings = {
         mode: "rings",
         rings: layoutDb.rings.map(ring => {
             return {

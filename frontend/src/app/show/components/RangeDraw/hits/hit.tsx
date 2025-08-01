@@ -1,11 +1,11 @@
 import { Hit } from "@shared/ranges/hits";
 import { idealTextColor } from "../../../lib/idealTextColor";
 import { getHitColor } from "../layout";
-import { Layout } from "@shared/ranges/discipline/layout";
+import { DisciplineLayout } from "@shared/ranges/discipline/layout";
 
 interface HitProps {
     hit: Hit,
-    layout: Layout,
+    layout: DisciplineLayout,
     gauge: number,
     isLatest: boolean
 }
