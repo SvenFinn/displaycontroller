@@ -29,11 +29,9 @@ COPY . .
 RUN npm run build
 
 # Convert icon.svg to icon.png
-FROM ubuntu:latest AS convert
+FROM linuxserver/inkscape:latest AS convert
 WORKDIR /app/screens/images
 COPY src/img .
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends inkscape
 
 RUN inkscape --export-type=png --export-dpi=288 icon.svg && \
     inkscape --export-type=png --export-dpi=288 404.svg && \
