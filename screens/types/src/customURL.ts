@@ -1,7 +1,7 @@
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
 
 export type CustomURLDbScreen = BaseDbScreen & {
-    preset: "customURL";
+    type: "customURL";
     options: CustomURLOptions;
 }
 
@@ -10,6 +10,6 @@ export type CustomURLOptions = {
 }
 
 export type CustomURLScreen = BaseScreenAvailable & {
-    preset: "customURL";
+    type: "customURL";
     options: CustomURLOptions;
 }

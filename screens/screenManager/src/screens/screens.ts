@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { resolvePreset } from "./presets";
+import { resolveScreen } from "./types";
 import { isDbScreen, DbScreen, Screen } from "dc-screens-types";
 import { checkCondition } from "./conditions";
 import { logger } from "dc-logger";
@@ -33,11 +33,11 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
             nextScreen = {
                 id: nextScreen.id,
 
-                preset: "systemMessage",
+                type: "systemMessage",
                 options: {
                     type: "invalidScreen",
                     id: nextScreen.id,
-                    preset: nextScreen.preset,
+                    screenType: nextScreen.type,
                 },
                 condition: null,
                 visibleFrom: null,
@@ -54,7 +54,7 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
         if (! await checkCondition(localClient, nextDbScreen)) {
             continue;
         }
-        const parsedScreen = await resolvePreset(nextDbScreen) || [];
+        const parsedScreen = await resolveScreen(nextDbScreen) || [];
         if (parsedScreen.length > 0) {
             return parsedScreen;
         }

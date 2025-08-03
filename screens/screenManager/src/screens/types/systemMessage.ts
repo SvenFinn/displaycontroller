@@ -7,7 +7,7 @@ export default async function systemMessage(screen: SystemMessageDbScreen): Prom
             available: true,
             id: screen.id,
             subId: 0,
-            preset: "systemMessage",
+            type: "systemMessage",
             options: screen.options,
             duration: 15000
         }

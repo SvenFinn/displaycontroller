@@ -1,17 +1,15 @@
--- CreateEnum
-CREATE TYPE "ScreensPreset" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation', 'customURL');
+-- CreateEnum (final enum to be used)
+CREATE TYPE "ScreensTypes" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation', 'customURL');
 
--- CreateTable
+-- CreateTable with final structure
 CREATE TABLE "Screens" (
-    "id" SERIAL NOT NULL,
-    "preset" "ScreensPreset" NOT NULL,
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "type" "ScreensTypes" NOT NULL,
     "options" JSONB NOT NULL,
     "condition" JSONB,
     "visibleFrom" TIMESTAMP(3),
     "visibleUntil" TIMESTAMP(3),
     "duration" INTEGER NOT NULL DEFAULT 30000,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Screens_pkey" PRIMARY KEY ("id")
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

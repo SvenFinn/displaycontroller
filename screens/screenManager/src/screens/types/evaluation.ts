@@ -21,7 +21,7 @@ export default async function evaluation(screen: EvaluationDbScreen): Promise<Sc
             available: true,
             id: screen.id,
             subId: index,
-            preset: "evaluation",
+            type: "evaluation",
             options: {
                 path: file
             },

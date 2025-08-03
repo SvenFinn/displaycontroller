@@ -1,12 +1,12 @@
 import { BaseDbScreen, BaseScreenAvailable } from './base';
 
 export type SystemMessageScreen = BaseScreenAvailable & {
-    preset: "systemMessage";
+    type: "systemMessage";
     options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
 }
 
 export type SystemMessageDbScreen = BaseDbScreen & {
-    preset: "systemMessage";
+    type: "systemMessage";
     options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
 }
 
@@ -22,7 +22,7 @@ export type IncompatibleMessageOptions = {
 export type InvalidScreenOptions = {
     type: "invalidScreen";
     id: number;
-    preset: string;
+    screenType: string;
 }
 
 export type SMDBAccessMessageOptions = {

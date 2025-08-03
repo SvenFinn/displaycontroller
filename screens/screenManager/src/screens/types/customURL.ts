@@ -7,7 +7,7 @@ export default async function customURL(screen: CustomURLDbScreen): Promise<Scre
             available: true,
             id: screen.id,
             subId: 0,
-            preset: "customURL",
+            type: "customURL",
             options: screen.options,
             duration: screen.duration
         }

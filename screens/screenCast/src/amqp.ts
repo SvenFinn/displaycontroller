@@ -16,7 +16,7 @@ export function startScreenCast() {
         if (!amqpChannel) return;
         const screen: Screen = {
             available: true,
-            preset: "screenCast",
+            type: "screenCast",
             options: {},
             duration: 10000,
             id: MAX_DB_NUM,

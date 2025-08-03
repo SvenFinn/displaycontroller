@@ -2,7 +2,7 @@ import { Condition } from './conditions';
 
 export type BaseDbScreen = {
     id: number;
-    preset: string;
+    type: string;
     options: any;
     condition: Condition | null;
     visibleFrom: Date | null;
@@ -16,7 +16,7 @@ export type BaseScreenAvailable = {
     available: true;
     id: number;
     subId: number;
-    preset: string;
+    type: string;
     options: Record<string, any>;
     duration: number;
 }

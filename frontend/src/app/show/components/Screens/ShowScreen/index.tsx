@@ -44,7 +44,7 @@ export default function ShowScreen({ id }: ShowScreenProps): React.JSX.Element {
 
 
 function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): React.JSX.Element {
-    switch (screen.preset) {
+    switch (screen.type) {
         case "drawTarget":
             return <DrawTarget options={screen.options} onReady={setIsReady} />;
         case "imageViewer":
@@ -61,6 +61,6 @@ function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): Re
             return <ScreenCastViewer onReady={setIsReady} />;
         default:
             setTimeout(setIsReady, 500);
-            return <h1>Unknown preset: {String((screen as any)?.preset)}</h1>;
+            return <h1>Unknown type: {String((screen as any)?.type)}</h1>;
     }
 }

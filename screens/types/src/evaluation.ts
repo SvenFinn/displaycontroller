@@ -2,7 +2,7 @@ import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
 
 export type EvaluationDbScreen = BaseDbScreen & {
-    preset: "evaluation";
+    type: "evaluation";
     options: EvaluationOptions;
 }
 
@@ -13,6 +13,6 @@ export type EvaluationOptions = {
 export const isEvaluationOptions = createIs<EvaluationOptions>();
 
 export type EvaluationScreen = BaseScreenAvailable & {
-    preset: "evaluation";
+    type: "evaluation";
     options: EvaluationOptions;
 }

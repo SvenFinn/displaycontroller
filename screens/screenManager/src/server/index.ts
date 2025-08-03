@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { logger } from "dc-logger";
 import { LocalClient } from 'dc-db-local';
 import { screenManager } from '../screens/screenManager';
-import { resolvePreset } from '../screens/presets';
+import { resolveScreen } from '../screens/types';
 import { DbScreen, Screen } from 'dc-screens-types';
 dotenv.config();
 
@@ -103,7 +103,7 @@ app.get('/api/screens/:screenId', async (req: Request, res: Response) => {
     const screenWType = screen as unknown as DbScreen;
     res.status(200).send({
         "config": screenWType,
-        "resolved": await resolvePreset(screenWType)
+        "resolved": await resolveScreen(screenWType)
     });
 })
 
@@ -167,7 +167,7 @@ app.get('/api/screens/:screenId/:subScreenId', async (req: Request, res: Respons
         return;
     }
     const screenWType = screen as unknown as DbScreen;
-    const resolved = await resolvePreset(screenWType);
+    const resolved = await resolveScreen(screenWType);
     if (!resolved) {
         res.status(500).send('Internal server error');
         return;

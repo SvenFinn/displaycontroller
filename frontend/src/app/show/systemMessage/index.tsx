@@ -33,7 +33,7 @@ function getMessage(options: SystemMessageScreen["options"]) {
         case "serverIncompatible":
             return <ServerIncompatibleMessage serverVersion={options.serverVersion} />
         case "invalidScreen":
-            return <InvalidScreen id={options.id} preset={options.preset} />
+            return <InvalidScreen id={options.id} type={options.screenType} />
         case "SMDBAccess":
             return <SmdbAccess />
         default:

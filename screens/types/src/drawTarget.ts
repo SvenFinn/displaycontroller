@@ -2,7 +2,7 @@ import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
 
 export type DrawTargetDbScreen = BaseDbScreen & {
-    preset: "drawTarget";
+    type: "drawTarget";
     options: DrawTargetOptions;
 }
 
@@ -16,6 +16,6 @@ export type DrawTargetOptions = {
 export const isDrawTargetOptions = createIs<DrawTargetOptions>();
 
 export type DrawTargetScreen = BaseScreenAvailable & {
-    preset: "drawTarget";
+    type: "drawTarget";
     options: DrawTargetOptions;
 }

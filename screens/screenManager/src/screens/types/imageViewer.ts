@@ -22,7 +22,7 @@ export default async function imageViewer(screen: ViewerDbScreen): Promise<Scree
             available: true,
             id: screen.id,
             subId: index,
-            preset: "imageViewer",
+            type: "imageViewer",
             options: {
                 path: file
             },

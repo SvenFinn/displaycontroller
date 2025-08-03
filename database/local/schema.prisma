@@ -19,18 +19,18 @@ model Parameter {
 }
 
 model Screens {
-    id           Int           @id @default(autoincrement())
-    preset       ScreensPreset
+    id           Int          @id @default(autoincrement())
+    type         ScreensTypes
     options      Json
     condition    Json?
     visibleFrom  DateTime?
     visibleUntil DateTime?
-    duration     Int           @default(30000)
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @default(now()) @updatedAt
+    duration     Int          @default(30000)
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @default(now()) @updatedAt
 }
 
-enum ScreensPreset {
+enum ScreensTypes {
     drawTarget
     cpcView
     imageViewer

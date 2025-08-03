@@ -2,7 +2,7 @@ import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
 
 export type CpcViewDbScreen = BaseDbScreen & {
-    preset: "cpcView";
+    type: "cpcView";
     options: CpcViewOptions
 }
 
@@ -15,6 +15,6 @@ export type CpcViewOptions = {
 export const isCpcViewOptions = createIs<CpcViewOptions>();
 
 export type CpcViewScreen = BaseScreenAvailable & {
-    preset: "cpcView";
+    type: "cpcView";
     options: CpcViewOptions;
 };

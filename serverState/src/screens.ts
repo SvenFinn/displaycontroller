@@ -17,7 +17,7 @@ export async function sendSystemScreen(serverState: AdvServerState, channel: amq
         logger.info("SMDB not available");
         const screen: Screen = {
             available: true,
-            preset: "systemMessage",
+            type: "systemMessage",
             options: {
                 type: "SMDBAccess"
             },
@@ -31,7 +31,7 @@ export async function sendSystemScreen(serverState: AdvServerState, channel: amq
     if (!serverState.compatible) {
         const screen: Screen = {
             available: true,
-            preset: "systemMessage",
+            type: "systemMessage",
             options: {
                 type: "serverIncompatible",
                 serverVersion: serverState.version
@@ -47,7 +47,7 @@ export async function sendSystemScreen(serverState: AdvServerState, channel: amq
         logger.info("SSMDB2 not available");
         const screen: Screen = {
             available: true,
-            preset: "systemMessage",
+            type: "systemMessage",
             options: {
                 type: "ssmdb2"
             },

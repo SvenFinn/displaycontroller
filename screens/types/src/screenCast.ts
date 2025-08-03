@@ -1,11 +1,11 @@
 import { BaseDbScreen, BaseScreenAvailable } from './base';
 
 export type ScreenCastScreen = BaseScreenAvailable & {
-    preset: "screenCast";
+    type: "screenCast";
     options: {};
 };
 
 export type ScreenCastDbScreen = BaseDbScreen & {
-    preset: "screenCast";
+    type: "screenCast";
     options: {};
 };

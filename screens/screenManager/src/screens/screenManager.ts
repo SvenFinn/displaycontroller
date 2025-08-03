@@ -2,7 +2,7 @@ import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 import { isDbScreen, isScreen, Screen, ScreenAvailable } from "dc-screens-types";
 import { EventEmitter } from "node:stream";
-import { resolvePreset } from "./presets";
+import { resolveScreen } from "./types";
 import { loadNextScreen } from "./screens";
 
 enum Direction {
@@ -66,7 +66,7 @@ class ScreenManager extends EventEmitter {
             return;
         }
 
-        const presetScreens = await resolvePreset(nextScreen) || [];
+        const presetScreens = await resolveScreen(nextScreen) || [];
         if (presetScreens.length <= subId) subId = 0;
 
         this.nextScreenList = presetScreens.slice(subId);

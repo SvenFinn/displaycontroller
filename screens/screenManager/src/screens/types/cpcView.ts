@@ -7,7 +7,7 @@ export default async function cpcView(screen: CpcViewDbScreen): Promise<Screens>
             available: true,
             id: screen.id,
             subId: 0,
-            preset: "cpcView",
+            type: "cpcView",
             options: screen.options,
             duration: screen.duration
         }
