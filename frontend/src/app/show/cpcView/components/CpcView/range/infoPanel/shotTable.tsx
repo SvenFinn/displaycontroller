@@ -8,13 +8,17 @@ import React from "react";
 
 export default function ShotTable({ id }: { id: number }): React.JSX.Element {
 
-    const range = useAppSelector(state => state.ranges[id]);
+    const range = useAppSelector(state => {
+        const range = state.ranges[id];
+        if (range && range.active && range.discipline) {
+            return range;
+        }
+        return null;
+    });
     if (!range) return <></>;
-    if (!range.active) return <></>;
-    if (!range.discipline) return <></>;
 
     const hits = range.hits?.[range.round] || [];
-    const round = range.discipline.rounds[range.round];
+    const round = range.discipline?.rounds[range.round];
     if (!round) return <></>;
     const mode = round.mode.mode;
 

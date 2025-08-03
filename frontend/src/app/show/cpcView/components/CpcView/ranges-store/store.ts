@@ -18,5 +18,9 @@ export type AppDispatch = AppStore['dispatch']
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
+export const useAppSelector = <TSelected>(
+    selector: (state: RootState) => TSelected
+) => useSelector.withTypes<RootState>()(selector, (state, next) => {
+    return JSON.stringify(state) === JSON.stringify(next);
+});
 export const useAppStore = useStore.withTypes<AppStore>()

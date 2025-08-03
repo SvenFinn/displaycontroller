@@ -4,11 +4,28 @@ import styles from "./infoPanel.module.css";
 
 
 export default function InfoStr({ id }: { id: number }): React.JSX.Element {
-    const range = useAppSelector(state => state.ranges[id]);
-    if (!range) return <></>;
-    if (!range.active) return <></>;
+    const zoom = useAppSelector((state) => {
+        const range = state.ranges[id];
+        if (range && range.active && range.discipline && range.round !== undefined) {
+            return range.discipline.rounds[range.round]?.zoom || undefined;
+        }
+        return undefined;
+    });
+    const hitsPerView = useAppSelector((state) => {
+        const range = state.ranges[id];
+        if (range && range.active && range.discipline && range.round !== undefined) {
+            return range.discipline.rounds[range.round]?.hitsPerView || "?";
+        }
+        return "?";
+    });
+    const ip = useAppSelector((state) => {
+        const range = state.ranges[id];
+        if (range && range.active) {
+            return range.ipAddress || "";
+        }
+        return "";
+    });
 
-    const zoom = range.discipline?.rounds[range.round]?.zoom;
     let zoomStr = "Z?";
     if (zoom !== undefined) {
         switch (zoom.mode) {
@@ -25,6 +42,6 @@ export default function InfoStr({ id }: { id: number }): React.JSX.Element {
     }
 
     return (
-        <div className={styles.rangeStr}><ScaleText text={`${range.ipAddress || ""} - S${range.discipline?.rounds[range.round]?.hitsPerView || "?"}:${zoomStr}`} /></div>
+        <div className={styles.rangeStr}><ScaleText text={`${ip} - S${hitsPerView}:${zoomStr}`} /></div>
     );
 }

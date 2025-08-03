@@ -3,11 +3,12 @@ import styles from "./header.module.css"
 
 
 interface HeaderProps {
-    ranges: Array<Range | null>;
+    ranges: Record<number, Range>;
 }
 
 export default function Header({ ranges }: HeaderProps): React.JSX.Element {
-    const startLists = ranges.map((range) => {
+    const rangesArray = Object.values(ranges);
+    const startLists = rangesArray.map((range) => {
         if (range === null) return null;
         if (range.active === false) return null;
         if (range.startList === null) return null;

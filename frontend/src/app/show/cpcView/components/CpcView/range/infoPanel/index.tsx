@@ -7,20 +7,25 @@ import { getTotal } from "@frontend/app/show/lib/ranges";
 import ModeIcon from "./icon";
 import ScaleText from "@frontend/app/show/components/ScaleText";
 import InfoStr from "./infoStr";
+import { DisciplineName } from "./disciplineName";
+import { RoundName } from "./roundName";
+import { HitTotal } from "./hitTotal";
 
 
 export default function InfoPanel({ id }: { id: number }): React.JSX.Element {
-    const range = useAppSelector(state => state.ranges[id]);
-    if (!range) return <></>;
-    if (!range.active) return <></>;
+    const shouldRender = useAppSelector(state => state.ranges[id]?.active || false);
+    if (!shouldRender) {
+        return <></>;
+    }
 
     return (
         <div className={styles.infoPanel}>
-            <div className={styles.discipline}> <ScaleText text={range.discipline && range.discipline.name || ""} /></div>
-            <div className={styles.round}><ScaleText text={range.discipline?.rounds[range.round]?.name || ""} /></div>
+            <DisciplineName id={id} />
+            <RoundName id={id} />
             <div className={styles.total}>
-                <ModeIcon range={range} className={styles.icon} />
-                <span className={styles.value}>{getTotal(range)}</span>
+                <ModeIcon id={id} className={styles.icon} />
+                <HitTotal id={id} />
+
             </div>
             <div className={styles.shotInfo}>
                 <ShotTable id={id} />

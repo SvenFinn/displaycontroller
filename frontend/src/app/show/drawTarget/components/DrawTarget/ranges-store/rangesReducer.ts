@@ -3,7 +3,7 @@ import { Range } from "dc-ranges-types"
 
 export const rangesSlice = createSlice({
     name: 'ranges',
-    initialState: [] as Array<Range | null>,
+    initialState: {} as Record<number, Range>,
     reducers: {
         setRange(state, action: PayloadAction<Range>) {
             state[action.payload.id] = action.payload;

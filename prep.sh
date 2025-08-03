@@ -30,6 +30,22 @@ function traverse_folder() {
     done
 }
 
+function generate_proxy_certs() {
+    (
+    cd proxy
+    if [ ! -d "certs" ]; then
+        echo "Generating proxy certificates"
+        mkdir certs
+        (
+        cd certs
+        openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout "displaycontroller.key"  -out "displaycontroller.crt" -subj "/CN=displaycontroller"
+        )
+    fi
+    )
+}
+
 npx npm-check-updates --upgrade --loglevel=info --deep
 
 traverse_folder .
+
+generate_proxy_certs

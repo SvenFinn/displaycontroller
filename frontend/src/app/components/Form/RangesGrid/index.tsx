@@ -14,9 +14,6 @@ interface Value {
 
 export default function RangesGrid(props: WidgetProps) {
     const host = useHost();
-    if (host === "") {
-        return <></>;
-    }
 
     const { rows = 1, columns = 1 } = props.options || {};
 
@@ -68,7 +65,7 @@ export default function RangesGrid(props: WidgetProps) {
             ));
         }
         fetchRanges();
-    }, []);
+    }, [host]);
 
     const handleChange = (id: number, option: Value | null) => {
         const value = option?.value || null; // Ensure value is a number or null

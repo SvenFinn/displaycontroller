@@ -11,14 +11,19 @@ import ringsTenthSVG from "./rings-tenth.svg";
 import dartSVG from "./dart.svg";
 import hundredSVG from "./hundred.svg";
 import decimalSVG from "./decimal.svg";
-import { Range } from "dc-ranges-types";
+import { useAppSelector } from "../../../ranges-store/store";
 
-export default function ModeIcon({ range, className }: { range: Range, className?: string }): React.JSX.Element {
-    if (!className) className = "";
-    if (!range.active) return <></>;
-    if (!range.discipline) return <></>;
-    const mode = range.discipline.rounds[range.round]?.mode;
-    if (!mode) return <></>;
+export default function ModeIcon({ id, className }: { id: number, className?: string }): React.JSX.Element {
+    const mode = useAppSelector((state) => {
+        const range = state.ranges[id];
+        if (!range || !range.active) {
+            return null;
+        }
+        return range.discipline?.rounds[range.round]?.mode;
+    });
+    if (!mode) {
+        return <></>;
+    }
     switch (mode.mode) {
         case "rings":
             if (mode.decimals === 0) {
@@ -51,6 +56,7 @@ export default function ModeIcon({ range, className }: { range: Range, className
             if (mode.exact && mode.value === 501) {
                 return <img src={dartSVG.src} alt="Target 501" className={className} />;
             }
+        default:
+            return <></>;
     }
-    return <></>;
 }

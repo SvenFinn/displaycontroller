@@ -1,12 +1,18 @@
 import ScaleText from "../../../../../components/ScaleText";
+import { useAppSelector } from "../../ranges-store/store";
 import styles from "./range.module.css";
-import { Shooter } from "dc-ranges-types";
 
-export default function Name({ shooter }: { shooter: Shooter | null }): React.JSX.Element {
-    const name = shooter ? `${shooter.firstName} ${shooter.lastName}` : "- - - Frei - - -";
+export default function Name({ id }: { id: number }): React.JSX.Element {
+    const shooterName = useAppSelector((state) => {
+        const range = state.ranges[id];
+        if (range && range.active && range.shooter) {
+            return `${range.shooter.firstName} ${range.shooter.lastName}`;
+        }
+        return "- - - Frei - - -";
+    });
     return (
         <div className={styles.rangeName}>
-            <ScaleText text={name} />
+            <ScaleText text={shooterName} />
         </div>
     )
 }

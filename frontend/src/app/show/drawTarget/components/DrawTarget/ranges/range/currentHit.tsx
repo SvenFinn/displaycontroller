@@ -3,17 +3,25 @@ import { getHitString, getRoundName } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import ShotArrowW from "./ShotArrow";
 import { Range } from "dc-ranges-types";
+import { useAppSelector } from "../../ranges-store/store";
 
 interface CurrentHitProps {
-    range: Range
+    id: number
 }
 
-export default function CurrentHit({ range }: CurrentHitProps): React.JSX.Element {
-    const hit = getHit(range) || getRoundName(range);
+export default function CurrentHit({ id }: CurrentHitProps): React.JSX.Element {
+    // This only needs to rerender if the hits change, so we can use a simple selector
+    const hit = useAppSelector((state) => {
+        const currentRange = state.ranges[id];
+        if (!currentRange || !currentRange.active) return null;
+        return getHit(currentRange) || getRoundName(currentRange);
+    });
+
     if (!hit) return <></>
+
     return (
         <div className={styles.currentShot}>
-            <ShotArrowW range={range} />
+            <ShotArrowW id={id} />
             <ScaleText text={hit} />
         </div>
     )

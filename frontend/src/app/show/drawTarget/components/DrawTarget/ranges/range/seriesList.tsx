@@ -1,10 +1,16 @@
 import ScaleText from "@frontend/app/show/components/ScaleText";
 import { getSeries } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
-import { Range } from "dc-ranges-types";
+import { useAppSelector } from "../../ranges-store/store";
 
-export default function SeriesList({ range }: { range: Range }): React.JSX.Element {
-    const series = getSeries(range);
+export default function SeriesList({ id }: { id: number }): React.JSX.Element {
+    // This only needs to rerender if the hits change, so we can use a simple selector
+    const series = useAppSelector((state) => {
+        const currentRange = state.ranges[id];
+        if (!currentRange || !currentRange.active) return [];
+        return getSeries(currentRange);
+    });
+
     const rows = Math.ceil(series.length / 4);
     return (
         <table className={styles.seriesList}>
