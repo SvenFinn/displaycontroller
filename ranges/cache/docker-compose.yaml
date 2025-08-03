@@ -25,6 +25,8 @@ services:
         - MEYTON_DB_PASS=${MEYTON_DB_PASS}
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
     depends_on:
+      dc-database:
+        condition: service_healthy
       dc-db-migrate:
         condition: service_completed_successfully
     environment:

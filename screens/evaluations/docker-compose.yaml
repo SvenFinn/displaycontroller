@@ -22,6 +22,8 @@ services:
     volumes:
       - evaluations_data:/app/html
     depends_on:
+      dc-database:
+        condition: service_healthy
       dc-db-migrate:
         condition: service_completed_successfully
       dc-server-state:

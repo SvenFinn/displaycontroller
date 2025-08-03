@@ -13,6 +13,11 @@ services:
       POSTGRES_USER: ${SELF_DB_USER}
       POSTGRES_PASSWORD: ${SELF_DB_PASS}
       POSTGRES_DB: ${SELF_DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SELF_DB_USER} -d ${SELF_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
   dc-db-migrate:
@@ -28,6 +33,9 @@ services:
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
+    depends_on:
+      dc-database:
+        condition: service_healthy
 
 volumes:
   postgres_data:
