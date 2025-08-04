@@ -1,10 +1,10 @@
-import { Condition } from './conditions';
+import { Conditions } from './conditions';
 
 export type BaseDbScreen = {
     id: number;
     type: string;
     options: any;
-    condition: Condition | null;
+    conditions: Conditions | null;
     visibleFrom: Date | null;
     visibleUntil: Date | null;
     duration: number;

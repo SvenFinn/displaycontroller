@@ -1,3 +1,8 @@
 import { ConditionMinMax, ConditionNone, ConditionNumber } from './base';
 
-export type Condition = ConditionMinMax | ConditionNumber | ConditionNone;
+type Condition = ConditionMinMax | ConditionNumber | ConditionNone;
+
+export type Conditions = {
+    mode: 'and' | 'or';
+    conditions: Condition[];
+}

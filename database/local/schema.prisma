@@ -22,7 +22,7 @@ model Screens {
     id           Int          @id @default(autoincrement())
     type         ScreensTypes
     options      Json
-    condition    Json?
+    conditions   Json?
     visibleFrom  DateTime?
     visibleUntil DateTime?
     duration     Int          @default(30000)

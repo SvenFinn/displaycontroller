@@ -6,7 +6,7 @@ CREATE TABLE "Screens" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "type" "ScreensTypes" NOT NULL,
     "options" JSONB NOT NULL,
-    "condition" JSONB,
+    "conditions" JSONB,
     "visibleFrom" TIMESTAMP(3),
     "visibleUntil" TIMESTAMP(3),
     "duration" INTEGER NOT NULL DEFAULT 30000,
