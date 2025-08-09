@@ -2,7 +2,7 @@
 
 source .env
 
-DB_HOST="$(echo $SELF_DB_URL | cut -d'@' -f2 | cut -d':' -f1)"
+DB_HOST="$(echo "$SELF_DB_URL" | cut -d'@' -f2 | cut -d':' -f1)"
 
 until nc -z -v -w30 "$DB_HOST" 5432
 do
