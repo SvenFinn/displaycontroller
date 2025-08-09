@@ -15,7 +15,6 @@ export default function SelectWithCustom({ value, onChange, options, schema }: W
     }
     let enumValue = enumOptions.find((option) => option.value === value) || null;
     if (!enumValue) {
-        enumOptions.push({ label: value, value });
         enumValue = { label: value, value };
     }
 

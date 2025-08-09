@@ -1,22 +1,7 @@
-import { CustomURLOptions } from "dc-screens-types";
-import styles from "./customURL.module.css"
+import dynamic from "next/dynamic";
 
-interface ImageViewerProps {
-    options: CustomURLOptions;
-    onReady: () => void;
-}
+const CpcView = dynamic(() => import("./customURL"), {
+    ssr: false,
+});
 
-export default function CustomURL({ options, onReady }: ImageViewerProps) {
-
-    return (
-        <div className={styles.customURL}>
-            <iframe
-                src={options.url}
-                title="Custom URL Viewer"
-                className={styles.customURL}
-                onLoad={onReady}
-            />
-        </div>
-    )
-}
-
+export default CpcView;

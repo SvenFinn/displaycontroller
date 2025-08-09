@@ -1,4 +1,4 @@
-import { DrawTargetProps } from "..";
+import { DrawTargetProps } from "../drawTarget";
 import styles from "./ranges.module.css";
 import Range from "./range";
 import RangeGrid from "../../../../components/Ranges/Grid";

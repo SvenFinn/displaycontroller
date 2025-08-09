@@ -1,0 +1,5 @@
+.drawTarget {
+    height: 100%;
+    user-select: none;
+    position: relative;
+}
