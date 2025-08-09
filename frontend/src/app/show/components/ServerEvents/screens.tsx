@@ -15,6 +15,10 @@ export default function ScreenEvents({ action }: ScreenEventsProps) {
     const dispatch = useDispatch();
     const host = useHost();
 
+    if (!host) {
+        return <></>;
+    }
+
 
     const path = `${host}/api/screens/current/sse`;
 

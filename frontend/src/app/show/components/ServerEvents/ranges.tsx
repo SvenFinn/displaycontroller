@@ -19,7 +19,7 @@ export default function RangeEvents({ action, ranges }: RangeEventsProps): React
 
     ranges = ranges.filter((range) => typeof range === "number" && !isNaN(range));
 
-    if (host === "") {
+    if (!host) {
         return <></>;
     }
 

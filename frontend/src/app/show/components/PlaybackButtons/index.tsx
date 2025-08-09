@@ -13,11 +13,14 @@ export default function Buttons(): React.JSX.Element {
         fetchPausedState();
     }, [host]);
 
-    if (host === "") {
+    if (!host) {
         return <></>;
     }
 
     async function fetchPausedState() {
+        if (!host) {
+            return;
+        }
         const response = await fetch(`${host}/api/screens/pause`);
         if (response.ok) {
             const data = await response.json();

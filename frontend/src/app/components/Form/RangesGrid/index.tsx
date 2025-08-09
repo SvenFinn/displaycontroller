@@ -49,6 +49,7 @@ export default function RangesGrid(props: WidgetProps) {
     }, [values, options]);
 
     useEffect(() => {
+        if (!host) return;
         async function fetchRanges() {
             const url = `${host}/api/ranges`;
             const response = await fetch(url);

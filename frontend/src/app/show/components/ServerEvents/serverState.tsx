@@ -2,22 +2,26 @@
 
 import ServerEvents from "./base";
 import Warning from "../Warning";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHost } from "@frontend/app/hooks/useHost";
 
 export default function ServerState(): React.JSX.Element {
     const [connected, setConnected] = useState<boolean>(false);
     const host = useHost();
 
-    const path = `${host}/api/serverState/sse`;
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function actionCallback(data: any) {
+    const actionCallback = useCallback((data: any) => {
         if (typeof data !== "boolean") {
             return;
         }
         setConnected(data);
+    }, []);
+
+    if (!host) {
+        return <></>;
     }
+
+    const path = `${host}/api/serverState/sse`;
     return (
         <>
             <ServerEvents path={path} canonicalName="Server State" action={actionCallback} />

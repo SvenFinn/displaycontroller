@@ -8,7 +8,7 @@ export default function MultiRangeSelector(props: WidgetProps) {
     const [ranges, setRanges] = useState<number[]>([]);
     const [selectedRanges, setSelectedRanges] = useState<number[]>(props.value || []);
     const host = useHost();
-    if (host === "") {
+    if (!host) {
         return <></>;
     }
 
