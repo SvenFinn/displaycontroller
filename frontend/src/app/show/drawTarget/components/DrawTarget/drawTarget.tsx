@@ -19,20 +19,13 @@ export interface DrawTargetProps {
 export default function DrawTarget({ options, onReady }: DrawTargetProps): React.JSX.Element {
     return (
         <Provider store={store} >
-            <DrawTargetContent options={options} onReady={onReady} />
+            <FontSizeWrapper className={styles.drawTarget} >
+                <RangesEvents action={setRange} ranges={options.ranges} />
+                <Header />
+                <Ranges options={options} />
+                <IsReadyDrawTarget options={options} onReady={onReady} />
+            </FontSizeWrapper >
         </Provider >
-    )
-}
-
-function DrawTargetContent({ options, onReady }: DrawTargetProps): React.JSX.Element {
-    console.log("DrawTargetContent rendered with options:", options);
-    return (
-        <FontSizeWrapper className={styles.drawTarget} >
-            <RangesEvents action={setRange} ranges={options.ranges} />
-            <Header />
-            <Ranges options={options} />
-            <IsReadyDrawTarget options={options} onReady={onReady} />
-        </FontSizeWrapper >
     )
 }
 

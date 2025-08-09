@@ -21,8 +21,16 @@ export default function DrawRangeW({ id }: DrawRangeProps): React.JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (!ref.current) return;
+
         updateMaxHeight();
-        window.addEventListener("resize", updateMaxHeight)
+
+        const observer = new ResizeObserver(() => {
+            updateMaxHeight();
+        });
+
+        observer.observe(ref.current);
+
         function updateMaxHeight() {
             if (!ref.current) return;
             // Compute the total height of the ranges container
@@ -41,7 +49,7 @@ export default function DrawRangeW({ id }: DrawRangeProps): React.JSX.Element {
         }
 
         return () => {
-            window.removeEventListener("resize", updateMaxHeight);
+            observer.disconnect();
         }
     });
 
