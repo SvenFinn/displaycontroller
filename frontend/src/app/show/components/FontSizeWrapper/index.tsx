@@ -6,16 +6,20 @@ export function FontSizeWrapper({ children, className = "" }: { children: React.
 
     const handleResize = () => {
         if (ref.current) {
-            const newFontSize = ref.current.clientHeight;
+            const newFontSize = ref.current.clientHeight < ref.current.clientWidth ? ref.current.clientHeight : ref.current.clientWidth;
             setFontSize(newFontSize);
         }
     }
 
     useEffect(() => {
         handleResize();
-        window.addEventListener("resize", handleResize);
+        const observer = new ResizeObserver(handleResize);
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
         return () => {
-            window.removeEventListener("resize", handleResize);
+            observer.disconnect();
         }
     }, []);
 
