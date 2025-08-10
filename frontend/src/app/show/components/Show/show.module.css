@@ -14,3 +14,9 @@ div.content {
     height: 100%;
     overflow: hidden;
 }
+
+@media all and (display-mode: fullscreen) {
+    div.show {
+        cursor: none;
+    }
+}

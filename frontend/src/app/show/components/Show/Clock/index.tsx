@@ -15,7 +15,7 @@ export default function Clock({ locale }: { locale?: string }): React.JSX.Elemen
             }
         }, 100);
         return () => clearInterval(interval);
-    });
+    }, [locale]);
 
     return (
         <div className={styles.clock}>

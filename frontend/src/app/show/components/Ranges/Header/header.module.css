@@ -5,4 +5,8 @@ div.header {
     font-size: 7%;
     text-align: center;
     background-color: white;
+    padding: 0 15%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

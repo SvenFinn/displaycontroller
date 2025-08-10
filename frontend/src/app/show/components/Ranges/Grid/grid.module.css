@@ -1,14 +1,15 @@
 div.grid {
+    --border-width: calc(var(--container-size) *0.005);
     display: grid;
-    padding-bottom: 5px;
-    padding-right: 5px;
+    padding-bottom: var(--border-width);
+    padding-right: var(--border-width);
 }
 
 div.grid>div {
-    border: 5px solid #888;
-    height: calc(100% + 5px);
-    width: calc(100% + 5px);
-    margin-bottom: -5px;
-    margin-right: -5px;
+    border: var(--border-width) solid #888;
+    height: calc(100% + var(--border-width));
+    width: calc(100% + var(--border-width));
+    margin-bottom: -var(--border-width);
+    margin-right: -var(--border-width);
     position: relative;
 }
