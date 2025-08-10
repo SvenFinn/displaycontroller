@@ -14,5 +14,5 @@ export default function Page(): React.JSX.Element {
 
 export const metadata: Metadata = {
     title: "Displaycontroller - Show",
-    description: "",
+    description: "Cycle through screens in a show",
 };

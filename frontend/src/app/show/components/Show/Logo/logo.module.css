@@ -1,6 +1,6 @@
 img.logo {
     height: 6.5%;
     position: absolute;
-    top: 1vmin;
-    left: 1vmin;
+    top: calc(var(--container-size) * 0.01);
+    left: calc(var(--container-size) * 0.01);
 }

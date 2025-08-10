@@ -9,7 +9,7 @@ import RangesEvents from "../../../components/ServerEvents/ranges"
 import Header from "./header";
 import { useEffect } from "react";
 import styles from "./drawTarget.module.css";
-import { FontSizeWrapper } from "@frontend/app/show/components/FontSizeWrapper";
+import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
 
 export interface DrawTargetProps {
     options: DrawTargetOptions;
@@ -19,12 +19,12 @@ export interface DrawTargetProps {
 export default function DrawTarget({ options, onReady }: DrawTargetProps): React.JSX.Element {
     return (
         <Provider store={store} >
-            <FontSizeWrapper className={styles.drawTarget} >
+            <SizeWrapper className={styles.drawTarget} >
                 <RangesEvents action={setRange} ranges={options.ranges} />
                 <Header />
                 <Ranges options={options} />
                 <IsReadyDrawTarget options={options} onReady={onReady} />
-            </FontSizeWrapper >
+            </SizeWrapper >
         </Provider >
     )
 }

@@ -7,6 +7,7 @@ import styles from "./systemMessage.module.css";
 import { useEffect } from "react";
 import InvalidScreen from "./InvalidScreen";
 import SmdbAccess from "./smdbAccess";
+import SizeWrapper from "../components/SizeWrapper";
 
 interface SystemMessageProps {
     options: SystemMessageScreen["options"];
@@ -20,9 +21,9 @@ export default function SystemMessage({ options, onReady }: SystemMessageProps) 
         return () => clearTimeout(timeout);
     }, [onReady]);
     return (
-        <div className={styles.systemMessage}>
+        <SizeWrapper className={styles.systemMessage}>
             {getMessage(options)}
-        </div>
+        </SizeWrapper>
     )
 }
 

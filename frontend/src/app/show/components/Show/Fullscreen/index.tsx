@@ -3,10 +3,13 @@
 import { FaExpandArrowsAlt } from "react-icons/fa";
 import styles from "./fullscreen.module.css";
 
-export default function FullscreenButton(): React.JSX.Element {
+export default function FullscreenButton({ container }: { container: HTMLDivElement | null }): React.JSX.Element {
 
     const toggleFullscreen = () => {
-        document.documentElement.requestFullscreen();
+        if (!container) {
+            return;
+        }
+        container.requestFullscreen();
     }
 
     return (

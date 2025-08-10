@@ -1,6 +1,6 @@
 "use client";
 
-import { FontSizeWrapper } from "@frontend/app/show/components/FontSizeWrapper";
+import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
 import styles from "./viewer.module.css";
 import { ScreenShareSocketState, useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/SocketIO/screenShare";
 import { useEffect, useRef, useState } from "react";
@@ -137,9 +137,9 @@ export default function ScreenCastViewer({ onReady }: { onReady: () => void }): 
                     controls={false}
                 />
             ) : (
-                <FontSizeWrapper className={styles.viewerPlaceholder}>
+                <SizeWrapper className={styles.viewerPlaceholder}>
                     <p>Übertragung beendet</p>
-                </FontSizeWrapper>
+                </SizeWrapper>
             )}
         </div>
     );
