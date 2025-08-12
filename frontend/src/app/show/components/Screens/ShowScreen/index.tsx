@@ -8,7 +8,7 @@ import { screenReady } from "../store/screensReducer";
 import styles from "./showScreen.module.css";
 import ImageViewer from "../../../imageViewer/components/ImageViewer";
 import SystemMessage from "../../../systemMessage";
-import CustomURL from "@frontend/app/show/customURL/components/CustomURL";
+import Embed from "@frontend/app/show/embed/components/Embed";
 import CpcView from "@frontend/app/show/cpcView/components/CpcView";
 import ScreenCastViewer from "@frontend/app/show/screenCast/components/Viewer";
 import Evaluation from "@frontend/app/show/evaluation/components/Evaluation";
@@ -62,8 +62,8 @@ function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): Re
             return <Evaluation options={screen.options} onReady={setIsReady} />;
         case "systemMessage":
             return <SystemMessage options={screen.options} onReady={setIsReady} />;
-        case "customURL":
-            return <CustomURL options={screen.options} onReady={setIsReady} />;
+        case "embed":
+            return <Embed options={screen.options} onReady={setIsReady} />;
         case "cpcView":
             return <CpcView options={screen.options} onReady={setIsReady} />;
         case "screenCast":

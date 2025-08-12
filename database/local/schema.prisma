@@ -35,7 +35,7 @@ enum ScreensTypes {
     cpcView
     imageViewer
     evaluation
-    customURL
+    embed
 }
 
 model Cache {

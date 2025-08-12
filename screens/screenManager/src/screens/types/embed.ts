@@ -1,13 +1,13 @@
 import { Screens } from ".";
-import { CustomURLDbScreen } from "dc-screens-types";
+import { EmbedDbScreen } from "dc-screens-types";
 
-export default async function customURL(screen: CustomURLDbScreen): Promise<Screens> {
+export default async function embed(screen: EmbedDbScreen): Promise<Screens> {
     return [
         {
             available: true,
             id: screen.id,
             subId: 0,
-            type: "customURL",
+            type: "embed",
             options: screen.options,
             duration: screen.duration
         }

@@ -1,5 +1,5 @@
 -- CreateEnum (final enum to be used)
-CREATE TYPE "ScreensTypes" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation', 'customURL');
+CREATE TYPE "ScreensTypes" AS ENUM ('drawTarget', 'cpcView', 'imageViewer', 'evaluation', 'embed');
 
 -- CreateTable with final structure
 CREATE TABLE "Screens" (
