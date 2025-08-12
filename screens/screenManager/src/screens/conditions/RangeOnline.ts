@@ -17,7 +17,7 @@ export async function range_online(condition: ConditionNumber): Promise<boolean>
         return range.active;
     }
     catch (e) {
-        logger.error("Failed to parse range response", e);
+        logger.error(`Failed to parse range response: ${e}`);
         return false;
     }
 }

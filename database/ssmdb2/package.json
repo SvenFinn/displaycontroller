@@ -12,13 +12,13 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@prisma/client": "^6.13.0",
+        "@prisma/client": "^6.14.0",
         "dc-db-local": "file:../local",
         "dotenv": "^17.2.1"
     },
     "devDependencies": {
-        "@types/node": "^24.1.0",
-        "prisma": "^6.13.0",
+        "@types/node": "^24.2.1",
+        "prisma": "^6.14.0",
         "typescript": "^5.9.2"
     },
     "files": [

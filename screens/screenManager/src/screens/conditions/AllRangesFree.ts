@@ -17,7 +17,7 @@ export async function all_ranges_free(condition: ConditionNone): Promise<boolean
         }
         return onlineRanges.length === freeRanges.length;
     } catch (e) {
-        logger.error("Failed to parse ranges response", e);
+        logger.error(`Failed to parse ranges response: ${e}`);
         return false;
     }
 }

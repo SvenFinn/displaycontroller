@@ -11,7 +11,7 @@
     "description": "",
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^24.1.0",
+        "@types/node": "^24.2.1",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.9.2"
     },

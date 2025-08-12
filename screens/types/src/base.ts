@@ -8,8 +8,6 @@ export type BaseDbScreen = {
     visibleFrom: Date | null;
     visibleUntil: Date | null;
     duration: number;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 export type BaseScreenAvailable = {

@@ -15,7 +15,7 @@ export class LogParserStream extends Transform {
             callback();
             return
         }
-        logger.debug("Parsing line", line);
+        logger.debug(`Parsing line: ${line}`);
         const values = line.split(";");
         for (let i = 0; i < values.length; i++) {
             values[i] = values[i].replace(/^"|"$/g, "");
