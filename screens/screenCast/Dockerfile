@@ -2,18 +2,24 @@ FROM node:alpine AS base
 
 WORKDIR /app
 
-FROM base AS local-deps
+FROM base AS deps-logger
 
 WORKDIR /app/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM base AS deps-screens-types
 WORKDIR /app/screens/types
 COPY --from=screen-types . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM base AS local-deps
+WORKDIR /app
+
+COPY --from=deps-logger /app/logger /app/logger
+COPY --from=deps-screens-types /app/screens/types /app/screens/types
 
 FROM local-deps AS deps
 

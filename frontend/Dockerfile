@@ -8,25 +8,32 @@ ARG MIN_MEYTON_VERSION
 ARG MAX_MEYTON_VERSION
 ARG APP_VERSION
 
-FROM base AS local_deps
+FROM base AS deps-screen-types
 
 WORKDIR /app/screens/types
 COPY --from=screen-types . .
 RUN npm ci --loglevel=info && \
     npm run build
 
+FROM base AS deps-files-utils
 WORKDIR /app/ranges/types
 COPY --from=range-types . .
 RUN npm ci --loglevel=info && \
     npm run build
 
-FROM local_deps AS deps
+FROM base AS local-deps
+WORKDIR /app
+
+COPY --from=deps-screen-types /app/screens/types /app/screens/types
+COPY --from=deps-files-utils /app/ranges/types /app/ranges/types
+
+FROM local-deps AS deps
 
 WORKDIR /app/frontend
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --loglevel=info
 
-FROM local_deps AS build
+FROM local-deps AS build
 
 WORKDIR /app/frontend
 COPY package.json package-lock.json ./

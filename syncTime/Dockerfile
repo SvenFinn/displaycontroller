@@ -9,22 +9,30 @@ ARG SELF_DB_PASS
 ARG MEYTON_DB_USER
 ARG MEYTON_DB_PASS
 
-FROM base AS local-deps
-
+FROM base AS deps-logger
 WORKDIR /app/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM base AS deps-local-db
 WORKDIR /app/database/local
 COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM deps-local-db AS deps-smdb
 WORKDIR /app/database/smdb
 COPY --from=smdb-db . .
 RUN npm ci --loglevel=info && \
     npm run build;
+
+FROM base AS local-deps
+WORKDIR /app
+
+COPY --from=deps-logger /app/logger /app/logger
+COPY --from=deps-local-db /app/database/local /app/database/local
+COPY --from=deps-smdb /app/database/smdb /app/database/smdb
 
 FROM local-deps AS deps
 
