@@ -4,10 +4,13 @@ import { logger } from "dc-logger";
 import { LocalClient } from 'dc-db-local';
 import { screenManager } from '../screens/screenManager';
 import { resolveScreen } from '../screens/types';
-import { DbScreen, Screen } from 'dc-screens-types';
+import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
+import BodyParser from 'body-parser';
 dotenv.config();
 
 const app: Express = express();
+app.use(BodyParser.json());
+
 const localClient: LocalClient = new LocalClient();
 
 let sseConnections: Response[] = [];
@@ -85,6 +88,64 @@ app.post('/api/screens/previous', (req: Request, res: Response) => {
     res.end();
 });
 
+app.post('/api/screens/resolve', async (req: Request, res: Response) => {
+    if (!req.body) {
+        res.status(400).send('No screen data provided');
+        return;
+    }
+    if (!isDbScreen(req.body)) {
+        res.status(400).send('Invalid screen data');
+        return;
+    }
+    const screen = req.body;
+    try {
+        const resolvedScreens = await resolveScreen(screen);
+        res.status(200).send(resolvedScreens);
+    } catch (error) {
+        res.status(500).send(`Internal server error: ${error}`);
+    }
+});
+
+app.put('/api/screens/swap/:screenId/:otherScreenId', async (req: Request, res: Response) => {
+    const screenId = Number(req.params.screenId);
+    const otherScreenId = Number(req.params.otherScreenId);
+    if (isNaN(screenId) || isNaN(otherScreenId)) {
+        res.status(400).send('Invalid screen id');
+        return;
+    }
+    try {
+        const screen = await localClient.screens.findFirst({
+            where: { id: screenId }
+        });
+        const otherScreen = await localClient.screens.findFirst({
+            where: { id: otherScreenId }
+        });
+        if (!screen || !otherScreen) {
+            res.status(404).send('Screen not found');
+            return;
+        }
+        const TEMP_SCREEN_ID = -1; // Temporary ID to swap screens
+        await localClient.$transaction([
+            localClient.screens.update({
+                where: { id: screenId },
+                data: { id: TEMP_SCREEN_ID }
+            }),
+            localClient.screens.update({
+                where: { id: otherScreenId },
+                data: { id: screenId }
+            }),
+            localClient.screens.update({
+                where: { id: TEMP_SCREEN_ID },
+                data: { id: otherScreenId }
+            })
+        ]);
+        res.status(200).send('Screens swapped');
+    } catch (error) {
+        logger.error(error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 app.get('/api/screens/:screenId', async (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
@@ -101,10 +162,7 @@ app.get('/api/screens/:screenId', async (req: Request, res: Response) => {
         return;
     }
     const screenWType = screen as unknown as DbScreen;
-    res.status(200).send({
-        "config": screenWType,
-        "resolved": await resolveScreen(screenWType)
-    });
+    res.status(200).send(screenWType);
 })
 
 app.put('/api/screens/:screenId', async (req: Request, res: Response) => {

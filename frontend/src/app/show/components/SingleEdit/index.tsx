@@ -6,6 +6,7 @@ import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import { useSearchParams } from "next/navigation";
 import styles from "./SingleEdit.module.css";
 import Show from "../Show";
+import LocalScreen from "../LocalScreen";
 
 export interface SingleEditProps<T> {
     initialData: T;
@@ -50,8 +51,8 @@ function SingleEditComponent<T>({ initialData, schema, uiSchemaFn, typeCheck, re
         <>
             {!validatedOptions ? (
                 <div className={styles.container}>
-                    <h1>Custom View: {name}</h1>
-                    <p>Create a custom {name} view</p>
+                    <h1>Benutzerdefinierte Ansicht: {name}</h1>
+                    <p>Erstellen Sie eine benutzerdefinierte {name}-Ansicht</p>
                     <FormWrapper
                         schema={schema}
                         uiSchemaFn={uiSchemaFn}
@@ -60,9 +61,7 @@ function SingleEditComponent<T>({ initialData, schema, uiSchemaFn, typeCheck, re
                         onSubmit={handleSubmit} />
                 </div>
             ) : (
-                <Show>
-                    {renderComponent(validatedOptions)}
-                </Show>
+                renderComponent(validatedOptions)
             )
             }
         </>

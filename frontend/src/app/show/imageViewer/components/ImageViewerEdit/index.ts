@@ -7,7 +7,7 @@ export const schema: RJSFSchema = {
     properties: {
         "path": {
             type: "string",
-            title: "Path",
+            title: "Pfad",
             default: "",
         }
     }

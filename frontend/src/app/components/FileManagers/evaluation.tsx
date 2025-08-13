@@ -13,6 +13,10 @@ export interface EvaluationManagerProps {
 export default function EvaluationManager({ selectedFiles = [], onSelect = () => { }, allowMultiSelect = true }: EvaluationManagerProps) {
     const host = useHost();
 
+    if (!host) {
+        return <></>;
+    }
+
     return (
         <FileManagerBase
             baseURL={`${host}/api/evaluations`}

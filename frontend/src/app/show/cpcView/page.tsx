@@ -1,9 +1,9 @@
 "use client";
 
 import { CpcViewOptions, isCpcViewOptions } from "dc-screens-types";
-import CpcView from "./components/CpcView";
 import SingleEdit from "../components/SingleEdit";
 import { schema, getUiSchema } from "./components/CpcViewEdit";
+import LocalScreen from "../components/LocalScreen";
 
 export default function Page() {
     return (
@@ -20,7 +20,11 @@ export default function Page() {
             schema={schema}
             uiSchemaFn={getUiSchema}
             typeCheck={isCpcViewOptions}
-            renderComponent={(data: CpcViewOptions) => <CpcView options={data} />}
+            renderComponent={(data: CpcViewOptions) => <LocalScreen screen={{
+                type: "cpcView",
+                options: data,
+                duration: 30
+            }} />}
         />
     );
 }

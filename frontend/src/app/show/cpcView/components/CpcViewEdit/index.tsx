@@ -3,24 +3,24 @@ import { CpcViewOptions } from "dc-screens-types";
 
 export const schema: RJSFSchema = {
     type: "object",
-    title: "Draw Target",
+    title: "CPC View",
     required: ["rows", "columns", "ranges", "highlightAssign"],
     properties: {
         "rows": {
             type: "integer",
-            title: "Rows",
+            title: "Zeilen",
             default: 1,
             minimum: 1,
         },
         "columns": {
             type: "integer",
-            title: "Columns",
+            title: "Spalten",
             default: 1,
             minimum: 1,
         },
         "ranges": {
             type: "array",
-            title: "Ranges",
+            title: "Stände",
             items: {
                 type: ["number", "null"],
             }

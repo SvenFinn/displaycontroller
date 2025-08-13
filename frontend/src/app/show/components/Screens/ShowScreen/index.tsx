@@ -51,8 +51,7 @@ export default function ShowScreen({ id }: ShowScreenProps): React.JSX.Element {
 
 }
 
-
-function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): React.JSX.Element {
+export function getScreenComponent(screen: ScreenAvailable, setIsReady: () => void): React.JSX.Element {
     switch (screen.type) {
         case "drawTarget":
             return <DrawTarget options={screen.options} onReady={setIsReady} />;

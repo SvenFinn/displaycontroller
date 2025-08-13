@@ -8,26 +8,30 @@ export const schema: RJSFSchema = {
     properties: {
         "rows": {
             type: "integer",
-            title: "Rows",
+            title: "Zeilen",
+            description: "Anzahl der Zeilen",
             default: 1,
             minimum: 1,
         },
         "columns": {
             type: "integer",
-            title: "Columns",
+            title: "Spalten",
+            description: "Anzahl der Spalten",
             default: 1,
             minimum: 1,
         },
         "ranges": {
             type: "array",
-            title: "Ranges",
+            title: "Stände",
+            description: " ",
             items: {
                 type: ["number", "null"],
             }
         },
         "highlightAssign": {
             type: "boolean",
-            title: "Highlight newly assigned ranges",
+            title: "Neu belegte Stände hervorheben",
+            description: "Neu belegte Stände werden durch orangenes Blinken hervorgehoben.",
             default: false
         }
     }
@@ -35,6 +39,7 @@ export const schema: RJSFSchema = {
 
 export function getUiSchema(formData: DrawTargetOptions): UiSchema {
     return {
+        "ui:title": "Draw Target Options",
         "ui:field": "LayoutGridField",
         "ui:layoutGrid": {
             "ui:row": {
@@ -107,6 +112,8 @@ export function getUiSchema(formData: DrawTargetOptions): UiSchema {
                 columns: formData.columns,
             }
         },
-
+        highlightAssign: {
+            "ui:widget": "select",
+        }
     }
 }

@@ -2,7 +2,6 @@
 
 import { ViewerScreen } from "dc-screens-types";
 import styles from "./imageViewer.module.css"
-import { useEffect, useState } from "react";
 import { useHost } from "@frontend/app/hooks/useHost";
 
 interface ImageViewerProps {
@@ -12,6 +11,10 @@ interface ImageViewerProps {
 
 export default function ImageViewer({ options, onReady }: ImageViewerProps) {
     const host = useHost();
+
+    if (!host) {
+        return <></>
+    }
 
     const imageUrl = `${host}/api/images/${options.path}`;
     return (

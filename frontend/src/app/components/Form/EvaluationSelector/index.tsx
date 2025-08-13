@@ -15,7 +15,7 @@ export default function EvaluationSelector(props: WidgetProps) {
                     props.onChange(file);
                 }
             }} />
-            <p>Selected file / folder: {props.value}</p>
+            <p>Ausgewählte Datei / Ordner: {props.value}</p>
         </>
     );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { DrawTargetOptions, isDrawTargetOptions } from "dc-screens-types";
-import DrawTarget from "./components/DrawTarget";
 import SingleEdit from "../components/SingleEdit";
 import { schema, getUiSchema } from "./components/DrawTargetEdit";
+import LocalScreen from "../components/LocalScreen";
 
 export default function Page() {
     return (
@@ -20,7 +20,11 @@ export default function Page() {
             schema={schema}
             uiSchemaFn={getUiSchema}
             typeCheck={isDrawTargetOptions}
-            renderComponent={(data: DrawTargetOptions) => <DrawTarget options={data} />}
+            renderComponent={(data: DrawTargetOptions) => <LocalScreen screen={{
+                type: "drawTarget",
+                options: data,
+                duration: 30
+            }} />}
         />
     );
 }
