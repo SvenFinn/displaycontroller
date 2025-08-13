@@ -56,7 +56,7 @@ chromium_options=(
     --disable-component-update
     --disable-background-networking
     --disable-gaia-services
-    --gaia-url=http://0.0.0.0
+    --gaia-url=http://127.0.0.1
     --disable-cache
     --disk-cache-dir=/dev/null
     --disk-cache-size=1
