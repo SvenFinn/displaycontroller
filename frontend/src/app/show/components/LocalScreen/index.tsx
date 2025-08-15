@@ -21,6 +21,7 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
     useEffect(() => {
         if (!host) return;
         async function resolveScreens() {
+            setScreens([{ available: false }]);
             const screenData: DbScreen = {
                 id: 0,
                 visibleFrom: null,
@@ -36,20 +37,17 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
                 body: JSON.stringify(screenData)
             });
             if (response.status !== 200) {
-                setScreens([{ available: false }]);
                 console.error("Failed to resolve screens", response.statusText);
                 return;
             }
             const data = await response.json();
             if (!Array.isArray(data)) {
-                setScreens([{ available: false }]);
                 console.error("Invalid screens response", data);
                 return;
             }
             for (let i = 0; i < data.length; i++) {
                 if (!isScreen(data[i])) {
                     console.error(`Invalid screen at index ${i}`, data[i]);
-                    setScreens([{ available: false }]);
                     return;
                 }
             }
@@ -66,6 +64,9 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
             setCurrentScreenId(prevId => {
                 const nextId = prevId >= screens.length - 1 ? 0 : prevId + 1;
                 const currentScreen = screens[nextId];
+                if (!currentScreen) {
+                    return prevId;
+                }
                 timeoutRef.current = setTimeout(
                     showNextScreen,
                     currentScreen.available ? currentScreen.duration * 1000 : 10000
@@ -74,6 +75,9 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
             });
         }
         const initialScreen = screens[currentScreenId];
+        if (!initialScreen) {
+            return;
+        }
         timeoutRef.current = setTimeout(showNextScreen, initialScreen.available ? initialScreen.duration * 1000 : 10000);
         return () => {
             if (timeoutRef.current) {
@@ -101,10 +105,10 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
 
 }
 
-function RenderScreen({ screen, onReady }: { screen: Screen, onReady: () => void }): React.JSX.Element {
+function RenderScreen({ screen, onReady }: { screen: Screen | null, onReady: () => void }): React.JSX.Element {
     return (
         <Show>
-            {screen.available && getScreenComponent(screen, onReady)}
+            {screen && screen.available && getScreenComponent(screen, onReady)}
         </Show>
     )
 }

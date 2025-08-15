@@ -1,0 +1,80 @@
+.screenList {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+}
+
+
+.screenListEntry {
+    height: unset !important;
+    aspect-ratio: 16/9;
+    border: 4px solid #ccc;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.screenListEntry:last-child {
+    margin-bottom: 0;
+}
+
+.screenListEntry.active {
+    border-color: orange;
+}
+
+.screenListEntry>svg {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 10%;
+    aspect-ratio: 1/1;
+    height: unset;
+    z-index: 10000;
+    fill: #666;
+    border-radius: 30%;
+    display: none;
+}
+
+.screenListEntry:hover>svg {
+    display: block;
+}
+
+.moveUp {
+    right: 0;
+    top: 0;
+}
+
+.moveDown {
+    right: 0;
+    bottom: 0;
+}
+
+.delete {
+    left: 0;
+    top: 0;
+    fill: red !important;
+}
+
+.addIcon {
+    fill: green !important;
+    display: block !important;
+}
+
+.addIcon:hover {
+    background-color: #ccc;
+}
+
+.addEntry {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: visible;
+
+    .addIcon {
+        fill: green !important;
+        display: block !important;
+        margin: 10px auto 0 auto;
+        z-index: 0;
+        position: unset !important;
+    }
+}

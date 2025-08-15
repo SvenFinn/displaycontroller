@@ -12,6 +12,8 @@ import useLoader from "./Loader/hook";
 import { BaseCallback, DeleteDownloadCallback, FolderCreateCallback, MoveCopyCallback, RenameCallback, UploadCallback, useCallbackLoader } from "./Actions/CallbackWrapper";
 import { useActions } from "./Actions/hook";
 import ActionsRunner from "./Actions/Runner";
+import Error from "./Error";
+import { useError } from "./Error/hook";
 
 type FileManagerProps = {
     initialPath: string;
@@ -35,6 +37,7 @@ export default function FileManager({ files, allowMultiSelect, initialPath, onSe
     allowMultiSelect = allowMultiSelect == undefined ? true : allowMultiSelect;
 
     const loader = useLoader();
+    const error = useError();
 
 
     function onSelectInternal(path: string) {
@@ -62,19 +65,20 @@ export default function FileManager({ files, allowMultiSelect, initialPath, onSe
 
     onOpen = onOpen || (() => { });
     const actions = {
-        moveAction: useCallbackLoader(onMove, loader),
-        copyAction: useCallbackLoader(onCopy, loader),
-        deleteAction: useCallbackLoader(onDelete, loader),
-        downloadAction: useCallbackLoader(onDownload, loader),
-        createFolderAction: useCallbackLoader(onCreateFolder, loader),
-        renameAction: useCallbackLoader(onRename, loader),
-        uploadAction: useCallbackLoader(onUpload, loader),
-        refreshAction: useCallbackLoader(onRefresh, loader),
+        moveAction: useCallbackLoader(onMove, loader, error),
+        copyAction: useCallbackLoader(onCopy, loader, error),
+        deleteAction: useCallbackLoader(onDelete, loader, error),
+        downloadAction: useCallbackLoader(onDownload, loader, error),
+        createFolderAction: useCallbackLoader(onCreateFolder, loader, error),
+        renameAction: useCallbackLoader(onRename, loader, error),
+        uploadAction: useCallbackLoader(onUpload, loader, error),
+        refreshAction: useCallbackLoader(onRefresh, loader, error),
     };
     const internalActions = useActions(actions, currentPath, selectedFiles, setSelectedFiles);
     return (
-        <>
+        <div className={styles.fileManager}>
             <Loader loader={loader} />
+            <Error error={error} />
             <ActionsRunner action={internalActions.action} actionCallbacks={actions} selectedFiles={selectedFiles} currentPath={currentPath} clipboard={internalActions.clipboard} closeDialog={internalActions.closeDialog} files={files} />
             <ToolBar refresh={actions.refreshAction}>
                 <ActionButtons selectedFiles={selectedFiles} actions={internalActions} currentPath={currentPath} />
@@ -83,5 +87,5 @@ export default function FileManager({ files, allowMultiSelect, initialPath, onSe
                 <FolderTree files={files} currentPath={currentPath} onSelect={onPathChange} />
                 <FileList files={files} currentPath={currentPath} selectedFiles={selectedFiles} onPathChange={onPathChange} onSelect={onSelectInternal} onOpen={onOpen} contextActions={internalActions} />
             </ColumnResize>
-        </>)
+        </div>)
 }

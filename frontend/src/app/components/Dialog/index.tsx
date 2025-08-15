@@ -9,6 +9,7 @@ type DialogProps = {
     confirmText?: string;
     confirmColor?: string;
     cancelColor?: string;
+
     onCancel?: () => void;
     onConfirm?: () => void;
 }

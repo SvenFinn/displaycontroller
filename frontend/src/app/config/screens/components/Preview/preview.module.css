@@ -1,0 +1,4 @@
+.preview>div {
+    aspect-ratio: 16/9;
+    margin-top: 10px;
+}

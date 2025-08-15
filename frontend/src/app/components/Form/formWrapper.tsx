@@ -12,7 +12,6 @@ import ImageSelector from "./ImageSelector";
 import RangesGrid from "./RangesGrid";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import dynamic from "next/dynamic";
 
 export interface FormDefinition<T> {
     schema: RJSFSchema;
@@ -38,7 +37,7 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
 
     useEffect(() => {
         setFormData(initialData);
-    }, [initialData]);
+    }, [JSON.stringify(initialData)]);
 
     useEffect(() => {
         function updateStyleSheets() {
@@ -99,11 +98,14 @@ export default function FormWrapper<T>({ schema, uiSchemaFn, widgets, onChange, 
         container: ref.current || undefined,
     });
 
+    const css = ".row{ --bs-gutter-x: 0 !important; }"
+
     return (
         <root.div className={className || ""}>
             <CacheProvider value={cache}>
                 <style>{parentStyles}</style>
                 <style>{bootstrapCss}</style>
+                <style>{css}</style>
                 <div data-bs-theme="light" ref={ref} >
                     <Form schema={schema} uiSchema={uiSchemaFn ? uiSchemaFn(formData) : undefined} formData={formData} validator={validator} widgets={allWidgets} onChange={handleChange} onSubmit={handleSubmit} />
                 </div>

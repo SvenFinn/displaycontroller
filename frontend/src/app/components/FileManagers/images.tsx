@@ -13,6 +13,10 @@ export interface ImageManagerProps {
 export default function ImageManager({ selectedFiles = [], onSelect = () => { }, allowMultiSelect = true }: ImageManagerProps) {
     const host = useHost();
 
+    if (!host) {
+        return <></>;
+    }
+
     return (
         <FileManagerBase
             baseURL={`${host}/api/images/`}

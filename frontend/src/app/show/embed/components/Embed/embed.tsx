@@ -9,11 +9,11 @@ interface EmbedProps {
 export default function Embed({ options, onReady }: EmbedProps) {
 
     return (
-        <div className={styles.customURL}>
+        <div className={styles.embed}>
             <iframe
                 src={options.url}
                 title="Embed Viewer"
-                className={styles.customURL}
+                className={styles.embed}
                 onLoad={onReady}
             />
         </div>

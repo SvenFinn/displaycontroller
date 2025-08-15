@@ -21,15 +21,13 @@ div.fileList {
     padding: 1rem;
     overflow-y: auto;
     max-height: 80vh;
-    min-height: 20vh;
 }
 
 div.fileEntry {
     position: relative;
-    width: 15%;
+    width: calc(20% - 1rem);
     box-sizing: border-box;
     aspect-ratio: 1.5;
-    padding: 0.5rem;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -48,6 +46,9 @@ div.fileEntry {
         height: unset;
         object-fit: cover;
         border-radius: 0.5rem;
+        max-width: 100%;
+        max-height: 100%;
+        padding: 0.5rem;
     }
 
     span.fileName {

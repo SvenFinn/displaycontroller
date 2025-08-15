@@ -6,6 +6,7 @@ import { screenManager } from '../screens/screenManager';
 import { resolveScreen } from '../screens/types';
 import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
 import BodyParser from 'body-parser';
+import { Prisma } from 'dc-db-local/generated/client/client';
 dotenv.config();
 
 const app: Express = express();
@@ -113,6 +114,11 @@ app.put('/api/screens/swap/:screenId/:otherScreenId', async (req: Request, res: 
         res.status(400).send('Invalid screen id');
         return;
     }
+    // Check this would not create any holes in the sequence
+    if (screenId < 1 || otherScreenId < 1 || screenId === otherScreenId) {
+        res.status(400).send('Invalid screen ids');
+        return;
+    }
     try {
         const screen = await localClient.screens.findFirst({
             where: { id: screenId }
@@ -138,7 +144,9 @@ app.put('/api/screens/swap/:screenId/:otherScreenId', async (req: Request, res: 
                 where: { id: TEMP_SCREEN_ID },
                 data: { id: otherScreenId }
             })
-        ]);
+        ], {
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable
+        });
         res.status(200).send('Screens swapped');
     } catch (error) {
         logger.error(error);
@@ -191,14 +199,14 @@ app.put('/api/screens/:screenId', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/api/screens/:screenId', (req: Request, res: Response) => {
+app.delete('/api/screens/:screenId', async (req: Request, res: Response) => {
     if (isNaN(Number(req.params.screenId))) {
         res.status(400).send('Invalid screen id');
         return;
     }
     const screenId = Number(req.params.screenId);
     try {
-        localClient.screens.delete({
+        await localClient.screens.delete({
             where: {
                 id: screenId
             }
@@ -261,6 +269,43 @@ app.post('/api/screens/:screenId{/:subScreenId}', (req: Request, res: Response) 
         res.status(200).send('Screen switched');
     } catch (error) {
         res.status(500).send('Internal server error');
+    }
+});
+
+app.post("/api/screens", async (req: Request, res: Response) => {
+    if (!req.body || !isDbScreen(req.body)) {
+        res.status(400).send('Invalid screen data');
+        return;
+    }
+    const screen = req.body;
+    if (screen.type == "systemMessage" || screen.type == "screenCast") {
+        res.status(400).send('Cannot create systemMessage or screenCast screens via API');
+        return;
+    }
+    try {
+
+        await localClient.$transaction(async (tx) => {
+            const maxIdRecord = await tx.screens.aggregate({
+                _max: { id: true },
+            });
+
+            const nextId = (maxIdRecord._max.id ?? 0) + 1;
+            const newScreen = await tx.screens.create({
+                data: {
+                    ...screen,
+                    id: nextId,
+                    conditions: screen.conditions || Prisma.JsonNull
+                },
+            });
+
+            return newScreen;
+        }, {
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable
+        });
+        res.status(201).send(screen);
+    } catch (error) {
+        logger.error(error);
+        res.status(500).send(error);
     }
 });
 

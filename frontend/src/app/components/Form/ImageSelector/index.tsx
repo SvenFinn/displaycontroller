@@ -5,9 +5,8 @@ import ImageManager from "../../FileManagers/images";
 
 
 export default function ImageSelector(props: WidgetProps) {
-
     return (
-        <>
+        <div style={{ minHeight: "20vh" }}>
             <ImageManager allowMultiSelect={false} selectedFiles={[props.value]} onSelect={(file) => {
                 if (props.value === file) {
                     props.onChange("");
@@ -16,6 +15,6 @@ export default function ImageSelector(props: WidgetProps) {
                 }
             }} />
             <p>Ausgewählte Datei / Ordner: {props.value}</p>
-        </>
+        </div>
     );
 }

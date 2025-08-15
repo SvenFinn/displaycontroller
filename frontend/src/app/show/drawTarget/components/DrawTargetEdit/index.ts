@@ -42,68 +42,25 @@ export function getUiSchema(formData: DrawTargetOptions): UiSchema {
         "ui:title": "Draw Target Options",
         "ui:field": "LayoutGridField",
         "ui:layoutGrid": {
-            "ui:row": {
-                "className": "row",
+            "ui:col": {
                 "children": [
                     {
-                        "ui:col": {
-                            "children": [
-
-                                {
-                                    "ui:row": {
-                                        "className": "row",
-                                        "children": [
-                                            {
-                                                "ui:col": {
-                                                    "children": [
-                                                        "rows",
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "ui:col": {
-                                                    "children": [
-                                                        "columns",
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "ui:row": {
-                                        "className": "row",
-                                        "children": [
-                                            {
-                                                "ui:columns": {
-                                                    "children": [
-                                                        "ranges",
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "ui:row": {
-                                        "className": "row",
-                                        "children": [
-                                            {
-                                                "ui:col": {
-                                                    "children": [
-                                                        "highlightAssign",
-                                                    ]
-                                                }
-                                            },
-
-                                        ]
-                                    }
-                                }
-                            ]
+                        "ui:row": {
+                            "children": ["rows", "columns"]
+                        }
+                    },
+                    {
+                        "ui:row": {
+                            "children": ["ranges"]
+                        }
+                    },
+                    {
+                        "ui:row": {
+                            "children": ["highlightAssign"]
                         }
                     }
                 ]
-            },
+            }
         },
         "ranges": {
             "ui:widget": "RangesGrid",

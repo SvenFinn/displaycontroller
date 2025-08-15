@@ -1,3 +1,4 @@
+import { ErrorHook } from "../Error/hook";
 import { LoaderHook } from "../Loader/hook";
 
 export type PercentageFunction = (percentage: number) => void;
@@ -42,7 +43,8 @@ export function useCallbackLoader<
     P extends any[]
 >(
     callback: ((...args: [...P, PercentageFunction, PercentageMessageFunction]) => Promise<void>) | undefined,
-    loader: LoaderHook
+    loader: LoaderHook,
+    errorHook: ErrorHook
 ): ((...args: P) => Promise<void>) | undefined {
     if (!callback) {
         return undefined;
@@ -53,7 +55,7 @@ export function useCallbackLoader<
         try {
             await callback(...args, setPercentage, setMessage);
         } catch (error) {
-            console.error(error instanceof Error ? error.message : String(error));
+            errorHook.setError(error instanceof Error ? error.message : String(error));
         } finally {
             stopLoading();
         }

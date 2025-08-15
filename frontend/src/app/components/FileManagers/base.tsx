@@ -15,7 +15,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
 
     async function refresh() {
         setFiles([]);
-        const response = await fetch(new URL("", baseURL));
+        const response = await fetch(baseURL);
         if (!response.ok) {
             throw new Error("Failed to fetch files");
         }

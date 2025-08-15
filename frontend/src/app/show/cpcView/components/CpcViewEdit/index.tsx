@@ -33,15 +33,12 @@ export function getUiSchema(formData: CpcViewOptions): UiSchema {
         "ui:field": "LayoutGridField",
         "ui:layoutGrid": {
             "ui:row": {
-                "className": "row",
                 "children": [
                     {
                         "ui:col": {
                             "children": [
-
                                 {
                                     "ui:row": {
-                                        "className": "row",
                                         "children": [
                                             {
                                                 "ui:col": {
@@ -62,7 +59,6 @@ export function getUiSchema(formData: CpcViewOptions): UiSchema {
                                 },
                                 {
                                     "ui:row": {
-                                        "className": "row",
                                         "children": [
                                             {
                                                 "ui:columns": {
@@ -76,7 +72,6 @@ export function getUiSchema(formData: CpcViewOptions): UiSchema {
                                 },
                                 {
                                     "ui:row": {
-                                        "className": "row",
                                         "children": [
                                             {
                                                 "ui:col": {

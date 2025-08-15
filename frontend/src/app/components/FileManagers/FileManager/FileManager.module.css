@@ -1,3 +1,9 @@
 .columns {
     --column-resize-handle-border-color: #cfcfcf;
 }
+
+div.fileManager {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
