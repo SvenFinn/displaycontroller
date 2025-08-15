@@ -3,4 +3,5 @@ img.logo {
     position: absolute;
     top: calc(var(--container-size) * 0.01);
     left: calc(var(--container-size) * 0.01);
+    font-size: 0px;
 }
