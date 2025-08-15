@@ -6,6 +6,9 @@ import { isDirectoryListing } from "@shared/files";
 import { flattenFileList } from "@shared/files/helpers";
 
 export default async function imageViewer(screen: ViewerDbScreen): Promise<Screens> {
+    if (!screen.options.path) {
+        return [];
+    }
     let fileList: string[];
     try {
         fileList = await createFileList(screen.options.path);

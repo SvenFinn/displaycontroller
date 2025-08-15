@@ -5,6 +5,9 @@ import { logger } from "dc-logger";
 import { flattenFileList } from "@shared/files/helpers";
 
 export default async function evaluation(screen: EvaluationDbScreen): Promise<Screens> {
+    if (!screen.options.path) {
+        return [];
+    }
     let fileList: string[];
     try {
         fileList = await createFileList(screen.options.path);
