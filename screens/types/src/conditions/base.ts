@@ -1,3 +1,5 @@
+import { RangeId } from "../common";
+
 type BaseCondition = {
     invert: boolean;
     type: string;
@@ -5,13 +7,13 @@ type BaseCondition = {
 
 export type ConditionMinMax = BaseCondition & {
     type: "ranges_free_count" | "ranges_online_count";
-    min: number;
-    max: number;
+    min: RangeId | null;
+    max: RangeId | null;
 }
 
 export type ConditionNumber = BaseCondition & {
     type: "range_free" | "range_online";
-    number: number;
+    number: RangeId;
 }
 
 export type ConditionNone = BaseCondition & {

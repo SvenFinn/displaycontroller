@@ -48,12 +48,12 @@ export const schema: RJSFSchema = {
                         then: {
                             properties: {
                                 min: {
-                                    type: "number",
-                                    default: 0
+                                    type: ["number", "null"],
+                                    default: null,
                                 },
                                 max: {
-                                    type: "number",
-                                    default: 10
+                                    type: ["number", "null"],
+                                    default: null
                                 }
                             },
                             required: ["min", "max"]
@@ -152,14 +152,16 @@ export function getUiSchema(data: Conditions): UiSchema {
                     "ui:options": {
                         label: false,
                     },
-                    "ui:help": "Minimale Anzahl"
+                    "ui:help": "Minimale Anzahl",
+                    "ui:placeholder": "Unbegrenzt"
 
                 },
                 max: {
                     "ui:options": {
                         label: false,
                     },
-                    "ui:help": "Maximale Anzahl"
+                    "ui:help": "Maximale Anzahl",
+                    "ui:placeholder": "Unbegrenzt"
                 },
                 number: {
                     "ui:options": {
