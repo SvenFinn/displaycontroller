@@ -1,5 +1,6 @@
 import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
+import { PositiveInteger, RangeId } from "./common";
 
 export type DrawTargetDbScreen = BaseDbScreen & {
     type: "drawTarget";
@@ -7,9 +8,9 @@ export type DrawTargetDbScreen = BaseDbScreen & {
 }
 
 export type DrawTargetOptions = {
-    rows: number;
-    columns: number;
-    ranges: Array<number | null>;
+    rows: PositiveInteger;
+    columns: PositiveInteger;
+    ranges: Array<RangeId | null>;
     highlightAssign: boolean;
 }
 

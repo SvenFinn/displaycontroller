@@ -1,5 +1,6 @@
 import { createIs } from "typia";
 import { BaseDbScreen, BaseScreenAvailable } from "./base";
+import { PositiveInteger, RangeId } from "./common";
 
 export type CpcViewDbScreen = BaseDbScreen & {
     type: "cpcView";
@@ -7,9 +8,9 @@ export type CpcViewDbScreen = BaseDbScreen & {
 }
 
 export type CpcViewOptions = {
-    "rows": number;
-    "columns": number;
-    "ranges": Array<number | null>;
+    "rows": PositiveInteger;
+    "columns": PositiveInteger;
+    "ranges": Array<RangeId | null>;
 }
 
 export const isCpcViewOptions = createIs<CpcViewOptions>();

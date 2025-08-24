@@ -1,3 +1,4 @@
+import { ScreenId } from './common';
 import { BaseDbScreen, BaseScreenAvailable } from './base';
 
 export type SystemMessageScreen = BaseScreenAvailable & {
@@ -21,7 +22,7 @@ export type IncompatibleMessageOptions = {
 
 export type InvalidScreenOptions = {
     type: "invalidScreen";
-    id: number;
+    id: ScreenId;
     screenType: string;
 }
 

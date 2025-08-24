@@ -1,22 +1,25 @@
+import { tags } from 'typia';
 import { Conditions } from './conditions';
+import { DateString, ScreenId } from './common';
+
 
 export type BaseDbScreen = {
-    id: number;
+    id: ScreenId;
     type: string;
-    options: any;
+    options: Record<string, any>;
     conditions: Conditions | null;
-    visibleFrom: Date | null;
-    visibleUntil: Date | null;
-    duration: number;
+    visibleFrom: DateString | null;
+    visibleUntil: DateString | null;
+    duration: number & tags.Minimum<1>;
 }
 
 export type BaseScreenAvailable = {
     available: true;
-    id: number;
+    id: ScreenId;
     subId: number;
     type: string;
     options: Record<string, any>;
-    duration: number;
+    duration: number & tags.Minimum<1>;
 }
 
 export type ScreenUnavailable = {

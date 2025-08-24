@@ -47,7 +47,8 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
                 updatedAt: new Date(),
             } as DbScreen;
         }
-        const nextDbScreen = nextScreen as DbScreen;
+        // The type guard above ensures that nextScreen is a DbScreen
+        const nextDbScreen = nextScreen as unknown as DbScreen;
         logger.info(`Found screen with id ${nextDbScreen.id} for old screen id ${currentScreenId}`);
         const nextScreenId = nextDbScreen.id;
         currentScreenId = nextScreenId; // Update currentScreenId for next iteration
