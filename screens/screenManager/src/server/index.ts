@@ -284,7 +284,7 @@ app.post("/api/screens", async (req: Request, res: Response) => {
     }
     try {
 
-        await localClient.$transaction(async (tx) => {
+        const newScreen = await localClient.$transaction(async (tx) => {
             const maxIdRecord = await tx.screens.aggregate({
                 _max: { id: true },
             });
@@ -302,10 +302,10 @@ app.post("/api/screens", async (req: Request, res: Response) => {
         }, {
             isolationLevel: Prisma.TransactionIsolationLevel.Serializable
         });
-        res.status(201).send(screen);
+        res.status(201).send(newScreen);
     } catch (error) {
         logger.error(error);
-        res.status(500).send(error);
+        res.status(500).send("Internal server error");
     }
 });
 

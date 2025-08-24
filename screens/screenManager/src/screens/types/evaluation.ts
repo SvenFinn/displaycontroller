@@ -2,7 +2,8 @@ import { Screens } from ".";
 import { EvaluationDbScreen } from "dc-screens-types";
 import { isDirectoryListing } from "@shared/files";
 import { logger } from "dc-logger";
-import { flattenFileList } from "@shared/files/helpers";
+import { createFileList } from "@shared/files/helpers";
+
 
 export default async function evaluation(screen: EvaluationDbScreen): Promise<Screens> {
     if (!screen.options.path) {
@@ -10,7 +11,7 @@ export default async function evaluation(screen: EvaluationDbScreen): Promise<Sc
     }
     let fileList: string[];
     try {
-        fileList = await createFileList(screen.options.path);
+        fileList = await createFileList(screen.options.path, new URL("http://evaluations/api/evaluations/"));
     } catch (e) {
         logger.error(`Failed to fetch files for screen ${screen.id}`);
         return [];
@@ -31,22 +32,4 @@ export default async function evaluation(screen: EvaluationDbScreen): Promise<Sc
             duration: screen.duration
         }
     });
-}
-
-
-async function createFileList(path: string): Promise<string[]> {
-    try {
-        const files = await fetch(`http://evaluations/api/evaluations/${path}`);
-        if (!files.ok) return [path];
-        // Check if the response is a JSON object or HTML
-        const contentType = files.headers.get("content-type");
-        if (!contentType) return [path];
-        if (!contentType.includes("application/json")) return [path];
-        const fileList = await files.json();
-        if (!isDirectoryListing(fileList)) return [path];
-        return flattenFileList(fileList, path);
-    } catch (e) {
-        logger.error(`Failed to fetch files for path ${path}`);
-        return [path];
-    }
 }
