@@ -1,10 +1,10 @@
 import { LocalClient } from "dc-db-local";
 
 
-export async function getRangeId(prismaClient: LocalClient, rangeIp: string): Promise<number | null> {
+export async function getRangeId(prismaClient: LocalClient, rangeMac: string, rangeIp: string): Promise<number | null> {
     const range = await prismaClient.knownRanges.findUnique({
         where: {
-            ipAddress: rangeIp
+            macAddress: rangeMac,
         }
     });
     if (!range) {
@@ -27,10 +27,21 @@ export async function getRangeId(prismaClient: LocalClient, rangeIp: string): Pr
         await prismaClient.knownRanges.create({
             data: {
                 rangeId: rangeId,
-                ipAddress: rangeIp
+                macAddress: rangeMac,
+                lastIp: rangeIp
             }
         });
         return rangeId;
+    }
+    if (range.lastIp !== rangeIp) {
+        await prismaClient.knownRanges.update({
+            where: {
+                macAddress: rangeMac,
+            },
+            data: {
+                lastIp: rangeIp
+            }
+        });
     }
     return range.rangeId;
 }

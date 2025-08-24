@@ -12,16 +12,16 @@ export async function updateIpAddresses(localClient: LocalClient) {
         },
         select: {
             rangeId: true,
-            ipAddress: true,
+            lastIp: true,
         },
     });
 
     const ipAddressTempMap = new Map<number, string>();
     for (const ipAddress of newDisciplines) {
-        if (ipAddress.rangeId === null || ipAddress.ipAddress === null) {
+        if (ipAddress.rangeId === null || ipAddress.lastIp === null) {
             continue;
         }
-        ipAddressTempMap.set(ipAddress.rangeId, ipAddress.ipAddress);
+        ipAddressTempMap.set(ipAddress.rangeId, ipAddress.lastIp);
     }
     mergeMaps(ipAddresses, ipAddressTempMap);
 }

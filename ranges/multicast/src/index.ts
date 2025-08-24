@@ -31,7 +31,7 @@ async function main() {
             return;
         }
         const multicastMessage = Buffer.from(message.message, "base64").toString();
-        const rangeData = await getRangeData(multicastMessage, message.ip);
+        const rangeData = await getRangeData(multicastMessage, message.mac, message.ip);
         if (rangeData === null) {
             logger.error("Failed to parse range data for " + message.ip);
             return;
@@ -42,8 +42,8 @@ async function main() {
     });
 }
 
-async function getRangeData(message: string, rangeIp: string): Promise<InternalRange | null> {
-    const rangeId = await getRangeId(prismaClient, rangeIp);
+async function getRangeData(message: string, rangeMac: string, rangeIp: string): Promise<InternalRange | null> {
+    const rangeId = await getRangeId(prismaClient, rangeMac, rangeIp);
     if (rangeId === null) {
         return null;
     }

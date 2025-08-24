@@ -23,8 +23,8 @@ model Screens {
     type         ScreensTypes
     options      Json
     conditions   Json?
-    visibleFrom  DateTime?
-    visibleUntil DateTime?
+    visibleFrom  String? // Represents a date in YYYY-MM-DD format
+    visibleUntil String? // Represents a date in YYYY-MM-DD format
     duration     Int          @default(30000)
     createdAt    DateTime     @default(now())
     updatedAt    DateTime     @default(now()) @updatedAt
@@ -58,8 +58,9 @@ enum CacheTypes {
 }
 
 model KnownRanges {
-    ipAddress String   @id @db.Inet
-    rangeId   Int?     @unique
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
+    macAddress String   @id
+    rangeId    Int?     @unique
+    lastIp     String?  @unique @db.Inet
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @default(now()) @updatedAt
 }

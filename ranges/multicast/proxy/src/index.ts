@@ -4,6 +4,7 @@ import { RangeProxyType } from "./types";
 import amqp from "amqplib";
 import { decode } from "iconv-lite";
 import dotenv from "dotenv";
+import { getTable, toMAC } from "@network-utils/arp-lookup";
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ async function main() {
         const address = client.address();
         logger.info(`UDP Client listening on ${address.address}:${address.port}`);
     });
-    client.on("message", function (message: Buffer, remote: RemoteInfo) {
+    client.on("message", async function (message: Buffer, remote: RemoteInfo) {
         if (remote.family !== "IPv4") {
             logger.warn("Received message from non-IPv4 address");
             return;
@@ -42,9 +43,15 @@ async function main() {
             logger.warn(`Received short message (${message.length} < ${MESSAGE_MIN_LENGTH}) from ${remote.address}`);
             return;
         }
+        const senderMac = await getMac(remote.address);
+        if (!senderMac) {
+            logger.warn(`Could not resolve MAC address for ${remote.address}`);
+            return;
+        }
         const messageStr = decode(message, 'windows-1252');
         const proxiedMessage: RangeProxyType = {
             ip: remote.address,
+            mac: senderMac,
             message: Buffer.from(messageStr).toString("base64")
         }
         logger.debug(`Received message from ${remote.address}`);
@@ -55,6 +62,27 @@ async function main() {
         process.exit();
     });
     client.bind(49497, "0.0.0.0");
+}
+
+async function getMac(ip: string): Promise<string | null> {
+    const mac = await toMAC(ip);
+    if (!mac) {
+        // Ping the device to populate the ARP table
+        await new Promise<void>((resolve) => {
+            const socket = createSocket("udp4");
+            socket.on("error", () => {
+                socket.close();
+                resolve();
+            });
+            socket.send("", 9, ip, () => {
+                socket.close();
+                setTimeout(resolve, 500); // Wait a bit for the ARP table to
+            });
+        });
+        // Try again to get the MAC address
+        return await toMAC(ip);
+    }
+    return mac;
 }
 
 main();

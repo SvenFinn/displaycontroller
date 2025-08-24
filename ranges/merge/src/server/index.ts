@@ -40,12 +40,12 @@ app.get('/api/ranges/known', async (req: Request, res: Response) => {
     res.status(200).send(knownRanges);
 });
 
-app.get('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
-    const rangeIp: string = req.params.rangeIp;
+app.get('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
+    const rangeMac: string = req.params.rangeMac;
     const knownRange = await localClient.knownRanges.findUnique(
         {
             where: {
-                ipAddress: rangeIp,
+                macAddress: rangeMac,
             },
         }
     );
@@ -56,24 +56,19 @@ app.get('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
-    const rangeIp: string = req.params.rangeIp;
+app.post('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
+    const rangeMac: string = req.params.rangeMac;
     const rangeId = parseInt(req.body);
     if (isNaN(rangeId)) {
         res.status(400).send('Invalid range ID');
         return;
     }
-    const elements = rangeIp.split('.');
-    if (elements.length !== 4 || elements.some((element) => isNaN(parseInt(element)) || parseInt(element) < 0 || parseInt(element) > 255)) {
-        res.status(400).send('Invalid IP address');
-        return;
-    }
     const knownRange = await localClient.knownRanges.upsert({
         where: {
-            ipAddress: rangeIp,
+            macAddress: rangeMac,
         },
         create: {
-            ipAddress: rangeIp,
+            macAddress: rangeMac,
             rangeId: rangeId,
         },
         update: {
@@ -83,11 +78,11 @@ app.post('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
     res.status(200).send(knownRange);
 });
 
-app.delete('/api/ranges/known/:rangeIp', async (req: Request, res: Response) => {
-    const rangeIp: string = req.params.rangeIp;
+app.delete('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
+    const rangeMac: string = req.params.rangeMac;
     const knownRange = await localClient.knownRanges.delete({
         where: {
-            ipAddress: rangeIp,
+            macAddress: rangeMac,
         },
     });
     res.status(200).send(knownRange);

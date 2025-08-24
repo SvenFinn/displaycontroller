@@ -7,8 +7,8 @@ CREATE TABLE "Screens" (
     "type" "ScreensTypes" NOT NULL,
     "options" JSONB NOT NULL,
     "conditions" JSONB,
-    "visibleFrom" TIMESTAMP(3),
-    "visibleUntil" TIMESTAMP(3),
+    "visibleFrom" TEXT,
+    "visibleUntil" TEXT,
     "duration" INTEGER NOT NULL DEFAULT 30000,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
