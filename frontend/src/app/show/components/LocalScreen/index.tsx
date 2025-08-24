@@ -22,13 +22,13 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
         if (!host) return;
         async function resolveScreens() {
             setScreens([{ available: false }]);
-            const screenData: DbScreen = {
-                id: 0,
+            const screenData = {
+                id: 1, // Dummy ID
                 visibleFrom: null,
                 visibleUntil: null,
                 conditions: null,
                 ...screen
-            };
+            } as DbScreen;
             const response = await fetch(`${host}/api/screens/resolve`, {
                 method: "POST",
                 headers: {

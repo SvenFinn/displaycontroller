@@ -19,7 +19,7 @@ export default function ScreenEdit({ screen, onSubmit, onChange, className }: Sc
     if (!screen) {
         return <div className={styles.error}>Keine Ansicht ausgewählt</div>;
     }
-    function translateFromDbScreen(data: DbScreen) {
+    function translateFromDbScreen(data: DbScreen): DbScreen {
         return {
             ...data,
             duration: data.duration / 1000, // Convert from milliseconds to seconds
@@ -32,16 +32,10 @@ export default function ScreenEdit({ screen, onSubmit, onChange, className }: Sc
 
     function translateToDbScreen(data: DbScreen): DbScreen {
         let screenData = JSON.parse(JSON.stringify(data)); // Deep clone to avoid mutation
-        if (data.visibleFrom) {
-            data.visibleFrom.setHours(0, 0, 0, 0);
-        }
-        if (data.visibleUntil) {
-            data.visibleUntil.setHours(23, 59, 59, 999);
-        }
         return {
-            ...data,
-            duration: data.duration * 1000, // Convert from seconds to milliseconds
-            conditions: data.conditions?.conditions.length ? data.conditions : null,
+            ...screenData,
+            duration: screenData.duration * 1000, // Convert from seconds to milliseconds
+            conditions: screenData.conditions?.conditions.length ? screenData.conditions : null,
 
         };
     }
@@ -95,7 +89,7 @@ export default function ScreenEdit({ screen, onSubmit, onChange, className }: Sc
     function getUiSchema(data: DbScreen): UiSchema {
         return {
             conditions: getConditionUiSchema(data.conditions!),
-            options: getScreensUiSchema(data),
+            options: getScreensUiSchema(data as DbScreen),
             "ui:field": "LayoutGridField",
             "ui:layoutGrid": {
                 "ui:col": [
@@ -149,7 +143,7 @@ export default function ScreenEdit({ screen, onSubmit, onChange, className }: Sc
             schema={schema}
             uiSchemaFn={getUiSchema}
             initialData={screenData}
-            typeCheck={isDbScreen}
+            typeCheck={(data) => isDbScreen(data)}
             className={className}
         />
     )

@@ -28,15 +28,16 @@ export const fetchScreens = createAsyncThunk("screens/fetchScreens", async () =>
 });
 
 export const createScreen = createAsyncThunk("screens/createScreen", async (type: DbScreen["type"], { dispatch }) => {
-    const screen = getDefaultOptions({
-        id: 0, // This will be set by the server
+    const baseScreen = {
+        id: 1, // This will be set by the server
         type,
         visibleFrom: null,
         visibleUntil: null,
         conditions: null,
-        options: {},
         duration: 30000
-    });
+    } as Omit<DbScreen, "options"> & { type: DbScreen["type"] };
+
+    const screen = getDefaultOptions(baseScreen as DbScreen);
     const host = getHost();
     if (!host) {
         throw new Error("Host is not defined");

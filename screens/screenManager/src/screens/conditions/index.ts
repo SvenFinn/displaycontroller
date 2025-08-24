@@ -9,10 +9,15 @@ import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 
 export async function checkCondition(localClient: LocalClient, screen: DbScreen): Promise<boolean> {
-    if (screen.visibleFrom && screen.visibleFrom > new Date()) return false;
+    if (screen.visibleFrom) {
+        const fromDate = new Date(screen.visibleFrom);
+        fromDate.setHours(0, 0, 0, 0);
+        if (fromDate > new Date()) return false;
+    }
     if (screen.visibleUntil) {
-        screen.visibleUntil.setDate(screen.visibleUntil.getDate() + 1);
-        if (screen.visibleUntil < new Date()) return false;
+        const untilDate = new Date(screen.visibleUntil);
+        untilDate.setHours(23, 59, 59, 999);
+        if (untilDate < new Date()) return false;
     }
     if (!screen.conditions) return true;
     if (screen.conditions.conditions.length === 0) return true;
