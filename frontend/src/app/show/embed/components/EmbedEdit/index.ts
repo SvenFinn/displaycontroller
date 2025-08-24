@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { DrawTargetOptions } from "dc-screens-types";
+import { EmbedOptions } from "dc-screens-types";
 
 export const schema: RJSFSchema = {
     type: "object",
@@ -13,6 +13,6 @@ export const schema: RJSFSchema = {
     }
 };
 
-export function getUiSchema(formData: DrawTargetOptions): UiSchema {
+export function getUiSchema(formData: EmbedOptions): UiSchema {
     return {};
 }
