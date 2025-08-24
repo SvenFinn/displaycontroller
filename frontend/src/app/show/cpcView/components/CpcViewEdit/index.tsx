@@ -4,7 +4,7 @@ import { CpcViewOptions } from "dc-screens-types";
 export const schema: RJSFSchema = {
     type: "object",
     title: "CPC View",
-    required: ["rows", "columns", "ranges", "highlightAssign"],
+    required: ["rows", "columns", "ranges"],
     properties: {
         "rows": {
             type: "integer",
