@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -euo pipefail
+
 PROXY_NAME="%PROXY_NAME%"
 APP_PORT="%APP_PORT%"
 
@@ -24,7 +26,7 @@ export SCREEN_RESOLUTION=$screen_res
 docker compose up --remove-orphans --no-build&
 
 # Wait for the proxy to be healthy
-docker events --filter 'event=health_status' | while read event; do
+docker events --filter 'event=health_status' | while read -r event; do
     if echo "$event" | grep "$PROXY_NAME" | grep -q " healthy "; then
         break;
     fi

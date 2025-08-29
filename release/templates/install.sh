@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -o pipefail
+set -euo pipefail
+IFS=$'\n\t'
 
 APP_VERSION="%APP_VERSION%"
 BACK_TITLE="Displaycontroller Installation ${APP_VERSION}"
@@ -13,11 +14,10 @@ function run_install_step(){
     local step_title=$3
 
     local nl=$'\n'
-    local command="DEBIAN_FRONTEND=noninteractive$nl set -e$nl"
+    local command="DEBIAN_FRONTEND=noninteractive$nl set -euo pipefail$nl"
     while IFS= read -r line; do
         command+="${line}${nl}"
-    done
-    command+="set +e$nl"     
+    done  
 
     local width height
     width=$(tput cols)
@@ -35,17 +35,21 @@ function run_install_step(){
     local tmp_log_file
     tmp_log_file=$(mktemp)
 
+    set +e
+
+    local EXIT_CODE=0
     if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
         eval "$command" 2>&1 | tee "$tmp_log_file"
+        EXIT_CODE=${PIPESTATUS[0]}
     else
         eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
                                                 --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
                                                 --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+        EXIT_CODE=${PIPESTATUS[0]}
     fi
+    set -e
 
-    local EXIT_CODE=$?
-
-    if [ $EXIT_CODE -ne 0 ]; then
+    if [ "$EXIT_CODE" -ne 0 ]; then
         if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
             echo "ERROR: $step_title"
             cat "$tmp_log_file"
@@ -66,7 +70,7 @@ function run_install_step(){
         local dialog_options=(
             --colors --keep-window --backtitle "$BACK_TITLE"
             --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
-            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
+            --and-widget --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command" "$log_height" "$width"
         )
         dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin $reboot_top 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
 
@@ -149,7 +153,13 @@ fi
 
 SRC_DIR="$(realpath "$(dirname "$0")")"
 INSTALL_DIR=$(pwd)
-USER=${SUDO_USER:-$(id -nu "$PKEXEC_UID")}
+if [ -n "${SUDO_USER:-}" ]; then
+    USER="$SUDO_USER"
+elif [ -n "${PKEXEC_UID:-}" ]; then
+    USER="$(id -nu "$PKEXEC_UID")"
+else
+    USER="$(id -nu)"
+fi
 
 
 # Check if the DisplayController.desktop file exists in the users autostart directory
@@ -164,31 +174,33 @@ if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
     height=$(tput lines)
 
     # Allow the user to choose the installation directory
-    INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 "$width" \
-        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 "$width" "/opt/displaycontroller")
-    # shellcheck disable=SC2181
-    if [ $? -ne 0 ]; then
-        exit
+
+    if ! INSTALL_DIR=$(dialog --stdout --backtitle "$BACK_TITLE" --begin 3 0 --title "Welcome" --infobox "Welcome to the DisplayController installation script.\n\nThis script will guide you through the installation process." 5 "$width" \
+        --and-widget --title "Installation directory" --inputbox "Please enter the installation directory" 0 "$width" "/opt/displaycontroller"); then
+        echo "Dialog for installation directory failed or was cancelled."
+        exit 1
     fi
 
     #SSL certificate selection
-    dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --yes-label "Self-signed" --no-label "Own certificate" --yesno "The displaycontroller can be accessed via HTTPS. Do you want to use a self-signed certificate or provide your own?" 0 "$width"
-    # shellcheck disable=SC2181
-    if [ $? -eq 0 ]; then
+    if dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --yes-label "Self-signed" --no-label "Own certificate" --yesno "The displaycontroller can be accessed via HTTPS. Do you want to use a self-signed certificate or provide your own?" 0 "$width"; then
         # Use self-signed certificate
         SSL_CERT_FILE=""
         SSL_KEY_FILE=""
     else
         # Ask for the certificate and key files
-        SSL_CERT_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --inputbox "Please enter the path to the SSL certificate file" 0 "$width" "$(pwd)/displaycontroller.crt")
-        SSL_KEY_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Key" --inputbox "Please enter the path to the SSL key file" 0 "$width" "$(pwd)/displaycontroller.key")
+        if ! SSL_CERT_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Certificate" --inputbox "Please enter the path to the SSL certificate file" 0 "$width" "$(pwd)/displaycontroller.crt"); then
+            echo "Dialog for SSL certificate file failed or was cancelled."
+            exit 1
+        fi
+        if ! SSL_KEY_FILE=$(dialog --stdout --backtitle "$BACK_TITLE" --title "SSL Key" --inputbox "Please enter the path to the SSL key file" 0 "$width" "$(pwd)/displaycontroller.key"); then
+            echo "Dialog for SSL key file failed or was cancelled."
+            exit 1
+        fi
     fi
     # Allow the user to choose if the DisplayController should start on boot
-    dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 "$width"
-    # shellcheck disable=SC2181
-    if [ $? -eq 0 ]; then
+    if dialog --stdout --backtitle "$BACK_TITLE" --title "Start on boot" --yesno "Do you want the DisplayController to start on boot?" 0 "$width"; then
         AUTOSTART=1
-    else 
+    else
         AUTOSTART=0
     fi
 fi
@@ -235,7 +247,7 @@ update-desktop-database -v /usr/share/applications
 if [ $AUTOSTART -eq 1 ]; then
     mkdir -p "/home/$USER/.config/autostart"
     rm -f "/home/$USER/.config/autostart/DisplayController.desktop" || true
-    ln -s "$INSTALL_DIR/DisplayController.desktop" "/home/$USER/.config/autostart/DisplayController.desktop"
+    ln -sf "$INSTALL_DIR/DisplayController.desktop" "/home/$USER/.config/autostart/DisplayController.desktop"
     echo "Linked DisplayController.desktop to /home/$USER/.config/autostart/DisplayController.desktop"
 fi
 EOF
@@ -276,7 +288,11 @@ EOF
 
 run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
-apt-get install -y chromium-browser unclutter
+if apt-cache show chromium-browser &>/dev/null; then
+    apt-get install -y chromium-browser unclutter
+else
+    apt-get install -y chromium unclutter
+fi
 EOF
 
 if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then

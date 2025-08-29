@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 function install_makeself() {
     # Installs makeself to the specified target path.
     # Usage: install_makeself <target_path> [version]

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 host="$1"
 name="$2"
 user="$3"

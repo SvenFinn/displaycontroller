@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o pipefail
+set -euo pipefail
 
 cd "$(dirname "$0")" || exit 1
 
@@ -56,11 +56,10 @@ function run_update_step(){
     local step_title=$3
 
     local nl=$'\n'
-    local command="DEBIAN_FRONTEND=noninteractive$nl set -e$nl"
+    local command="DEBIAN_FRONTEND=noninteractive$nl set -euo pipefail$nl"
     while IFS= read -r line; do
         command+="${line}${nl}"
     done 
-    command+="set +e$nl"
 
     local width  height
     width=$(tput cols)
@@ -78,13 +77,21 @@ function run_update_step(){
     local tmp_log_file
     tmp_log_file=$(mktemp)
 
-    eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                            --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
-                                            --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+    set +e
 
-    local EXIT_CODE=$?
+    local EXIT_CODE=0
+    if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
+        eval "$command" 2>&1 | tee "$tmp_log_file"
+        EXIT_CODE=${PIPESTATUS[0]}
+    else
+        eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
+                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
+                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+        EXIT_CODE=${PIPESTATUS[0]}
+    fi
+    set -e
 
-    if [ $EXIT_CODE -ne 0 ]; then
+    if [ "$EXIT_CODE" -ne 0 ]; then
         local error_top=2
         local error_height=3
 
@@ -99,7 +106,7 @@ function run_update_step(){
         local dialog_options=(
             --colors --keep-window --backtitle "$BACK_TITLE"
             --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
-            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command_with_newlines" "$log_height" "$width"
+            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command" "$log_height" "$width"
         )
         if [ "$REBOOT" == "0" ]; then
             dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
@@ -163,7 +170,7 @@ apt-get autoremove -y
 EOF
 
 run_update_step $((step_nr++)) $total_steps "Updating snap packages" <<EOF
-local snap_list=\$(snap refresh --list | cut -d' ' -f1 | tail -n +2)
+snap_list=\$(snap refresh --list | cut -d' ' -f1 | tail -n +2)
 for snap in \$snap_list; do
     local dot_count=0
     snap refresh "\$snap"&
@@ -199,7 +206,7 @@ if [ -e ".FREEZE" ]; then
     exit 0
 fi
 
-if [ "$APP_VERSION" == "%APP_VERSION%" ] || [ "$APP_VERSION" == "development" ] || ["$GITHUB_REPO" == "%GITHUB_REPO%"]; then
+if [ "$APP_VERSION" == "%APP_VERSION%" ] || [ "$APP_VERSION" == "development" ] || [ "$GITHUB_REPO" == "%GITHUB_REPO%" ]; then
     echo "Development version, skipping update"
     exit 0
 fi
@@ -223,7 +230,7 @@ fi
 
 latest_version=\$(echo "\$latest_release_json" | jq -r '.tag_name')
 
-if [ "\$latest_version" == "null" ] || [ -z \$latest_version ]; then
+if [ "\$latest_version" == "null" ] || [ -z "\$latest_version" ]; then
     echo "Failed to parse latest release information"
     exit 1
 fi
@@ -249,14 +256,14 @@ for asset in \$(echo "\$latest_release_json" | jq -r '.assets[].browser_download
     fi
 done
 
-if [ "\$(ls -A \$tmp_folder)" == "" ]; then
+if [ -z "\$(ls -A \$tmp_folder)" ]; then
     echo "No assets found"
     exit 1
 fi
 
 echo "Removing old version"
 
-find . -mindepth 1 -maxdepth 1 ! -name 'volumes' -exec rm -rf {} +
+find . -mindepth 1 -maxdepth 1 ! -name 'volumes' -print0 | xargs -0 rm -rf
 
 echo "Installing new version"
 

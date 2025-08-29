@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Stop the mariadb service
 echo -n "Stopping mariadb service..."
 systemctl stop mariadb

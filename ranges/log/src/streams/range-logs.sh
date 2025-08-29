@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # This script is used to monitor the log files of the Meyton Shootmaster software.
 # It will print the new lines of the log files to the console.
 # These represent the shots that were fired per range.

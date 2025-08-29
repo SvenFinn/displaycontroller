@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 cd "$(dirname "$0")" || exit
 
 APP_VERSION=$1
@@ -23,8 +25,7 @@ function package(){
 
     # shellcheck source=/dev/null
     source ../utils/makeself.sh
-    install_makeself "$makeself_path" "latest"
-    if [ $? -ne 0 ]; then
+    if ! install_makeself "$makeself_path" "latest"; then
         echo "Failed to install makeself" >&2
         exit 1
     fi
@@ -40,8 +41,7 @@ function package(){
         "$executable_name"
     )
 
-    "$makeself_path"/makeself.sh "${makeself_options[@]}"
-    if [ $? -ne 0 ]; then
+    if ! "$makeself_path"/makeself.sh "${makeself_options[@]}"; then
         echo "Failed to create self-extracting archive" >&2
         exit 1
     fi
@@ -69,7 +69,7 @@ function generate_compose(){
 
     cd - > /dev/null || exit
 
-    echo "$config" > $target_path
+    echo "$config" > "$target_path"
 }
 
 function generate_script(){
