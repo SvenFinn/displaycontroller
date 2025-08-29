@@ -11,7 +11,7 @@
     "description": "",
     "dependencies": {
         "@network-utils/arp-lookup": "^2.1.0",
-        "amqplib": "^0.10.8",
+        "amqplib": "^0.10.9",
         "dc-logger": "file:../../../logger",
         "dotenv": "^17.2.1",
         "iconv-lite": "^0.7.0"
