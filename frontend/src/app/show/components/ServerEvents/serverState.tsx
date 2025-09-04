@@ -25,7 +25,7 @@ export default function ServerState(): React.JSX.Element {
     return (
         <>
             <ServerEvents path={path} canonicalName="Server State" action={actionCallback} />
-            {connected ? <></> : <Warning level={900}>Keine Verbindung zum Meyton-Server verfügbar</Warning>}
+            {connected ? <></> : <Warning level={900}>Keine Verbindung zum ShootMaster-Server verfügbar</Warning>}
         </>
     )
 }

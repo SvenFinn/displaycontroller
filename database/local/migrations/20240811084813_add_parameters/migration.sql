@@ -11,7 +11,7 @@ CREATE TABLE "Parameter" (
 );
 
 INSERT INTO "Parameter" ("key", "strValue") VALUES
-('MEYTON_SERVER_IP', '192.168.10.200');
+('SM_SERVER_IP', '192.168.10.200');
 
 INSERT INTO "Parameter" ("key", "boolValue") VALUES
 ('ENABLE_TIME_SYNC', true), ('ENABLE_EVALUATION_SYNC', true);

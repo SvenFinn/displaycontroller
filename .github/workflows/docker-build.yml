@@ -50,12 +50,12 @@ jobs:
         id: args
         env:
           APP_VERSION: ${{ steps.app-version.outputs.app_version }}
-          MIN_MEYTON_VERSION: ${{ vars.MIN_MEYTON_VERSION }}
-          MAX_MEYTON_VERSION: ${{ vars.MAX_MEYTON_VERSION }}
-          MEYTON_SSH_USER: ${{ vars.MEYTON_SSH_USER }}
-          MEYTON_SSH_PASS: ${{ vars.MEYTON_SSH_PASS }}
-          MEYTON_DB_USER: ${{ vars.MEYTON_DB_USER }}
-          MEYTON_DB_PASS: ${{ vars.MEYTON_DB_PASS }}
+          MIN_SM_VERSION: ${{ vars.MIN_SM_VERSION }}
+          MAX_SM_VERSION: ${{ vars.MAX_SM_VERSION }}
+          SM_SSH_USER: ${{ vars.SM_SSH_USER }}
+          SM_SSH_PASS: ${{ vars.SM_SSH_PASS }}
+          SM_DB_USER: ${{ vars.SM_DB_USER }}
+          SM_DB_PASS: ${{ vars.SM_DB_PASS }}
           DISCIPLINE_DEFAULT_COLOR: ${{ vars.DISCIPLINE_DEFAULT_COLOR }}
           MULTICAST_MSG_MIN_LENGTH: ${{ vars.MULTICAST_MSG_MIN_LENGTH }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
@@ -72,12 +72,12 @@ jobs:
           echo "SELF_DB_USER=$SELF_DB_USER" >> /tmp/args
           echo "SELF_DB_PASS=$SELF_DB_PASS" >> /tmp/args
           echo "SELF_DB_NAME=$SELF_DB_NAME" >> /tmp/args
-          echo "MIN_MEYTON_VERSION=$MIN_MEYTON_VERSION" >> /tmp/args
-          echo "MAX_MEYTON_VERSION=$MAX_MEYTON_VERSION" >> /tmp/args
-          echo "MEYTON_SSH_USER=$MEYTON_SSH_USER" >> /tmp/args
-          echo "MEYTON_SSH_PASS=$MEYTON_SSH_PASS" >> /tmp/args
-          echo "MEYTON_DB_USER=$MEYTON_DB_USER" >> /tmp/args
-          echo "MEYTON_DB_PASS=$MEYTON_DB_PASS" >> /tmp/args
+          echo "MIN_SM_VERSION=$MIN_SM_VERSION" >> /tmp/args
+          echo "MAX_SM_VERSION=$MAX_SM_VERSION" >> /tmp/args
+          echo "SM_SSH_USER=$SM_SSH_USER" >> /tmp/args
+          echo "SM_SSH_PASS=$SM_SSH_PASS" >> /tmp/args
+          echo "SM_DB_USER=$SM_DB_USER" >> /tmp/args
+          echo "SM_DB_PASS=$SM_DB_PASS" >> /tmp/args
           echo "DISCIPLINE_DEFAULT_COLOR=$DISCIPLINE_DEFAULT_COLOR" >> /tmp/args
           echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
           echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args

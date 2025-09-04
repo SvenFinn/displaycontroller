@@ -17,5 +17,5 @@ export type ConditionNumber = BaseCondition & {
 }
 
 export type ConditionNone = BaseCondition & {
-    type: "all_ranges_free" | "meyton_available";
+    type: "all_ranges_free" | "shootmaster_available";
 }

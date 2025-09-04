@@ -15,12 +15,12 @@ services:
         - screen-types=../screens/types
         - logger=../logger
       args:
-        - MIN_MEYTON_VERSION=${MIN_MEYTON_VERSION}
-        - MAX_MEYTON_VERSION=${MAX_MEYTON_VERSION}
-        - MEYTON_SSH_USER=${MEYTON_SSH_USER}
-        - MEYTON_SSH_PASS=${MEYTON_SSH_PASS}
-        - MEYTON_DB_USER=${MEYTON_DB_USER}
-        - MEYTON_DB_PASS=${MEYTON_DB_PASS}
+        - MIN_SM_VERSION=${MIN_SM_VERSION}
+        - MAX_SM_VERSION=${MAX_SM_VERSION}
+        - SM_SSH_USER=${SM_SSH_USER}
+        - SM_SSH_PASS=${SM_SSH_PASS}
+        - SM_DB_USER=${SM_DB_USER}
+        - SM_DB_PASS=${SM_DB_PASS}
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}

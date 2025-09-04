@@ -13,7 +13,7 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
     logger.debug("Fetching server information");
     const server = (await prismaClient.parameter.findUnique({
         where: {
-            key: "MEYTON_SERVER_IP"
+            key: "SM_SERVER_IP"
         }
     }))?.strValue;
     if (!server) {
@@ -21,9 +21,9 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
             online: false
         };
     }
-    if (!process.env.MEYTON_SSH_USER || !process.env.MEYTON_SSH_PASS) {
+    if (!process.env.SM_SSH_USER || !process.env.SM_SSH_PASS) {
         logger.info(process.env);
-        logger.error("MEYTON_SSH_USER or MEYTON_SSH_PASS not set");
+        logger.error("SM_SSH_USER or SM_SSH_PASS not set");
         return {
             online: false
         };
@@ -32,7 +32,7 @@ export async function checkServiceAvailability(): Promise<AdvServerState | null>
         'echo -n "Services=" && sed -n "s/^RealServerDaemons=//p" /etc/meyton/shootmasterd.cfg';
     let output = "";
     try {
-        output = execSync(`sshpass -p "${process.env.MEYTON_SSH_PASS}" ssh -o ConnectTimeout=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${process.env.MEYTON_SSH_USER}@${server} '${commands}'`, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
+        output = execSync(`sshpass -p "${process.env.SM_SSH_PASS}" ssh -o ConnectTimeout=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${process.env.SM_SSH_USER}@${server} '${commands}'`, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
     } catch (e) {
         logger.error(`Error while checking server availability: ${e}`);
         return null;
@@ -69,7 +69,7 @@ export async function checkServerAvailable(): Promise<boolean> {
     logger.debug("Checking server availability");
     const server = (await prismaClient.parameter.findUnique({
         where: {
-            key: "MEYTON_SERVER_IP"
+            key: "SM_SERVER_IP"
         }
     }))?.strValue;
     if (!server) {
@@ -92,14 +92,14 @@ function checkServerCompatibility(serverState: AdvServerState): boolean {
         logger.warn("SMDB service is not available");
         return false;
     }
-    if (!process.env.MAX_MEYTON_VERSION || !process.env.MIN_MEYTON_VERSION) {
-        logger.error("Environment variables MAX_MEYTON_VERSION and MIN_MEYTON_VERSION must be set");
+    if (!process.env.MAX_SM_VERSION || !process.env.MIN_SM_VERSION) {
+        logger.error("Environment variables MAX_SM_VERSION and MIN_SM_VERSION must be set");
         return false;
     }
-    const minVersion = semver.coerce(process.env.MIN_MEYTON_VERSION);
-    const maxVersion = semver.coerce(process.env.MAX_MEYTON_VERSION);
+    const minVersion = semver.coerce(process.env.MIN_SM_VERSION);
+    const maxVersion = semver.coerce(process.env.MAX_SM_VERSION);
     if (!minVersion || !maxVersion) {
-        logger.error("Environment variables MAX_MEYTON_VERSION and MIN_MEYTON_VERSION must be in the correct format");
+        logger.error("Environment variables MAX_SM_VERSION and MIN_SM_VERSION must be in the correct format");
         return false;
     }
     // Check if the version is in the format X.Y.Z
@@ -109,10 +109,10 @@ function checkServerCompatibility(serverState: AdvServerState): boolean {
         return false;
     }
     if (semver.lte(versionSemver, maxVersion) && semver.gte(versionSemver, minVersion)) {
-        logger.debug("Meyton server version is compatible");
+        logger.debug("ShootMaster server version is compatible");
         return true;
     }
-    logger.warn("Meyton server version is not compatible");
+    logger.warn("ShootMaster server version is not compatible");
     return false;
 }
 

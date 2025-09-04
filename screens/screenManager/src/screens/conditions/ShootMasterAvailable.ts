@@ -1,7 +1,7 @@
 import { ConditionNone } from "dc-screens-types";
 import { logger } from "dc-logger";
 
-export async function meyton_available(condition: ConditionNone): Promise<boolean> {
+export async function shootmaster_available(condition: ConditionNone): Promise<boolean> {
     const serverStateReq = await fetch("http://server-state:80/api/serverState");
     if (serverStateReq.status !== 200) {
         logger.warn("Failed to fetch server state");

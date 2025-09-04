@@ -35,7 +35,7 @@ async function loop(event: MessageEvent | null = null) {
         }
         const server = (await localClient.parameter.findUnique({
             where: {
-                key: "MEYTON_SERVER_IP"
+                key: "SM_SERVER_IP"
             }
         }))?.strValue;
         if (server) {

@@ -12,8 +12,8 @@ services:
         - SELF_DB_USER=${SELF_DB_USER}
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
-        - MEYTON_SSH_USER=${MEYTON_SSH_USER}
-        - MEYTON_SSH_PASS=${MEYTON_SSH_PASS}
+        - SM_SSH_USER=${SM_SSH_USER}
+        - SM_SSH_PASS=${SM_SSH_PASS}
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
         - local-db=../../database/local

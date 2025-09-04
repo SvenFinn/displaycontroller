@@ -37,11 +37,11 @@ export class logReaderStream extends Duplex {
         const script = fs.readFileSync(`${__dirname}/range-logs.sh`, "utf-8");
         const serverIp = (await this.localClient.parameter.findUniqueOrThrow({
             where: {
-                key: "MEYTON_SERVER_IP",
+                key: "SM_SERVER_IP",
             }
         })).strValue;
 
-        this.sshThread = spawn("sshpass", ["-p", process.env.MEYTON_SSH_PASS as string, "ssh", "-o", "StrictHostKeyChecking=no", `${process.env.MEYTON_SSH_USER}@${serverIp}`, script]);
+        this.sshThread = spawn("sshpass", ["-p", process.env.SM_SSH_PASS as string, "ssh", "-o", "StrictHostKeyChecking=no", `${process.env.SM_SSH_USER}@${serverIp}`, script]);
         this.sshThread.on("exit", (code) => {
             if (this.serverState) {
                 logger.warn(`SSH exit: ${code}`);

@@ -1,6 +1,6 @@
 import { DbScreen } from "dc-screens-types";
 import { all_ranges_free } from "./AllRangesFree";
-import { meyton_available } from "./MeytonAvailable";
+import { shootmaster_available } from "./ShootMasterAvailable";
 import { range_free } from "./RangeFree";
 import { range_online } from "./RangeOnline";
 import { ranges_free_count } from "./RangesFreeCount";
@@ -25,8 +25,8 @@ export async function checkCondition(localClient: LocalClient, screen: DbScreen)
         switch (condition.type) {
             case "all_ranges_free":
                 return all_ranges_free(condition);
-            case "meyton_available":
-                return meyton_available(condition);
+            case "shootmaster_available":
+                return shootmaster_available(condition);
             case "range_free":
                 return range_free(condition);
             case "range_online":

@@ -27,7 +27,7 @@ export const schema: RJSFSchema = {
                             { const: "range_free", title: "Stand frei" },
                             { const: "range_online", title: "Stand aktiv" },
                             { const: "all_ranges_free", title: "Alle Stände frei" },
-                            { const: "meyton_available", title: "Meyton verfügbar" }
+                            { const: "shootmaster_available", title: "ShootMaster-Server verfügbar" }
                         ]
                     },
                     invert: {
