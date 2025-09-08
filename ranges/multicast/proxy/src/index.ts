@@ -6,7 +6,7 @@ import { decode } from "iconv-lite";
 import dotenv from "dotenv";
 import { getTable, toMAC } from "@network-utils/arp-lookup";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 if (!process.env.MULTICAST_MSG_MIN_LENGTH) {
     logger.error("MULTICAST_MSG_MIN_LENGTH is not defined");

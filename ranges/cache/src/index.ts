@@ -8,7 +8,7 @@ import { logger } from "dc-logger";
 import { Discipline, StartList, Shooter, OverrideDiscipline } from "dc-ranges-types";
 import { getOverrideDisciplines } from "./overrideDisciplines";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const tables = [
     "Starterlisten", // startList

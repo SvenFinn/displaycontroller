@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
 import { Discipline, Round, Rounds, Mode, Zoom, Layouts } from "dc-ranges-types";
 import { SmdbClient } from "dc-db-smdb";
 import { getLayout } from "./layout";
-
-dotenv.config();
 
 export async function getDisciplineCache(smdbClient: SmdbClient): Promise<Array<Discipline>> {
     const disciplinesDb = await smdbClient.discipline.findMany({

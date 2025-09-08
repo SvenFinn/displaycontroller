@@ -5,7 +5,7 @@ import { logger } from "dc-logger";
 import semver from "semver";
 import dotenv from "dotenv";
 import { createSMDBClient } from "dc-db-smdb";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const prismaClient = new LocalClient();
 

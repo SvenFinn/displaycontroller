@@ -5,7 +5,7 @@ import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 import { updateOverrides } from "./discipline/overrides";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const client = new LocalClient();
 

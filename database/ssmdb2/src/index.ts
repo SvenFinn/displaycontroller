@@ -1,7 +1,7 @@
 import { PrismaClient as Ssmdb2Client } from '../generated/client';
 import { LocalClient } from "dc-db-local";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 if (!process.env.SM_DB_USER || !process.env.SM_DB_PASS) {
     throw new Error("Please provide the SM_DB_USER and SM_DB_PASS environment variables");

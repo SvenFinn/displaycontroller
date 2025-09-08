@@ -2,7 +2,7 @@ import { updateDisciplines } from "./disciplines";
 import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const localClient = new LocalClient();
 

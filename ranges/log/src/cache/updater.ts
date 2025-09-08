@@ -3,7 +3,7 @@ import { updateOverrides } from "./overrides";
 import { updateShooters } from "./shooter";
 import { LocalClient } from "dc-db-local";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const localClient = new LocalClient();
 

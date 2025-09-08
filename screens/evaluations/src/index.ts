@@ -5,7 +5,7 @@ import "./server";
 import { logger } from "dc-logger";
 import fs from "fs";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const htmlPath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
 const smbPath = fs.mkdtempSync("html")

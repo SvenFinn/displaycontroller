@@ -7,7 +7,7 @@ import { resolveScreen } from '../screens/types';
 import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
 import BodyParser from 'body-parser';
 import { Prisma } from 'dc-db-local/generated/client/client';
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const app: Express = express();
 app.use(BodyParser.json());

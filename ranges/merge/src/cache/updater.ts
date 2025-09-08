@@ -5,7 +5,7 @@ import { updateStartLists } from "./startLists";
 import { logger } from "dc-logger";
 import dotenv from "dotenv";
 import { updateIpAddresses } from "./ipAddress";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const client = new LocalClient();
 
