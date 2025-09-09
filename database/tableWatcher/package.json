@@ -12,7 +12,7 @@
     "description": "",
     "devDependencies": {
         "@prisma/client": "^6.15.0",
-        "@types/node": "^24.3.0",
+        "@types/node": "^24.3.1",
         "prisma": "^6.15.0",
         "typescript": "^5.9.2"
     },

@@ -11,7 +11,7 @@
     "description": "",
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^24.3.0",
+        "@types/node": "^24.3.1",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.9.2"
     },
@@ -20,6 +20,6 @@
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
         "dc-ranges-types": "file:../types",
-        "dotenv": "^17.2.1"
+        "dotenv": "^17.2.2"
     }
 }

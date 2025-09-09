@@ -13,12 +13,12 @@
         "@network-utils/arp-lookup": "^2.1.0",
         "amqplib": "^0.10.9",
         "dc-logger": "file:../../../logger",
-        "dotenv": "^17.2.1",
+        "dotenv": "^17.2.2",
         "iconv-lite": "^0.7.0"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.7",
-        "@types/node": "^24.3.0",
+        "@types/node": "^24.3.1",
         "typescript": "^5.9.2"
     }
 }

@@ -5,7 +5,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "prepare": "ts-patch install",
+        "prepare": "ts-patch install || true",
         "build": "typia generate --input src --output generated --project tsconfig.json && tsc -p tsconfig.build.json && rm -rf generated"
     },
     "author": "",

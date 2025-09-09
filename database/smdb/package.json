@@ -9,14 +9,14 @@
         "generate": "npx prisma generate --no-hints"
     },
     "devDependencies": {
-        "@types/node": "^24.3.0",
+        "@types/node": "^24.3.1",
         "prisma": "^6.15.0",
         "typescript": "^5.9.2"
     },
     "dependencies": {
         "@prisma/client": "^6.15.0",
         "dc-db-local": "file:../local",
-        "dotenv": "^17.2.1"
+        "dotenv": "^17.2.2"
     },
     "files": [
         "dist",
