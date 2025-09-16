@@ -80,7 +80,7 @@ function run_update_step(){
     set +e
 
     local EXIT_CODE=0
-    if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
+    if [ "${DEBIAN_FRONTEND:-}" == "noninteractive" ]; then
         eval "$command" 2>&1 | tee "$tmp_log_file"
         EXIT_CODE=${PIPESTATUS[0]}
     else

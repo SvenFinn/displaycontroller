@@ -38,7 +38,7 @@ function run_install_step(){
     set +e
 
     local EXIT_CODE=0
-    if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
+    if [ "${DEBIAN_FRONTEND:-}" == "noninteractive" ]; then
         eval "$command" 2>&1 | tee "$tmp_log_file"
         EXIT_CODE=${PIPESTATUS[0]}
     else
@@ -50,7 +50,7 @@ function run_install_step(){
     set -e
 
     if [ "$EXIT_CODE" -ne 0 ]; then
-        if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
+        if [ "${DEBIAN_FRONTEND:-}" == "noninteractive" ]; then
             echo "ERROR: $step_title"
             cat "$tmp_log_file"
             exit 1
@@ -90,7 +90,7 @@ function run_install_step(){
 
 function install_finished(){
 
-    if [ "$DEBIAN_FRONTEND" == "noninteractive" ]; then
+    if [ "${DEBIAN_FRONTEND:-}" == "noninteractive" ]; then
         echo "Installation finished successfully."
         exit 0
     fi
@@ -168,7 +168,7 @@ if [ -f "/home/$USER/.config/autostart/DisplayController.desktop" ]; then
     AUTOSTART=1
 fi
 
-if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
+if [ "${DEBIAN_FRONTEND:-}" != "noninteractive" ]; then
 
     width=$(tput cols)
     height=$(tput lines)
@@ -228,7 +228,7 @@ cat << EOT > "$INSTALL_DIR/DisplayController.desktop"
 Version=$APP_VERSION
 Name=DisplayController
 Comment=Start the DisplayController
-Exec=gnome-terminal --full-screen -- $INSTALL_DIR/start.sh
+Exec=$INSTALL_DIR/start.sh
 Type=Application
 Icon=$INSTALL_DIR/icon.png
 Terminal=true
@@ -243,21 +243,31 @@ rm -f "/usr/share/applications/DisplayController.desktop" || true
 ln -sf "$INSTALL_DIR/DisplayController.desktop" "/usr/share/applications/DisplayController.desktop"
 echo "Linked DisplayController.desktop to /usr/share/applications/DisplayController.desktop"
 update-desktop-database -v /usr/share/applications
-
-if [ $AUTOSTART -eq 1 ]; then
-    mkdir -p "/home/$USER/.config/autostart"
-    rm -f "/home/$USER/.config/autostart/DisplayController.desktop" || true
-    ln -sf "$INSTALL_DIR/DisplayController.desktop" "/home/$USER/.config/autostart/DisplayController.desktop"
-    echo "Linked DisplayController.desktop to /home/$USER/.config/autostart/DisplayController.desktop"
-fi
 EOF
 
-if [ "$AUTOSTART" -eq 1 ]; then
+if [ $AUTOSTART -eq 1 ]; then
     run_install_step $((step_nr++)) $total_steps "Installing autostart" <<EOF
 mkdir -p "/home/$USER/.config/autostart"
 rm -f "/home/$USER/.config/autostart/DisplayController.desktop" || true
-ln -s "$INSTALL_DIR/DisplayController.desktop" "/home/$USER/.config/autostart/DisplayController.desktop"
-echo "Linked DisplayController.desktop to /home/$USER/.config/autostart/DisplayController.desktop"
+
+# Override .desktop entry for autostart (fullscreen terminal)
+cat << EOT > "/home/$USER/.config/autostart/DisplayController.desktop"
+[Desktop Entry]
+Version=$APP_VERSION
+Name=DisplayController
+Comment=Start the DisplayController (autostart fullscreen)
+Exec=gnome-terminal --full-screen -- $INSTALL_DIR/start.sh
+Type=Application
+Icon=$INSTALL_DIR/icon.png
+Terminal=false
+Path=$INSTALL_DIR
+Categories=Utility;WebBrowser;
+X-GNOME-Autostart-enabled=true
+EOT
+
+chown -v $USER "/home/$USER/.config/autostart/DisplayController.desktop"
+chmod -v +x "/home/$USER/.config/autostart/DisplayController.desktop"
+
 echo "$USER ALL=(ALL) NOPASSWD: $INSTALL_DIR/update.sh, NOPASSWD: /usr/bin/true" > /etc/sudoers.d/displaycontroller
 echo "Added $USER to sudoers"
 EOF
@@ -289,13 +299,13 @@ EOF
 run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
 if apt-cache show chromium-browser &>/dev/null; then
-    apt-get install -y chromium-browser unclutter
+    apt-get install -y chromium-browser
 else
-    apt-get install -y chromium unclutter
+    apt-get install -y chromium
 fi
 EOF
 
-if [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
+if [ "${DEBIAN_FRONTEND:-}" != "noninteractive" ]; then
     run_install_step $((step_nr++)) $total_steps "Installing SSL Certificate" <<EOF
     echo "Installing SSL certificate..."
     if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
