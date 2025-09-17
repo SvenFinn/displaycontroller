@@ -38,7 +38,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
     async function onDownload(files: string[], setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
         for (let i = 0; i < files.length; i++) {
             setMessage(`Downloading ${files[i]}`);
-            const file = files[i].split("/").map(encodeURIComponent).join("/");
+            const file = files[i].split("/").filter(component => component != "").map(encodeURIComponent).join("/");
             const response = await fetch(new URL(file, baseURL));
             if (!response.ok) {
                 throw new Error("Failed to download file");
@@ -56,7 +56,8 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
     }
 
     async function onCreateFolder(path: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
-        path = path.split("/").map(encodeURIComponent).join("/");
+        console.log("Creating folder", path);
+        path = path.split("/").filter(component => component != "").map(encodeURIComponent).join("/");
         setMessage(`Creating folder ${path}`);
         const response = await fetch(new URL(path, baseURL), {
             method: "POST",
@@ -69,7 +70,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
     async function onDelete(files: string[], setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
         for (let i = 0; i < files.length; i++) {
             setMessage(`Deleting ${files[i]}`);
-            const file = files[i].split("/").map(encodeURIComponent).join("/");
+            const file = files[i].split("/").filter(component => component != "").map(encodeURIComponent).join("/");
             const response = await fetch(new URL(file, baseURL), {
                 method: "DELETE",
             });
@@ -82,7 +83,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
 
     async function onRename(oldPath: string, newPath: string, setPercentage: (percentage: number) => void, setMessage: (message: string) => void) {
         setMessage(`Renaming ${oldPath} to ${newPath}`);
-        oldPath = oldPath.split("/").map(encodeURIComponent).join("/");
+        oldPath = oldPath.split("/").filter(component => component != "").map(encodeURIComponent).join("/");
         const response = await fetch(new URL(oldPath, baseURL), {
             method: "PUT",
             body: JSON.stringify({ destination: newPath, mode: "move" }),
@@ -99,7 +100,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
         for (let i = 0; i < files.length; i++) {
             setMessage(`Moving ${files[i]} to ${destination}`);
             const file = files[i];
-            const encodedFile = file.split("/").map(encodeURIComponent).join("/");
+            const encodedFile = file.split("/").filter(component => component != "").map(encodeURIComponent).join("/");
             const response = await fetch(`${baseURL}/${encodedFile}`, {
                 method: "PUT",
                 body: JSON.stringify({ destination: `${destination}/${file.split("/").pop()}`, mode: "move" }),
@@ -118,7 +119,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
         for (let i = 0; i < files.length; i++) {
             setMessage(`Copying ${files[i]} to ${destination}`);
             const file = files[i];
-            const encodedFile = file.split("/").map(encodeURIComponent).join("/");
+            const encodedFile = file.split("/").filter(component => component != "").map(encodeURIComponent).join("/");
             const response = await fetch(new URL(encodedFile, baseURL), {
                 method: "PUT",
                 body: JSON.stringify({ destination: `${destination}/${file.split("/").pop()}`, mode: "copy" }),
@@ -142,7 +143,7 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
             for (let i = 0; i < files.length; i++) {
                 formdata.append("file", files[i]);
             }
-            destination = destination.split("/").map(encodeURIComponent).join("/");
+            destination = destination.split("/").filter(component => component != "").map(encodeURIComponent).join("/");
             const request = new XMLHttpRequest();
             request.open("POST", new URL(destination, baseURL));
             request.onload = () => {
@@ -183,7 +184,6 @@ export default function FileManagerBase({ baseURL, readonly, allowMultiSelect, s
         onCopy: onCopy,
         onUpload: onUpload,
     };
-
 
     return (
         <FileManager files={files} initialPath={getCommonPath(selectedFiles)} onSelect={onSelect} {...operations} allowMultiSelect={allowMultiSelect} />
