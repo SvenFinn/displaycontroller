@@ -24,4 +24,5 @@ export type BaseScreenAvailable = {
 
 export type ScreenUnavailable = {
     available: false;
+    duration: 10000;
 }

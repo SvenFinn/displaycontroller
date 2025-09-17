@@ -20,7 +20,8 @@ export async function loadNextScreen(localClient: LocalClient, currentScreenId: 
         if (!nextScreen) {
             if (!loopOne) {
                 return [{
-                    available: false
+                    available: false,
+                    duration: 10000
                 }]; // We have looped through all screens and found no new screen
             }
             loopOne = false;

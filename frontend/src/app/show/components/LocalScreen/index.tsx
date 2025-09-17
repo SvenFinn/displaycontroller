@@ -13,7 +13,7 @@ interface LocalScreenProps {
 }
 
 export default function LocalScreen({ screen, onReady = () => { }, mode = "sequential", className }: LocalScreenProps): React.JSX.Element {
-    const [screens, setScreens] = useState<Screen[]>([{ available: false }]);
+    const [screens, setScreens] = useState<Screen[]>([{ available: false, duration: 10000 }]);
     const [currentScreenId, setCurrentScreenId] = useState<number>(0);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const host = useHost();
@@ -21,7 +21,7 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
     useEffect(() => {
         if (!host) return;
         async function resolveScreens() {
-            setScreens([{ available: false }]);
+            setScreens([{ available: false, duration: 10000 }]);
             const screenData = {
                 id: 1, // Dummy ID
                 visibleFrom: null,
