@@ -94,7 +94,7 @@ export default function LocalScreen({ screen, onReady = () => { }, mode = "seque
             {mode === "sequential" ? (
                 <RenderScreen screen={screens[currentScreenId]} onReady={onReady} />
             ) : (
-                screens.map((screen, index) => (
+                screens.slice(0, 10).map((screen, index) => (
                     <div key={index}>
                         <RenderScreen screen={screen} onReady={onReady} />
                     </div>
