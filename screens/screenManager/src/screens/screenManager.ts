@@ -4,6 +4,7 @@ import { isDbScreen, isScreen, Screen, ScreenAvailable } from "dc-screens-types"
 import { EventEmitter } from "node:stream";
 import { resolveScreen } from "./types";
 import { loadNextScreen } from "./screens";
+import { ScreenUnavailable } from "dc-screens-types/dist/base";
 
 enum Direction {
     Next = 0,
@@ -11,7 +12,7 @@ enum Direction {
 }
 
 const MAX_PREVIOUS_SCREENS = 20;
-const EMPTY_SCREEN: Screen = { available: false };
+const EMPTY_SCREEN: ScreenUnavailable = { available: false, duration: 10000 };
 
 class ScreenManager extends EventEmitter {
     private currentScreen: Screen = EMPTY_SCREEN;
@@ -104,9 +105,6 @@ class ScreenManager extends EventEmitter {
         if (direction === Direction.Previous) {
             this.nextScreenList.unshift(this.previousScreenList.pop() || EMPTY_SCREEN);
         } else {
-            const prev = this.nextScreenList.shift();
-            if (prev) this.previousScreenList.push(prev);
-
             if (this.nextScreenList.length < 1) {
                 this.nextScreenList = await loadNextScreen(
                     this.localClient,
@@ -115,26 +113,23 @@ class ScreenManager extends EventEmitter {
             }
         }
 
-        this.currentScreen = this.nextScreenList.shift() || EMPTY_SCREEN;
+        this.switchToScreen(this.nextScreenList.shift() || EMPTY_SCREEN);
 
+        if (!this.isPaused) {
+            this.setTimeout(() => this.screenLoop(), this.currentScreen.duration);
+        }
+    }
+
+    private async switchToScreen(screen: Screen) {
+        this.previousScreenList.push(this.currentScreen);
         while (this.previousScreenList.length > MAX_PREVIOUS_SCREENS) {
             this.previousScreenList.shift();
         }
-
-        this.emit("screenChanged", this.currentScreen);
-
-        if (!this.currentScreen.available) {
-            logger.info("No available screens, waiting 10s");
-            if (!this.isPaused) {
-                this.setTimeout(() => this.screenLoop(), 10000);
-            }
-        } else {
-            logger.info(`Current screen: ${this.currentScreen.id}-${this.currentScreen.subId}`);
-            if (!this.isPaused) {
-                this.setTimeout(() => this.screenLoop(), this.currentScreen.duration);
-            }
-        }
+        this.currentScreen = screen;
+        this.emit("screenChanged", screen);
+        logger.info(`Switched to screen: ${screen.available ? `${screen.id}-${screen.subId}` : "Unavailable"}`);
     }
+
 
     private clearTimeout() {
         if (this.screenTimeout) {
