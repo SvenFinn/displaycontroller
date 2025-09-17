@@ -11,9 +11,9 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@prisma/client": "^6.15.0",
-        "@types/node": "^24.3.1",
-        "prisma": "^6.15.0",
+        "@prisma/client": "^6.16.2",
+        "@types/node": "^24.5.1",
+        "prisma": "^6.16.2",
         "typescript": "^5.9.2"
     },
     "files": [
