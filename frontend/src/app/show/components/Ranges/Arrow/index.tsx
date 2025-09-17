@@ -21,6 +21,7 @@ export default function ShotArrow({ hitIndex, className, range }: ShotArrowProps
     const hit = hitIndex >= 0 ? hits[hitIndex] : hits[hits.length + hitIndex];
     if (!hit) return <></>;
     if (!hit.valid) return <></>;
+    if (hit.x === 0 && hit.y === 0) return <div className={className || ""} />;
     const angle = -Math.atan2(hit.y, hit.x) + Math.PI / 2;
     return (
         <FaArrowUp className={className || ""} style={{ rotate: `${angle}rad` }} />
