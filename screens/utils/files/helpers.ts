@@ -14,7 +14,7 @@ export function sanitizePath(path: string): string | null {
     // SSRF prevention: validate/sanitize path input.
     // Only allow safe, relative file names (alphanumeric, _, -, ., and optionally / for subfolders).
     // Disallow path traversal, absolute path, suspicious characters.
-    const SAFE_PATH_REGEX = /^([a-zA-Z0-9_\-./]+)$/;
+    const SAFE_PATH_REGEX = /^([a-zA-Z0-9_\-./ ]+)$/;
     if (
         !path ||
         typeof path !== "string" ||
