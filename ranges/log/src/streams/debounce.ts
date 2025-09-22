@@ -14,6 +14,11 @@ export class DebounceStream extends Transform {
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: TransformCallback): void {
         logger.debug(`Debouncing range ${chunk.rangeId}`);
         if (this.ranges.has(chunk.rangeId)) {
+            if (JSON.stringify(this.ranges.get(chunk.rangeId)) === JSON.stringify(chunk)) {
+                logger.debug(`Skipping range ${chunk.rangeId} due to no changes`);
+                callback();
+                return;
+            }
             clearTimeout(this.ranges.get(chunk.rangeId)!);
         }
         this.ranges.set(chunk.rangeId,
