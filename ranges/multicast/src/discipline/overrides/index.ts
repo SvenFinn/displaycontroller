@@ -47,7 +47,7 @@ export function getOverrideDiscipline(startListId: number, message: string): Int
     const keys = Array.from(disciplines.keys()).sort((a, b) => b.length - a.length);// sort by length descending
     for (const name of keys) {
         if (message.includes(name)) {
-            return disciplines.get(name) || null;
+            return structuredClone(disciplines.get(name) ?? null);
         }
     }
     return null;

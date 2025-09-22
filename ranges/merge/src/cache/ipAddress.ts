@@ -27,5 +27,5 @@ export async function updateIpAddresses(localClient: LocalClient) {
 }
 
 export function getIpAddress(rangeId: number): string | null {
-    return ipAddresses.get(rangeId) || null;
+    return ipAddresses.get(rangeId) ?? null;
 }

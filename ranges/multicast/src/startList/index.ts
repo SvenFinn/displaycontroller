@@ -23,13 +23,14 @@ export async function updateStartList(client: LocalClient) {
 }
 
 export function getStartList(message: string): number | null {
-    let currentStartList: number | null = null;
-    let currentStartListName = "";
-    for (const [name, key] of matchStartLists) {
-        if (currentStartListName.length < name.length && message.match(new RegExp(name)) !== null) {
-            currentStartList = key;
-            currentStartListName = name;
+    const names = Array.from(matchStartLists.keys())
+        .sort((a, b) => b.length - a.length); // longest first
+
+    for (const name of names) {
+        if (message.includes(name)) {
+            return structuredClone(matchStartLists.get(name) ?? null);
         }
     }
-    return currentStartList;
+
+    return null;
 }

@@ -27,5 +27,5 @@ export function getStartList(startListId: number | null): StartList | null {
     if (startListId == null) {
         return null;
     }
-    return startLists.get(startListId) || null;
+    return structuredClone(startLists.get(startListId) ?? null);
 }

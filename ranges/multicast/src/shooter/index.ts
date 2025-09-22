@@ -33,7 +33,7 @@ export function getShooters(message: string): InternalShooter | null {
     const names = Array.from(matchShooter.keys()).sort((a, b) => b.length - a.length);
     for (const name of names) {
         if (message.includes(name)) {
-            return matchShooter.get(name) || null;
+            return structuredClone(matchShooter.get(name) ?? null);
         }
     }
     return null;

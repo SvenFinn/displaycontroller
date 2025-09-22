@@ -20,5 +20,5 @@ export async function updateOverrides(client: LocalClient) {
 }
 
 export function getDisciplineId(overrideId: number): number | null {
-    return overrideToDiscipline.get(overrideId) || null;
+    return overrideToDiscipline.get(overrideId) ?? null;
 }

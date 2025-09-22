@@ -34,7 +34,7 @@ export function getDiscipline(startListId: number | null, message: string): Inte
     const keys = Array.from(matchDiscipline.keys()).sort((a, b) => b.length - a.length);// sort by length descending
     for (const name of keys) {
         if (message.includes(name)) {
-            return matchDiscipline.get(name) || null;
+            return structuredClone(matchDiscipline.get(name) ?? null);
         }
     }
     return null;

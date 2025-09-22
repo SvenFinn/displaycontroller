@@ -26,7 +26,7 @@ export function getShooter(shooter: InternalShooter | null): Shooter | null {
         return null;
     }
     if (isInternalShooterById(shooter)) {
-        return shooters.get(shooter) ?? null;
+        return structuredClone(shooters.get(shooter) ?? null);
     }
     return {
         id: null,

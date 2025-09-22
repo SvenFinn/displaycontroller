@@ -61,10 +61,11 @@ export function getDiscipline(internalDiscipline: InternalDiscipline | null): Di
         return null;
     }
     if (isInternalOverrideDiscipline(internalDiscipline)) {
-        return overrides.get(internalDiscipline.overrideId) || null;
+        return structuredClone(overrides.get(internalDiscipline.overrideId) ?? null);
     }
-    return disciplines.get(internalDiscipline.disciplineId) || null;
+    return structuredClone(disciplines.get(internalDiscipline.disciplineId) ?? null);
 }
+
 
 export function getRoundId(internalDiscipline: InternalDiscipline): number {
     return internalDiscipline.roundId;

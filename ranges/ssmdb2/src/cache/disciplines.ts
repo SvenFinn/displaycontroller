@@ -32,10 +32,12 @@ export async function updateDisciplines(client: LocalClient) {
 }
 
 export function getDisciplineId(id: number, round: number): InternalDiscipline | null {
-    const discipline = disciplineIdToObj.get(id) || null;
+    const discipline = disciplineIdToObj.get(id) ?? null;
     if (discipline === null) {
         return null;
     }
-    discipline.roundId = round;
-    return discipline;
+    return {
+        ...discipline,
+        roundId: round
+    };
 }
