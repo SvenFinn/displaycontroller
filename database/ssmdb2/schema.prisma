@@ -11,15 +11,15 @@ generator client {
 
 /**
  * This is the schema for the Meyton SSMDB2 database.
- * For ShootMaster Version 4.9.7a - 5.3.x
- * SSMDB2 Version 3 - 7
+ * For ShootMaster Version 4.9.7a - 5.4.0
+ * SSMDB2 Version 3 - 8
  */
 
 model Target {
     id               Int      @id @map("ScheibenID")
     startList        String   @map("Starterliste") @db.VarChar(36)
     startListId      Int      @map("StarterlistenID")
-    // startTime        DateTime @map("Startzeit") @db.DateTime(0) // This can contain 0000-00-00 00:00:00, which is not valid in Prisma
+    //startTime        DateTime @map("Startzeit") @db.DateTime(0) // This can contain 0000-00-00 00:00:00, which is not valid in Prisma
     startNo          Int      @map("StartNr")
     lastName         String   @map("Nachname") @db.VarChar(36)
     firstName        String   @map("Vorname") @db.VarChar(36)
@@ -27,6 +27,7 @@ model Target {
     country          String   @map("Land") @db.VarChar(3)
     shooterId        BigInt   @map("SportpassID")
     rangeId          Int      @map("StandNr") @db.SmallInt
+    //rangeIdText      String   @map("StandNrText") @db.VarChar(36) // Added in SSMDB2 Version 8
     discipline       String   @map("Disziplin") @db.VarChar(36)
     disciplineId     Int      @map("DisziplinID")
     class            String   @map("Klasse") @db.VarChar(36)
@@ -69,6 +70,7 @@ model Hit {
     targetId         Int      @map("ScheibenID")
     roundId          Int      @map("Stellung") @db.SmallInt
     id               Int      @map("Treffer") @db.SmallInt
+    // series           Int      @map("Serie") @db.SmallInt // Added in SSMDB2 Version 8
     x                Int      @map("x")
     y                Int      @map("y")
     innerTen         Boolean  @map("Innenzehner")
@@ -87,11 +89,8 @@ model Hit {
     @@map("Treffer")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Version {
-    Versionsnummer Int
-
-    @@ignore
+    id Int @id @map("Versionsnummer")
 }
 
 enum Gender {

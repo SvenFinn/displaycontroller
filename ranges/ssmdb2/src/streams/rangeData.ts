@@ -23,6 +23,8 @@ export class RangeDataStream extends Transform {
 
     private async getRanges(): Promise<InternalRange[]> {
         const localTime = new Date((new Date()).setMinutes((new Date()).getMinutes() - new Date().getTimezoneOffset()));
+        const version = (await this.prisma.version.findFirst())?.id ?? 0;
+        const roundIdHasOffByOneBug = version < 8; // Versions before 8 have the roundId starting at 1 instead of 0
         const targets = await this.prisma.target.findMany(
             {
                 where: {
@@ -41,9 +43,9 @@ export class RangeDataStream extends Transform {
                 },
                 distinct: ['rangeId'],
             });
-        return (await Promise.all(targets.map(async (target) => this.getRangeData(target.id)))).filter((range) => range !== null) as InternalRange[];
+        return (await Promise.all(targets.map(async (target) => this.getRangeData(target.id, roundIdHasOffByOneBug)))).filter((range) => range !== null) as InternalRange[];
     }
-    private async getRangeData(targetId: number): Promise<InternalRange | null> {
+    private async getRangeData(targetId: number, roundIdHasOffByOneBug: boolean): Promise<InternalRange | null> {
         const data = await this.prisma.target.findUnique({
             where: {
                 id: targetId
@@ -52,7 +54,7 @@ export class RangeDataStream extends Transform {
         if (data === null) {
             return null;
         }
-        const hits = await this.getHits(targetId);
+        const hits = await this.getHits(targetId, roundIdHasOffByOneBug);
         return {
             rangeId: data.rangeId,
             startListId: data.startListId,
@@ -64,7 +66,7 @@ export class RangeDataStream extends Transform {
         }
     }
 
-    private async getHits(targetId: number): Promise<Hits> {
+    private async getHits(targetId: number, roundIdHasOffByOneBug: boolean): Promise<Hits> {
         const hits = await this.prisma.hit.findMany({
             where: {
                 targetId: targetId
@@ -72,7 +74,7 @@ export class RangeDataStream extends Transform {
         });
         const result: Hits = [];
         for (const hit of hits) {
-            const roundId = hit.roundId - 1;
+            const roundId = roundIdHasOffByOneBug ? hit.roundId - 1 : hit.roundId;
             if (result[roundId] === undefined) {
                 result[roundId] = [];
             }
