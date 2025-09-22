@@ -42,7 +42,7 @@ export class RangeMerger extends Transform {
             this.logStates.set(chunk.rangeId, chunk as LogInternalRange);
         }
         logger.debug(`Merging range ${chunk.rangeId}`);
-        const merged = this.mergeStates(this.multicastStates.get(chunk.rangeId)?.getMessage() || null, this.logStates.get(chunk.rangeId) || null);
+        const merged = this.mergeStates(this.multicastStates.get(chunk.rangeId)?.getMessage() ?? null, this.logStates.get(chunk.rangeId) ?? null);
         if (merged !== null) {
             this.push(merged);
         }

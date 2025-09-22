@@ -19,17 +19,17 @@ function getFirstNotNull<T>(array: T[]): T | null {
 
 function mergeDiscipline(sourceData: SourceData): Discipline | null {
     const disciplines = sourceData.map((source) => source.getMessage()?.discipline);
-    return getDiscipline(getFirstNotNull(disciplines) || null);
+    return getDiscipline(getFirstNotNull(disciplines) ?? null);
 }
 
 function mergeShooter(sourceData: SourceData): Shooter | null {
     const shooters = sourceData.map((source) => source.getMessage()?.shooter);
-    return getShooter(getFirstNotNull(shooters) || null);
+    return getShooter(getFirstNotNull(shooters) ?? null);
 }
 
 function mergeStartList(sourceData: SourceData): StartList | null {
     const startLists = sourceData.map((source) => source.getMessage()?.startListId);
-    return getStartList(getFirstNotNull(startLists) || null);
+    return getStartList(getFirstNotNull(startLists) ?? null);
 }
 
 function getMaxRounds(sourceData: SourceData): number {
@@ -45,7 +45,7 @@ function getMaxRounds(sourceData: SourceData): number {
 function mergeRound(sourceData: SourceData, roundId: number): Array<Hit> | null {
     const rounds = sourceData.map((source) => source.getMessage()?.hits[roundId])
         .filter((round) => round !== undefined && round !== null);
-    return rounds[0] || null;
+    return rounds[0] ?? null;
 }
 
 function mergeHits(sourceData: SourceData): Hits {
