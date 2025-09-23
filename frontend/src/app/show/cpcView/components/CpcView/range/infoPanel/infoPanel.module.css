@@ -67,45 +67,66 @@
                 width: 100%;
                 max-height: 65%;
                 overflow: hidden;
+                border-collapse: collapse;
+                text-align: center;
 
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    text-align: center;
+                div.tableTitle {
+                    font-size: 3%;
+                    background: linear-gradient(0deg, rgba(231, 231, 231, 1) 0%, rgba(235, 236, 236, 1) 10%, rgba(244, 244, 244, 1) 50%, rgba(255, 255, 255, 1) 62%);
+                    line-height: 1.5;
+                    border-bottom: 1px solid #00005b;
+                    display: flex;
+                    flex-direction: row;
 
-                    thead {
-                        font-size: 3%;
-                        background: linear-gradient(0deg, rgba(231, 231, 231, 1) 0%, rgba(235, 236, 236, 1) 10%, rgba(244, 244, 244, 1) 50%, rgba(255, 255, 255, 1) 62%);
-                        line-height: 1.5;
-                        border-bottom: 1px solid #00005b;
 
-                        th {
-                            width: 20%;
-                            border-left: 1px solid #d4d4d4;
-                        }
-
-                        th:nth-child(2) {
-                            width: 60%;
-                        }
-
-                        th:first-child {
-                            border-left: none;
-                        }
+                    div {
+                        flex-grow: 1;
+                        border-left: 1px solid #d4d4d4;
+                        flex-basis: 0;
                     }
 
-                    tbody {
-                        font-size: 3.5%;
+                    div:first-child,
+                    div:last-child {
+                        flex-grow: 0;
+                        flex-basis: 20%;
+                    }
 
-                        tr:first-child {
-                            font-weight: bold;
+                    div:first-child {
+                        border-left: none;
+                    }
 
-                        }
+                }
 
-                        tr:nth-child(2n) {
-                            background-color: #f0f0f0;
-                        }
+                div.tableRow:nth-child(2n) {
+                    background-color: #f0f0f0;
+                }
+
+                div.tableRow {
+                    font-size: 3.5%;
+                    display: flex;
+                    flex-direction: row;
+
+                    div {
+                        flex-grow: 1;
+                        border-left: 1px solid #d4d4d4;
+                        flex-basis: 0;
+                    }
+
+                    div:first-child,
+                    div:last-child {
+                        flex-grow: 0;
+                        flex-basis: 20%;
+                    }
+
+                    div:first-child {
+                        border-left: none;
+                    }
+
+                    tr:nth-child(2n) {
+                        background-color: #f0f0f0;
                     }
                 }
+
             }
 
             div.seriesTable {
@@ -113,7 +134,7 @@
                 width: 100%;
                 height: 17%;
                 position: absolute;
-                top: 65%;
+                top: 70%;
                 font-weight: bold;
 
                 div {

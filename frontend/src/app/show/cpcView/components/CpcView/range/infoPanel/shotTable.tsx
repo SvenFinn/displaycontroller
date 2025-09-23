@@ -27,34 +27,31 @@ export default function ShotTable({ id }: { id: number }): React.JSX.Element {
 
     return (
         <div className={styles.shotTable} >
-            <table>
-                <thead>
-                    <tr>
-                        {getColumns(range).map((col, index) => (
-                            <th key={index}>
-                                {col}
-                            </th>
+            <div className={styles.tableTitle}>
+                {
+                    getColumns(range).map((col, index) => (
+                        <div key={index} className={styles.tableTitleEntry}>
+                            {col}
+                        </div>
+                    ))
+                }
+            </div>
+
+            {selectedHits.reverse().map((hit, index) => {
+                const hitStrings = getHitString(range, range.round, hit);
+                if (!hitStrings) return null;
+                return (
+                    <div className={styles.tableRow} key={index}>
+                        {hitStrings.map((value, idx) => (
+                            <div key={idx}>{value}</div>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {selectedHits.reverse().map((hit, index) => {
-                        const hitStrings = getHitString(range, range.round, hit);
-                        if (!hitStrings) return null;
-                        return (
-                            <tr key={index}>
-                                {hitStrings.map((value, idx) => (
-                                    <td key={idx}>{value}</td>
-                                ))}
-                                {mode !== "hidden" && mode !== "fullHidden" && (
-                                    <ShotArrow hitIndex={index} range={range} />
-                                )}
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
+                        {mode !== "hidden" && mode !== "fullHidden" && (
+                            <div><ShotArrow hitIndex={index} range={range} /></div>
+                        )}
+                    </div>
+                );
+            })}
+        </div >
     )
 }
 
@@ -87,6 +84,11 @@ function getColumns(range: Range): Array<string> {
             break;
         case "decimal":
             columns.push("Dezimal");
+            columns.push("Ring");
+            break;
+        case "integerDecimal":
+            columns.push("Wert")
+            columns.push("Ring");
             break;
     }
     if (mode !== "hidden" && mode !== "fullHidden") {

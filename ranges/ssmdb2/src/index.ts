@@ -12,7 +12,7 @@ async function main() {
     const ssmdb2Client = await createSSMDB2Client();
     const tableWatcherStream = new TableWatcherStream(ssmdb2Client, ["Scheiben", "Treffer"], 10000, 100, 30000);
     const rangeDataStream = tableWatcherStream.pipe(new RangeDataStream(ssmdb2Client));
-    const debounceStream = rangeDataStream.pipe(new DebounceStream(300));
+    const debounceStream = rangeDataStream.pipe(new DebounceStream(500));
     debounceStream.pipe(new RabbitSenderStream());
 }
 

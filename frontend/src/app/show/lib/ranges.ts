@@ -74,8 +74,17 @@ export function getHitString(data: Range, roundId?: number, hit?: Hit): Array<st
         case "decimal":
             return [
                 `${hit.id}`,
+                `${Math.floor(hit.rings * 10) % 10}`,
+                `${floor(hit.rings, 1).toFixed(1)}${hit.innerTen ? '*' : ''}`
+            ]
 
-                `${Math.floor(hit.rings * 10) % 10}`
+        case "integerDecimal":
+            const integer = Math.floor(hit.rings);
+            const decimal = Math.round((hit.rings - integer) * 10);
+            return [
+                `${hit.id}`,
+                `${integer * decimal}`,
+                `${floor(hit.rings, 1).toFixed(1)}${hit.innerTen ? '*' : ''}`
             ]
 
         case "circle":
@@ -133,24 +142,36 @@ function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: 
                     hitId = hit.id;
                 }
                 break;
+
             case "fullHidden":
             case "hidden":
                 if (round.counts) return "***";
                 sum += floor(hit.rings, 0);
                 break;
+
             case "rings":
             case "ringsDiv":
                 sum += floor(hit.rings, round.mode.decimals);
                 break;
+
             case "hundred":
                 sum += (Math.floor(hit.rings) - 1) * 10 + 1;
                 break;
+
             case "decimal":
                 sum += Math.floor(hit.rings * 10) % 10;
                 break;
+
+            case "integerDecimal":
+                const integer = Math.floor(hit.rings);
+                const decimal = Math.floor((hit.rings - integer) * 10);
+                sum += integer * decimal;
+                break;
+
             case "circle":
                 sum = 0;
                 break;
+
             case "target":
                 const value = floor(hit.rings, round.mode.decimals);
                 if (!round.mode.exact) {
@@ -159,6 +180,7 @@ function accumulateHits(hits: Array<Hit>, round: Round, gauge: number, startId: 
                     sum += value;
                 }
                 break;
+
             default:
                 throw new Error("Unsupported mode");
         }

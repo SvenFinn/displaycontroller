@@ -137,6 +137,8 @@ function getMode(mode: number): Mode {
             return { mode: "decimal" };
         case 13: // Dart 501
             return { mode: "target", decimals: 0, value: 501, exact: true };
+        case 14: // decimal * integer part
+            return { mode: "integerDecimal" };
         default:
             throw new Error("Invalid mode");
     }

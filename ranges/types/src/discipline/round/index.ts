@@ -17,7 +17,7 @@ type ModeDecimals = {
 }
 
 type ModeBase = {
-    mode: "circle" | "fullHidden" | "hidden" | "hundred" | "decimal"
+    mode: "circle" | "fullHidden" | "hidden" | "hundred" | "decimal" | "integerDecimal",
 }
 
 type ModeTarget = {

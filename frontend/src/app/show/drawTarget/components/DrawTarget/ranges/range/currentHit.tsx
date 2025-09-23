@@ -28,8 +28,17 @@ export default function CurrentHit({ id }: CurrentHitProps): React.JSX.Element {
 }
 
 function getHit(range: Range): string | null {
+    // If is decimal or integerDecimal, remove rings entry from the array
+    if (!range.active) return null;
+    if (!range.hits) return null;
+    if (!range.discipline) return null;
+    const round = range.discipline.rounds[range.round];
+    if (!round) return null;
     const hitArr = getHitString(range);
     if (!hitArr) return null;
     const hitId = hitArr.shift();
+    if (round.mode.mode === "decimal" || round.mode.mode === "integerDecimal") {
+        hitArr.pop();
+    }
     return `${hitId}: ${hitArr.join(" ")}`;
 }

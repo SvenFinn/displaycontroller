@@ -11,6 +11,7 @@ import ringsTenthSVG from "./rings-tenth.svg";
 import dartSVG from "./dart.svg";
 import hundredSVG from "./hundred.svg";
 import decimalSVG from "./decimal.svg";
+import integerDecimalSVG from "./integerDecimal.svg";
 import { useAppSelector } from "../../../ranges-store/store";
 
 export default function ModeIcon({ id, className }: { id: number, className?: string }): React.JSX.Element {
@@ -56,6 +57,8 @@ export default function ModeIcon({ id, className }: { id: number, className?: st
             if (mode.exact && mode.value === 501) {
                 return <img src={dartSVG.src} alt="Target 501" className={className} />;
             }
+        case "integerDecimal":
+            return <img src={integerDecimalSVG.src} alt="IntegerDecimal" className={className} />;
         default:
             return <></>;
     }
