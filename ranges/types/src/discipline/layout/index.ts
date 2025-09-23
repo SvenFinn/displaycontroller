@@ -31,7 +31,7 @@ export type LayoutChess = {
 }
 
 export type LayoutEaster = {
-    mode: "easter";
+    mode: "easter" | "winter";
 }
 
 export type Layouts = {

@@ -173,6 +173,10 @@ export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle
             return {
                 mode: "easter",
             };
+        case 9914: // winter lg
+            return {
+                mode: "winter",
+            };
         default:
             return undefined;
     }

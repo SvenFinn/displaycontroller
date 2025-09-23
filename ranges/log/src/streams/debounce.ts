@@ -2,8 +2,13 @@ import { InternalRange } from "dc-ranges-types";
 import { Transform, TransformCallback } from "stream";
 import { logger } from "dc-logger";
 
+type RangeDebounce = {
+    data: InternalRange;
+    debounce: NodeJS.Timeout;
+}
+
 export class DebounceStream extends Transform {
-    private ranges: Map<number, NodeJS.Timeout> = new Map();
+    private ranges: Map<number, RangeDebounce> = new Map();
     private debounceTime: number;
 
     constructor(debounceTime: number) {
@@ -12,21 +17,22 @@ export class DebounceStream extends Transform {
     }
 
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: TransformCallback): void {
-        logger.debug(`Debouncing range ${chunk.rangeId}`);
+        logger.debug(`Received range ${chunk.rangeId} from RangeDataStream`);
         if (this.ranges.has(chunk.rangeId)) {
-            if (JSON.stringify(this.ranges.get(chunk.rangeId)) === JSON.stringify(chunk)) {
+            if (JSON.stringify(this.ranges.get(chunk.rangeId)!.data) === JSON.stringify(chunk)) {
                 logger.debug(`Skipping range ${chunk.rangeId} due to no changes`);
                 callback();
                 return;
             }
-            clearTimeout(this.ranges.get(chunk.rangeId)!);
+            clearTimeout(this.ranges.get(chunk.rangeId)!.debounce);
         }
-        this.ranges.set(chunk.rangeId,
-            setTimeout(() => {
+        this.ranges.set(chunk.rangeId, {
+            data: chunk,
+            debounce: setTimeout(() => {
                 this.push(chunk);
                 this.ranges.delete(chunk.rangeId);
             }, this.debounceTime)
-        );
+        });
         callback();
     }
 }

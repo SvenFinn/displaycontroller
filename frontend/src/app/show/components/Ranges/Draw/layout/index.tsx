@@ -21,6 +21,8 @@ export default function LayoutComp({ layout, color }: LayoutProps): React.JSX.El
         case "chess":
             return <ChessLayout layout={layout} />;
         case "stars":
+        case "easter":
+        case "winter":
             return <StarsLayout layout={layout} />;
         case "rectangle":
             return <RectangleLayout layout={layout} color={color} />;
@@ -64,11 +66,13 @@ function getSizeFixed(range: Range): [number, number] {
         case "chess":
             return getFixedChess(range);
         case "stars":
+        case "easter":
+        case "winter":
             return getFixedStars(range);
         case "rectangle":
             return getFixedRectangle(range);
         default:
-            return getSizeAuto(range);
+            return [0, 0];
     }
 }
 

@@ -53,7 +53,8 @@ export {
     LayoutRectangle,
     LayoutRings,
     LayoutChess,
-    LayoutRing
+    LayoutRing,
+    LayoutEaster
 } from './discipline/layout';
 
 export {
