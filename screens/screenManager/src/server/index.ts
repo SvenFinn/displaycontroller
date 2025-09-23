@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { logger } from "dc-logger";
 import { LocalClient } from 'dc-db-local';
 import { screenManager } from '../screens/screenManager';
-import { resolveScreen } from '../screens/types';
+import { resolveScreen } from '../screens/screenTypes';
 import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
 import BodyParser from 'body-parser';
 import { Prisma } from 'dc-db-local/generated/client/client';

@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { resolveScreen } from "./types";
+import { resolveScreen } from "./screenTypes";
 import { isDbScreen, DbScreen, Screen } from "dc-screens-types";
 import { checkCondition } from "./conditions";
 import { logger } from "dc-logger";

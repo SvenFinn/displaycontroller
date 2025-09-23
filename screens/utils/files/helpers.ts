@@ -32,18 +32,18 @@ export function sanitizePath(path: string): string | null {
 
 export async function createFileList(path: string, baseURL: URL): Promise<string[]> {
     const sanitizedPath = sanitizePath(path);
-    if (!sanitizedPath) return [path];
+    if (!sanitizedPath) return [];
     try {
         const files = await fetch(new URL(sanitizedPath, baseURL));
-        if (!files.ok) return [path];
+        if (!files.ok) return [];
         // Check if the response is a JSON object or HTML
         const contentType = files.headers.get("content-type");
         if (!contentType) return [path];
         if (!contentType.includes("application/json")) return [path];
         const fileList = await files.json();
-        if (!isDirectoryListing(fileList)) return [path];
+        if (!isDirectoryListing(fileList)) return [];
         return flattenFileList(fileList, path);
     } catch (e) {
-        return [path];
+        return [];
     }
 }
