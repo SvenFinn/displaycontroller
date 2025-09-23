@@ -9,7 +9,7 @@
         "generate": "npx prisma generate --no-hints"
     },
     "devDependencies": {
-        "@types/node": "^24.5.1",
+        "@types/node": "^24.5.2",
         "prisma": "^6.16.2",
         "typescript": "^5.9.2"
     },
