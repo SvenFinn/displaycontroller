@@ -19,6 +19,8 @@ services:
         - SELF_DB_PASS=${SELF_DB_PASS}
         - SELF_DB_NAME=${SELF_DB_NAME}
         - EVALUATIONS_VOLUME_PATH=/app/html
+        - SM_SMB_USER=${SM_SMB_USER}
+        - SM_SMB_PASS=${SM_SMB_PASS}
     volumes:
       - evaluations_data:/app/html
     depends_on:

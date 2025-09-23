@@ -66,6 +66,8 @@ jobs:
           SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
           SELF_DB_NAME: ${{ vars.SELF_DB_NAME }}
           CACHE_REFRESH_INTERVAL: ${{ vars.CACHE_REFRESH_INTERVAL }}
+          SM_SMB_USER: ${{ vars.SM_SMB_USER }}
+          SM_SMB_PASS: ${{ vars.SM_SMB_PASS }}
         run: |
           echo "APP_VERSION=$APP_VERSION" > /tmp/args
           echo "SELF_DB_HOST=$SELF_DB_HOST" >> /tmp/args
@@ -85,6 +87,8 @@ jobs:
           echo "HTTPS_PORT=$HTTPS_PORT" >> /tmp/args
           echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> /tmp/args
           echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
+          echo "SM_SMB_USER=$SM_SMB_USER" >> /tmp/args
+          echo "SM_SMB_PASS=$SM_SMB_PASS" >> /tmp/args
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
           echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
 

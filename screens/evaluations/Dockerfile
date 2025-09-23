@@ -7,6 +7,8 @@ ARG SELF_DB_USER
 ARG SELF_DB_PASS
 ARG SELF_DB_NAME
 ARG EVALUATIONS_VOLUME_PATH
+ARG SM_SMB_USER
+ARG SM_SMB_PASS
 
 FROM base AS deps-logger
 WORKDIR /app/logger
@@ -45,7 +47,9 @@ RUN npm i --loglevel=info;
 COPY . .
 RUN npm run build && \
     echo "SELF_DB_URL=postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" > dist/.env && \
-    echo "EVALUATIONS_VOLUME_PATH=${EVALUATIONS_VOLUME_PATH}" >> dist/.env;
+    echo "EVALUATIONS_VOLUME_PATH=${EVALUATIONS_VOLUME_PATH}" >> dist/.env && \
+    echo "SM_SMB_USER=${SM_SMB_USER}" >> dist/.env && \
+    echo "SM_SMB_PASS=${SM_SMB_PASS}" >> dist/.env;
 
 FROM base AS final
 
