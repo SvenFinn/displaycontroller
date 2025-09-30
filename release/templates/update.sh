@@ -172,21 +172,63 @@ EOF
 run_update_step $((step_nr++)) $total_steps "Updating snap packages" <<EOF
 snap_list=\$(snap refresh --list | cut -d' ' -f1 | tail -n +2)
 for snap in \$snap_list; do
-    local dot_count=0
-    snap refresh "\$snap"&
-    snap_pid=\$!
-    while kill -0 "\$snap_pid" 2>/dev/null; do
-        echo -n "Updating \$snap "
-        for i in \$(seq 1 \$dot_count); do
-            echo -n "."
-        done
-        echo ""        
-        dot_count=\$((dot_count + 1))
-        if [ \$dot_count -gt 30 ]; then
-            dot_count=0
-        fi
-        sleep 1
-    done    
+    echo "Updating snap: \$snap"
+    python3 -u -c "
+import pty, os, select, fcntl, termios, struct, sys
+
+def monitor_snap_refresh(snap_name):
+    master, slave = pty.openpty()
+    
+    # Set terminal size (rows, cols, xpixel, ypixel)
+    rows, cols = 24, 120
+    size = struct.pack('HHHH', rows, cols, 0, 0)
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, size)
+    
+    pid = os.fork()
+    
+    if pid == 0:
+        # Child process
+        os.close(master)
+        os.dup2(slave, 0)
+        os.dup2(slave, 1)
+        os.dup2(slave, 2)
+        os.close(slave)
+        os.execvp('snap', ['snap', 'refresh', snap_name])
+    else:
+        # Parent process
+        os.close(slave)
+        output_buffer = ''
+        
+        try:
+            while True:
+                # Check if child process finished
+                pid_result, _ = os.waitpid(pid, os.WNOHANG)
+                if pid_result == pid:
+                    break
+                
+                try:
+                    data = os.read(master, 1024)
+                    
+                    # Process the data
+                    output_buffer += data.decode('utf-8', errors='ignore').replace('\r', '\n')
+                    
+                    # Print complete lines
+                    while '\n' in output_buffer:
+                        line, output_buffer = output_buffer.split('\n', 1)
+                        if line.strip():
+                            print(line.strip())
+                except OSError:
+                    break
+            
+            # Handle any remaining output
+            if output_buffer.strip():
+                print(output_buffer.strip())
+        
+        finally:
+            os.close(master)
+
+monitor_snap_refresh('"\$snap"')
+"
 done
 EOF
 
