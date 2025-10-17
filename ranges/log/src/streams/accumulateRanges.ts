@@ -34,7 +34,7 @@ export class AccumulateRanges extends Transform {
             ttl: 15000,
             last_update: chunk.timestamp,
         }
-        rangeData.shooter = chunk.shooter.id ?? null; // Id is 0 if free
+        rangeData.shooter = chunk.shooter.id || null; // Id is 0 if free
         rangeData.discipline = { disciplineId: chunk.discipline.id, roundId: chunk.round.id };
         while (rangeData.hits.length - 1 < chunk.round.id) {
             rangeData.hits.push(null);
@@ -72,7 +72,7 @@ export class AccumulateRanges extends Transform {
                 callback();
                 return;
             }
-            rangeData.hits[chunk.round.id] = rangeData.hits[chunk.round.id]?.filter(hit => hit.id !== chunk.hit.id) ?? null;
+            rangeData.hits[chunk.round.id] = rangeData.hits[chunk.round.id]?.filter(hit => hit.id !== chunk.hit.id) || null;
             rangeData.hits[chunk.round.id]?.forEach(hit => {
                 if (hit.id > chunk.hit.id) {
                     hit.id--;
