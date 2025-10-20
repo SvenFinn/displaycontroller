@@ -8,8 +8,8 @@
         "build": "tsc"
     },
     "devDependencies": {
-        "@types/node": "^24.5.2",
-        "typescript": "^5.9.2"
+        "@types/node": "^24.9.0",
+        "typescript": "^5.9.3"
     },
     "files": [
         "dist"
