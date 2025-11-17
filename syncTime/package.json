@@ -19,6 +19,6 @@
         "dc-db-smdb": "file:../database/smdb",
         "dc-logger": "file:../logger",
         "dotenv": "^17.2.3",
-        "eventsource": "^4.0.0"
+        "socket.io-client": "^4.8.1"
     }
 }

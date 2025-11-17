@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { EventEmitter } from 'events';
-import { EventSource } from "eventsource";
 import { logger } from "dc-logger";
+import { io } from 'socket.io-client';
 
 export class TableWatcher extends EventEmitter {
     private prisma: PrismaClient;
@@ -20,22 +20,22 @@ export class TableWatcher extends EventEmitter {
         for (let i = 0; i < this.tables.length; i++) {
             this.checksums[this.tables[i]] = 0n;
         }
-        const events = new EventSource("http://server-state:80/api/serverState/sse");
-        events.onopen = () => {
-            logger.info("Connected to server state events");
-        }
-        events.onmessage = async (event: MessageEvent) => {
-            logger.info("Received server state");
-            const curState = JSON.parse(event.data as string);
-            if (curState != this.serverState) {
-                this.serverState = curState;
-                if (this.serverState) {
-                    await this.startInternal();
-                } else {
-                    await this.stopInternal();
-                }
+        const socket = io("http://server-state:80/api/serverState", { path: "/api/serverState/ws" });
+        socket.on("connect", () => {
+            logger.info("Connected to server state via socket.io");
+        });
+        socket.on("serverState", async (data: boolean) => {
+            logger.info("Received server state via socket.io");
+            if (data == this.serverState) {
+                return;
             }
-        }
+            this.serverState = data;
+            if (this.serverState) {
+                await this.startInternal();
+            } else {
+                await this.stopInternal();
+            }
+        });
     }
 
     private async startInternal() {

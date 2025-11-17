@@ -1,42 +1,38 @@
 import { execSync } from "child_process"
-import { EventSource } from "eventsource";
 import { LocalClient } from "dc-db-local";
 import { createSMDBClient } from "dc-db-smdb";
 import { CurrentTimestamp } from "./types";
 import { logger } from "dc-logger";
+import { io } from "socket.io-client";
 
-let localPrismaClient: LocalClient = new LocalClient();
+const localClient = new LocalClient();
+const socket = io("http://server-state:80/api/serverState", { path: "/api/serverState/ws", transports: ["websocket", "polling"] });
 
 let syncTimeout: NodeJS.Timeout | null = null;
 
-async function main() {
-    const syncEnabled = (await localPrismaClient.parameter.findUnique({
+socket.on("connect", () => {
+    logger.info("Connected to server state via socket.io");
+});
+socket.on("serverState", async (data: boolean) => {
+    if (syncTimeout) {
+        clearTimeout(syncTimeout);
+    }
+    if (data) {
+        loop();
+    }
+});
+
+async function loop() {
+    const syncEnabled = (await localClient.parameter.findUnique({
         where: {
             key: "ENABLE_TIME_SYNC"
         }
     }))?.boolValue;
     if (!syncEnabled) {
-        logger.info("Time sync is disabled")
         return;
     }
-    const eventSource = new EventSource("http://server-state:80/api/serverState/sse");
-    eventSource.onopen = () => {
-        logger.info("Connected to server state events")
-    }
-    eventSource.onmessage = async (event) => {
-        if (syncTimeout) {
-            clearTimeout(syncTimeout);
-        }
-        const serverState = JSON.parse(event.data);
-        if (serverState) {
-            loop();
-        }
-    }
-}
-
-async function loop() {
     logger.info("Syncing time");
-    const smdbClient = await createSMDBClient(localPrismaClient);
+    const smdbClient = await createSMDBClient(localClient);
     let timestampQuery: CurrentTimestamp[] = [];
     try {
         timestampQuery = (await smdbClient.$queryRaw`SELECT UTC_TIMESTAMP;`) as CurrentTimestamp[];
@@ -48,7 +44,7 @@ async function loop() {
         const date = timestampQuery[0].UTC_TIMESTAMP;
         execSync(`date -s @${Math.round(date.getTime() / 1000)}`);
     }
-    const syncInterval = (await localPrismaClient.parameter.findUnique({
+    const syncInterval = (await localClient.parameter.findUnique({
         where: {
             key: "TIME_SYNC_INTERVAL"
         }
@@ -57,5 +53,3 @@ async function loop() {
     syncTimeout = setTimeout(loop, syncInterval || 60000);
     smdbClient.$disconnect();
 }
-
-main();

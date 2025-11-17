@@ -1,25 +1,27 @@
-import { EventSource } from "eventsource";
+import { logger } from "dc-logger";
+import { io, Socket } from "socket.io-client";
 import { Readable } from "stream";
 
 export class ServerStateStream extends Readable {
-    private eventSource: EventSource;
+    private socket: Socket;
 
     constructor() {
         super({ objectMode: true });
-        this.eventSource = new EventSource(`http://server-state/api/serverState/sse`);
-        this.createEventSource();
-    }
-
-    private createEventSource() {
-        this.eventSource.close();
-        this.eventSource = new EventSource(`http://server-state/api/serverState/sse`);
-        this.eventSource.onmessage = (message) => {
-            this.push(JSON.parse(message.data));
-        };
-        this.eventSource.onerror = this.createEventSource.bind(this);
+        this.socket = io("http://server-state/api/serverState", { path: "/api/serverState/ws" });
+        this.socket.on("connect", () => {
+            logger.info("Connected to server state via socket.io");
+        });
+        this.socket.on("serverState", (data: boolean) => {
+            this.push(data);
+        });
     }
 
     _read() {
         // Do nothing
+    }
+
+    _destroy(error: Error | null, callback: (error?: Error | null) => void): void {
+        this.socket.close();
+        callback(error);
     }
 }
