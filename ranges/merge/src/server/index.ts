@@ -2,8 +2,39 @@ import express, { Express, Request, Response } from 'express';
 import { LocalClient } from 'dc-db-local';
 import { logger } from "dc-logger";
 import { rangeManager } from '../rangeMan';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const app: Express = express();
+const server = createServer(app);
+const io = new Server(server, {
+    path: '/api/ranges/ws',
+    cors: {
+        origin: '*'
+    }
+}).of("/api/ranges");
+rangeManager.setNamespace(io);
+
+io.on('connection', (socket) => {
+    logger.info('New WebSocket connection for ranges');
+    const handshakeRanges = socket.handshake.query.ranges;
+    let ranges: number[] | null = null;
+
+    if (handshakeRanges) {
+        const rawRanges = Array.isArray(handshakeRanges) ? handshakeRanges : [handshakeRanges];
+        ranges = rawRanges
+            .map((r: any) => parseInt(r.toString()))
+            .filter((n: number) => !isNaN(n));
+    }
+    setTimeout(() => {
+        rangeManager.addSocket(socket, ranges);
+    }, 100);
+
+    socket.on('disconnect', () => {
+        logger.info('WebSocket disconnected for ranges');
+    });
+});
+
 const localClient: LocalClient = new LocalClient();
 
 app.get('/api/ranges', async (req: Request, res: Response) => {
@@ -104,6 +135,6 @@ app.get('/api/ranges/:rangeId', async (req: Request, res: Response) => {
 });
 
 
-app.listen(80, () => {
+server.listen(80, () => {
     logger.info('Listening on port 80');
 });

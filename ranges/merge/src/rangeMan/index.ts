@@ -2,15 +2,20 @@ import { InternalRange, Range } from "dc-ranges-types";
 import { RangeMerger } from "../rangeMerger";
 import { Response } from "express";
 import { logger } from "dc-logger";
+import { Namespace, Socket } from "socket.io";
 
 export class RangeManager {
     private readonly ranges: Map<number, RangeMerger>
     private readonly allSSE: Array<Response>;
     private readonly rangeSSE: Map<number, Array<Response>>;
+    private namespace: Namespace | null = null;
     constructor() {
         this.ranges = new Map();
         this.allSSE = [];
         this.rangeSSE = new Map();
+    }
+    public setNamespace(nsp: Namespace) {
+        this.namespace = nsp;
     }
     public setData(data: InternalRange) {
         const rangeId = data.rangeId;
@@ -21,6 +26,24 @@ export class RangeManager {
         }
         this.ranges.get(rangeId)?.setData(data);
     }
+    public addSocket(socket: Socket, ranges: number[] | null) {
+        if (!this.namespace) {
+            logger.error("Namespace not set in RangeManager");
+            return;
+        }
+        if (ranges) {
+            for (const range of ranges) {
+                socket.join(`range:${range}`);
+                socket.emit('range', this.getRangeData(range));
+            }
+        } else {
+            for (const range of this.ranges.keys()) {
+                socket.emit('range', this.getRangeData(range));
+            }
+            socket.join('all');
+        }
+    }
+
     public addSSE(response: Response, ranges: number[] | null) {
         if (ranges) {
             for (const range of ranges) {
@@ -59,6 +82,13 @@ export class RangeManager {
         for (const response of this.rangeSSE.get(data.id) || []) {
             response.write(`data: ${JSON.stringify(data)}\n\n`);
         }
+        if (!this.namespace) {
+            logger.error("Namespace not set in RangeManager");
+            return;
+        }
+        this.namespace.to(`range:${data.id}`).volatile.emit('range', data);
+        this.namespace.to('all').volatile.emit('range', data);
+
     }
     public getRangeData(rangeId: number): Range {
         if (this.ranges.has(rangeId)) {
