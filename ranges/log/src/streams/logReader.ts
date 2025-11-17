@@ -65,7 +65,7 @@ export class logReaderStream extends Duplex {
         this.sshThread.stderr?.on("data", (data: any) => {
             const str = data.toString();
             if (str.length > 0) {
-                logger.warn(`SSH error: ${str}`);
+                logger.debug(`SSH error: ${str}`);
             }
         });
     }
