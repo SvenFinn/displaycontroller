@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SocketRegistryProvider } from "./components/SocketRegistry";
 
 // const geistSans = Geist({
 //     variable: "--font-geist-sans",
@@ -30,7 +31,9 @@ export default function RootLayout({
 
             {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
             <body>
-                {children}
+                <SocketRegistryProvider>
+                    {children}
+                </SocketRegistryProvider>
             </body>
         </html>
     );

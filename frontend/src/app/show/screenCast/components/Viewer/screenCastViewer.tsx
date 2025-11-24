@@ -2,13 +2,21 @@
 
 import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
 import styles from "./viewer.module.css";
-import { ScreenShareSocketState, useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/SocketIO/screenShare";
+import { ScreenShareSocketProvider, useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/SocketIO/screenShare";
 import { useEffect, useRef, useState } from "react";
 
 export default function ScreenCastViewer({ onReady }: { onReady: () => void }): React.JSX.Element {
     useEffect(() => {
         onReady();
     }, [onReady]);
+    return (
+        <ScreenShareSocketProvider>
+            <ScreenViewerContent />
+        </ScreenShareSocketProvider>
+    )
+}
+
+function ScreenViewerContent() {
     const [connected, setConnected] = useState(false);
     const [broadcasterId, setBroadcasterId] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -125,7 +133,6 @@ export default function ScreenCastViewer({ onReady }: { onReady: () => void }): 
 
     return (
         <div className={styles.viewer}>
-            <ScreenShareSocketState />
             {connected ? (
                 <video
                     ref={videoRef}

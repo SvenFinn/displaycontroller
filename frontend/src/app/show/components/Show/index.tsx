@@ -4,10 +4,10 @@ import Background from './Background';
 import Clock from './Clock';
 import FullscreenButton from './Fullscreen';
 import Logo from './Logo';
-import ServerState from '../ServerEvents/serverState';
 import styles from './show.module.css';
 import { useRef, useState } from 'react';
 import { SizeWrapper } from '../SizeWrapper';
+import ServerState from '../ServerEvents/SocketIO/serverState';
 
 
 export default function Show({ children }: { children: React.ReactNode }): React.JSX.Element {

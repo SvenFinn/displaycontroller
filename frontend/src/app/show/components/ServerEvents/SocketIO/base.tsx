@@ -1,24 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Warning from "../../Warning";
 import { Socket } from "socket.io-client";
+import { useSocketFromRegistry } from "@frontend/app/components/SocketRegistry";
 
 interface SocketIoProps {
-    socket: Socket;
+    url: string;
     canonicalName: string;
+    isBundleable?: boolean;
+    children?: React.ReactNode;
 }
 
-export default function SocketIoState({ socket, canonicalName }: SocketIoProps): React.JSX.Element {
+const SocketIoContext = createContext<Socket | null>(null);
+
+export default function SocketProvider({ url, isBundleable, canonicalName, children }: SocketIoProps): React.JSX.Element {
+    const socket = useSocketFromRegistry(url, isBundleable);
     const [connected, setConnected] = useState<boolean>(false);
     useEffect(() => {
 
-        function onConnect() {
-            setConnected(true);
-        }
-
         function onDisconnect() {
             setConnected(false);
+        }
+
+        function onConnect() {
+            setConnected(true);
         }
 
         socket.on("connect", onConnect);
@@ -33,10 +39,19 @@ export default function SocketIoState({ socket, canonicalName }: SocketIoProps):
         }
 
     }, [socket]);
-    if (!connected) {
-        return (
-            <Warning>Warten auf Verbindung zum {canonicalName} Backend </Warning>
-        )
+
+    return (
+        <SocketIoContext.Provider value={socket}>
+            {children}
+            {!connected && (<Warning>Warten auf Verbindung zum {canonicalName} Backend </Warning>)}
+        </SocketIoContext.Provider>
+    );
+}
+
+export function useSocket(): Socket {
+    const socket = useContext(SocketIoContext);
+    if (!socket) {
+        throw new Error("useSocket must be used within a SocketProvider");
     }
-    return <></>;
+    return socket;
 }

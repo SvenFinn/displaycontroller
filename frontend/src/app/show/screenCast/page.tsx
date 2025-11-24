@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ScreenCastBroadcaster from "./components/Broadcaster";
 import styles from "./screenCast.module.css";
-import { ScreenShareSocketState } from "../components/ServerEvents/SocketIO/screenShare";
+import { ScreenShareSocketProvider } from "../components/ServerEvents/SocketIO/screenShare";
 
 export default function ScreenCastPage() {
     const [isSecure, setIsSecure] = useState(false);
@@ -32,10 +32,11 @@ export default function ScreenCastPage() {
                         </button>
                     </div>
                 </div>)}
-            <h1>Bildschirmübertragung</h1>
-            <p>Hier kannst du deinen Bildschirm auf den Displaycontroller übertragen. Dein Bildschirm wird dann auf allen verbundenen Geräten angezeigt.</p>
-            <ScreenCastBroadcaster />
-            <ScreenShareSocketState />
+            <ScreenShareSocketProvider>
+                <h1>Bildschirmübertragung</h1>
+                <p>Hier kannst du deinen Bildschirm auf den Displaycontroller übertragen. Dein Bildschirm wird dann auf allen verbundenen Geräten angezeigt.</p>
+                <ScreenCastBroadcaster />
+            </ScreenShareSocketProvider>
         </>
     );
 }
