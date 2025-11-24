@@ -21,13 +21,8 @@ const io = new IOServer(server, {
 
 const localClient: LocalClient = new LocalClient();
 
-let sseConnections: Response[] = [];
-
-export async function sendSSEResponse(data: Screen) {
+export async function sendSocketIOResponse(data: Screen) {
     logger.info("Sending screen update");
-    sseConnections.forEach((socket) => {
-        socket.write(`data: ${JSON.stringify(data)}\n\n`);
-    });
     io.emit('data', data);
 }
 
@@ -43,25 +38,6 @@ app.get('/api/screens', async (req: Request, res: Response) => {
 
 app.get('/api/screens/current', (req: Request, res: Response) => {
     res.status(200).send(screenManager.getCurrentScreen());
-});
-
-app.get('/api/screens/current/sse', (req: Request, res: Response) => {
-    logger.info("New screens events connection");
-    const headers = {
-        'Content-Type': 'text/event-stream',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'no-cache',
-        'Content-Encoding': 'none',
-    };
-    res.writeHead(200, headers);
-
-    res.write(`data: ${JSON.stringify(screenManager.getCurrentScreen())}\n\n`);
-
-    sseConnections.push(res);
-
-    req.on("close", () => {
-        sseConnections = sseConnections.filter((socket) => socket !== res);
-    });
 });
 
 app.get('/api/screens/pause', (req: Request, res: Response) => {

@@ -7,7 +7,7 @@ import Logo from './Logo';
 import styles from './show.module.css';
 import { useRef, useState } from 'react';
 import { SizeWrapper } from '../SizeWrapper';
-import ServerState from '../ServerEvents/SocketIO/serverState';
+import ServerState from '../ServerEvents/serverState';
 
 
 export default function Show({ children }: { children: React.ReactNode }): React.JSX.Element {

@@ -1,36 +1,44 @@
 "use client";
 
-import { useDispatch } from "react-redux";
-import ServerEvents from "./base";
-import { isScreen, Screen } from "dc-screens-types";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
-import { useHost } from "@frontend/app/hooks/useHost";
+import { useSocket } from "./base";
+import SocketProvider from "./base";
+import { isScreen, Screen } from "dc-screens-types";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLastMessage } from "@frontend/app/components/SocketRegistry";
 
-interface ScreenEventsProps {
-    action: ActionCreatorWithPayload<Screen>;
+export default function ScreensProvider({ children }: { children: React.ReactNode }) {
+    return (
+        <SocketProvider canonicalName="Screens" url="/api/screens" isBundleable={true}>
+            {children}
+        </SocketProvider>
+    )
 }
 
-export default function ScreenEvents({ action }: ScreenEventsProps) {
+export const useScreensSocket = useSocket;
+
+export function useScreensCallback(action: ActionCreatorWithPayload<Screen>) {
+    const socket = useScreensSocket();
     const dispatch = useDispatch();
-    const host = useHost();
+    const lastMessage = useLastMessage("/api/screens");
 
-    if (!host) {
-        return <></>;
-    }
-
-
-    const path = `${host}/api/screens/current/sse`;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function screensAction(data: any) {
-        if (!isScreen(data)) {
+    useEffect(() => {
+        if (!socket) {
             return;
         }
-        dispatch(action(data));
-    }
+        onData(lastMessage);
 
-    return (
-        <ServerEvents path={path} canonicalName="Screens" action={screensAction} />
-    )
+        function onData(data: any) {
+            if (!isScreen(data)) {
+                return;
+            }
+            dispatch(action(data));
+        }
+
+        socket.on("data", onData);
+        return () => {
+            socket.off("data", onData);
+        }
+    }, [socket, action]);
 }

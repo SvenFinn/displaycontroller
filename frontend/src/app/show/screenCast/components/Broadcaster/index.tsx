@@ -5,7 +5,7 @@ import { Preview } from "./preview";
 import { ClientTable } from "./clientTable";
 import { FaPlay, FaStop } from "react-icons/fa6";
 import styles from "./broadcaster.module.css";
-import { useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/SocketIO/screenShare";
+import { useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/screenShare";
 
 const config: RTCConfiguration = {};
 

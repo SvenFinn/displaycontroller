@@ -1,52 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Warning from "../Warning";
+import { Socket } from "socket.io-client";
+import { useSocketFromRegistry } from "@frontend/app/components/SocketRegistry";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ServerEventsCallback = (data: any) => void;
-
-interface ServerEventsProps {
-    path: URL | string;
+interface SocketIoProps {
+    url: string;
     canonicalName: string;
-    action: ServerEventsCallback;
+    params?: { [key: string]: any; };
+    isBundleable?: boolean;
+    children?: React.ReactNode;
 }
 
-export default function ServerEvents({ path, canonicalName, action }: ServerEventsProps): React.JSX.Element {
+const SocketIoContext = createContext<Socket | null>(null);
+
+export default function SocketProvider({ url, isBundleable, params, canonicalName, children }: SocketIoProps): React.JSX.Element {
+    const socket = useSocketFromRegistry(url, isBundleable, params);
     const [connected, setConnected] = useState<boolean>(false);
     useEffect(() => {
-        let eventSource: EventSource;
-
-        createEventSource();
-
-        function createEventSource() {
-            eventSource = new EventSource(path);
-            eventSource.onopen = () => {
-                setConnected(true);
-            }
-            eventSource.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                action(data);
-            }
-            eventSource.onerror = () => {
-                setConnected(false);
-                eventSource.close();
-                setTimeout(() => {
-                    createEventSource();
-                }, 5000);
-            }
+        if (!socket) {
+            return;
         }
 
-        return () => {
-            eventSource.close();
+        function onDisconnect() {
             setConnected(false);
         }
 
-    }, [path, canonicalName, action]);
-    if (!connected) {
-        return (
-            <Warning>Warten auf Verbindung zum {canonicalName} Backend </Warning>
-        )
-    }
-    return <></>;
+        function onConnect() {
+            setConnected(true);
+        }
+
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+
+        setConnected(socket.connected);
+
+        return () => {
+            if (!socket) {
+                return;
+            }
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+            setConnected(false);
+        }
+
+    }, [socket]);
+
+    return (
+        <SocketIoContext.Provider value={socket}>
+            {children}
+            {!connected && (<Warning>Warten auf Verbindung zum {canonicalName} Backend </Warning>)}
+        </SocketIoContext.Provider>
+    );
+}
+
+export function useSocket(): Socket | null {
+    return useContext(SocketIoContext);
 }

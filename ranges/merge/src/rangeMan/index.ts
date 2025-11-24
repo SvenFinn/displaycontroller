@@ -1,18 +1,13 @@
 import { InternalRange, Range } from "dc-ranges-types";
 import { RangeMerger } from "../rangeMerger";
-import { Response } from "express";
 import { logger } from "dc-logger";
 import { Namespace, Socket } from "socket.io";
 
 export class RangeManager {
     private readonly ranges: Map<number, RangeMerger>
-    private readonly allSSE: Array<Response>;
-    private readonly rangeSSE: Map<number, Array<Response>>;
     private namespace: Namespace | null = null;
     constructor() {
         this.ranges = new Map();
-        this.allSSE = [];
-        this.rangeSSE = new Map();
     }
     public setNamespace(nsp: Namespace) {
         this.namespace = nsp;
@@ -21,7 +16,7 @@ export class RangeManager {
         const rangeId = data.rangeId;
         if (!this.ranges.has(rangeId)) {
             const rangeMerger = new RangeMerger(rangeId);
-            rangeMerger.on("update", this.sendSSE.bind(this));
+            rangeMerger.on("update", this.sendUpdate.bind(this));
             this.ranges.set(rangeId, rangeMerger);
         }
         this.ranges.get(rangeId)?.setData(data);
@@ -44,44 +39,8 @@ export class RangeManager {
         }
     }
 
-    public addSSE(response: Response, ranges: number[] | null) {
-        if (ranges) {
-            for (const range of ranges) {
-                if (!this.rangeSSE.has(range)) {
-                    this.rangeSSE.set(range, []);
-                }
-                this.rangeSSE.get(range)?.push(response);
-                response.write(`data: ${JSON.stringify(this.getRangeData(range))}\n\n`);
-            }
-        } else {
-            this.allSSE.push(response);
-            for (const range of this.ranges.keys()) {
-                response.write(`data: ${JSON.stringify(this.getRangeData(range))}\n\n`);
-            }
-        }
-    }
-    public removeSSE(response: Response) {
-        if (this.allSSE.includes(response)) {
-            this.allSSE.splice(this.allSSE.indexOf(response), 1);
-        }
-        for (const range of this.rangeSSE.keys()) {
-            const rangeSSE = this.rangeSSE.get(range);
-            if (!rangeSSE) {
-                continue;
-            }
-            if (rangeSSE.includes(response)) {
-                rangeSSE.splice(rangeSSE.indexOf(response), 1);
-            }
-        }
-    }
-    private sendSSE(data: Range) {
+    private sendUpdate(data: Range) {
         logger.info(`Sending update for range ${data.id}`);
-        for (const response of this.allSSE) {
-            response.write(`data: ${JSON.stringify(data)}\n\n`);
-        }
-        for (const response of this.rangeSSE.get(data.id) || []) {
-            response.write(`data: ${JSON.stringify(data)}\n\n`);
-        }
         if (!this.namespace) {
             logger.error("Namespace not set in RangeManager");
             return;

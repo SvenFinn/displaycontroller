@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ScreenCastBroadcaster from "./components/Broadcaster";
 import styles from "./screenCast.module.css";
-import { ScreenShareSocketProvider } from "../components/ServerEvents/SocketIO/screenShare";
+import { ScreenShareSocketProvider } from "../components/ServerEvents/screenShare";
 
 export default function ScreenCastPage() {
     const [isSecure, setIsSecure] = useState(false);

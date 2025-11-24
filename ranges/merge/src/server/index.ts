@@ -46,26 +46,6 @@ app.get('/api/ranges/free', async (req: Request, res: Response) => {
     res.status(200).send(freeRanges);
 });
 
-app.get('/api/ranges/sse', async (req: Request, res: Response) => {
-    let ranges: number[] | null = null;
-    if (req.query.ranges) {
-        ranges = JSON.parse(req.query.ranges.toString()).map((range: any) => parseInt(range.toString())).filter((range: number) => !isNaN(range));
-    }
-    const headers = {
-        'Content-Type': 'text/event-stream',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'no-cache',
-        'Content-Encoding': 'none',
-    };
-    res.writeHead(200, headers);
-
-    rangeManager.addSSE(res, ranges);
-
-    req.on("close", () => {
-        rangeManager.removeSSE(res);
-    });
-});
-
 app.get('/api/ranges/known', async (req: Request, res: Response) => {
     const knownRanges = await localClient.knownRanges.findMany();
     res.status(200).send(knownRanges);

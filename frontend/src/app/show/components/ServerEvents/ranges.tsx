@@ -1,40 +1,54 @@
 "use client";
 
-import ServerEvents from "./base";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { isRange, Range } from "dc-ranges-types";
-import { useAppDispatch } from "../../drawTarget/components/DrawTarget/ranges-store/store";
-import { useEffect, useState } from "react";
+import { useSocket } from "./base";
+import SocketProvider from "./base";
+import { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useHost } from "@frontend/app/hooks/useHost";
 
-interface RangeEventsProps {
-    ranges: Array<number | null>;
-    action: ActionCreatorWithPayload<Range>;
-}
-
-export default function RangeEvents({ action, ranges }: RangeEventsProps): React.JSX.Element {
-    const dispatch = useAppDispatch();
+export default function RangesProvider({ children, ranges }: { ranges: Array<number | null>, children: React.ReactNode }) {
+    const params = useMemo(() => {
+        const paramObj: { [key: string]: any } = {};
+        paramObj["ranges"] = ranges.filter((r) => r !== null);
+        return paramObj;
+    }, [ranges]);
     const host = useHost();
-
-
-    ranges = ranges.filter((range) => typeof range === "number" && !isNaN(range));
-
     if (!host) {
         return <></>;
     }
 
-    const path = new URL(`${host}/api/ranges/sse`);
-    path.searchParams.append("ranges", JSON.stringify(ranges));
+    return (
+        <SocketProvider canonicalName="Ranges" url={"/api/ranges"} params={params} isBundleable={false}>
+            {children}
+        </SocketProvider>
+    )
+}
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function actionCallback(data: any) {
-        if (!isRange(data)) {
+export const useRangesSocket = useSocket;
+
+export function useRangesCallback(action: ActionCreatorWithPayload<Range>) {
+    const socket = useRangesSocket();
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        if (!socket) {
             return;
         }
-        dispatch(action(data));
-    }
+        console.log("Setting up ranges socket callback");
+        function onData(data: any) {
+            if (!isRange(data)) {
+                return;
+            }
+            console.log("Received range data:", data);
+            dispatch(action(data));
+        }
 
-    return (
-        <ServerEvents path={path} canonicalName="Ranges" action={actionCallback} />
-    )
+        socket.on("data", onData);
+        return () => {
+            socket.off("data", onData);
+        }
+    }, [socket, action]);
 }

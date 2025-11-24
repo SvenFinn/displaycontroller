@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { setRange } from "./ranges-store/rangesReducer";
 import Ranges from "./ranges";
 import { CpcHeader } from "./header";
-import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/SocketIO/ranges";
+import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/ranges";
 
 interface CpcViewProps {
     options: CpcViewOptions,

@@ -5,12 +5,11 @@ import Ranges from "./ranges";
 import { Provider } from "react-redux";
 import { store, useAppSelector } from "./ranges-store/store"
 import { setRange } from "./ranges-store/rangesReducer";
-import RangesEvents from "../../../components/ServerEvents/ranges"
 import Header from "./header";
 import { useEffect } from "react";
 import styles from "./drawTarget.module.css";
 import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
-import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/SocketIO/ranges";
+import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/ranges";
 
 export interface DrawTargetProps {
     options: DrawTargetOptions;

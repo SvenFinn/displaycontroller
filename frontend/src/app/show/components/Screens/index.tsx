@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import ShowScreen from "./ShowScreen";
 import { nextScreen } from "./store/screensReducer";
 import { store } from "./store/store";
-import ScreensProvider, { useScreensCallback } from "../ServerEvents/SocketIO/screens";
+import ScreensProvider, { useScreensCallback } from "../ServerEvents/screens";
 
 
 export default function ShowScreens(): React.JSX.Element {

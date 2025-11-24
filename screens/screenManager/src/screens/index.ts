@@ -1,11 +1,11 @@
 import { isScreen, Screen } from "dc-screens-types";
 import { logger } from "dc-logger";
-import { sendSSEResponse } from "../server";
+import { sendSocketIOResponse } from "../server";
 import amqp from "amqplib"
 import { screenManager } from "./screenManager";
 
 screenManager.on("screenChanged", (screen: Screen) => {
-    sendSSEResponse(screen);
+    sendSocketIOResponse(screen);
 });
 
 async function main() {
