@@ -24,7 +24,7 @@ export class TableWatcher extends EventEmitter {
         socket.on("connect", () => {
             logger.info("Connected to server state via socket.io");
         });
-        socket.on("serverState", async (data: boolean) => {
+        socket.on("data", async (data: boolean) => {
             logger.info("Received server state via socket.io");
             if (data == this.serverState) {
                 return;

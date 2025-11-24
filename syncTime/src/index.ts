@@ -13,7 +13,7 @@ let syncTimeout: NodeJS.Timeout | null = null;
 socket.on("connect", () => {
     logger.info("Connected to server state via socket.io");
 });
-socket.on("serverState", async (data: boolean) => {
+socket.on("data", async (data: boolean) => {
     if (syncTimeout) {
         clearTimeout(syncTimeout);
     }

@@ -56,13 +56,13 @@ export function updateServerState(newServerInf: AdvServerState) {
     sockets.forEach((socket) => {
         socket.write(`data: ${serverInf.online ? serverInf.compatible : false}\n\n`);
     })
-    io.emit('serverState', serverInf.online ? serverInf.compatible : false);
+    io.emit('data', serverInf.online ? serverInf.compatible : false);
 }
 
 io.on('connection', (socket) => {
     logger.info('socket.io client connected: ' + socket.id);
     setTimeout(() => {
-        socket.emit('serverState', serverInf.online ? serverInf.compatible : false);
+        socket.emit('data', serverInf.online ? serverInf.compatible : false);
     }, 100);
     socket.on('disconnect', () => {
         logger.info('socket.io client disconnected: ' + socket.id);

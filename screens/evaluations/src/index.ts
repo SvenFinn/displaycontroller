@@ -118,7 +118,7 @@ socket.on("disconnect", (reason) => {
     serverState = false;
     if (nextSyncTimeOut) { clearTimeout(nextSyncTimeOut); nextSyncTimeOut = null; }
 });
-socket.on("serverState", async (data: boolean) => {
+socket.on("data", async (data: boolean) => {
     const s = Boolean(data);
     logger.info("Received server state via socket.io: " + String(s));
     serverState = s;

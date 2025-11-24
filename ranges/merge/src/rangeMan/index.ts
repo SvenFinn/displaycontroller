@@ -34,11 +34,11 @@ export class RangeManager {
         if (ranges) {
             for (const range of ranges) {
                 socket.join(`range:${range}`);
-                socket.emit('range', this.getRangeData(range));
+                socket.emit('data', this.getRangeData(range));
             }
         } else {
             for (const range of this.ranges.keys()) {
-                socket.emit('range', this.getRangeData(range));
+                socket.emit('data', this.getRangeData(range));
             }
             socket.join('all');
         }
@@ -86,8 +86,8 @@ export class RangeManager {
             logger.error("Namespace not set in RangeManager");
             return;
         }
-        this.namespace.to(`range:${data.id}`).volatile.emit('range', data);
-        this.namespace.to('all').volatile.emit('range', data);
+        this.namespace.to(`range:${data.id}`).volatile.emit('data', data);
+        this.namespace.to('all').volatile.emit('data', data);
 
     }
     public getRangeData(rangeId: number): Range {

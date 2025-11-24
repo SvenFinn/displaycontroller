@@ -7,7 +7,7 @@ import { startScreenCast, stopScreenCast } from "./amqp";
 const server = createServer();
 const io = new Server(server, {
     path: "/api/screenCast/ws/",
-});
+}).of("/api/screenCast");
 
 
 
@@ -16,6 +16,7 @@ const viewers: Set<string> = new Set();
 
 io.on("error", e => logger.error(e));
 io.on("connection", socket => {
+    console.log("New screenCast connection");
     socket.on("broadcaster", () => {
         if (broadcaster) {
             logger.warn("New broadcaster connected, rejecting");

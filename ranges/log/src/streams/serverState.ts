@@ -11,7 +11,7 @@ export class ServerStateStream extends Readable {
         this.socket.on("connect", () => {
             logger.info("Connected to server state via socket.io");
         });
-        this.socket.on("serverState", (data: boolean) => {
+        this.socket.on("data", (data: boolean) => {
             this.push(data);
         });
     }
