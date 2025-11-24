@@ -30,6 +30,10 @@ function ServerStateContent(): React.JSX.Element {
     const socket = useSocket();
 
     useEffect(() => {
+        if (!socket) {
+            return;
+        }
+
         function onData(data: any) {
             if (typeof data !== "boolean") {
                 return;

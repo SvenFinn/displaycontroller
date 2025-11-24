@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
     let ranges: number[] | null = null;
 
     if (handshakeRanges) {
-        const rawRanges = Array.isArray(handshakeRanges) ? handshakeRanges : [handshakeRanges];
+        const rawRanges = Array.isArray(handshakeRanges) ? handshakeRanges : JSON.parse(handshakeRanges);
         ranges = rawRanges
             .map((r: any) => parseInt(r.toString()))
             .filter((n: number) => !isNaN(n));

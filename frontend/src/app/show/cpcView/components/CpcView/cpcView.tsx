@@ -4,10 +4,10 @@ import { CpcViewOptions } from "dc-screens-types";
 import { store, useAppSelector } from "./ranges-store/store";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
-import RangesEvents from "../../../components/ServerEvents/ranges";
 import { setRange } from "./ranges-store/rangesReducer";
 import Ranges from "./ranges";
 import { CpcHeader } from "./header";
+import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/SocketIO/ranges";
 
 interface CpcViewProps {
     options: CpcViewOptions,
@@ -16,12 +16,22 @@ interface CpcViewProps {
 
 export default function CpcView({ options, onReady }: CpcViewProps): React.JSX.Element {
     return (
-        <Provider store={store}>
-            <RangesEvents action={setRange} ranges={options.ranges} />
+        <RangesProvider ranges={options.ranges}>
+            <Provider store={store}>
+                <CpcViewContent options={options} onReady={onReady} />
+            </Provider>
+        </RangesProvider>
+    );
+}
+
+function CpcViewContent({ options, onReady }: CpcViewProps): React.JSX.Element {
+    useRangesCallback(setRange);
+    return (
+        <>
             <CpcHeader />
             <Ranges options={options} />
             <CpcViewIsReady options={options} onReady={onReady} />
-        </Provider>
+        </>
     );
 }
 

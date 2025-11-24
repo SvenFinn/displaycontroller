@@ -19,6 +19,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
 
     // Socket handlers for transmission
     useEffect(() => {
+        if (!socket) return;
         if (!isTransmitting) return;
 
         function handleAnswer(id: string, description: RTCSessionDescriptionInit) {
@@ -26,6 +27,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
         }
 
         async function handleViewer(id: string) {
+            if (!socket) return;
             if (peerConnections.current[id]) return;
 
             const pc = new RTCPeerConnection(config);
@@ -38,6 +40,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
             stream.getTracks().forEach(track => pc.addTrack(track, stream));
 
             pc.onicecandidate = (event) => {
+                if (!socket) return;
                 if (event.candidate) {
                     socket.emit("candidate", id, event.candidate);
                 }
@@ -110,6 +113,7 @@ export const ScreenCastBroadcaster: React.FC = () => {
     }
 
     function stopTransmitting() {
+        if (!socket) return;
         if (!isTransmitting) return;
         Object.values(peerConnections.current).forEach(pc => pc.close());
         peerConnections.current = {};

@@ -26,6 +26,7 @@ function ScreenViewerContent() {
 
     // Handle connection state changes
     useEffect(() => {
+        if (!socket) return;
         if (!broadcasterId) return;
 
         peerConnection.current = new RTCPeerConnection();
@@ -38,6 +39,7 @@ function ScreenViewerContent() {
         peerConnection.current.addEventListener("connectionstatechange", onConnectionStateChange);
 
         const onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
+            if (!socket) return;
             if (broadcasterId && event.candidate) {
                 socket.emit("candidate", broadcasterId, event.candidate);
             }
@@ -46,6 +48,7 @@ function ScreenViewerContent() {
 
         const handleOffer = async (id: string, message: RTCSessionDescriptionInit) => {
             if (!peerConnection.current) return;
+            if (!socket) return;
             await peerConnection.current.setRemoteDescription(new RTCSessionDescription(message));
             const answer = await peerConnection.current.createAnswer();
             await peerConnection.current.setLocalDescription(answer);
@@ -98,6 +101,7 @@ function ScreenViewerContent() {
 
     // Handle socket events
     useEffect(() => {
+        if (!socket) return;
         const sendViewer = () => {
             if (socket.connected) socket.emit("viewer");
         };

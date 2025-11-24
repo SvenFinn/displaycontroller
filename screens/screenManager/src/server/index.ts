@@ -7,10 +7,17 @@ import { resolveScreen } from '../screens/screenTypes';
 import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
 import BodyParser from 'body-parser';
 import { Prisma } from 'dc-db-local/generated/client/client';
+import http from 'http';
+import { Server as IOServer } from 'socket.io';
 dotenv.config({ quiet: true });
 
 const app: Express = express();
 app.use(BodyParser.json());
+
+const server = http.createServer(app);
+const io = new IOServer(server, {
+    path: "/api/screens/ws",
+}).of("/api/screens");
 
 const localClient: LocalClient = new LocalClient();
 
@@ -21,6 +28,7 @@ export async function sendSSEResponse(data: Screen) {
     sseConnections.forEach((socket) => {
         socket.write(`data: ${JSON.stringify(data)}\n\n`);
     });
+    io.emit('data', data);
 }
 
 app.get('/api/screens', async (req: Request, res: Response) => {
@@ -309,6 +317,16 @@ app.post("/api/screens", async (req: Request, res: Response) => {
     }
 });
 
-app.listen(80, () => {
+io.on('connection', (socket) => {
+    logger.info('socket.io client connected: ' + socket.id);
+    setTimeout(() => {
+        socket.emit('data', screenManager.getCurrentScreen());
+    }, 100);
+    socket.on('disconnect', () => {
+        logger.info('socket.io client disconnected: ' + socket.id);
+    });
+});
+
+server.listen(80, () => {
     logger.info('Listening on port 80');
 });

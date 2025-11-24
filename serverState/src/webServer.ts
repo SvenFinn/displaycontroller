@@ -10,9 +10,6 @@ const server = http.createServer(app);
 const io = new IOServer(server, {
     // serve the socket.io endpoint under this base path
     path: '/api/serverState/ws',
-    cors: {
-        origin: '*'
-    }
 }).of("/api/serverState");
 
 let serverInf: AdvServerState = {
