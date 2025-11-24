@@ -4,7 +4,8 @@ import { RegistryWidgetsType, RJSFSchema, UiSchema } from "@rjsf/utils";
 import root from "react-shadow";
 import Form from "@rjsf/react-bootstrap";
 import validator from "@rjsf/validator-ajv8";
-import bootstrapCss from '!!raw-loader!bootstrap/dist/css/bootstrap.min.css';
+// @ts-expect-error: This works despite the file not being reachable for typescript
+import bootstrapCss from 'bootstrap/dist/css/bootstrap.min.css?raw';
 import { useEffect, useRef, useState } from "react";
 import SingleRangeSelector from "./RangeSelector/single";
 import EvaluationSelector from "./EvaluationSelector";

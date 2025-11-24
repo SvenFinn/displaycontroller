@@ -56,7 +56,7 @@ FROM base AS final
 WORKDIR /app
 
 COPY --from=build /app/frontend/public /app/public
-COPY --from=build /app/frontend/.next/standalone /app
+COPY --from=build /app/frontend/.next/standalone/frontend /app
 COPY --from=build /app/frontend/.next/static /app/.next/static
 
 ENV NODE_ENV=production
