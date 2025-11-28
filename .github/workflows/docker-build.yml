@@ -198,11 +198,117 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ steps.build-config.outputs.image }}
+      - name: Compute build hash
+        id: hash
+        run: |
+          set -e
+
+          context="${{ steps.build-config.outputs.context }}"
+          dockerfile="${{ steps.build-config.outputs.dockerfile }}"
+          args='${{ steps.build-config.outputs.args }}'
+          additional='${{ steps.build-config.outputs.additional_contexts }}'
+
+          # deterministic hashing function (no timestamps, sorted, stable)
+          hash_dir () {
+            dir="$1"
+            tar --sort=name \
+                --mtime='UTC 1970-01-01' \
+                --owner=0 --group=0 --numeric-owner \
+                -cf - "$dir" 2>/dev/null | sha256sum | awk '{print $1}'
+          }
+
+          # --- main context ---
+          context_hash=$(hash_dir "$context")
+
+          # --- dockerfile ---
+          dockerfile_hash=$(sha256sum "$context/$dockerfile" | awk '{print $1}')
+
+          # --- build args ---
+          args_hash=$(echo "$args" | jq -S '.' | sha256sum | awk '{print $1}')
+
+          # --- additional contexts ---
+          additional_hash=""
+          if [ "$additional" != "\"\"" ]; then
+            while read -r entry; do
+              path=$(echo "$entry" | awk -F'=' '{print $2}')
+              if [ -d "$path" ]; then
+                h=$(hash_dir "$path")
+              else
+                h=$(echo "" | sha256sum | awk '{print $1}')
+              fi
+              additional_hash="$additional_hash$h"
+            done <<< "$(echo "$additional" | jq -r '.[]')"
+          fi
+
+          # --- base image digest ---
+          base_image=$(grep -E '^FROM ' "$context/$dockerfile" | head -1 | awk '{print $2}')
+          docker pull "$base_image" >/dev/null 2>&1
+          base_digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$base_image")
+
+          # --- final hash ---
+          build_hash=$(printf "%s\n%s\n%s\n%s\n%s" \
+            "$context_hash" "$dockerfile_hash" "$args_hash" "$additional_hash" "$base_digest" \
+            | sha256sum | awk '{print $1}')
+
+          echo "build_hash=$build_hash" >> $GITHUB_OUTPUT
+          echo "context hash: $context_hash"
+          echo "dockerfile hash: $dockerfile_hash"
+          echo "args hash: $args_hash"
+          echo "additional contexts hash: $additional_hash"
+          echo "base image digest: $base_digest"
+
+      - name: Extract primary tag
+        id: tag
+        run: |
+          # metadata-action output is a newline separated list
+          primary=$(echo "${{ steps.metadata.outputs.tags }}" | head -n 1)
+          echo "primary=$primary" >> $GITHUB_OUTPUT
+
+      - name: Check existing image build hash
+        id: need-build
+        run: |
+          primary="${{ steps.tag.outputs.primary }}"
+          new_hash="${{ steps.hash.outputs.build_hash }}"
+
+          echo "Checking existing image: $primary"
+
+          # Try pulling the existing image
+          if docker pull "$primary" >/dev/null 2>&1; then
+            echo "Image exists, inspecting…"
+
+            # Extract build-hash label (could be empty)
+            old_hash=$(docker inspect "$primary" --format='{{ index .Config.Labels "build-hash" }}')
+
+            echo "Old hash: ${old_hash:-<none>}"
+            echo "New hash: $new_hash"
+
+            # If the old hash is missing OR does not match → build
+            if [ -z "$old_hash" ]; then
+              echo "No build-hash label present → build required."
+              echo "build_needed=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+            if [ "$old_hash" = "$new_hash" ]; then
+              echo "build_needed=false" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "build_needed=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+          else
+            echo "Image does not exist yet → build required."
+            echo "build_needed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
       - name: Set up Docker Buildx
+        if: steps.need-build.outputs.build_needed == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Build and Push the Docker image
+        if: steps.need-build.outputs.build_needed == 'true'
         uses: docker/build-push-action@v6
         with:
           context: ${{ steps.build-config.outputs.context }}
@@ -212,9 +318,9 @@ jobs:
           build-contexts: |
             ${{ fromJson(steps.build-config.outputs.additional_contexts) }}
           tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          labels: |
+            ${{ steps.metadata.outputs.labels }}
+            build-hash=${{ steps.hash.outputs.build_hash }}
           push: true
 
   generate-release:
