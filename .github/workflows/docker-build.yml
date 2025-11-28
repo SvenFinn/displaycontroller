@@ -321,8 +321,6 @@ jobs:
           labels: |
             ${{ steps.metadata.outputs.labels }}
             build-hash=${{ steps.hash.outputs.build_hash }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           push: true
 
   generate-release:
