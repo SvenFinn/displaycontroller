@@ -208,40 +208,55 @@ jobs:
           args='${{ steps.build-config.outputs.args }}'
           additional='${{ steps.build-config.outputs.additional_contexts }}'
 
-          # --- hash main context ----
-          context_hash=$(tar -c "$context" | sha256sum | awk '{print $1}')
+          # deterministic hashing function (no timestamps, sorted, stable)
+          hash_dir () {
+            dir="$1"
+            tar --sort=name \
+                --mtime='UTC 1970-01-01' \
+                --owner=0 --group=0 --numeric-owner \
+                -cf - "$dir" 2>/dev/null | sha256sum | awk '{print $1}'
+          }
 
-          # --- hash dockerfile ----
+          # --- main context ---
+          context_hash=$(hash_dir "$context")
+
+          # --- dockerfile ---
           dockerfile_hash=$(sha256sum "$context/$dockerfile" | awk '{print $1}')
 
-          # --- hash build args ----
-          args_hash=$(echo "$args" | sha256sum | awk '{print $1}')
+          # --- build args ---
+          args_hash=$(echo "$args" | jq -S '.' | sha256sum | awk '{print $1}')
 
-          # --- hash base image digest ----
-          base_image=$(grep -E '^FROM ' "$context/$dockerfile" | head -1 | awk '{print $2}')
-          base_digest=$(docker pull "$base_image" >/dev/null 2>&1 && docker inspect --format='{{index .RepoDigests 0}}' "$base_image")
-
-          # --- hash all additional contexts ----
+          # --- additional contexts ---
           additional_hash=""
           if [ "$additional" != "\"\"" ]; then
-          echo "$additional" | jq -r '.[]' | while read -r entry; do
-              # entry looks like: "name=/path/to/context"
+            while read -r entry; do
               path=$(echo "$entry" | awk -F'=' '{print $2}')
               if [ -d "$path" ]; then
-              h=$(tar -c "$path" | sha256sum | awk '{print $1}')
+                h=$(hash_dir "$path")
               else
-              h=$(echo "" | sha256sum | awk '{print $1}')
+                h=$(echo "" | sha256sum | awk '{print $1}')
               fi
               additional_hash="$additional_hash$h"
-          done
+            done <<< "$(echo "$additional" | jq -r '.[]')"
           fi
 
-          # combine all hashes into final hash
+          # --- base image digest ---
+          base_image=$(grep -E '^FROM ' "$context/$dockerfile" | head -1 | awk '{print $2}')
+          docker pull "$base_image" >/dev/null 2>&1
+          base_digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$base_image")
+
+          # --- final hash ---
           build_hash=$(printf "%s\n%s\n%s\n%s\n%s" \
-          "$context_hash" "$dockerfile_hash" "$args_hash" "$additional_hash" "$base_digest" \
-          | sha256sum | awk '{print $1}')
+            "$context_hash" "$dockerfile_hash" "$args_hash" "$additional_hash" "$base_digest" \
+            | sha256sum | awk '{print $1}')
 
           echo "build_hash=$build_hash" >> $GITHUB_OUTPUT
+          echo "context hash: $context_hash"
+          echo "dockerfile hash: $dockerfile_hash"
+          echo "args hash: $args_hash"
+          echo "additional contexts hash: $additional_hash"
+          echo "base image digest: $base_digest"
+
       - name: Extract primary tag
         id: tag
         run: |
