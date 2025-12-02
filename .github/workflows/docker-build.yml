@@ -3,352 +3,352 @@ name: Create and publish a Docker image
 
 # Configures this workflow to run every time a change is pushed to the branch called `release`.
 on:
-  push:
-    branches:
-      - "development"
-  create:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to tag the Docker image with"
-        required: true
-        default: "development"
+    push:
+        branches:
+            - "development"
+    create:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Version to tag the Docker image with"
+                required: true
+                default: "development"
 
 permissions:
-  contents: read
-  packages: write
+    contents: read
+    packages: write
 
 jobs:
-  prep-args:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'create' && github.event.ref_type == 'tag')
+    prep-args:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'create' && github.event.ref_type == 'tag')
 
-    outputs:
-      args: ${{ steps.args.outputs.BUILD_ARGS }}
+        outputs:
+            args: ${{ steps.args.outputs.BUILD_ARGS }}
 
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout the repository
+              uses: actions/checkout@v4
 
-      - name: Determine APP_VERSION
-        id: app-version
-        run: |
-          if [ ! -z "${{ github.event.inputs.version }}" ]; then
-            app_version="${{ github.event.inputs.version }}"
-          else
-            branch=$(git branch --show-current)
-            if [ "$branch" = "development" ]; then
-              app_version="development"
-            else
-              app_version=$(git describe --tags --abbrev=0)
-            fi
-          fi
-          echo "app_version=$app_version"
-          echo "app_version=$app_version" >> $GITHUB_OUTPUT
+            - name: Determine APP_VERSION
+              id: app-version
+              run: |
+                  if [ ! -z "${{ github.event.inputs.version }}" ]; then
+                    app_version="${{ github.event.inputs.version }}"
+                  else
+                    branch=$(git branch --show-current)
+                    if [ "$branch" = "development" ]; then
+                      app_version="development"
+                    else
+                      app_version=$(git describe --tags --abbrev=0)
+                    fi
+                  fi
+                  echo "app_version=$app_version"
+                  echo "app_version=$app_version" >> $GITHUB_OUTPUT
 
-      - name: Prep arguments
-        id: args
-        env:
-          APP_VERSION: ${{ steps.app-version.outputs.app_version }}
-          MIN_SM_VERSION: ${{ vars.MIN_SM_VERSION }}
-          MAX_SM_VERSION: ${{ vars.MAX_SM_VERSION }}
-          SM_SSH_USER: ${{ vars.SM_SSH_USER }}
-          SM_SSH_PASS: ${{ vars.SM_SSH_PASS }}
-          SM_DB_USER: ${{ vars.SM_DB_USER }}
-          SM_DB_PASS: ${{ vars.SM_DB_PASS }}
-          DISCIPLINE_DEFAULT_COLOR: ${{ vars.DISCIPLINE_DEFAULT_COLOR }}
-          MULTICAST_MSG_MIN_LENGTH: ${{ vars.MULTICAST_MSG_MIN_LENGTH }}
-          LOG_LEVEL: ${{ vars.LOG_LEVEL }}
-          APP_PORT: ${{ vars.APP_PORT }}
-          HTTPS_PORT: ${{ vars.HTTPS_PORT }}
-          SELF_DB_HOST: ${{ vars.SELF_DB_HOST }}
-          SELF_DB_USER: ${{ vars.SELF_DB_USER }}
-          SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
-          SELF_DB_NAME: ${{ vars.SELF_DB_NAME }}
-          CACHE_REFRESH_INTERVAL: ${{ vars.CACHE_REFRESH_INTERVAL }}
-          SM_SMB_USER: ${{ vars.SM_SMB_USER }}
-          SM_SMB_PASS: ${{ vars.SM_SMB_PASS }}
-        run: |
-          echo "APP_VERSION=$APP_VERSION" > /tmp/args
-          echo "SELF_DB_HOST=$SELF_DB_HOST" >> /tmp/args
-          echo "SELF_DB_USER=$SELF_DB_USER" >> /tmp/args
-          echo "SELF_DB_PASS=$SELF_DB_PASS" >> /tmp/args
-          echo "SELF_DB_NAME=$SELF_DB_NAME" >> /tmp/args
-          echo "MIN_SM_VERSION=$MIN_SM_VERSION" >> /tmp/args
-          echo "MAX_SM_VERSION=$MAX_SM_VERSION" >> /tmp/args
-          echo "SM_SSH_USER=$SM_SSH_USER" >> /tmp/args
-          echo "SM_SSH_PASS=$SM_SSH_PASS" >> /tmp/args
-          echo "SM_DB_USER=$SM_DB_USER" >> /tmp/args
-          echo "SM_DB_PASS=$SM_DB_PASS" >> /tmp/args
-          echo "DISCIPLINE_DEFAULT_COLOR=$DISCIPLINE_DEFAULT_COLOR" >> /tmp/args
-          echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
-          echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args
-          echo "APP_PORT=$APP_PORT" >> /tmp/args
-          echo "HTTPS_PORT=$HTTPS_PORT" >> /tmp/args
-          echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> /tmp/args
-          echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
-          echo "SM_SMB_USER=$SM_SMB_USER" >> /tmp/args
-          echo "SM_SMB_PASS=$SM_SMB_PASS" >> /tmp/args
-          echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
-          echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
+            - name: Prep arguments
+              id: args
+              env:
+                  APP_VERSION: ${{ steps.app-version.outputs.app_version }}
+                  MIN_SM_VERSION: ${{ vars.MIN_SM_VERSION }}
+                  MAX_SM_VERSION: ${{ vars.MAX_SM_VERSION }}
+                  SM_SSH_USER: ${{ vars.SM_SSH_USER }}
+                  SM_SSH_PASS: ${{ vars.SM_SSH_PASS }}
+                  SM_DB_USER: ${{ vars.SM_DB_USER }}
+                  SM_DB_PASS: ${{ vars.SM_DB_PASS }}
+                  DISCIPLINE_DEFAULT_COLOR: ${{ vars.DISCIPLINE_DEFAULT_COLOR }}
+                  MULTICAST_MSG_MIN_LENGTH: ${{ vars.MULTICAST_MSG_MIN_LENGTH }}
+                  LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+                  APP_PORT: ${{ vars.APP_PORT }}
+                  HTTPS_PORT: ${{ vars.HTTPS_PORT }}
+                  SELF_DB_HOST: ${{ vars.SELF_DB_HOST }}
+                  SELF_DB_USER: ${{ vars.SELF_DB_USER }}
+                  SELF_DB_PASS: ${{ vars.SELF_DB_PASS }}
+                  SELF_DB_NAME: ${{ vars.SELF_DB_NAME }}
+                  CACHE_REFRESH_INTERVAL: ${{ vars.CACHE_REFRESH_INTERVAL }}
+                  SM_SMB_USER: ${{ vars.SM_SMB_USER }}
+                  SM_SMB_PASS: ${{ vars.SM_SMB_PASS }}
+              run: |
+                  echo "APP_VERSION=$APP_VERSION" > /tmp/args
+                  echo "SELF_DB_HOST=$SELF_DB_HOST" >> /tmp/args
+                  echo "SELF_DB_USER=$SELF_DB_USER" >> /tmp/args
+                  echo "SELF_DB_PASS=$SELF_DB_PASS" >> /tmp/args
+                  echo "SELF_DB_NAME=$SELF_DB_NAME" >> /tmp/args
+                  echo "MIN_SM_VERSION=$MIN_SM_VERSION" >> /tmp/args
+                  echo "MAX_SM_VERSION=$MAX_SM_VERSION" >> /tmp/args
+                  echo "SM_SSH_USER=$SM_SSH_USER" >> /tmp/args
+                  echo "SM_SSH_PASS=$SM_SSH_PASS" >> /tmp/args
+                  echo "SM_DB_USER=$SM_DB_USER" >> /tmp/args
+                  echo "SM_DB_PASS=$SM_DB_PASS" >> /tmp/args
+                  echo "DISCIPLINE_DEFAULT_COLOR=$DISCIPLINE_DEFAULT_COLOR" >> /tmp/args
+                  echo "MULTICAST_MSG_MIN_LENGTH=$MULTICAST_MSG_MIN_LENGTH" >> /tmp/args
+                  echo "LOG_LEVEL=$LOG_LEVEL" >> /tmp/args
+                  echo "APP_PORT=$APP_PORT" >> /tmp/args
+                  echo "HTTPS_PORT=$HTTPS_PORT" >> /tmp/args
+                  echo "CACHE_REFRESH_INTERVAL=$CACHE_REFRESH_INTERVAL" >> /tmp/args
+                  echo "SCREEN_RESOLUTION=PLACEHOLDER" >> /tmp/args
+                  echo "SM_SMB_USER=$SM_SMB_USER" >> /tmp/args
+                  echo "SM_SMB_PASS=$SM_SMB_PASS" >> /tmp/args
+                  echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)"
+                  echo "BUILD_ARGS=$(cat /tmp/args | base64 --wrap=0)" >> $GITHUB_OUTPUT
 
-      - name: Validate that all arguments exist
-        run: |
-          args=$(echo "${{ steps.args.outputs.BUILD_ARGS }}" | base64 --decode)
-          for arg in $args; do
-            export $arg
-          done
-          docker compose config 1>/dev/null 2>/tmp/docker-compose-errors
-          errors=$(cat /tmp/docker-compose-errors)
-          if [ ! -z "$errors" ]; then
-            echo "$errors"
-            exit 1
-          fi
+            - name: Validate that all arguments exist
+              run: |
+                  args=$(echo "${{ steps.args.outputs.BUILD_ARGS }}" | base64 --decode)
+                  for arg in $args; do
+                    export $arg
+                  done
+                  docker compose config 1>/dev/null 2>/tmp/docker-compose-errors
+                  errors=$(cat /tmp/docker-compose-errors)
+                  if [ ! -z "$errors" ]; then
+                    echo "$errors"
+                    exit 1
+                  fi
 
-  prep-matrix:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'create' && github.event.ref_type == 'tag')
+    prep-matrix:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'create' && github.event.ref_type == 'tag')
 
-    outputs:
-      matrix: ${{ steps.services.outputs.services }}
+        outputs:
+            matrix: ${{ steps.services.outputs.services }}
 
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout the repository
+              uses: actions/checkout@v4
 
-      - name: Install jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install jq -y
+            - name: Install jq
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install jq -y
 
-      - name: Determine services
-        id: services
-        run: |
-          config=$(docker compose config --format json 2>/dev/null)
-          services=$(echo "$config" | jq '.services | to_entries | map(select(.value.image | test("^ghcr\\.io"))) | .[].key')
+            - name: Determine services
+              id: services
+              run: |
+                  config=$(docker compose config --format json 2>/dev/null)
+                  services=$(echo "$config" | jq '.services | to_entries | map(select(.value.image | test("^ghcr\\.io"))) | .[].key')
 
-          # Convert the service names into a properly formatted JSON array
-          servicesJson=$(echo "$services" | jq -R -s -c 'split("\n") | map(select(length > 0) | gsub("^\"|\"$"; ""))')          # Output the JSON to a file (for debugging purposes) and set it in the environment
-          echo "services=$servicesJson" >> $GITHUB_OUTPUT
-          echo "$servicesJson"
+                  # Convert the service names into a properly formatted JSON array
+                  servicesJson=$(echo "$services" | jq -R -s -c 'split("\n") | map(select(length > 0) | gsub("^\"|\"$"; ""))')          # Output the JSON to a file (for debugging purposes) and set it in the environment
+                  echo "services=$servicesJson" >> $GITHUB_OUTPUT
+                  echo "$servicesJson"
 
-  build:
-    needs:
-      - prep-args
-      - prep-matrix
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: ${{fromJson(needs.prep-matrix.outputs.matrix)}}
+    build:
+        needs:
+            - prep-args
+            - prep-matrix
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                service: ${{fromJson(needs.prep-matrix.outputs.matrix)}}
 
-    steps:
-      - name: Install jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install jq -y
+        steps:
+            - name: Install jq
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install jq -y
 
-      - name: Checkout the repository
-        uses: actions/checkout@v4
+            - name: Checkout the repository
+              uses: actions/checkout@v4
 
-      - name: Generate build config
-        id: build-config
-        run: |
+            - name: Generate build config
+              id: build-config
+              run: |
 
-          args=$(echo "${{ needs.prep-args.outputs.args }}" | base64 --decode)
-          for arg in $args; do
-            export $arg
-          done
+                  args=$(echo "${{ needs.prep-args.outputs.args }}" | base64 --decode)
+                  for arg in $args; do
+                    export $arg
+                  done
 
-          config=$(docker compose config --format json ${{ matrix.service }} 2>/dev/null | jq -r '.services."${{ matrix.service }}"')
-          echo $config
-          image=$(echo "$config" | jq -r -c .image | awk -F':' '{OFS=":"; $NF=""; sub(/:$/, ""); print}')
-          context=$(echo "$config" | jq -r -c .build.context)
-          dockerfile=$(echo "$config" | jq -r -c .build.dockerfile)
-          if [ "$(echo "$config" | jq -r -c '.build.args')" = "null" ]; then
-            args='""'
-          else
-            args=$(echo "$config" | jq -r -c '.build.args | to_entries | map("\(.key)=\(.value)") | join("\n") | @json')
-          fi
-          if [ "$(echo "$config" | jq -r -c '.build.additional_contexts')" = "null" ]; then
-            additional_contexts='""'
-          else
-            additional_contexts=$(echo "$config" | jq -r -c '.build.additional_contexts | to_entries | map("\(.key)=\(.value)") | join("\n") | @json')
-          fi
+                  config=$(docker compose config --format json ${{ matrix.service }} 2>/dev/null | jq -r '.services."${{ matrix.service }}"')
+                  echo $config
+                  image=$(echo "$config" | jq -r -c .image | awk -F':' '{OFS=":"; $NF=""; sub(/:$/, ""); print}')
+                  context=$(echo "$config" | jq -r -c .build.context)
+                  dockerfile=$(echo "$config" | jq -r -c .build.dockerfile)
+                  if [ "$(echo "$config" | jq -r -c '.build.args')" = "null" ]; then
+                    args='""'
+                  else
+                    args=$(echo "$config" | jq -r -c '.build.args | to_entries | map("\(.key)=\(.value)") | join("\n") | @json')
+                  fi
+                  if [ "$(echo "$config" | jq -r -c '.build.additional_contexts')" = "null" ]; then
+                    additional_contexts='""'
+                  else
+                    additional_contexts=$(echo "$config" | jq -r -c '.build.additional_contexts | to_entries | map("\(.key)=\(.value)") | join("\n") | @json')
+                  fi
 
-          echo "image=$image"
-          echo "context=$context"
-          echo "dockerfile=$dockerfile"
-          echo "args=$args"
-          echo "additional_contexts=$additional_contexts"
-          echo "image=$image" >> $GITHUB_OUTPUT
-          echo "context=$context" >> $GITHUB_OUTPUT
-          echo "dockerfile=$dockerfile" >> $GITHUB_OUTPUT
-          echo "args=$args" >> $GITHUB_OUTPUT
-          echo "additional_contexts=$additional_contexts" >> $GITHUB_OUTPUT
+                  echo "image=$image"
+                  echo "context=$context"
+                  echo "dockerfile=$dockerfile"
+                  echo "args=$args"
+                  echo "additional_contexts=$additional_contexts"
+                  echo "image=$image" >> $GITHUB_OUTPUT
+                  echo "context=$context" >> $GITHUB_OUTPUT
+                  echo "dockerfile=$dockerfile" >> $GITHUB_OUTPUT
+                  echo "args=$args" >> $GITHUB_OUTPUT
+                  echo "additional_contexts=$additional_contexts" >> $GITHUB_OUTPUT
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Log in to GitHub Container Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: metadata
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ steps.build-config.outputs.image }}
-      - name: Compute build hash
-        id: hash
-        run: |
-          set -e
+            - name: Extract metadata (tags, labels) for Docker
+              id: metadata
+              uses: docker/metadata-action@v5
+              with:
+                  images: ${{ steps.build-config.outputs.image }}
+            - name: Compute build hash
+              id: hash
+              run: |
+                  set -e
 
-          context="${{ steps.build-config.outputs.context }}"
-          dockerfile="${{ steps.build-config.outputs.dockerfile }}"
-          args='${{ steps.build-config.outputs.args }}'
-          additional='${{ steps.build-config.outputs.additional_contexts }}'
+                  context="${{ steps.build-config.outputs.context }}"
+                  dockerfile="${{ steps.build-config.outputs.dockerfile }}"
+                  args='${{ steps.build-config.outputs.args }}'
+                  additional='${{ steps.build-config.outputs.additional_contexts }}'
 
-          # deterministic hashing function (no timestamps, sorted, stable)
-          hash_dir () {
-            dir="$1"
-            tar --sort=name \
-                --mtime='UTC 1970-01-01' \
-                --owner=0 --group=0 --numeric-owner \
-                -cf - "$dir" 2>/dev/null | sha256sum | awk '{print $1}'
-          }
+                  # deterministic hashing function (no timestamps, sorted, stable)
+                  hash_dir () {
+                    dir="$1"
+                    tar --sort=name \
+                        --mtime='UTC 1970-01-01' \
+                        --owner=0 --group=0 --numeric-owner \
+                        -cf - "$dir" 2>/dev/null | sha256sum | awk '{print $1}'
+                  }
 
-          # --- main context ---
-          context_hash=$(hash_dir "$context")
+                  # --- main context ---
+                  context_hash=$(hash_dir "$context")
 
-          # --- dockerfile ---
-          dockerfile_hash=$(sha256sum "$context/$dockerfile" | awk '{print $1}')
+                  # --- dockerfile ---
+                  dockerfile_hash=$(sha256sum "$context/$dockerfile" | awk '{print $1}')
 
-          # --- build args ---
-          args_hash=$(echo "$args" | jq -S '.' | sha256sum | awk '{print $1}')
+                  # --- build args ---
+                  args_hash=$(echo "$args" | jq -S '.' | sha256sum | awk '{print $1}')
 
-          # --- additional contexts ---
-          additional_hash=""
-          if [ "$additional" != "\"\"" ]; then
-            while read -r entry; do
-              path=$(echo "$entry" | awk -F'=' '{print $2}')
-              if [ -d "$path" ]; then
-                h=$(hash_dir "$path")
-              else
-                h=$(echo "" | sha256sum | awk '{print $1}')
-              fi
-              additional_hash="$additional_hash$h"
-            done <<< "$(echo "$additional" | jq -r '.[]')"
-          fi
+                  # --- additional contexts ---
+                  additional_hash=""
+                  if [ "$additional" != "\"\"" ]; then
+                    while read -r entry; do
+                      path=$(echo "$entry" | awk -F'=' '{print $2}')
+                      if [ -d "$path" ]; then
+                        h=$(hash_dir "$path")
+                      else
+                        h=$(echo "" | sha256sum | awk '{print $1}')
+                      fi
+                      additional_hash="$additional_hash$h"
+                    done <<< "$(echo "$additional" | jq -r '.')"
+                  fi
 
-          # --- base image digest ---
-          base_image=$(grep -E '^FROM ' "$context/$dockerfile" | head -1 | awk '{print $2}')
-          docker pull "$base_image" >/dev/null 2>&1
-          base_digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$base_image")
+                  # --- base image digest ---
+                  base_image=$(grep -E '^FROM ' "$context/$dockerfile" | head -1 | awk '{print $2}')
+                  docker pull "$base_image" >/dev/null 2>&1
+                  base_digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$base_image")
 
-          # --- final hash ---
-          build_hash=$(printf "%s\n%s\n%s\n%s\n%s" \
-            "$context_hash" "$dockerfile_hash" "$args_hash" "$additional_hash" "$base_digest" \
-            | sha256sum | awk '{print $1}')
+                  # --- final hash ---
+                  build_hash=$(printf "%s\n%s\n%s\n%s\n%s" \
+                    "$context_hash" "$dockerfile_hash" "$args_hash" "$additional_hash" "$base_digest" \
+                    | sha256sum | awk '{print $1}')
 
-          echo "build_hash=$build_hash" >> $GITHUB_OUTPUT
-          echo "context hash: $context_hash"
-          echo "dockerfile hash: $dockerfile_hash"
-          echo "args hash: $args_hash"
-          echo "additional contexts hash: $additional_hash"
-          echo "base image digest: $base_digest"
+                  echo "build_hash=$build_hash" >> $GITHUB_OUTPUT
+                  echo "context hash: $context_hash"
+                  echo "dockerfile hash: $dockerfile_hash"
+                  echo "args hash: $args_hash"
+                  echo "additional contexts hash: $additional_hash"
+                  echo "base image digest: $base_digest"
 
-      - name: Extract primary tag
-        id: tag
-        run: |
-          # metadata-action output is a newline separated list
-          primary=$(echo "${{ steps.metadata.outputs.tags }}" | head -n 1)
-          echo "primary=$primary" >> $GITHUB_OUTPUT
+            - name: Extract primary tag
+              id: tag
+              run: |
+                  # metadata-action output is a newline separated list
+                  primary=$(echo "${{ steps.metadata.outputs.tags }}" | head -n 1)
+                  echo "primary=$primary" >> $GITHUB_OUTPUT
 
-      - name: Check existing image build hash
-        id: need-build
-        run: |
-          primary="${{ steps.tag.outputs.primary }}"
-          new_hash="${{ steps.hash.outputs.build_hash }}"
+            - name: Check existing image build hash
+              id: need-build
+              run: |
+                  primary="${{ steps.tag.outputs.primary }}"
+                  new_hash="${{ steps.hash.outputs.build_hash }}"
 
-          echo "Checking existing image: $primary"
+                  echo "Checking existing image: $primary"
 
-          # Try pulling the existing image
-          if docker pull "$primary" >/dev/null 2>&1; then
-            echo "Image exists, inspecting…"
+                  # Try pulling the existing image
+                  if docker pull "$primary" >/dev/null 2>&1; then
+                    echo "Image exists, inspecting…"
 
-            # Extract build-hash label (could be empty)
-            old_hash=$(docker inspect "$primary" --format='{{ index .Config.Labels "build-hash" }}')
+                    # Extract build-hash label (could be empty)
+                    old_hash=$(docker inspect "$primary" --format='{{ index .Config.Labels "build-hash" }}')
 
-            echo "Old hash: ${old_hash:-<none>}"
-            echo "New hash: $new_hash"
+                    echo "Old hash: ${old_hash:-<none>}"
+                    echo "New hash: $new_hash"
 
-            # If the old hash is missing OR does not match → build
-            if [ -z "$old_hash" ]; then
-              echo "No build-hash label present → build required."
-              echo "build_needed=true" >> $GITHUB_OUTPUT
-              exit 0
-            fi
+                    # If the old hash is missing OR does not match → build
+                    if [ -z "$old_hash" ]; then
+                      echo "No build-hash label present → build required."
+                      echo "build_needed=true" >> $GITHUB_OUTPUT
+                      exit 0
+                    fi
 
-            if [ "$old_hash" = "$new_hash" ]; then
-              echo "build_needed=false" >> $GITHUB_OUTPUT
-              exit 0
-            else
-              echo "build_needed=true" >> $GITHUB_OUTPUT
-              exit 0
-            fi
+                    if [ "$old_hash" = "$new_hash" ]; then
+                      echo "build_needed=false" >> $GITHUB_OUTPUT
+                      exit 0
+                    else
+                      echo "build_needed=true" >> $GITHUB_OUTPUT
+                      exit 0
+                    fi
 
-          else
-            echo "Image does not exist yet → build required."
-            echo "build_needed=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+                  else
+                    echo "Image does not exist yet → build required."
+                    echo "build_needed=true" >> $GITHUB_OUTPUT
+                    exit 0
+                  fi
 
-      - name: Set up Docker Buildx
-        if: steps.need-build.outputs.build_needed == 'true'
-        uses: docker/setup-buildx-action@v3
+            - name: Set up Docker Buildx
+              if: steps.need-build.outputs.build_needed == 'true'
+              uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push the Docker image
-        if: steps.need-build.outputs.build_needed == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: ${{ steps.build-config.outputs.context }}
-          file: "${{ steps.build-config.outputs.context }}/${{ steps.build-config.outputs.dockerfile }}"
-          build-args: |
-            ${{ fromJson(steps.build-config.outputs.args) }}
-          build-contexts: |
-            ${{ fromJson(steps.build-config.outputs.additional_contexts) }}
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: |
-            ${{ steps.metadata.outputs.labels }}
-            build-hash=${{ steps.hash.outputs.build_hash }}
-          push: true
+            - name: Build and Push the Docker image
+              if: steps.need-build.outputs.build_needed == 'true'
+              uses: docker/build-push-action@v6
+              with:
+                  context: ${{ steps.build-config.outputs.context }}
+                  file: "${{ steps.build-config.outputs.context }}/${{ steps.build-config.outputs.dockerfile }}"
+                  build-args: |
+                      ${{ fromJson(steps.build-config.outputs.args) }}
+                  build-contexts: |
+                      ${{ fromJson(steps.build-config.outputs.additional_contexts) }}
+                  tags: ${{ steps.metadata.outputs.tags }}
+                  labels: |
+                      ${{ steps.metadata.outputs.labels }}
+                      build-hash=${{ steps.hash.outputs.build_hash }}
+                  push: true
 
-  generate-release:
-    runs-on: ubuntu-latest
-    needs: prep-args
+    generate-release:
+        runs-on: ubuntu-latest
+        needs: prep-args
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Install yq
-        run: |
-          sudo apt-get update
-          sudo apt-get install yq jq -y
+            - name: Install yq
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install yq jq -y
 
-      - name: Generate release tarball
-        run: |
-          cd release
-          args=$(echo "${{ needs.prep-args.outputs.args }}" | base64 --decode)
-          for arg in $args; do
-            export $arg
-            echo "$arg"
-          done
-          echo "APP_VERSION=$APP_VERSION"
-          ./generate-release.sh "$APP_VERSION"
+            - name: Generate release tarball
+              run: |
+                  cd release
+                  args=$(echo "${{ needs.prep-args.outputs.args }}" | base64 --decode)
+                  for arg in $args; do
+                    export $arg
+                    echo "$arg"
+                  done
+                  echo "APP_VERSION=$APP_VERSION"
+                  ./generate-release.sh "$APP_VERSION"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release
-          path: release/displaycontroller-*.run
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: release
+                  path: release/displaycontroller-*.run
