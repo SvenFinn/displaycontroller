@@ -70,7 +70,10 @@ FROM base AS final
 
 WORKDIR /app
 
-RUN apk add --update --no-cache sshpass openssh-client
+RUN apk add --update --no-cache sshpass openssh-client nano
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/ranges/log/dist ./
 COPY --from=deps /app/ranges/log/node_modules ./node_modules

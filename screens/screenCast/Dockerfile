@@ -42,6 +42,9 @@ FROM base AS final
 
 WORKDIR /app
 
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
+
 COPY --from=build /app/screens/screenCast/dist ./
 COPY --from=deps /app/screens/screenCast/node_modules ./node_modules
 

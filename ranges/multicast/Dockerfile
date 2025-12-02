@@ -55,6 +55,9 @@ FROM base AS final
 
 WORKDIR /app
 
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
+
 COPY --from=build /app/ranges/multicast/dist ./
 COPY --from=deps /app/ranges/multicast/node_modules ./node_modules
 

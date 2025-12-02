@@ -25,7 +25,10 @@ COPY src/entrypoint.sh schema.prisma dist/
 
 FROM base AS final
 
-RUN apk add --no-cache --update netcat-openbsd
+RUN apk add --no-cache --update netcat-openbsd nano
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/dist ./
 COPY --from=deps /app/node_modules ./node_modules

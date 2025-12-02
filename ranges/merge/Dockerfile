@@ -64,6 +64,9 @@ FROM base AS final
 
 WORKDIR /app
 
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
+
 EXPOSE 80
 
 COPY --from=build /app/ranges/merger/dist ./

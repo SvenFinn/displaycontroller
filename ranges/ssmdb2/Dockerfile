@@ -75,7 +75,10 @@ FROM base AS final
 
 WORKDIR /app
 
-RUN apk add --no-cache --update openssl # Required for prisma
+RUN apk add --no-cache --update openssl nano # Required for prisma
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/ranges/ssmdb2/dist ./
 COPY --from=deps /app/ranges/ssmdb2/node_modules ./node_modules

@@ -29,7 +29,10 @@ COPY . .
 RUN npm run build
 
 # Convert icon.svg to icon.png
-FROM linuxserver/inkscape:latest AS convert
+FROM alpine:latest AS convert
+
+RUN apk --no-cache add inkscape
+
 WORKDIR /app/screens/images
 COPY src/img .
 
@@ -40,7 +43,10 @@ RUN inkscape --export-type=png --export-dpi=288 icon.svg && \
 
 FROM base AS final
 
-RUN apk add --no-cache --update ghostscript graphicsmagick
+RUN apk add --no-cache --update ghostscript graphicsmagick nano
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/screens/images/dist ./
 COPY --from=deps /app/screens/images/node_modules ./node_modules

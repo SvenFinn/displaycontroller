@@ -55,7 +55,10 @@ FROM base AS final
 
 WORKDIR /app
 
-RUN apk add --no-cache samba-client
+RUN apk add --no-cache nano samba-client
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/screens/evaluations/dist ./
 COPY --from=deps /app/screens/evaluations/node_modules ./node_modules

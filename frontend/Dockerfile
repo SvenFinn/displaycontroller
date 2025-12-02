@@ -55,6 +55,9 @@ FROM base AS final
 
 WORKDIR /app
 
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
+
 COPY --from=build /app/frontend/public /app/public
 COPY --from=build /app/frontend/.next/standalone/frontend /app
 COPY --from=build /app/frontend/.next/static /app/.next/static

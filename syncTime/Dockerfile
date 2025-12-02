@@ -55,7 +55,7 @@ RUN npm run build && \
 
 FROM base AS final
 
-RUN apk add --no-cache --update openssl # Required for prisma 
+RUN apk add --no-cache --update openssl nano # Required for prisma 
 
 COPY --from=build /app/syncTime/dist ./
 COPY --from=deps /app/syncTime/node_modules ./node_modules

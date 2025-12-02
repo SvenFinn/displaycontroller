@@ -72,9 +72,12 @@ RUN npm run build && \
 
 FROM base AS final
 
-RUN apk add --update --no-cache netcat-openbsd sshpass openssh-client
+RUN apk add --update --no-cache netcat-openbsd sshpass openssh-client nano
 
 WORKDIR /app
+
+RUN adduser -D display-user && chown -R display-user /app
+USER display-user
 
 COPY --from=build /app/checkServer/dist ./
 COPY --from=deps /app/checkServer/node_modules ./node_modules
