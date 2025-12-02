@@ -1,6 +1,6 @@
 import { LayoutGames, LayoutRectangle } from "dc-ranges-types";
 
-export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle | undefined {
+export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle | null {
     switch (layoutId) {
         case 1410: // 5.5x90
             return {
@@ -178,6 +178,6 @@ export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle
                 mode: "winter",
             };
         default:
-            return undefined;
+            return null;
     }
 }

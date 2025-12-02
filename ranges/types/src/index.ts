@@ -1,6 +1,6 @@
 import { Discipline, isDiscipline } from './discipline';
 import { Hits, Hit } from './hits';
-import { isOverrideDiscipline, isInternalStartList } from './internal/startList';
+import { isInternalStartList } from './internal/startList';
 import { mergeMaps } from './cache';
 import { createIs } from 'typia';
 
@@ -47,7 +47,6 @@ export type Source = "multicast" | "log" | "ssmdb2";
 
 export {
     Layout,
-    Layouts,
     LayoutGames,
     LayoutGamesCommon,
     LayoutRectangle,

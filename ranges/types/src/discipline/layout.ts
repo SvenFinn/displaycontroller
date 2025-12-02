@@ -34,10 +34,6 @@ export type LayoutEaster = {
     mode: "easter" | "winter";
 }
 
-export type Layouts = {
-    [layoutId: number]: Layout;
-}
-
 export type Layout = LayoutRings | LayoutGames | LayoutRectangle;
 
 

@@ -24,7 +24,7 @@ export function getSizeFixed(range: Range): [number, number] {
     const round = range.discipline.rounds[range.round];
     if (!round) return [0, 0];
     const zoom = round.zoom;
-    const layout = range.discipline.layouts[round.layoutId];
+    const layout = round.layout;
     if (!layout) return [0, 0];
     if (layout.mode !== "rings") return [0, 0];
     const rings = layout.rings;

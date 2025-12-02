@@ -34,7 +34,7 @@ export function getSizeFixed(range: Range): [number, number] {
     if (!range.discipline) return [0, 0];
     const round = range.discipline.rounds[range.round];
     if (!round) return [0, 0];
-    const layout = range.discipline.layouts[round.layoutId];
+    const layout = round.layout;
     if (!layout) return [0, 0];
     if (layout.mode !== "stars" && layout.mode !== "easter" && layout.mode !== "winter") return [0, 0];
     return [176, 176];

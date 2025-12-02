@@ -1,5 +1,4 @@
 import { Rounds } from './round';
-import { Layouts } from './layout';
 import { createIs } from "typia";
 
 export type Discipline = {
@@ -10,7 +9,6 @@ export type Discipline = {
     gauge: number;
 
     rounds: Rounds;
-    layouts: Layouts;
 
 }
 

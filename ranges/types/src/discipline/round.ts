@@ -1,3 +1,5 @@
+import { Layout } from "./layout";
+
 export type Zoom = ZoomFixed | ZoomBase;
 
 type ZoomFixed = {
@@ -38,7 +40,7 @@ export type Round = {
     counts: boolean;
 
     zoom: Zoom;
-    layoutId: number;
+    layout: Layout | null;
     hitsPerSum: number;
     hitsPerView: number;
 

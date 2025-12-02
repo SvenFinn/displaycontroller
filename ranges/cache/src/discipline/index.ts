@@ -1,4 +1,4 @@
-import { Discipline, Round, Rounds, Mode, Zoom, Layouts } from "dc-ranges-types";
+import { Discipline, Round, Rounds, Mode, Zoom } from "dc-ranges-types";
 import { SmdbClient } from "dc-db-smdb";
 import { getLayout } from "./layout";
 
@@ -38,7 +38,6 @@ async function getDiscipline(smdbClient: SmdbClient, disciplineId: number): Prom
         name: discipline.name,
         gauge: parseFloat((discipline.gauge / 100).toFixed(2)),
         color: `#${process.env.TARGET_DEFAULT_COLOR}`,
-        layouts: await getLayouts(smdbClient, disciplineId),
         rounds: await getRounds(smdbClient, disciplineId)
     };
 }
@@ -91,7 +90,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
             zoom: true,
             layoutId: true,
             name: true
-        }
+        },
     });
     if (!round) {
         return undefined;
@@ -103,7 +102,7 @@ async function getRound(smdbClient: SmdbClient, disciplineId: number, roundId: n
         maxHits: round.maxHits,
         hitsPerSum: round.hitsPerSum,
         hitsPerView: round.hitsPerView,
-        layoutId: round.layoutId,
+        layout: await getLayout(smdbClient, round.layoutId),
         mode: getMode(round.mode),
         zoom: getZoom(round.zoom)
     }
@@ -159,31 +158,4 @@ function getZoom(zoom: number): Zoom {
         default:
             throw new Error("Invalid zoom");
     }
-}
-
-async function getLayouts(smdbClient: SmdbClient, disciplineId: number): Promise<Layouts> {
-    const layoutDatabase = await smdbClient.discipline.findUnique({
-        where: {
-            id: disciplineId
-        },
-        include: {
-            rounds: {
-                select: {
-                    layoutId: true
-                }
-            }
-        }
-    });
-    if (!layoutDatabase) {
-        return [];
-    }
-    const layoutIds = layoutDatabase.rounds.map(round => round.layoutId).filter((value, index, self) => self.indexOf(value) === index);
-    const layouts: Layouts = {};
-    for (let i = 0; i < layoutIds.length; i++) {
-        const layout = await getLayout(smdbClient, layoutIds[i]);
-        if (layout) {
-            layouts[layoutIds[i]] = layout
-        }
-    }
-    return layouts;
 }

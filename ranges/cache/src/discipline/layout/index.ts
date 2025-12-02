@@ -2,7 +2,7 @@ import { SmdbClient } from "dc-db-smdb";
 import { Layout, LayoutRings } from "dc-ranges-types";
 import { getCustomLayout } from "./custom";
 
-export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Layout | undefined> {
+export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Layout | null> {
     const layoutDb = await smdbClient.layout.findUnique({
         where: {
             id: layoutId
@@ -12,7 +12,7 @@ export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promi
         }
     });
     if (!layoutDb) {
-        return undefined;
+        return null;
     }
     if (layoutDb.funcId === 12) {
         return await getCustomLayout(layoutId);
@@ -21,7 +21,7 @@ export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promi
     }
 }
 
-async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise<LayoutRings | undefined> {
+async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise<LayoutRings | null> {
     const layoutDb = await smdbClient.layout.findUnique({
         where: {
             id: layoutId
@@ -33,7 +33,7 @@ async function getRingsLayout(smdbClient: SmdbClient, layoutId: number): Promise
         }
     });
     if (!layoutDb) {
-        return undefined;
+        return null;
     }
     const layout: LayoutRings = {
         mode: "rings",
