@@ -10,16 +10,16 @@
     "author": "Sven Finn",
     "license": "ISC",
     "dependencies": {
-        "body-parser": "^2.2.0",
+        "body-parser": "^2.2.1",
         "dc-logger": "file:../../logger",
         "dotenv": "^17.2.3",
-        "express": "^5.1.0",
+        "express": "^5.2.1",
         "express-fileupload": "^1.5.2",
         "express-rate-limit": "^8.2.1",
         "pdf2pic": "^3.2.0"
     },
     "devDependencies": {
-        "@types/express": "^5.0.5",
+        "@types/express": "^5.0.6",
         "@types/express-fileupload": "^1.5.1",
         "@types/node": "^24.10.1",
         "tsc-alias": "^1.8.16",
