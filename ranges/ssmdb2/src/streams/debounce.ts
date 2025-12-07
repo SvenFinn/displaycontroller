@@ -19,7 +19,8 @@ export class DebounceStream extends Transform {
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: TransformCallback): void {
         logger.debug(`Received range ${chunk.rangeId} from RangeDataStream`);
         if (this.ranges.has(chunk.rangeId)) {
-            if (JSON.stringify(this.ranges.get(chunk.rangeId)!.data) === JSON.stringify(chunk)) {
+            const existingData = structuredClone(this.ranges.get(chunk.rangeId)!.data);
+            if (JSON.stringify(existingData) === JSON.stringify(chunk)) {
                 logger.debug(`Skipping range ${chunk.rangeId} due to no changes`);
                 callback();
                 return;

@@ -31,7 +31,7 @@ export default function ScreenEdit({ screen, onSubmit, onChange, className }: Sc
     }
 
     function translateToDbScreen(data: DbScreen): DbScreen {
-        let screenData = JSON.parse(JSON.stringify(data)); // Deep clone to avoid mutation
+        let screenData = structuredClone(data); // Deep clone to avoid mutation
         return {
             ...screenData,
             duration: screenData.duration * 1000, // Convert from seconds to milliseconds
