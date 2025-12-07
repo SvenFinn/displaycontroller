@@ -51,6 +51,9 @@ RUN npm run build && \
     echo "SM_SMB_USER=${SM_SMB_USER}" >> dist/.env && \
     echo "SM_SMB_PASS=${SM_SMB_PASS}" >> dist/.env;
 
+COPY ./src/entrypoint.sh ./dist/entrypoint.sh
+RUN chmod +x ./dist/entrypoint.sh
+
 FROM base AS final
 
 WORKDIR /app
@@ -63,9 +66,14 @@ USER display-user
 COPY --from=build /app/screens/evaluations/dist ./
 COPY --from=deps /app/screens/evaluations/node_modules ./node_modules
 
+VOLUME ["/app/html"]
+
 EXPOSE 80
 
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
+
+USER root
+ENTRYPOINT [ "/app/entrypoint.sh" ]
 
 CMD ["node", "/app/evaluations/src/index.js"]
