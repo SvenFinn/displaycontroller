@@ -20,6 +20,7 @@ export class DebounceStream extends Transform {
         logger.debug(`Received range ${chunk.rangeId} from RangeDataStream`);
         if (this.ranges.has(chunk.rangeId)) {
             const existingData = structuredClone(this.ranges.get(chunk.rangeId)!.data);
+            existingData.ttl = chunk.ttl; // Ignore TTL changes for debounce comparison
             if (JSON.stringify(existingData) === JSON.stringify(chunk)) {
                 logger.debug(`Skipping range ${chunk.rangeId} due to no changes`);
                 callback();

@@ -3,13 +3,16 @@ import { Ssmdb2Client } from "dc-db-ssmdb2";
 import { InternalRange, Hits, INVALID_HIT_POS } from "dc-ranges-types";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
+import { getLocalMs } from "../utils";
 
 export class RangeDataStream extends Transform {
-    private prisma: Ssmdb2Client;
+    private readonly prisma: Ssmdb2Client;
+    private readonly timeoutMs: number;
 
-    constructor(prisma: Ssmdb2Client) {
+    constructor(prisma: Ssmdb2Client, timeoutMs: number = 20000) {
         super({ objectMode: true });
         this.prisma = prisma;
+        this.timeoutMs = timeoutMs;
     }
 
     async _transform(chunk: any, encoding: BufferEncoding, callback: TransformCallback): Promise<void> {
@@ -22,7 +25,6 @@ export class RangeDataStream extends Transform {
     }
 
     private async getRanges(): Promise<InternalRange[]> {
-        const localTime = new Date((new Date()).setMinutes((new Date()).getMinutes() - new Date().getTimezoneOffset()));
         const version = (await this.prisma.version.findFirst())?.id ?? 0;
         const roundIdHasOffByOneBug = version < 8; // Versions before 8 have the roundId starting at 1 instead of 0
         const targets = await this.prisma.target.findMany(
@@ -30,7 +32,7 @@ export class RangeDataStream extends Transform {
                 where: {
                     timestamp:
                     {
-                        gt: new Date(localTime.getTime() - 5000)
+                        gt: new Date(getLocalMs() - this.timeoutMs)
                     }
                 },
                 select: {
@@ -62,7 +64,7 @@ export class RangeDataStream extends Transform {
             hits: hits,
             discipline: getDisciplineId(data.disciplineId, hits.length === 0 ? 0 : hits.length - 1),
             source: "ssmdb2",
-            ttl: 15000
+            ttl: (data.timestamp.getTime() - getLocalMs()) + this.timeoutMs,
         }
     }
 
