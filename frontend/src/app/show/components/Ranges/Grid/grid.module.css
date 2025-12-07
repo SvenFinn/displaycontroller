@@ -6,10 +6,12 @@ div.grid {
 }
 
 div.grid>div {
-    border: var(--border-width) solid #888;
+    border: var(--border-width) solid transparent;
     height: calc(100% + var(--border-width));
     width: calc(100% + var(--border-width));
-    margin-bottom: -var(--border-width);
-    margin-right: -var(--border-width);
     position: relative;
+}
+
+div.grid>div:not(:empty) {
+    border-color: #888;
 }
