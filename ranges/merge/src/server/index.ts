@@ -8,10 +8,7 @@ import { Server } from 'socket.io';
 const app: Express = express();
 const server = createServer(app);
 const io = new Server(server, {
-    path: '/api/ranges/ws',
-    cors: {
-        origin: '*'
-    }
+    path: '/api/ranges/ws'
 }).of("/api/ranges");
 rangeManager.setNamespace(io);
 
