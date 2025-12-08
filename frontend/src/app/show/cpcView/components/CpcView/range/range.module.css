@@ -4,5 +4,9 @@ div.range {
     position: relative;
     --sep-width: calc(0.005 * var(--container-size));
     --bg-blue: #000080;
+    background-color: #888;
+}
+
+div.range.active {
     background-color: var(--bg-blue);
 }

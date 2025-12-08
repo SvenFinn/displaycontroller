@@ -14,7 +14,7 @@ export default function CpcViewRange({ id }: CpcViewRangeProps): React.JSX.Eleme
     }
 
     return (
-        <SizeWrapper className={styles.range}>
+        <SizeWrapper className={`${styles.range} ${styles.active}`}>
             <InfoPanel id={id} />
             <RangeView id={id} />
         </SizeWrapper>
