@@ -2,9 +2,9 @@ import { createSocket, RemoteInfo } from "dgram";
 import { logger } from "dc-logger";
 import { RangeProxyType } from "./types";
 import amqp from "amqplib";
-import { decode } from "iconv-lite";
+import iconv from "iconv-lite";
 import dotenv from "dotenv";
-import { getTable, toMAC } from "@network-utils/arp-lookup";
+import { toMAC } from "@network-utils/arp-lookup";
 
 dotenv.config({ quiet: true });
 
@@ -48,7 +48,7 @@ async function main() {
             logger.warn(`Could not resolve MAC address for ${remote.address}`);
             return;
         }
-        const messageStr = decode(message, 'windows-1252');
+        const messageStr = iconv.decode(message, 'windows-1252');
         const proxiedMessage: RangeProxyType = {
             ip: remote.address,
             mac: senderMac,
