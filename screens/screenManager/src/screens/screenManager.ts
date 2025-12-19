@@ -1,4 +1,4 @@
-import { LocalClient } from "dc-db-local";
+import { createLocalClient, LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
 import { isDbScreen, isScreen, Screen, ScreenAvailable } from "dc-screens-types";
 import { EventEmitter } from "node:stream";
@@ -143,4 +143,4 @@ class ScreenManager extends EventEmitter {
     }
 }
 
-export const screenManager = new ScreenManager(new LocalClient());
+export const screenManager = new ScreenManager(createLocalClient());

@@ -1,4 +1,4 @@
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { sync } from "./sync";
 import "./server";
 import { logger } from "dc-logger";
@@ -6,7 +6,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import dotenv from "dotenv";
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 
 dotenv.config({ quiet: true });
 
@@ -19,7 +19,7 @@ if (!fs.existsSync(htmlPath)) {
     fs.mkdirSync(htmlPath, { recursive: true });
 }
 
-const localClient = new LocalClient();
+const localClient = createLocalClient();
 const socket = io("http://server-state:80/api/serverState", { path: "/api/serverState/ws", transports: ["websocket", "polling"] });
 
 let nextSyncTimeOut: NodeJS.Timeout | null = null;

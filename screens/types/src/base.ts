@@ -1,6 +1,6 @@
 import { tags } from 'typia';
-import { Conditions } from './conditions';
-import { DateString, ScreenId } from './common';
+import { Conditions } from './conditions/index.js';
+import { DateString, ScreenId } from './common.js';
 
 
 export type BaseDbScreen = {

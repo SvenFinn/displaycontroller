@@ -20,6 +20,7 @@ FROM base AS deps-local-db
 WORKDIR /app/database/local
 COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
+    export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
 FROM base AS local-deps
@@ -51,9 +52,7 @@ RUN npm run build && \
     echo "SM_SMB_USER=${SM_SMB_USER}" >> dist/.env && \
     echo "SM_SMB_PASS=${SM_SMB_PASS}" >> dist/.env;
 
-COPY ./src/entrypoint.sh ./dist/entrypoint.sh
-RUN chmod +x ./dist/entrypoint.sh
-
+COPY --chmod=755 ./src/entrypoint.sh ./dist/entrypoint.sh
 FROM base AS final
 
 WORKDIR /app

@@ -15,7 +15,7 @@ done
 npx prisma migrate deploy
 
 echo "Checking database schema..."
-diff=$(npx prisma migrate diff --from-schema-datasource ./schema.prisma --to-schema-datamodel ./schema.prisma --script | 
+diff=$(npx prisma migrate diff --from-schema ./schema.prisma --to-config-datasource --script | 
         grep -sv '^--' || true | 
         grep -sv '^/*' || true |
         grep -sv '^$' || true)

@@ -1,5 +1,5 @@
 import { createIs } from "typia";
-import { BaseDbScreen, BaseScreenAvailable } from "./base";
+import { BaseDbScreen, BaseScreenAvailable } from "./base.js";
 
 export type EvaluationDbScreen = BaseDbScreen & {
     type: "evaluation";

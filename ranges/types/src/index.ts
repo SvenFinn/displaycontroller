@@ -1,7 +1,7 @@
-import { Discipline, isDiscipline } from './discipline';
-import { Hits, Hit } from './hits';
-import { isInternalStartList } from './internal/startList';
-import { mergeMaps } from './cache';
+import { Discipline, isDiscipline } from './discipline/index.js';
+import { Hits, Hit } from './hits/index.js';
+import { isInternalStartList } from './internal/startList/index.js';
+import { mergeMaps } from './cache.js';
 import { createIs } from 'typia';
 
 type BaseRange = {
@@ -23,7 +23,7 @@ export const isShooter = createIs<Shooter>();
 export type StartList = {
     id: number;
     name: string;
-    type: "default" | "price" | "league" | "round" | "final";
+    type: "default" | "price" | "league" | "round" | "final" | "unknown";
 }
 
 export type ActiveRange = BaseRange & {
@@ -54,14 +54,14 @@ export {
     LayoutChess,
     LayoutRing,
     LayoutEaster
-} from './discipline/layout';
+} from './discipline/layout.js';
 
 export {
     Round,
     Rounds,
     Mode,
     Zoom
-} from './discipline/round';
+} from './discipline/round.js';
 
 export {
     InternalDiscipline,
@@ -74,13 +74,13 @@ export {
     isInternalRange,
     isInternalOverrideDiscipline,
     isNormInternalDiscipline,
-} from './internal';
+} from './internal/index.js';
 
 export {
     isOverrideDiscipline,
     OverrideDiscipline,
     InternalStartList
-} from './internal/startList';
+} from './internal/startList/index.js';
 
 
 

@@ -1,6 +1,6 @@
 import { SmdbClient } from "dc-db-smdb";
+import { StartListTypes } from "dc-db-smdb/dist/generated/enums";
 import { InternalStartList } from "dc-ranges-types"
-import { StartListTypes } from "dc-db-smdb/generated/client";
 
 export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<InternalStartList>> {
     const startListsDb = await smdbCLient.startList.findMany({
@@ -62,5 +62,7 @@ function getStartListType(type: StartListTypes): InternalStartList["type"] {
             return "final";
         case StartListTypes.priceShooting:
             return "price";
+        default:
+            return "unknown";
     }
 }

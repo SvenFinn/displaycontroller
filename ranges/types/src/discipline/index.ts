@@ -1,4 +1,4 @@
-import { Rounds } from './round';
+import { Rounds } from './round.js';
 import { createIs } from "typia";
 
 export type Discipline = {

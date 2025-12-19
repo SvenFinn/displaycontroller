@@ -1,5 +1,5 @@
-import { Hits } from "../hits";
-import { Source } from "../index";
+import { Hits } from "../hits/index.js";
+import { Source } from "../index.js";
 import { createIs } from "typia";
 
 export type InternalRange = {

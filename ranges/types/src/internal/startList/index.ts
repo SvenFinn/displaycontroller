@@ -4,7 +4,7 @@ export type InternalStartList = {
     id: number,
     name: string,
     active: boolean
-    type: "default" | "league" | "round" | "final" | "price"
+    type: "default" | "league" | "round" | "final" | "price" | "unknown"
 }
 
 export type OverrideDiscipline = {

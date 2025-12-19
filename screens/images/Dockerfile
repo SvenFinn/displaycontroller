@@ -27,6 +27,7 @@ RUN npm i --loglevel=info
 
 COPY . .
 RUN npm run build
+COPY --chmod=755 ./src/entrypoint.sh ./dist/entrypoint.sh
 
 # Convert icon.svg to icon.png
 FROM alpine:latest AS convert
@@ -46,7 +47,6 @@ FROM base AS final
 RUN apk add --no-cache --update ghostscript graphicsmagick nano
 
 RUN adduser -D display-user && chown -R display-user /app
-USER display-user
 
 COPY --from=build /app/screens/images/dist ./
 COPY --from=deps /app/screens/images/node_modules ./node_modules
@@ -56,5 +56,6 @@ EXPOSE 80
 
 ENV NODE_ENV=production
 ENV LOG_LEVEL=info
+ENTRYPOINT [ "/app/entrypoint.sh" ]
 
 CMD ["node", "./images/src/index.js"]

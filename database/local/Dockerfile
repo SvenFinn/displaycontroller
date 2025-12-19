@@ -18,10 +18,11 @@ COPY package.json package-lock.json schema.prisma ./
 RUN npm ci --loglevel=info;
 
 COPY . .
-RUN npm run build && \
+RUN export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
+    npm run build && \
     echo "SELF_DB_URL=postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" > dist/.env;
 COPY migrations dist/migrations
-COPY src/entrypoint.sh schema.prisma dist/
+COPY src/entrypoint.sh prisma.config.ts schema.prisma dist/
 
 FROM base AS final
 

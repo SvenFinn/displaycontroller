@@ -1,5 +1,5 @@
 import { createIs } from 'typia';
-import { ConditionMinMax, ConditionNone, ConditionNumber } from './base';
+import { ConditionMinMax, ConditionNone, ConditionNumber } from './base.js';
 
 type Condition = ConditionMinMax | ConditionNumber | ConditionNone;
 

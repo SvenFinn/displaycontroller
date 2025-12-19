@@ -1,11 +1,11 @@
 import { logger } from "dc-logger";
 import { updateOverrides } from "./overrides";
 import { updateShooters } from "./shooter";
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
-const localClient = new LocalClient();
+const localClient = createLocalClient();
 
 if (!process.env.CACHE_REFRESH_INTERVAL) {
     logger.error("CACHE_REFRESH_INTERVAL is not set");

@@ -46,7 +46,7 @@ function generate_proxy_certs() {
     )
 }
 
-npx npm-check-updates --upgrade --loglevel=info --deep --reject '/prisma/'
+npx npm-check-updates --upgrade --loglevel=info --deep
 
 traverse_folder .
 

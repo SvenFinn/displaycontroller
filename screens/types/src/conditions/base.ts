@@ -1,4 +1,4 @@
-import { RangeId } from "../common";
+import { RangeId } from "../common.js";
 
 type BaseCondition = {
     invert: boolean;

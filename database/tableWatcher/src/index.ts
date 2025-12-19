@@ -1,10 +1,13 @@
-import { PrismaClient } from '@prisma/client';
 import { EventEmitter } from 'events';
 import { logger } from "dc-logger";
 import { io } from 'socket.io-client';
 
+interface ChecksumQueryable {
+    $queryRawUnsafe<T = unknown>(query: string): Promise<T>;
+}
+
 export class TableWatcher extends EventEmitter {
-    private prisma: PrismaClient;
+    private prisma: ChecksumQueryable;
     private tables: string[];
     private interval: number;
     private checksums: Record<string, BigInt> = {};
@@ -12,7 +15,7 @@ export class TableWatcher extends EventEmitter {
     private serverState: boolean = false;
     private running: boolean = false;
 
-    constructor(prisma: PrismaClient, tables: string[], interval: number = 10000) {
+    constructor(prisma: ChecksumQueryable, tables: string[], interval: number = 10000) {
         super();
         this.prisma = prisma;
         this.tables = tables;
@@ -110,7 +113,7 @@ export class TableWatcherFast extends TableWatcher {
     private fastTimeout: number;
     private fastIntervalTimeout: NodeJS.Timeout | null = null;
 
-    constructor(prisma: PrismaClient, tables: string[], interval: number = 10000, fastInterval: number = 1000, fastTimeout: number = 30000) {
+    constructor(prisma: ChecksumQueryable, tables: string[], interval: number = 10000, fastInterval: number = 1000, fastTimeout: number = 30000) {
         super(prisma, tables, interval);
         this.slowInterval = interval;
         this.fastInterval = fastInterval;

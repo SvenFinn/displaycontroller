@@ -1,13 +1,13 @@
-import { ScreenUnavailable } from "./base";
-import { CpcViewScreen, CpcViewDbScreen, CpcViewOptions, isCpcViewOptions } from "./cpcView";
-import { EmbedDbScreen, EmbedScreen, EmbedOptions } from "./embed";
-import { DrawTargetScreen, DrawTargetDbScreen, DrawTargetOptions, isDrawTargetOptions } from "./drawTarget";
-import { EvaluationScreen, EvaluationDbScreen, EvaluationOptions, isEvaluationOptions } from "./evaluation";
-import { ViewerScreen, ViewerDbScreen, ViewerOptions, isViewerOptions } from "./imageViewer";
-import { SystemMessageDbScreen, SystemMessageScreen } from "./systemMessage";
-import { ConditionNone, ConditionNumber, ConditionMinMax } from "./conditions/base";
+import { ScreenUnavailable } from "./base.js";
+import { CpcViewScreen, CpcViewDbScreen, CpcViewOptions, isCpcViewOptions } from "./cpcView.js";
+import { EmbedDbScreen, EmbedScreen, EmbedOptions } from "./embed.js";
+import { DrawTargetScreen, DrawTargetDbScreen, DrawTargetOptions, isDrawTargetOptions } from "./drawTarget.js";
+import { EvaluationScreen, EvaluationDbScreen, EvaluationOptions, isEvaluationOptions } from "./evaluation.js";
+import { ViewerScreen, ViewerDbScreen, ViewerOptions, isViewerOptions } from "./imageViewer.js";
+import { SystemMessageDbScreen, SystemMessageScreen } from "./systemMessage.js";
+import { ConditionNone, ConditionNumber, ConditionMinMax } from "./conditions/base.js";
 import { createIs } from "typia";
-import { ScreenCastDbScreen, ScreenCastScreen } from "./screenCast";
+import { ScreenCastDbScreen, ScreenCastScreen } from "./screenCast.js";
 
 export type ScreenAvailable = ViewerScreen | CpcViewScreen | DrawTargetScreen | EvaluationScreen | SystemMessageScreen | EmbedScreen | ScreenCastScreen;
 

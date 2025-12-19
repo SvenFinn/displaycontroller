@@ -4,7 +4,7 @@ import { logger } from "dc-logger";
 
 import "./cache/updater"; // Import the updater to start the caching
 import { ServerStateStream } from "./streams/serverState";
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { LogParserStream } from "./streams/logParser";
 import { MulticastStream } from "./streams/multicastRecv";
 import { RangeMerger } from "./streams/mergeRange";
@@ -17,7 +17,7 @@ import { MulticastAccumulate } from "./streams/multicastAcc";
 async function main() {
     logger.info("Connecting to rabbitmq");
     const connection = await amqp.connect("amqp://rabbitmq");
-    const localClient = new LocalClient();
+    const localClient = createLocalClient();
 
     const merger = new RangeMerger(localClient);
 

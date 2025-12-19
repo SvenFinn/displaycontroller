@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { AdvServerState } from "./types";
 import { logger } from "dc-logger";
 import semver from "semver";
@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import { createSMDBClient } from "dc-db-smdb";
 dotenv.config({ quiet: true });
 
-const prismaClient = new LocalClient();
+const prismaClient = createLocalClient();
 
 export async function checkServiceAvailability(): Promise<AdvServerState | null> {
     logger.debug("Fetching server information");

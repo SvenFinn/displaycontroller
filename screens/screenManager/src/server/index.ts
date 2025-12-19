@@ -1,14 +1,14 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { logger } from "dc-logger";
-import { LocalClient } from 'dc-db-local';
+import { createLocalClient, LocalClient } from 'dc-db-local';
 import { screenManager } from '../screens/screenManager';
 import { resolveScreen } from '../screens/screenTypes';
 import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
 import BodyParser from 'body-parser';
-import { Prisma } from 'dc-db-local/generated/client/client';
 import http from 'http';
 import { Server as IOServer } from 'socket.io';
+import { Prisma } from 'dc-db-local/dist/generated/client';
 dotenv.config({ quiet: true });
 
 const app: Express = express();
@@ -19,7 +19,7 @@ const io = new IOServer(server, {
     path: "/api/screens/ws",
 }).of("/api/screens");
 
-const localClient: LocalClient = new LocalClient();
+const localClient: LocalClient = createLocalClient();
 
 export async function sendSocketIOResponse(data: Screen) {
     logger.info("Sending screen update");

@@ -1,11 +1,11 @@
 import { execSync } from "child_process"
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { createSMDBClient } from "dc-db-smdb";
 import { CurrentTimestamp } from "./types";
 import { logger } from "dc-logger";
 import { io } from "socket.io-client";
 
-const localClient = new LocalClient();
+const localClient = createLocalClient();
 const socket = io("http://server-state:80/api/serverState", { path: "/api/serverState/ws", transports: ["websocket", "polling"] });
 
 let syncTimeout: NodeJS.Timeout | null = null;

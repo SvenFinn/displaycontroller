@@ -1,6 +1,6 @@
 import { createIs } from "typia";
-import { BaseDbScreen, BaseScreenAvailable } from "./base";
-import { PositiveInteger, RangeId } from "./common";
+import { BaseDbScreen, BaseScreenAvailable } from "./base.js";
+import { PositiveInteger, RangeId } from "./common.js";
 
 export type CpcViewDbScreen = BaseDbScreen & {
     type: "cpcView";

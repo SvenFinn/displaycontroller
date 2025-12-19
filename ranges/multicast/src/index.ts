@@ -5,11 +5,11 @@ import { getStartList } from "./startList";
 import { getDiscipline } from "./discipline";
 import { getShooters } from "./shooter";
 import { getRangeId } from "./rangeId";
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { InternalRange } from "dc-ranges-types";
 import { logger } from "dc-logger";
 
-const prismaClient = new LocalClient();
+const prismaClient = createLocalClient();
 
 async function main() {
     const connection = await amqp.connect("amqp://rabbitmq");

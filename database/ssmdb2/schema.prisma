@@ -1,12 +1,10 @@
 datasource db {
     provider = "mysql"
-    url      = "mysql://meyton:mc4hct@192.168.10.200:3306/SSMDB2"
 }
 
 generator client {
-    provider      = "prisma-client-js"
-    output        = "./generated/client"
-    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    provider = "prisma-client"
+    output   = "./src/generated"
 }
 
 /**

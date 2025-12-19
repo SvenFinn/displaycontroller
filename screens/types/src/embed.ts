@@ -1,4 +1,4 @@
-import { BaseDbScreen, BaseScreenAvailable } from "./base";
+import { BaseDbScreen, BaseScreenAvailable } from "./base.js";
 
 export type EmbedDbScreen = BaseDbScreen & {
     type: "embed";

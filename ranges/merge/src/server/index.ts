@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express';
-import { LocalClient } from 'dc-db-local';
+import { createLocalClient, LocalClient } from 'dc-db-local';
 import { logger } from "dc-logger";
 import { rangeManager } from '../rangeMan';
 import { createServer } from 'http';
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const localClient: LocalClient = new LocalClient();
+const localClient: LocalClient = createLocalClient();
 
 app.get('/api/ranges', async (req: Request, res: Response) => {
     res.status(200).send(rangeManager.getActiveRanges());

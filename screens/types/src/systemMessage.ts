@@ -1,5 +1,5 @@
-import { ScreenId } from './common';
-import { BaseDbScreen, BaseScreenAvailable } from './base';
+import { ScreenId } from './common.js';
+import { BaseDbScreen, BaseScreenAvailable } from './base.js';
 
 export type SystemMessageScreen = BaseScreenAvailable & {
     type: "systemMessage";

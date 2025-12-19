@@ -21,6 +21,7 @@ FROM base AS deps-local-db
 WORKDIR /app/database/local
 COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
+    export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
 FROM deps-local-db AS deps-ssmdb2

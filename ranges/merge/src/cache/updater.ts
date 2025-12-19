@@ -1,4 +1,4 @@
-import { LocalClient } from "dc-db-local";
+import { createLocalClient } from "dc-db-local";
 import { updateDisciplines, updateOverrides } from "./disciplines";
 import { updateShooters } from "./shooters";
 import { updateStartLists } from "./startLists";
@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import { updateIpAddresses } from "./ipAddress";
 dotenv.config({ quiet: true });
 
-const client = new LocalClient();
+const client = createLocalClient();
 
 if (!process.env.CACHE_REFRESH_INTERVAL) {
     logger.error("CACHE_REFRESH_INTERVAL is not set");
