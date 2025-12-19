@@ -53,7 +53,7 @@ function mergeHits(sourceData: SourceData): Hits {
     const hits = [];
     for (let i = 0; i < maxRounds; i++) {
         const round = mergeRound(sourceData, i);
-        hits[i] = round;
+        hits[i] = round || [];
     }
     return hits;
 }

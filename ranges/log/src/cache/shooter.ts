@@ -1,7 +1,7 @@
 import { LocalClient } from "dc-db-local";
-import { isShooter, mergeMaps, isInternalShooterById, isInternalShooterByName, InternalShooter, InternalShooterById, InternalShooterByName } from "dc-ranges-types";
+import { isShooter, mergeMaps, isShooterId, isInternalShooterByName, InternalShooter, ShooterId, InternalShooterByName } from "dc-ranges-types";
 
-export const shooterMap = new Map<InternalShooterById, InternalShooterByName>();
+export const shooterMap = new Map<ShooterId, InternalShooterByName>();
 
 export async function updateShooters(client: LocalClient) {
     const shooters = await client.cache.findMany({
@@ -9,7 +9,7 @@ export async function updateShooters(client: LocalClient) {
             type: "shooter"
         }
     });
-    const shooterTempMap = new Map<InternalShooterById, InternalShooterByName>();
+    const shooterTempMap = new Map<ShooterId, InternalShooterByName>();
     for (const shooter of shooters) {
         if (!isShooter(shooter.value)) {
             continue;
@@ -28,8 +28,8 @@ export function isSameShooter(shooterOne: InternalShooter | null, shooterTwo: In
     } else if (shooterOne === null || shooterTwo === null) {
         return false;
     }
-    const isShooterOneById = isInternalShooterById(shooterOne);
-    const isShooterTwoById = isInternalShooterById(shooterTwo);
+    const isShooterOneById = isShooterId(shooterOne);
+    const isShooterTwoById = isShooterId(shooterTwo);
     if (isShooterOneById && isShooterTwoById) {
         return shooterOne === shooterTwo;
     } else if (isInternalShooterByName(shooterOne) && isInternalShooterByName(shooterTwo)) {

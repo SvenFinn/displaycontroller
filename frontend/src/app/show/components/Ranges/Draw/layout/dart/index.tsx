@@ -1,12 +1,11 @@
-import { LayoutGames, Range } from "dc-ranges-types";
+import { LayoutDart, Range } from "dc-ranges-types";
 import dart from "./dartboard.svg";
 
 interface DartLayoutProps {
-    layout: LayoutGames
+    layout: LayoutDart
 }
 export default function DartLayout({ layout }: DartLayoutProps): React.JSX.Element {
     if (!layout) return <></>;
-    if (layout.mode !== "dart") return <></>;
 
     const size = layout.type === "pistol" ? 125 : 90;
     const corner = -size / 2;

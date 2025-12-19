@@ -37,7 +37,7 @@ export class AccumulateRanges extends Transform {
         rangeData.shooter = chunk.shooter.id || null; // Id is 0 if free
         rangeData.discipline = { disciplineId: chunk.discipline.id, roundId: chunk.round.id };
         while (rangeData.hits.length - 1 < chunk.round.id) {
-            rangeData.hits.push(null);
+            rangeData.hits.push([]);
         }
         if (chunk.action === "insert") {
             logger.info(`Adding hit ${chunk.hit.id} to range ${chunk.rangeId}`);

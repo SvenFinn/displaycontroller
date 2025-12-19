@@ -1,6 +1,6 @@
-import { LayoutGames, LayoutRectangle } from "dc-ranges-types";
+import { Layout } from "dc-ranges-types";
 
-export function getCustomLayout(layoutId: number): LayoutGames | LayoutRectangle | null {
+export function getCustomLayout(layoutId: number): Layout | null {
     switch (layoutId) {
         case 1410: // 5.5x90
             return {

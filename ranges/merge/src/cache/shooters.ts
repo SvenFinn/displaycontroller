@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { Shooter, isShooter, InternalShooter, isInternalShooterById, mergeMaps } from "dc-ranges-types";
+import { Shooter, isShooter, InternalShooter, isShooterId, mergeMaps } from "dc-ranges-types";
 export const shooters = new Map<number, Shooter>();
 
 export async function updateShooters(localClient: LocalClient) {
@@ -25,7 +25,7 @@ export function getShooter(shooter: InternalShooter | null): Shooter | null {
     if (shooter == null) { // Range is free
         return null;
     }
-    if (isInternalShooterById(shooter)) {
+    if (isShooterId(shooter)) {
         return structuredClone(shooters.get(shooter) ?? null);
     }
     return {

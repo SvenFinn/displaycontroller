@@ -97,6 +97,6 @@ export class RangeDataStream extends Transform {
                 });
             }
         }
-        return result.map((round) => round?.sort((a, b) => a.id - b.id)).map((round) => round === undefined ? null : round);
+        return result.map((round) => round?.sort((a, b) => a.id - b.id)).map((round) => round === undefined ? [] : round);
     }
 }

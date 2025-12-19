@@ -3,10 +3,10 @@ import starsPistol from "./starsLp.svg";
 import easter from "./easter.svg";
 import winter from "./winter.svg";
 
-import { Range, LayoutGamesCommon, LayoutEaster } from "dc-ranges-types";
+import { Range, LayoutStars, LayoutEaster } from "dc-ranges-types";
 
 interface StarsLayoutProps {
-    layout: LayoutGamesCommon | LayoutEaster;
+    layout: LayoutStars | LayoutEaster;
 }
 export default function StarsLayout({ layout }: StarsLayoutProps): React.JSX.Element {
     if (!layout) return <></>;

@@ -12,10 +12,12 @@
     "author": "",
     "license": "ISC",
     "description": "",
+    "dependencies": {
+        "typia": "^10.1.0"
+    },
     "devDependencies": {
         "ts-patch": "^3.3.0",
-        "typescript": "~5.9.3",
-        "typia": "^10.1.0"
+        "typescript": "~5.9.3"
     },
     "files": [
         "dist"

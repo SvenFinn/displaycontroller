@@ -1,8 +1,15 @@
-import { Discipline, isDiscipline } from './discipline/index.js';
+import { Discipline, InternalDiscipline, InternalOverrideDiscipline, NormInternalDiscipline, OverrideDiscipline } from './discipline/index.js';
 import { Hits, Hit } from './hits/index.js';
-import { isInternalStartList } from './internal/startList/index.js';
 import { mergeMaps } from './cache.js';
 import { createIs } from 'typia';
+import { Layout, LayoutChess, LayoutDart, LayoutEaster, LayoutRectangle, LayoutRing, LayoutRings, LayoutStars } from './discipline/round/layout.js';
+import { Round, Rounds } from './discipline/round/index.js';
+import { Mode } from './discipline/round/mode.js';
+import { Zoom } from './discipline/round/zoom.js';
+import { InternalShooter, InternalShooterByName, Shooter, ShooterId } from './shooter/index.js';
+import { InternalStartList, StartList } from './startList/index.js';
+import { UnsignedInteger, ColorCode, Index, Integer, RangeId, UnsignedNumber } from './common/index.js';
+export type Range = InactiveRange | ActiveRange;
 
 type BaseRange = {
     id: number;
@@ -10,20 +17,6 @@ type BaseRange = {
 
 export type InactiveRange = BaseRange & {
     active: false;
-}
-
-export type Shooter = {
-    id: number | null; // Null = Can't be determined uniquely
-    firstName: string;
-    lastName: string;
-}
-
-export const isShooter = createIs<Shooter>();
-
-export type StartList = {
-    id: number;
-    name: string;
-    type: "default" | "price" | "league" | "round" | "final" | "unknown";
 }
 
 export type ActiveRange = BaseRange & {
@@ -34,63 +27,68 @@ export type ActiveRange = BaseRange & {
     shooter: Shooter | null;
     startList: StartList | null;
     discipline: Discipline | null;
-    hits: Hits | null;
+    hits: Hits;
     ipAddress: string | null;
     source: Source;
 }
 
-export type Range = InactiveRange | ActiveRange;
+export type InternalRange = {
+    rangeId: RangeId,
+    shooter: InternalShooter | null,
+    discipline: InternalDiscipline | null,
+    startListId: Index | null,
+    hits: Hits,
+    source: Source,
+    ttl: UnsignedInteger,
+}
+
 
 export const isRange = createIs<Range>();
 
 export type Source = "multicast" | "log" | "ssmdb2";
 
-export {
-    Layout,
-    LayoutGames,
-    LayoutGamesCommon,
-    LayoutRectangle,
-    LayoutRings,
-    LayoutChess,
-    LayoutRing,
-    LayoutEaster
-} from './discipline/layout.js';
-
-export {
-    Round,
-    Rounds,
-    Mode,
-    Zoom
-} from './discipline/round.js';
-
-export {
-    InternalDiscipline,
-    InternalShooter,
-    InternalShooterById,
-    InternalShooterByName,
-    isInternalShooterByName,
-    isInternalShooterById,
-    InternalRange,
-    isInternalRange,
-    isInternalOverrideDiscipline,
-    isNormInternalDiscipline,
-} from './internal/index.js';
-
-export {
-    isOverrideDiscipline,
-    OverrideDiscipline,
-    InternalStartList
-} from './internal/startList/index.js';
-
-
+export const isDiscipline = createIs<Discipline>();
+export const isInternalStartList = createIs<InternalStartList>();
+export const isOverrideDiscipline = createIs<OverrideDiscipline>();
+export const isShooter = createIs<Shooter>();
+export const isShooterId = createIs<ShooterId>();
+export const isInternalShooterByName = createIs<InternalShooterByName>();
+export const isInternalShooter = createIs<InternalShooter>();
+export const isInternalOverrideDiscipline = createIs<InternalOverrideDiscipline>();
+export const isNormInternalDiscipline = createIs<NormInternalDiscipline>();
+export const isInternalRange = createIs<InternalRange>();
 
 export {
     Discipline,
-    isDiscipline,
     mergeMaps,
     Hit,
     Hits,
-    isInternalStartList
+    Layout,
+    LayoutChess,
+    LayoutDart,
+    LayoutEaster,
+    LayoutRectangle,
+    LayoutRing,
+    LayoutRings,
+    LayoutStars,
+    Mode,
+    Round,
+    Rounds,
+    Zoom,
+    InternalDiscipline,
+    InternalShooter,
+    InternalShooterByName,
+    StartList,
+    UnsignedInteger,
+    ColorCode,
+    Index,
+    Integer,
+    RangeId,
+    UnsignedNumber,
+    OverrideDiscipline,
+    Shooter,
+    InternalStartList,
+    ShooterId
 }
 
 // The ShootMaster software represents a invalid hit as the maximum 32-bit integer value.
