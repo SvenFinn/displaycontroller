@@ -1,20 +1,19 @@
 "use client";
 
 import { ActiveRange, ColorCode, Range, Round } from "dc-ranges-types";
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useMemo, useRef, useState } from "react";
 import Layout, { getSizeAuto, getSize as getSizeLayout } from "./layout";
 import { DrawHits } from "./hits";
 import CountsCorner from "./CountsCorner";
 import styles from "./rangeDraw.module.css";
-import { useResizeObserver } from "@frontend/app/components/base/resize";
+import { useResizeObserver } from "@frontend/app/hooks/useResizeObserver";
 
 interface DrawRangeProps {
     range: Range
     className?: string
 }
 
-
-const DrawRange = React.memo(
+const DrawRange = memo(
     function DrawRange({ range, className }: DrawRangeProps): React.JSX.Element {
         if (!range.active) return <></>
         return <DrawActiveRange range={range} className={className} />
@@ -32,10 +31,11 @@ interface DrawActiveRangeProps {
 }
 
 function useClientSize(ref: React.RefObject<Element | null>): [number, number] {
-    const [size, setSize] = useState<[number, number]>([0, 0]);
+    const [size, setSize] = useState<[number, number]>([1, 1]);
 
     useResizeObserver(ref, () => {
         if (!ref.current) return;
+        if (ref.current.clientWidth === 0 || ref.current.clientHeight === 0) return;
         const newSize: [number, number] = [ref.current.clientWidth, ref.current.clientHeight];
         setSize(newSize);
     });

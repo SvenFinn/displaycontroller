@@ -1,4 +1,4 @@
-import SizeWrapper from "../../SizeWrapper";
+import { BoundingBoxCss, HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 import styles from "./grid.module.css";
 
 interface GridProps {
@@ -11,13 +11,15 @@ interface GridProps {
 
 export default function Grid({ rows, columns, children, className }: GridProps): React.JSX.Element {
     return (
-        <SizeWrapper style={{
-            gridTemplateRows: `repeat(${rows}, 1fr)`,
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            fontSize: `${100 / rows}%`
-        }} className={`${styles.grid} ${className || ""}`}>
-            {children}
-        </SizeWrapper>
+        <BoundingBoxCss className={className} >
+            <div style={{
+                gridTemplateRows: `repeat(${rows}, 1fr)`,
+                gridTemplateColumns: `repeat(${columns}, 1fr)`,
+                fontSize: `calc(calc(var(--height, 0px) * var(--font-height-ratio)) / ${rows})`,
+            }} className={styles.grid}>
+                {children}
+            </div>
+        </BoundingBoxCss>
     );
 
 }

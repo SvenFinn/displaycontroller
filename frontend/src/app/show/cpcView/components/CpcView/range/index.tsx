@@ -1,8 +1,7 @@
-import { useAppSelector } from "../ranges-store/store";
 import styles from "./range.module.css";
 import InfoPanel from "./infoPanel";
 import { RangeView } from "./rangeView";
-import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
+import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 
 interface CpcViewRangeProps {
     id: number | null;
@@ -14,10 +13,10 @@ export default function CpcViewRange({ id }: CpcViewRangeProps): React.JSX.Eleme
     }
 
     return (
-        <SizeWrapper className={`${styles.range} ${styles.active}`}>
+        <HeightAsFontSize className={`${styles.range} ${styles.active}`}>
             <InfoPanel id={id} />
             <RangeView id={id} />
-        </SizeWrapper>
+        </HeightAsFontSize>
 
     );
 }

@@ -1,5 +1,8 @@
 div.grid {
-    --border-width: calc(var(--container-size) *0.005);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    --border-width: calc(var(--height) *0.005);
     display: grid;
     padding-bottom: var(--border-width);
     padding-right: var(--border-width);

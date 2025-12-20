@@ -6,23 +6,23 @@ import FullscreenButton from './Fullscreen';
 import Logo from './Logo';
 import styles from './show.module.css';
 import { useRef, useState } from 'react';
-import { SizeWrapper } from '../SizeWrapper';
 import ServerState from '../ServerEvents/serverState';
+import { HeightAsFontSize } from '@frontend/app/components/base/BoundingBoxCss';
 
 
 export default function Show({ children }: { children: React.ReactNode }): React.JSX.Element {
-    const [container, setContainer] = useState<HTMLDivElement | null>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
 
     return (
-        <SizeWrapper className={styles.show} ref={(el) => setContainer(el)}>
+        <HeightAsFontSize className={styles.show} ref={ref}>
             <Background />
             <div className={styles.content}>
                 {children}
             </div>
-            <FullscreenButton container={container} />
+            <FullscreenButton container={ref} />
             <Clock />
             <Logo />
             <ServerState />
-        </SizeWrapper>
+        </HeightAsFontSize>
     )
 }

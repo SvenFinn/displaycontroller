@@ -1,6 +1,6 @@
 "use client";
 
-import { useResizeObserver } from "../resize";
+import { useResizeObserver } from "@frontend/app/hooks/useResizeObserver";
 import styles from "./scaleText.module.css";
 import { useRef } from "react";
 
@@ -22,7 +22,7 @@ export function ScaleText({ text, }: ScaleTextProps): React.JSX.Element {
     return (
         <div ref={containerRef} className={styles.scaleText}>
             <span ref={measureRef} className={styles.measure}>{text}</span>
-            <span ref={textRef} className={styles.scaleText}>{text}</span>
+            <span ref={textRef} className={styles.text}>{text}</span>
         </div>
     )
 }

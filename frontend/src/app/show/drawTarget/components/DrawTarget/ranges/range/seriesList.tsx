@@ -8,7 +8,14 @@ export default function SeriesList({ id }: { id: number }): React.JSX.Element {
     const series = useAppSelector((state) => {
         const currentRange = state.ranges[id];
         if (!currentRange || !currentRange.active) return [];
-        return getSeries(currentRange);
+        const series = getSeries(currentRange);
+        if (series.length > 12) {
+            // Remove so many multiples of 4 from the front until we have at most 12 entries
+            const excess = series.length - 12;
+            const toRemove = Math.ceil(excess / 4) * 4;
+            return series.slice(toRemove);
+        }
+        return series;
     });
 
     const rows = Math.ceil(series.length / 4);

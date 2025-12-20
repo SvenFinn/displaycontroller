@@ -1,9 +1,9 @@
 "use client";
 
-import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
 import styles from "./viewer.module.css";
 import { ScreenShareSocketProvider, useScreenShareSocket } from "@frontend/app/show/components/ServerEvents/screenShare";
 import { useEffect, useRef, useState } from "react";
+import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 
 export default function ScreenCastViewer({ onReady }: { onReady: () => void }): React.JSX.Element {
     useEffect(() => {
@@ -148,9 +148,9 @@ function ScreenViewerContent() {
                     controls={false}
                 />
             ) : (
-                <SizeWrapper className={styles.viewerPlaceholder}>
+                <HeightAsFontSize className={styles.viewerPlaceholder}>
                     <p>Übertragung beendet</p>
-                </SizeWrapper>
+                </HeightAsFontSize>
             )}
         </div>
     );

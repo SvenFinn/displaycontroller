@@ -8,8 +8,8 @@ import { setRange } from "./ranges-store/rangesReducer";
 import Header from "./header";
 import { useEffect } from "react";
 import styles from "./drawTarget.module.css";
-import { SizeWrapper } from "@frontend/app/show/components/SizeWrapper";
 import RangesProvider, { useRangesCallback } from "@frontend/app/show/components/ServerEvents/ranges";
+import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 
 export interface DrawTargetProps {
     options: DrawTargetOptions;
@@ -17,13 +17,10 @@ export interface DrawTargetProps {
 }
 
 export default function DrawTarget({ options, onReady }: DrawTargetProps): React.JSX.Element {
-    console.log("Render DrawTarget with options:", options);
     return (
         <RangesProvider ranges={options.ranges} >
             <Provider store={store} >
-                <SizeWrapper className={styles.drawTarget} >
-                    <DrawTargetContent options={options} onReady={onReady} />
-                </SizeWrapper >
+                <DrawTargetContent options={options} onReady={onReady} />
             </Provider >
         </RangesProvider >
     )
@@ -32,11 +29,11 @@ export default function DrawTarget({ options, onReady }: DrawTargetProps): React
 function DrawTargetContent({ options, onReady }: DrawTargetProps): React.JSX.Element {
     useRangesCallback(setRange);
     return (
-        <>
+        <div className={styles.drawTarget}>
             <Header />
             <Ranges options={options} />
             <IsReadyDrawTarget options={options} onReady={onReady} />
-        </>
+        </div>
     );
 }
 
