@@ -1,9 +1,9 @@
-import ScaleText from "@frontend/app/show/components/ScaleText";
 import { getHitString, getRoundName } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import ShotArrowW from "./ShotArrow";
 import { Range } from "dc-ranges-types";
 import { useAppSelector } from "../../ranges-store/store";
+import { ScaleText } from "@frontend/app/components/base/ScaleText";
 
 interface CurrentHitProps {
     id: number

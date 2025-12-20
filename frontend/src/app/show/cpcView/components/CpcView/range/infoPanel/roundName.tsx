@@ -1,4 +1,4 @@
-import ScaleText from "@frontend/app/show/components/ScaleText";
+import { ScaleText } from "@frontend/app/components/base/ScaleText";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
 

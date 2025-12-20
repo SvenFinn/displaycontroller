@@ -1,4 +1,4 @@
-import ScaleText from "../../../../../components/ScaleText";
+import { ScaleText } from "@frontend/app/components/base/ScaleText";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./range.module.css";
 

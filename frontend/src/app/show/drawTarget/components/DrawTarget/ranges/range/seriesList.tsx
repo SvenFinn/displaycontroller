@@ -1,7 +1,7 @@
-import ScaleText from "@frontend/app/show/components/ScaleText";
 import { getSeries } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import { useAppSelector } from "../../ranges-store/store";
+import { ScaleText } from "@frontend/app/components/base/ScaleText";
 
 export default function SeriesList({ id }: { id: number }): React.JSX.Element {
     // This only needs to rerender if the hits change, so we can use a simple selector
