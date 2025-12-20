@@ -48,7 +48,7 @@ function mergeRound(sourceData: SourceData, roundId: number): Array<Hit> | null 
     return rounds[0] || null;
 }
 
-function mergeHits(sourceData: SourceData): Hits {
+function mergeHits(sourceData: SourceData): Hits[] {
     const maxRounds = getMaxRounds(sourceData);
     const hits = [];
     for (let i = 0; i < maxRounds; i++) {

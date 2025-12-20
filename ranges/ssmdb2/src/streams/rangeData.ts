@@ -68,13 +68,13 @@ export class RangeDataStream extends Transform {
         }
     }
 
-    private async getHits(targetId: number, roundIdHasOffByOneBug: boolean): Promise<Hits> {
+    private async getHits(targetId: number, roundIdHasOffByOneBug: boolean): Promise<Hits[]> {
         const hits = await this.prisma.hit.findMany({
             where: {
                 targetId: targetId
             }
         });
-        const result: Hits = [];
+        const result: Hits[] = [];
         for (const hit of hits) {
             const roundId = roundIdHasOffByOneBug ? hit.roundId - 1 : hit.roundId;
             if (result[roundId] === undefined) {

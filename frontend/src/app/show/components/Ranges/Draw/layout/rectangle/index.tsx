@@ -1,34 +1,31 @@
-import { Range, LayoutRectangle } from "dc-ranges-types";
+import { LayoutRectangle } from "dc-ranges-types";
+import { LayoutInterface } from "..";
+import { layoutRings } from "../rings";
 
-interface RectangleLayoutProps {
-    layout: LayoutRectangle,
-    color: string
-}
-
-
-export default function RectangleLayout({ layout, color }: RectangleLayoutProps): React.JSX.Element {
-    if (layout.mode !== "rectangle") return <></>;
-    const { x, y, width, height } = layout;
-    return (
-        <rect
-            x={x}
-            y={y}
-            width={width}
-            height={height}
-            fill={color}
-            stroke='#000000'
-        />
-
-    )
-}
-
-export function getSizeFixed(range: Range): [number, number] {
-    if (!range.active) return [0, 0];
-    if (!range.discipline) return [0, 0];
-    const round = range.discipline.rounds[range.round];
-    if (!round) return [0, 0];
-    const layout = round.layout;
-    if (!layout) return [0, 0];
-    if (layout.mode !== "rectangle") return [0, 0];
-    return [layout.width, layout.height];
+export const layoutRectangle: LayoutInterface<LayoutRectangle> = {
+    getHitColor(hit, isLatest) {
+        return layoutRings.getHitColor(hit, isLatest);
+    },
+    getSizeNone(layout) {
+        // How do we handle x and y here?
+        const realWidth = layout.x + layout.width;
+        const realHeight = layout.y + layout.height;
+        return [realWidth * 2, realHeight * 2];
+    },
+    getSizeFixed(layout, value) {
+        return this.getSizeNone(layout);
+    },
+    render({ layout, color }) {
+        const { x, y, width, height } = layout;
+        return (
+            <rect
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                fill={color}
+                stroke="black"
+            />
+        )
+    }
 }

@@ -1,6 +1,8 @@
 import { Hit, Layout } from "dc-ranges-types";
 import { idealTextColor } from "../../../../lib/idealTextColor";
 import { getHitColor } from "../layout";
+import { memo } from "react";
+import { compareJSON } from "..";
 
 interface HitProps {
     hit: Hit,
@@ -9,17 +11,19 @@ interface HitProps {
     isLatest: boolean
 }
 
-export default function DrawHit({ layout, hit, gauge, isLatest }: HitProps): React.JSX.Element {
-    if (!hit.valid) return <></>;
-    const color = getHitColor(layout, hit.rings, isLatest);
-    const textColor = idealTextColor(color);
-    return (
-        <g key={hit.id}>
-            <circle cx={hit.x} cy={-hit.y} r={gauge / 2} fill={color} stroke={textColor} />
-            <text x={hit.x} y={-hit.y} fontSize={gauge / 2} fill={textColor}>
-                {hit.id}
-            </text>
-        </g>
+export const DrawHit = memo(
+    function DrawHit({ layout, hit, gauge, isLatest }: HitProps): React.ReactNode {
+        if (!hit.valid) return <></>;
+        const color = getHitColor(layout!, hit, isLatest);
+        const textColor = idealTextColor(color);
+        return (
+            <g key={hit.id}>
+                <circle cx={hit.x} cy={-hit.y} r={gauge / 2} fill={color} stroke={textColor} />
+                <text x={hit.x} y={-hit.y} fontSize={gauge / 2} fill={textColor}>
+                    {hit.id}
+                </text>
+            </g>
 
-    )
-}
+        )
+    }, compareJSON
+);

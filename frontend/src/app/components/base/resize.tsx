@@ -1,0 +1,43 @@
+import { ComponentPropsWithRef, forwardRef, PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
+
+
+export function useResizeObserver(
+    ref: React.RefObject<Element | null>,
+    cb: (entry: ResizeObserverEntry) => void
+) {
+    const cbRef = useRef(cb);
+    cbRef.current = cb;
+
+    useLayoutEffect(() => {
+        if (!ref.current) return;
+        const observer = new ResizeObserver(entries => {
+            if (entries[0]) cbRef.current(entries[0]);
+        });
+        observer.observe(ref.current);
+
+        cbRef.current({
+            target: ref.current!,
+            contentRect: ref.current!.getBoundingClientRect(),
+        } as ResizeObserverEntry);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [ref]);
+}
+
+export function BoundingBoxCss({ children, ...rest }: ComponentPropsWithRef<"div">): React.ReactNode {
+    const ref = useRef<HTMLElement | null>(null);
+
+    useResizeObserver(ref, () => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        if (!rect) return;
+        ref.current.style.setProperty("--width", `${rect.width}px`);
+        ref.current.style.setProperty("--height", `${rect.height}px`);
+    });
+    return (
+        <div {...rest} > {children} </div>
+    )
+}
+

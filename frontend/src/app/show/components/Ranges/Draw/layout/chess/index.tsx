@@ -1,76 +1,57 @@
-import { Range, LayoutChess } from "dc-ranges-types";
+import { LayoutChess } from "dc-ranges-types";
 
 import chessFive from "./5x5.svg";
 import chessSix from "./6x6.svg";
 import chessSeven from "./7x7.svg";
 import chessTen from "./10x10.svg";
+import { LayoutInterface } from "..";
 
-interface ChessLayoutProps {
-    layout: LayoutChess
-}
-export default function ChessLayout({ layout }: ChessLayoutProps): React.JSX.Element {
-    if (!layout) return <></>;
-
-    const size = getSizeLayout(layout)[0];
-    const corner = -size / 2;
-
-    switch (layout.size) {
-        case 5:
-            return <image href={chessFive.src} x={corner} y={corner} width={size} height={size} />
-        case 6:
-            return <image href={chessSix.src} x={corner} y={corner} width={size} height={size} />
-        case 7:
-            return <image href={chessSeven.src} x={corner} y={corner} width={size} height={size} />
-        case 10:
-            return <image href={chessTen.src} x={corner} y={corner} width={size} height={size} />
-        default:
-            return <></>;
-    }
-}
-
-function getSizeLayout(layout: LayoutChess): [number, number] {
-    if (layout.type === "rifle") {
-        switch (layout.size) {
-            case 5:
-                return [85.5, 85.5];
-            case 6:
-                return [90, 90];
-            case 7:
-                return [90, 90];
-            case 10:
-                return [85.5, 85.5];
-            default:
-                return [0, 0];
+export const layoutChess: LayoutInterface<LayoutChess> = {
+    getHitColor(hit, isLatest) {
+        return "#0000FF";
+    },
+    getSizeFixed(layout, value) {
+        return this.getSizeNone(layout);
+    },
+    getSizeNone(layout) {
+        if (layout.type === "rifle") {
+            switch (layout.size) {
+                case 5:
+                case 10:
+                    return [85.5, 85.5];
+                case 6:
+                case 7:
+                    return [90, 90];
+                default:
+                    return [0, 0];
+            }
+        } else if (layout.type === "pistol") {
+            switch (layout.size) {
+                case 5:
+                case 10:
+                    return [120.5, 120.5];
+                case 6:
+                case 7:
+                    return [125, 125];
+                default:
+                    return [0, 0];
+            }
         }
-    } else if (layout.type === "pistol") {
-        switch (layout.size) {
-            case 5:
-                return [120.5, 120.5];
-            case 6:
-                return [125, 125];
-            case 7:
-                return [125, 125];
-            case 10:
-                return [120.5, 120.5];
-            default:
-                return [0, 0];
-        }
+        return [0, 0];
+    },
+    render({ layout, color }) {
+        const dimensions = this.getSizeNone(layout);
+
+        const srcs = (() => {
+            switch (layout.size) {
+                case 5: chessFive.src;
+                case 6: chessSix.src;
+                case 7: chessSeven.src;
+                case 10: chessTen.src;
+                default: return "";
+            }
+        })();
+
+        return <image href={srcs} x={-dimensions[0] / 2} y={-dimensions[1] / 2} width={dimensions[0]} height={dimensions[1]} />
     }
-    return [0, 0];
-}
-
-
-export function getSizeFixed(range: Range): [number, number] {
-    if (!range.active) return [0, 0];
-    if (!range.discipline) return [0, 0];
-    const round = range.discipline.rounds[range.round];
-    if (!round) return [0, 0];
-    const layout = round.layout;
-    if (!layout) return [0, 0];
-    if (layout.mode !== "chess") return [0, 0];
-    return getSizeLayout(layout);
-}
-
-export function getHitColor(ring: number, isLatest: boolean): string {
-    return "#0000FF";
 }

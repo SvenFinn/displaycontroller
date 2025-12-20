@@ -1,62 +1,86 @@
 "use client";
 
-import { Range } from "dc-ranges-types";
-import { useEffect, useRef, useState } from "react";
-import Layout, { getSize as getSizeLayout } from "./layout";
-import Hits from "./hits";
+import { ActiveRange, ColorCode, Range, Round } from "dc-ranges-types";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import Layout, { getSizeAuto, getSize as getSizeLayout } from "./layout";
+import { DrawHits } from "./hits";
 import CountsCorner from "./CountsCorner";
 import styles from "./rangeDraw.module.css";
+import { useResizeObserver } from "@frontend/app/components/base/resize";
 
 interface DrawRangeProps {
     range: Range
     className?: string
 }
 
-export default function DrawRange({ range, className }: DrawRangeProps): React.JSX.Element {
-    const ref = useRef<SVGSVGElement>(null);
-    const [size, setSize] = useState<[number, number]>([0, 0]);
-    const [strokeWidth, setStrokeWidth] = useState<number>(0);
 
-    useEffect(() => {
+const DrawRange = React.memo(
+    function DrawRange({ range, className }: DrawRangeProps): React.JSX.Element {
+        if (!range.active) return <></>
+        return <DrawActiveRange range={range} className={className} />
+    }, compareJSON);
+export default DrawRange;
+
+
+export function compareJSON(a: any, b: any): boolean {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
+
+interface DrawActiveRangeProps {
+    range: ActiveRange,
+    className?: string
+}
+
+function useClientSize(ref: React.RefObject<Element | null>): [number, number] {
+    const [size, setSize] = useState<[number, number]>([0, 0]);
+
+    useResizeObserver(ref, () => {
         if (!ref.current) return;
-        const observer = new ResizeObserver(handleResize);
-        observer.observe(ref.current);
-        function handleResize() {
-            if (!ref.current) return;
-            const newSize = getSize(range, ref.current);
-            if (newSize !== size) {
-                setSize(newSize);
-                const strokeWidth = newSize[0] / ref.current.clientWidth;
-                setStrokeWidth(isNaN(strokeWidth) ? 0 : strokeWidth);
-            }
+        const newSize: [number, number] = [ref.current.clientWidth, ref.current.clientHeight];
+        setSize(newSize);
+    });
+
+    return size;
+}
+
+function DrawActiveRange({ range, className }: DrawActiveRangeProps): React.JSX.Element {
+    const ref = useRef<SVGSVGElement>(null);
+
+    const discipline = range.discipline;
+    const round = discipline?.rounds[range.round] || null;
+
+    const layoutSize = useMemo(() => {
+        if (!round || !discipline) {
+            return getSizeAuto(4.5, null, range.hits[range.round] || []) || [0, 0];
         }
-        return () => observer.disconnect();
+        return getSizeLayout(round, discipline.gauge, range.hits[range.round] || []);
     }, [range]);
 
-    if (!range.active) return <></>
-    if (!range.discipline) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
-    const round = range.discipline.rounds[range.round];
-    if (!round) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
+    const clientSize = useClientSize(ref);
 
-    const layout = round.layout;
-    if (!layout) return <svg className={`${className} ${styles.rangeDraw}`} viewBox="0 0 0 0" />;
+    const size = useMemo(() => {
+        const largestW = Math.max(layoutSize[0], layoutSize[1] / clientSize[1] * clientSize[0]);
+        const sizes: [number, number] = [largestW, largestW / clientSize[0] * clientSize[1]];
+        return sizes;
+    }, [layoutSize, clientSize]);
+
+    const strokeWidth = size[0] / clientSize[0];
 
     const viewBox = `${-size[0] / 2} ${-size[1] / 2} ${size[0]} ${size[1]}`;
 
     return (
         <svg ref={ref} className={`${className} ${styles.rangeDraw}`} viewBox={viewBox} strokeWidth={strokeWidth}>
-            <Layout layout={layout} color={range.discipline.color} />
-            <CountsCorner counts={round.counts} size={size} />
-            <Hits range={range} strokeWidth={strokeWidth} />
+            {round && discipline && <Background round={round} color={discipline.color} size={size} />}
+            <DrawHits gauge={discipline?.gauge || 4.5} hits={range.hits[range.round] || []} round={round} strokeWidth={strokeWidth} />
         </svg>
     )
 }
 
-function getSize(range: Range, ref: SVGSVGElement): [number, number] {
-    if (ref.clientHeight === 0 || ref.clientWidth === 0) return [0, 0];
-    if (!range.active) return [0, 0];
-    const diameters = getSizeLayout(range);
-    const largestW = Math.max(diameters[0], diameters[1] / ref.clientHeight * ref.clientWidth);
-    const sizes = [largestW, largestW / ref.clientWidth * ref.clientHeight];
-    return sizes as [number, number];
-}
+const Background = memo(function Background({ round, color, size }: { round: Round, color: ColorCode, size: [number, number] }): React.JSX.Element {
+    return (
+        <>
+            {round.layout && <Layout layout={round.layout} color={color} />}
+            {round.counts || <CountsCorner size={size} />}
+        </>
+    )
+}, compareJSON);

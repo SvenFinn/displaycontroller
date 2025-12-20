@@ -1,119 +1,92 @@
-import { Layout } from "dc-ranges-types";
-import Rings, { getSizeFixed as getFixedRings, getHitColor as getRingsColor } from "./rings";
-import DartLayout, { getSizeFixed as getFixedDarts, getHitColor as getDartColor } from "./dart";
-import { Range } from "dc-ranges-types";
-import ChessLayout, { getSizeFixed as getFixedChess, getHitColor as getChessColor } from "./chess";
-import StarsLayout, { getSizeFixed as getFixedStars, getHitColor as getStarsColor } from "./stars";
-import RectangleLayout, { getSizeFixed as getFixedRectangle } from "./rectangle";
+import { ColorCode, Hit, Hits, Layout, Mode, Range, Round, UnsignedInteger, UnsignedNumber, ValidHit, Zoom } from "dc-ranges-types";
+import { memo, useMemo } from "react";
+import { layoutRings } from "./rings";
+import { layoutDart } from "./dart";
+import { layoutChess } from "./chess";
+import { layoutStars } from "./stars";
+import { layoutRectangle } from "./rectangle";
+
+
+export interface LayoutInterface<T extends Layout> {
+    render(props: { layout: T, color: ColorCode }): React.ReactNode;
+    getHitColor(hit: ValidHit, isLatest: boolean): ColorCode;
+    getSizeFixed(layout: T, value: UnsignedInteger): [number, number];
+    getSizeNone(layout: T): [number, number];
+}
+
+export function getLayout(layout: Layout): LayoutInterface<any> | null {
+    switch (layout.mode) {
+        case "rings": return layoutRings;
+        case "dart": return layoutDart;
+        case "chess": return layoutChess;
+        case "stars":
+        case "easter":
+        case "winter": return layoutStars;
+        case "rectangle": return layoutRectangle;
+        default: return null;
+    }
+}
 
 interface LayoutProps {
-    layout: Layout | null;
+    layout: Layout;
     color: string;
 }
 
-export default function LayoutComp({ layout, color }: LayoutProps): React.JSX.Element {
-    if (!layout) return <></>;
-    switch (layout.mode) {
-        case "rings":
-            return <Rings layout={layout} color={color} />;
-        case "dart":
-            return <DartLayout layout={layout} />;
-        case "chess":
-            return <ChessLayout layout={layout} />;
-        case "stars":
-        case "easter":
-        case "winter":
-            return <StarsLayout layout={layout} />;
-        case "rectangle":
-            return <RectangleLayout layout={layout} color={color} />;
-        default:
-            return <></>;
-    }
+export default function LayoutComp({ layout, color }: LayoutProps): React.ReactNode {
+    const layoutInterface = getLayout(layout);
+    return layoutInterface?.render({ layout, color }) || <></>;
 }
 
-export function getSize(range: Range): [number, number] {
-    if (!range.active) return [0, 0];
-    if (!range.discipline) return [0, 0];
-    const round = range.discipline.rounds[range.round];
-    const gauge = range.discipline.gauge;
-    if (!round) return [0, 0];
-    let diameters = [0, 0];
-    switch (round.zoom.mode) {
-        case "auto":
-            diameters = getSizeAuto(range);
-            break;
-        case "fixed":
-        case "none":
-            diameters = getSizeFixed(range);
-            break;
-        default:
-            return [0, 0];
-    }
-    return diameters.map((d) => d + gauge * 1.1) as [number, number];
+
+export function getSize(round: Round, gauge: UnsignedNumber, hits: Hits): [number, number] {
+    return getSizeInternal(round, gauge, hits).map((d) => d + gauge * 1.1) as [number, number];
 }
 
-function getSizeFixed(range: Range): [number, number] {
-    if (!range.active) return [0, 0];
-    if (!range.discipline) return [0, 0];
-    const round = range.discipline.rounds[range.round];
-    if (!round) return [0, 0];
+function getSizeInternal(round: Round, gauge: UnsignedNumber, hits: Hits): [number, number] {
+    const layoutInterface = round.layout ? getLayout(round.layout) : null;
+    if (!layoutInterface) {
+        return [0, 0];
+    }
+    const zoom = round.zoom;
     const layout = round.layout;
-    switch (layout?.mode) {
-        case "rings":
-            return getFixedRings(range);
-        case "dart":
-            return getFixedDarts(range);
-        case "chess":
-            return getFixedChess(range);
-        case "stars":
-        case "easter":
-        case "winter":
-            return getFixedStars(range);
-        case "rectangle":
-            return getFixedRectangle(range);
+    switch (zoom.mode) {
+        case "auto":
+            const size = getSizeAuto(gauge, round, hits);
+            if (!size) {
+                return layoutInterface.getSizeNone(layout);
+            }
+            return size;
+        case "fixed":
+            return layoutInterface.getSizeFixed(layout, zoom.value);
+        case "none":
+            return layoutInterface.getSizeNone(layout);
         default:
             return [0, 0];
     }
 }
 
-function getSizeAuto(range: Range): [number, number] {
-    if (!range.active) return [0, 0];
-    if (!range.discipline) return [0, 0];
-    const gauge = range.discipline.gauge;
-    const round = range.discipline.rounds[range.round];
-    if (!round) return [0, 0];
-    const hitsPerView = round.hitsPerView;
-    if (!range.hits) return [0, 0];
-    const hits = range.hits[range.round];
-    if (!hits || hits.length == 0 || round.mode.mode === "fullHidden") {
-        return getSizeFixed(range);
-    }
+
+export function getSizeAuto(gauge: UnsignedNumber, round: Round | null, hits: Hits): [number, number] | null {
     let startingIndex = 0;
-    if (hits.length < round.maxHits) {
+    if (round && hits.length < round.maxHits) {
+        const hitsPerView = round.hitsPerView;
         startingIndex = Math.floor((hits.length - 1) / hitsPerView) * hitsPerView;
 
     }
     const hitsCopy = hits.slice(startingIndex).filter(hit => hit.valid);
-    if (hitsCopy.length === 0) {
-        return getSizeFixed(range);
+    if (hitsCopy.length === 0 || round?.mode.mode == "fullHidden") {
+        return null;
     }
     const sizes = [Math.max(...hitsCopy.map(hit => Math.abs(hit.x))),
     Math.max(...hitsCopy.map(hit => Math.abs(hit.y)))];
     return sizes.map((s) => s * 2 + gauge) as [number, number];
 }
 
-export function getHitColor(layout: Layout | null, ring: number, isLatest: boolean): string {
-    switch (layout?.mode) {
-        case "dart":
-            return getDartColor(ring, isLatest);
-        case "chess":
-            return getChessColor(ring, isLatest);
-        case "stars":
-            return getStarsColor(ring, isLatest);
-        case "rectangle":
-        case "rings":
-        default:
-            return getRingsColor(ring, isLatest);
+export function getHitColor(layout: Layout, hit: Hit, isLatest: boolean): ColorCode {
+    const layoutInterface = getLayout(layout);
+    if (!layoutInterface || !hit.valid) {
+        return "#000000";
     }
+    return layoutInterface.getHitColor(hit, isLatest);
 }
 

@@ -1,5 +1,5 @@
 import { Discipline, InternalDiscipline, InternalOverrideDiscipline, NormInternalDiscipline, OverrideDiscipline } from './discipline/index.js';
-import { Hits, Hit } from './hits/index.js';
+import { Hits, Hit, ValidHit } from './hits/index.js';
 import { mergeMaps } from './cache.js';
 import { createIs } from 'typia';
 import { Layout, LayoutChess, LayoutDart, LayoutEaster, LayoutRectangle, LayoutRing, LayoutRings, LayoutStars } from './discipline/round/layout.js';
@@ -27,7 +27,7 @@ export type ActiveRange = BaseRange & {
     shooter: Shooter | null;
     startList: StartList | null;
     discipline: Discipline | null;
-    hits: Hits;
+    hits: Array<Hits>;
     ipAddress: string | null;
     source: Source;
 }
@@ -37,7 +37,7 @@ export type InternalRange = {
     shooter: InternalShooter | null,
     discipline: InternalDiscipline | null,
     startListId: Index | null,
-    hits: Hits,
+    hits: Array<Hits>,
     source: Source,
     ttl: UnsignedInteger,
 }
@@ -62,6 +62,7 @@ export {
     Discipline,
     mergeMaps,
     Hit,
+    ValidHit,
     Hits,
     Layout,
     LayoutChess,

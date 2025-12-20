@@ -1,6 +1,6 @@
 import { Index, UnsignedInteger, UnsignedNumber } from "../common/index.js";
 
-export type Hits = Array<Array<Hit>>;
+export type Hits = Array<Hit>;
 
 export type Hit = InvalidHit | ValidHit;
 
