@@ -42,11 +42,13 @@ div.rangeName {
 }
 
 div.currentShot {
-    width: 100%;
+    width: 95%;
     text-align: center;
     font-size: 87.5%;
     position: relative;
     margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 svg.shotArrow {
