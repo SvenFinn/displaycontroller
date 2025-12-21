@@ -1,17 +1,20 @@
 import { useResizeObserver } from "@frontend/app/hooks/useResizeObserver";
-import { ComponentPropsWithoutRef, ComponentPropsWithRef, useRef } from "react";
+import { ComponentPropsWithoutRef, ComponentPropsWithRef, useLayoutEffect, useRef } from "react";
 import styles from "./boundingBoxCss.module.css";
 
 export function BoundingBoxCss({ children, ...rest }: ComponentPropsWithoutRef<"div">): React.ReactNode {
     const ref = useRef<HTMLDivElement | null>(null);
 
-    useResizeObserver(ref, () => {
+    function updateSize() {
         if (!ref.current) return;
         const rect = ref.current.getBoundingClientRect();
         if (!rect) return;
         ref.current.style.setProperty("--width", `${rect.width}px`);
         ref.current.style.setProperty("--height", `${rect.height}px`);
-    });
+    }
+
+    useResizeObserver(ref, updateSize);
+    useLayoutEffect(updateSize, [children]);
     return (
         <div ref={ref} {...rest} > {children} </div>
     )

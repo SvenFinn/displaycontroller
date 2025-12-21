@@ -1,7 +1,7 @@
 "use client";
 
 import { ActiveRange, ColorCode, Range, Round } from "dc-ranges-types";
-import React, { memo, useMemo, useRef, useState } from "react";
+import React, { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Layout, { getSizeAuto, getSize as getSizeLayout } from "./layout";
 import { DrawHits } from "./hits";
 import CountsCorner from "./CountsCorner";
@@ -33,12 +33,16 @@ interface DrawActiveRangeProps {
 function useClientSize(ref: React.RefObject<Element | null>): [number, number] {
     const [size, setSize] = useState<[number, number]>([1, 1]);
 
-    useResizeObserver(ref, () => {
+    function updateSize() {
         if (!ref.current) return;
         if (ref.current.clientWidth === 0 || ref.current.clientHeight === 0) return;
         const newSize: [number, number] = [ref.current.clientWidth, ref.current.clientHeight];
         setSize(newSize);
-    });
+    }
+
+    useResizeObserver(ref, updateSize);
+
+    useLayoutEffect(updateSize, [ref]);
 
     return size;
 }

@@ -14,11 +14,6 @@ export function useResizeObserver(
         });
         observer.observe(ref.current);
 
-        cbRef.current({
-            target: ref.current!,
-            contentRect: ref.current!.getBoundingClientRect(),
-        } as ResizeObserverEntry);
-
         return () => {
             observer.disconnect();
         };
