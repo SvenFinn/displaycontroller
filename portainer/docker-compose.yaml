@@ -3,6 +3,8 @@ services:
     image: portainer/portainer-ce:latest
     container_name: dc-portainer
     hostname: portainer
+    command: |
+      --base-url /portainer
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
