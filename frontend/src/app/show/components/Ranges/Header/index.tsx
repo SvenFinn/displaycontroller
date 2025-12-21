@@ -1,5 +1,6 @@
 import { Range } from "dc-ranges-types";
 import styles from "./header.module.css"
+import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 
 
 interface HeaderProps {
@@ -23,8 +24,8 @@ export default function Header({ ranges }: HeaderProps): React.JSX.Element {
         return bCount - aCount;
     })[0];
     return (
-        <div className={styles.header}>
+        <HeightAsFontSize className={styles.header}>
             {startList}
-        </div>
+        </HeightAsFontSize>
     )
 }
