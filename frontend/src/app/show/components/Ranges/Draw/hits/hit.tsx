@@ -14,7 +14,7 @@ interface HitProps {
 export const DrawHit = memo(
     function DrawHit({ layout, hit, gauge, isLatest }: HitProps): React.ReactNode {
         if (!hit.valid) return <></>;
-        const color = getHitColor(layout!, hit, isLatest);
+        const color = layout ? getHitColor(layout, hit, isLatest) : "#000000";
         const textColor = idealTextColor(color);
         return (
             <g key={hit.id}>
