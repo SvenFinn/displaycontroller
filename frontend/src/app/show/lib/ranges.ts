@@ -116,12 +116,12 @@ export function getSeries(data: Range, roundId?: number): Array<string> {
 }
 
 export function getTotal(data: Range): string {
-    if (!data.active) return "0";
-    if (!data.discipline) return "0";
+    if (!data.active) return "?";
+    if (!data.discipline) return "?";
     const round = getRound(data, data.round);
-    if (!round) return "0";
+    if (!round) return "?";
     const hits = data.hits?.[data.round] || [];
-    if (!hits) return "0";
+    if (!hits) return "?";
     return accumulateHits(hits, round, data.discipline.gauge, 0, hits.length, true);
 }
 
