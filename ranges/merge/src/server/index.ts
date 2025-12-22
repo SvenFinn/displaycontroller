@@ -4,6 +4,7 @@ import { logger } from "dc-logger";
 import { rangeManager } from '../rangeMan';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { isStartList } from 'dc-ranges-types';
 
 const app: Express = express();
 const server = createServer(app);
@@ -94,6 +95,19 @@ app.delete('/api/ranges/known/:rangeMac', async (req: Request, res: Response) =>
         },
     });
     res.status(200).send(knownRange);
+});
+
+app.get('/api/ranges/start-lists', async (req: Request, res: Response) => {
+    logger.info("GET /api/ranges/start-lists");
+    const startListsDb = await localClient.cache.findMany({
+        where: {
+            type: "startList",
+        },
+    });
+    const startLists = startListsDb
+        .map(sl => sl.value)
+        .filter(isStartList);
+    res.status(200).send(startLists);
 });
 
 app.get('/api/ranges/:rangeId', async (req: Request, res: Response) => {
