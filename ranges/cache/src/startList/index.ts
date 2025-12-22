@@ -1,8 +1,7 @@
 import { SmdbClient } from "dc-db-smdb";
-import { StartListTypes } from "dc-db-smdb/dist/generated/enums";
-import { InternalStartList } from "dc-ranges-types"
+import { StartList } from "dc-ranges-types";
 
-export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<InternalStartList>> {
+export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<StartList>> {
     const startListsDb = await smdbCLient.startList.findMany({
         where: {
             id: {
@@ -16,17 +15,16 @@ export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<I
     const startLists = await Promise.all(startListsDb.map(async startList => {
         return await getStartList(smdbCLient, startList.id);
     }));
-    return startLists.filter(startList => startList !== null) as InternalStartList[];
+    return startLists.filter(startList => startList !== null) as Array<StartList>;
 }
 
-async function getStartList(smdbClient: SmdbClient, startListId: number): Promise<InternalStartList | null> {
+async function getStartList(smdbClient: SmdbClient, startListId: number): Promise<StartList | null> {
     const startListDb = await smdbClient.startList.findUnique({
         where: {
             id: startListId
         },
         select: {
             id: true,
-            type: true,
             startDate: true,
             endDate: true,
             name: true,
@@ -46,23 +44,5 @@ async function getStartList(smdbClient: SmdbClient, startListId: number): Promis
         id: startListDb.id,
         name: startListDb.name,
         active: startListDbActive,
-        type: getStartListType(startListDb.type)
-    }
-}
-
-function getStartListType(type: StartListTypes): InternalStartList["type"] {
-    switch (type) {
-        case StartListTypes.default:
-            return "default";
-        case StartListTypes.league:
-            return "league";
-        case StartListTypes.roundRobin:
-            return "round";
-        case StartListTypes.final:
-            return "final";
-        case StartListTypes.priceShooting:
-            return "price";
-        default:
-            return "unknown";
     }
 }

@@ -7,7 +7,7 @@ import { Round, Rounds } from './discipline/round/index.js';
 import { Mode } from './discipline/round/mode.js';
 import { Zoom } from './discipline/round/zoom.js';
 import { InternalShooter, InternalShooterByName, Shooter, ShooterId } from './shooter/index.js';
-import { InternalStartList, StartList } from './startList/index.js';
+import { StartList } from './startList/index.js';
 import { UnsignedInteger, ColorCode, Index, Integer, RangeId, UnsignedNumber } from './common/index.js';
 export type Range = InactiveRange | ActiveRange;
 
@@ -48,7 +48,7 @@ export const isRange = createIs<Range>();
 export type Source = "multicast" | "log" | "ssmdb2";
 
 export const isDiscipline = createIs<Discipline>();
-export const isInternalStartList = createIs<InternalStartList>();
+export const isStartList = createIs<StartList>();
 export const isOverrideDiscipline = createIs<OverrideDiscipline>();
 export const isShooter = createIs<Shooter>();
 export const isShooterId = createIs<ShooterId>();
@@ -88,7 +88,6 @@ export {
     UnsignedNumber,
     OverrideDiscipline,
     Shooter,
-    InternalStartList,
     ShooterId
 }
 

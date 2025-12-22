@@ -1,5 +1,6 @@
 import { LocalClient } from "dc-db-local";
-import { StartList, isInternalStartList, mergeMaps } from "dc-ranges-types";
+import { StartList, isStartList, mergeMaps } from "dc-ranges-types";
+import { start } from "repl";
 
 export const startLists = new Map<number, StartList>();
 
@@ -11,14 +12,10 @@ export async function updateStartLists(localClient: LocalClient) {
     });
     const startListTempMap = new Map<number, StartList>();
     for (const startList of newStartLists) {
-        if (!isInternalStartList(startList.value)) {
+        if (!isStartList(startList.value)) {
             continue;
         }
-        startListTempMap.set(startList.value.id, {
-            id: startList.value.id,
-            name: startList.value.name,
-            type: startList.value.type,
-        });
+        startListTempMap.set(startList.value.id, startList.value);
     }
     mergeMaps(startLists, startListTempMap);
 }
