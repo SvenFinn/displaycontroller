@@ -16,7 +16,7 @@
         "dc-ranges-ttl": "file:../ttl",
         "dc-ranges-types": "file:../types",
         "dotenv": "^17.2.3",
-        "socket.io-client": "^4.8.1"
+        "socket.io-client": "^4.8.2"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.8",
