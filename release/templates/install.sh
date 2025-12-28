@@ -299,9 +299,9 @@ EOF
 run_install_step $((step_nr++)) $total_steps "Installing Dependencies" <<EOF
 apt-get update
 if apt-cache show chromium-browser &>/dev/null; then
-    apt-get install -y chromium-browser
+    apt-get install -y chromium-browser gnome-terminal
 else
-    apt-get install -y chromium
+    apt-get install -y chromium gnome-terminal
 fi
 EOF
 
