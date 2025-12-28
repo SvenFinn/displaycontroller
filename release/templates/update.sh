@@ -47,6 +47,87 @@ function update_finished(){
     exit 0
 }
 
+run_cmd() {
+    local shell_width=$1
+    local shell_height=$2
+
+    local status_file
+    local script_file
+    status_file=$(mktemp)
+    script_file=$(mktemp)
+
+    cat > "$script_file" <<'EOF'
+    #!/bin/bash
+    set -euo pipefail
+EOF
+    cat >> "$script_file"
+
+    local line=""
+
+    # Run stdin in a PTY-backed shell
+    script -q -f -c '
+        stty cols '"$shell_width"' rows '"$shell_height"'
+        stdbuf -o0 -e0 bash '$script_file'
+        echo $? >'"$status_file"'
+    ' /dev/null |
+    while IFS= read -r -n1 ch; do
+    # Buffer until newline or carriage return
+    if [[ $ch == $'\n' ]] || [[ $ch == $'\r' ]]
+    then
+        # Emit complete line
+        printf '%s\n' "$line"
+        line=""
+    else
+        line+="$ch"
+    fi
+done | sed -u '/^$/d' | remove_ansi_codes
+
+    local rc
+    rc=$(<"$status_file") 
+    rm -f "$status_file"
+
+    return "${rc:-127}"
+}
+
+remove_ansi_codes(){
+perl -pe '
+  BEGIN {
+    $| = 1;        # autoflush STDOUT
+    $buf = "";
+  }
+
+  $buf .= $_;
+  $_ = "";
+
+  while (length $buf) {
+    # No ESC left → emit everything
+    if ($buf !~ /\e/) {
+      print $buf;
+      $buf = "";
+      last;
+    }
+
+    # Emit text before ESC
+    $buf =~ s/^(.*?)\e//s;
+    print $1;
+
+    # Complete CSI? (ESC [ ... final byte)
+    if ($buf =~ s/^\[[0-?]*[ -\/]*[@-~]//s) {
+      next; # drop it
+    }
+
+    # Incomplete escape → wait for more input
+    $buf = "\e" . $buf;
+    last;
+  }
+
+  END {
+    print $buf if length $buf;
+  }
+'
+
+}
+
 # This function takes a pipe as input, which contains the command to run
 function run_update_step(){
     tput civis
@@ -55,11 +136,6 @@ function run_update_step(){
     local total_steps=$2
     local step_title=$3
 
-    local nl=$'\n'
-    local command="DEBIAN_FRONTEND=noninteractive$nl set -euo pipefail$nl"
-    while IFS= read -r line; do
-        command+="${line}${nl}"
-    done 
 
     local width  height
     width=$(tput cols)
@@ -72,6 +148,7 @@ function run_update_step(){
     bar=$(for _ in $(seq 1 $(((step-1)*bar_width/(total_steps-1)))); do echo -n "\Z4\Zr \Zn"; done)
 
     local command_top=2
+    local command_width=$(($width - 6))
     local command_height=$(( bar_top - command_top - 3 ))
 
     local tmp_log_file
@@ -80,13 +157,21 @@ function run_update_step(){
     set +e
 
     local EXIT_CODE=0
-    if [ "${DEBIAN_FRONTEND:-}" == "noninteractive" ]; then
-        eval "$command" 2>&1 | tee "$tmp_log_file"
+    # If noninteractive, do not use dialog
+    if [[ $- == *i* ]]; then
+        run_cmd $command_width $command_height | tee "$tmp_log_file"
         EXIT_CODE=${PIPESTATUS[0]}
     else
-        eval "$command" 2>&1 | tee "$tmp_log_file" | dialog --colors --keep-window --backtitle "$BACK_TITLE" \
-                                                --begin $bar_top 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" $bar_height "$width" \
-                                                --and-widget --keep-window --begin $command_top 0 --title "$step_title" --progressbox $command_height "$width"
+        local dialog_options=(
+            --colors --keep-window --backtitle "$BACK_TITLE"
+            --begin "$bar_top" 0 --title "Step $step of $total_steps: $step_title" --infobox "$bar" "$bar_height" "$width"
+            --and-widget --colors --keep-window --begin "$command_top" 0 --title "$step_title" --progressbox "$command_height" "$width"
+        )
+
+        run_cmd $command_width $command_height  \
+        | tee "$tmp_log_file" \
+        | tee "./update_step_${step}.log" \
+        | dialog "${dialog_options[@]}"
         EXIT_CODE=${PIPESTATUS[0]}
     fi
     set -e
@@ -106,7 +191,7 @@ function run_update_step(){
         local dialog_options=(
             --colors --keep-window --backtitle "$BACK_TITLE"
             --begin "$error_top" 0 --title "\Z1ERROR\Zn" --infobox "\Z1\Zb$error_message\Zn" 3 "$width"
-            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$command" "$log_height" "$width"
+            --and-widget --keep-window --colors --begin "$log_top" 0 --title "\Z1Log: $step_title\Zn" --progressbox "$log_height" "$width"
         )
         if [ "$REBOOT" == "0" ]; then
             dialog "${dialog_options[@]}" --and-widget --keep-window --colors --begin "$reboot_top" 0 --msgbox "" "$reboot_height" "$width" < "$tmp_log_file"
@@ -170,71 +255,12 @@ apt-get autoremove -y
 EOF
 
 run_update_step $((step_nr++)) $total_steps "Updating snap packages" <<EOF
-snap_list=\$(snap refresh --list | cut -d' ' -f1 | tail -n +2)
-for snap in \$snap_list; do
-    echo "Updating snap: \$snap"
-    python3 -u -c "
-import pty, os, select, fcntl, termios, struct, sys
-
-def monitor_snap_refresh(snap_name):
-    master, slave = pty.openpty()
-    
-    # Set terminal size (rows, cols, xpixel, ypixel)
-    rows, cols = 24, 120
-    size = struct.pack('HHHH', rows, cols, 0, 0)
-    fcntl.ioctl(slave, termios.TIOCSWINSZ, size)
-    
-    pid = os.fork()
-    
-    if pid == 0:
-        # Child process
-        os.close(master)
-        os.dup2(slave, 0)
-        os.dup2(slave, 1)
-        os.dup2(slave, 2)
-        os.close(slave)
-        os.execvp('snap', ['snap', 'refresh', snap_name])
-    else:
-        # Parent process
-        os.close(slave)
-        output_buffer = ''
-        
-        try:
-            while True:
-                # Check if child process finished
-                pid_result, _ = os.waitpid(pid, os.WNOHANG)
-                if pid_result == pid:
-                    break
-                
-                try:
-                    data = os.read(master, 1024)
-                    
-                    # Process the data
-                    output_buffer += data.decode('utf-8', errors='ignore').replace('\r', '\n')
-                    
-                    # Print complete lines
-                    while '\n' in output_buffer:
-                        line, output_buffer = output_buffer.split('\n', 1)
-                        if line.strip():
-                            print(line.strip())
-                except OSError:
-                    break
-            
-            # Handle any remaining output
-            if output_buffer.strip():
-                print(output_buffer.strip())
-        
-        finally:
-            os.close(master)
-
-monitor_snap_refresh('"\$snap"')
-"
-done
+snap refresh
 EOF
 
 run_update_step $((step_nr++)) $total_steps "Pruning docker images" <<EOF
 export COMPOSE_MENU=0
-docker compose down
+docker compose --progress plain --ansi never down
 docker image prune -f
 EOF
 
@@ -318,7 +344,7 @@ EOF
 
 run_update_step $((step_nr++)) $total_steps "Pulling latest docker images" <<EOF
 export COMPOSE_MENU=0
-docker compose pull --policy=always
+docker compose --progress plain --ansi never pull --policy=always
 EOF
 
 update_finished
