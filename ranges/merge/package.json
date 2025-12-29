@@ -24,6 +24,6 @@
         "dc-ranges-types": "file:../types",
         "dotenv": "^17.2.3",
         "express": "^5.2.1",
-        "socket.io": "^4.8.1"
+        "socket.io": "^4.8.3"
     }
 }
