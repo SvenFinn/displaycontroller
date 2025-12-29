@@ -3,11 +3,13 @@ import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
 
 export default function SeriesTable({ id }: { id: number }): React.JSX.Element {
-    const range = useAppSelector(state => state.ranges[id]);
-    if (!range) return <></>;
+    const series = useAppSelector(state => {
+        const range = state.ranges[id];
+        if (!range || !range.active || !range.discipline) return [];
+        return getSeries(range.discipline.rounds[range.round], range.discipline.gauge, range.hits[range.round] || []);
 
-    const series = getSeries(range);
-    if (!series || series.length === 0) return <></>;
+    })
+    if (!series) return <></>;
 
     const cols = series.length > 9 ? 4 : 3;
     const rows = series.length > 6 ? 3 : 2;

@@ -1,10 +1,10 @@
-import { UnsignedNumber } from "../../common/index.js";
+import { UnsignedInteger, UnsignedNumber } from "../../common/index.js";
 
 export type Mode = ModeBase | ModeDecimals | ModeTarget;
 
 type ModeDecimals = {
     mode: "rings" | "divider" | "ringsDiv",
-    decimals: UnsignedNumber
+    decimals: UnsignedInteger
 }
 
 type ModeBase = {
@@ -13,7 +13,7 @@ type ModeBase = {
 
 type ModeTarget = {
     mode: "target"
-    decimals: UnsignedNumber,
+    decimals: UnsignedInteger,
     value: UnsignedNumber,
     exact: boolean
 }

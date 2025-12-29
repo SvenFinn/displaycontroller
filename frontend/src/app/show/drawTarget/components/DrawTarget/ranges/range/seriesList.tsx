@@ -2,13 +2,16 @@ import { getSeries } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import { useAppSelector } from "../../ranges-store/store";
 import { ScaleText } from "@frontend/app/components/base/ScaleText";
+import { current } from "@reduxjs/toolkit";
 
 export default function SeriesList({ id }: { id: number }): React.JSX.Element {
     // This only needs to rerender if the hits change, so we can use a simple selector
     const series = useAppSelector((state) => {
         const currentRange = state.ranges[id];
-        if (!currentRange || !currentRange.active) return [];
-        const series = getSeries(currentRange);
+        if (!currentRange || !currentRange.active || !currentRange.discipline) return [];
+        const round = currentRange.discipline.rounds[currentRange.round];
+        const hits = currentRange.hits[currentRange.round];
+        const series = getSeries(round, currentRange.discipline.gauge, hits || []);
         if (series.length > 12) {
             // Remove so many multiples of 4 from the front until we have at most 12 entries
             const excess = series.length - 12;

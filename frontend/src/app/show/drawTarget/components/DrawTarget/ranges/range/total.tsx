@@ -6,8 +6,8 @@ import { useAppSelector } from "../../ranges-store/store";
 export default function Total({ id }: { id: number }): React.JSX.Element {
     const total = useAppSelector((state => {
         const range = state.ranges[id];
-        if (!range || !range.active) return null;
-        return getTotal(range);
+        if (!range || !range.active || !range.discipline) return null;
+        return getTotal(range.discipline.rounds[range.round], range.discipline.gauge, range.hits[range.round] || []);
     }));
     if (total === null) return <></>;
     return (

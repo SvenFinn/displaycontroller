@@ -1,26 +1,13 @@
-import { Range } from "dc-ranges-types";
+import { ValidHit } from "dc-ranges-types";
 import { FaArrowUp } from "react-icons/fa6";
 
 interface ShotArrowProps {
-    hitIndex: number;
-    range: Range | null;
+    hit?: ValidHit;
     className?: string;
 }
 
-export default function ShotArrow({ hitIndex, className, range }: ShotArrowProps): React.JSX.Element {
-    if (!range) return <></>;
-    if (!range.active) return <></>;
-    if (!range.discipline) return <></>;
-    const round = range.discipline.rounds[range.round];
-    if (!round) return <></>;
-    if (round.mode.mode === "fullHidden") return <></>;
-
-    if (!range.hits) return <></>;
-    const hits = range.hits[range.round];
-    if (!hits) return <></>;
-    const hit = hitIndex >= 0 ? hits[hitIndex] : hits[hits.length + hitIndex];
+export default function ShotArrow({ hit, className }: ShotArrowProps): React.JSX.Element {
     if (!hit) return <></>;
-    if (!hit.valid) return <></>;
     if (hit.x === 0 && hit.y === 0) return <div className={className || ""} />;
     const angle = -Math.atan2(hit.y, hit.x) + Math.PI / 2;
     return (

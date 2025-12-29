@@ -1,7 +1,7 @@
-import { getHitString, getRoundName } from "../../../../../lib/ranges";
+import { getHitEval, getRoundName } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import ShotArrowW from "./ShotArrow";
-import { Range } from "dc-ranges-types";
+import { Hit, Range, Round } from "dc-ranges-types";
 import { useAppSelector } from "../../ranges-store/store";
 import { ScaleText } from "@frontend/app/components/base/ScaleText";
 
@@ -14,7 +14,12 @@ export default function CurrentHit({ id }: CurrentHitProps): React.JSX.Element {
     const hit = useAppSelector((state) => {
         const currentRange = state.ranges[id];
         if (!currentRange || !currentRange.active) return null;
-        return getHit(currentRange) || getRoundName(currentRange);
+        const round = currentRange.discipline?.rounds[currentRange.round];
+        if (!round) return "Unbekannt";
+        const hits = currentRange.hits[currentRange.round];
+        if (!hits) return round.name;
+        return getHit(round, hits[hits.length - 1]) || round.name
+
     });
 
     if (!hit) return <></>
@@ -27,18 +32,31 @@ export default function CurrentHit({ id }: CurrentHitProps): React.JSX.Element {
     )
 }
 
-function getHit(range: Range): string | null {
-    // If is decimal or integerDecimal, remove rings entry from the array
-    if (!range.active) return null;
-    if (!range.hits) return null;
-    if (!range.discipline) return null;
-    const round = range.discipline.rounds[range.round];
-    if (!round) return null;
-    const hitArr = getHitString(range);
-    if (!hitArr) return null;
-    const hitId = hitArr.shift();
-    if (round.mode.mode === "decimal" || round.mode.mode === "integerDecimal") {
-        hitArr.pop();
+function getHit(round: Round, hit?: Hit): string | null {
+    if (!hit) return null;
+    if (!hit.valid) return `${hit.id}: Ungültig`;
+    const hitEval = getHitEval(round, hit);
+    if (!hitEval) return null;
+    const prefix = `${hitEval.id}: `
+    switch (hitEval.kind) {
+        case "rings":
+            return prefix + hitEval.rings;
+        case "divider":
+            return prefix + hitEval.divider;
+        case "hundred":
+            return prefix + hitEval.hundred;
+        case "circle":
+            return prefix + `${hitEval.x} ${hitEval.y}`
+        case "hidden":
+            return prefix + "***";
+        case "decimal":
+            return prefix + hitEval.decimal;
+        case "integerDecimal":
+            return prefix + hitEval.integerTimesDecimal;
+        case "ringsDiv":
+            return prefix + `${hitEval.rings} ${hitEval.divider}`;
+        default:
+            const _exhaustive: never = hitEval;
+            return _exhaustive;
     }
-    return `${hitId}: ${hitArr.join(" ")}`;
 }

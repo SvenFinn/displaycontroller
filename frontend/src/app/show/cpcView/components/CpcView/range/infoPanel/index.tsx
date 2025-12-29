@@ -1,4 +1,3 @@
-import { Range } from "dc-ranges-types";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
 import SeriesTable from "./seriesTable";
