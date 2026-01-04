@@ -5,7 +5,7 @@
     "main": "src/index.ts",
     "scripts": {
         "test": "nodemon src/index.ts",
-        "build": "tsc && tsc-alias"
+        "build": "tsc && tsc-alias && cp src/rewrite/assets/replacement.css dist/evaluations/src/rewrite/assets && cp src/rewrite/assets/client-script.js dist/evaluations/src/rewrite/assets"
     },
     "author": "Sven Finn",
     "license": "ISC",

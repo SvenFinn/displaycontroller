@@ -19,7 +19,7 @@ export default function EvaluationManager({ selectedFiles = [], onSelect = () =>
 
     return (
         <FileManagerBase
-            baseURL={`${host}/api/evaluations`}
+            baseURL={`${host}/api/evaluations/`}
             readonly={true}
             allowMultiSelect={allowMultiSelect}
             selectedFiles={selectedFiles}

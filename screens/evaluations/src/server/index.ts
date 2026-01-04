@@ -3,8 +3,7 @@ import * as fs from "fs";
 import { logger } from "dc-logger";
 import { scanDirectory } from "@shared/files/scanDir";
 import { rateLimit } from "express-rate-limit";
-
-const basePath = process.env.EVALUATIONS_VOLUME_PATH || "/app/evaluations";
+import { htmlPath } from "../constants";
 
 const app: Express = express();
 
@@ -29,18 +28,23 @@ app.get("/api/evaluations{/*files}", async (req: Request, res) => {
         });
         return;
     }
-    const realPath = `${basePath}/${path}`;
+    const realPath = `${htmlPath}/${path}`;
     if (!fs.existsSync(realPath)) {
         logger.info("File not found");
         res.status(404).send({
             code: 404,
             message: "File not found"
         });
-        return
+        return;
     }
     if (fs.lstatSync(realPath).isDirectory()) {
         logger.info("Scanning directory");
-        res.status(200).send(await scanDirectory(realPath));
+        try {
+            res.status(200).send(await scanDirectory(realPath));
+        } catch (error) {
+            logger.error(`Directory scan failed: ${error}`);
+            res.status(500).send({ code: 500, message: "Internal server error" });
+        }
     } else {
         res.status(200).sendFile(realPath);
     }
