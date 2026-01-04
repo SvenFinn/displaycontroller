@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+source .env
+export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME"
+
 cd "$(dirname "$0")"
 
 # This script loops through all directories in the src folder and runs npm install on folders that contain a package.json file.
