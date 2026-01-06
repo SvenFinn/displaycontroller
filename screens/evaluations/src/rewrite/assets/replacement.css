@@ -66,6 +66,7 @@ table.resultStatus {
     top: 0;
     background-color: white;
     z-index: 2;
+    text-align: center;
 }
 
 table.result {
