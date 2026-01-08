@@ -20,19 +20,37 @@ export class RabbitSenderStream extends Writable {
         });
     }
 
-    _write(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+    statesEqual(newState: InternalRange): boolean {
+        const oldState = this.currentState.get(newState.rangeId);
+        if (!oldState) {
+            return false;
+        }
+        const oldClone = structuredClone(oldState);
+        oldClone.ttl = newState.ttl;
+        return JSON.stringify(oldClone) == JSON.stringify(newState);
+    }
+
+    _write(
+        chunk: InternalRange,
+        encoding: BufferEncoding,
+        callback: (error?: Error | null) => void,
+    ): void {
         if (this.channel === null) {
             logger.error("Channel not connected");
             callback();
             return;
         }
-        if (this.currentState.has(chunk.rangeId) && JSON.stringify(this.currentState.get(chunk.rangeId)) === JSON.stringify(chunk)) {
+        if (this.statesEqual(chunk)) {
             callback();
             return;
         }
         this.currentState.set(chunk.rangeId, chunk);
         logger.info(`Sending range ${chunk.rangeId}`);
-        this.channel.publish("ranges.ssmdb2", "", Buffer.from(JSON.stringify(chunk)));
+        this.channel.publish(
+            "ranges.ssmdb2",
+            "",
+            Buffer.from(JSON.stringify(chunk)),
+        );
         setTimeout(() => {
             this.currentState.delete(chunk.rangeId);
         }, 5000);
