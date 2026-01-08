@@ -1,9 +1,10 @@
 import { Transform, TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
-import { InternalRange, Hits, INVALID_HIT_POS } from "dc-ranges-types";
+import { Hits, INVALID_HIT_POS, UnsignedInteger } from "dc-ranges-types";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 import { getLocalMs } from "../utils";
+import { SSMDB2InternalRange } from "../types";
 
 export class RangeDataStream extends Transform {
     private readonly prisma: Ssmdb2Client;
@@ -15,7 +16,11 @@ export class RangeDataStream extends Transform {
         this.timeoutMs = timeoutMs;
     }
 
-    async _transform(chunk: any, encoding: BufferEncoding, callback: TransformCallback): Promise<void> {
+    async _transform(
+        chunk: any,
+        encoding: BufferEncoding,
+        callback: TransformCallback,
+    ): Promise<void> {
         logger.debug("Received update from TableWatcherStream");
         const ranges = await this.getRanges();
         for (const range of ranges) {
@@ -24,59 +29,75 @@ export class RangeDataStream extends Transform {
         callback();
     }
 
-    private async getRanges(): Promise<InternalRange[]> {
+    private async getRanges(): Promise<SSMDB2InternalRange[]> {
         const version = (await this.prisma.version.findFirst())?.id ?? 0;
         const roundIdHasOffByOneBug = version < 8; // Versions before 8 have the roundId starting at 1 instead of 0
-        const targets = await this.prisma.target.findMany(
-            {
-                where: {
-                    timestamp:
-                    {
-                        gt: new Date(getLocalMs() - this.timeoutMs)
-                    }
+        const targets = await this.prisma.target.findMany({
+            where: {
+                timestamp: {
+                    gt: new Date(getLocalMs() - this.timeoutMs),
                 },
-                select: {
-                    rangeId: true,
-                    id: true,
-                    timestamp: true,
-                },
-                orderBy: {
-                    timestamp: 'desc'
-                },
-                distinct: ['rangeId'],
-            });
-        return (await Promise.all(targets.map(async (target) => this.getRangeData(target.id, roundIdHasOffByOneBug)))).filter((range) => range !== null) as InternalRange[];
+            },
+            select: {
+                rangeId: true,
+                id: true,
+                timestamp: true,
+            },
+            orderBy: {
+                timestamp: "desc",
+            },
+            distinct: ["rangeId"],
+        });
+        return (
+            await Promise.all(
+                targets.map(async (target) =>
+                    this.getRangeData(target.id, roundIdHasOffByOneBug),
+                ),
+            )
+        ).filter((range) => range !== null) as SSMDB2InternalRange[];
     }
-    private async getRangeData(targetId: number, roundIdHasOffByOneBug: boolean): Promise<InternalRange | null> {
+    private async getRangeData(
+        targetId: UnsignedInteger,
+        roundIdHasOffByOneBug: boolean,
+    ): Promise<SSMDB2InternalRange | null> {
         const data = await this.prisma.target.findUnique({
             where: {
-                id: targetId
-            }
+                id: targetId,
+            },
         });
         if (data === null) {
             return null;
         }
         const hits = await this.getHits(targetId, roundIdHasOffByOneBug);
         return {
+            targetId: targetId,
             rangeId: data.rangeId,
             startListId: data.startListId,
             shooter: data.shooterId ? Number(data.shooterId) : null,
             hits: hits,
-            discipline: getDisciplineId(data.disciplineId, hits.length === 0 ? 0 : hits.length - 1),
+            discipline: getDisciplineId(
+                data.disciplineId,
+                hits.length === 0 ? 0 : hits.length - 1,
+            ),
             source: "ssmdb2",
-            ttl: (data.timestamp.getTime() - getLocalMs()) + this.timeoutMs,
-        }
+            ttl: data.timestamp.getTime() - getLocalMs() + this.timeoutMs,
+        };
     }
 
-    private async getHits(targetId: number, roundIdHasOffByOneBug: boolean): Promise<Hits[]> {
+    private async getHits(
+        targetId: number,
+        roundIdHasOffByOneBug: boolean,
+    ): Promise<Hits[]> {
         const hits = await this.prisma.hit.findMany({
             where: {
-                targetId: targetId
-            }
+                targetId: targetId,
+            },
         });
         const result: Hits[] = [];
         for (const hit of hits) {
-            const roundId = roundIdHasOffByOneBug ? hit.roundId - 1 : hit.roundId;
+            const roundId = roundIdHasOffByOneBug
+                ? hit.roundId - 1
+                : hit.roundId;
             if (result[roundId] === undefined) {
                 result[roundId] = [];
             }
@@ -97,6 +118,8 @@ export class RangeDataStream extends Transform {
                 });
             }
         }
-        return result.map((round) => round?.sort((a, b) => a.id - b.id)).map((round) => round === undefined ? [] : round);
+        return result
+            .map((round) => round?.sort((a, b) => a.id - b.id))
+            .map((round) => (round === undefined ? [] : round));
     }
 }
