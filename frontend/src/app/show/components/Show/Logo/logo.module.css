@@ -1,5 +1,5 @@
 img.logo {
-    height: 6.5%;
+    height: calc(8% - 20px);
     position: absolute;
     top: 10px;
     left: 10px;
