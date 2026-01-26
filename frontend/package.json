@@ -20,11 +20,11 @@
         "dc-ranges-types": "file:../ranges/types",
         "dc-screens-types": "file:../screens/types",
         "mime": "^4.1.0",
-        "next": "^16.1.4",
+        "next": "^16.1.5",
         "raw-loader": "^4.0.2",
-        "react": "^19.2.3",
+        "react": "^19.2.4",
         "react-bootstrap": "^2.10.10",
-        "react-dom": "^19.2.3",
+        "react-dom": "^19.2.4",
         "react-icons": "^5.5.0",
         "react-redux": "^9.2.0",
         "react-select": "^5.10.2",
@@ -33,7 +33,7 @@
         "socket.io-client": "^4.8.3"
     },
     "devDependencies": {
-        "@types/node": "^25.0.9",
+        "@types/node": "^25.0.10",
         "@types/react": "^19.2.9",
         "@types/react-dom": "^19.2.3",
         "@types/smallest-enclosing-circle": "^1.0.3",
