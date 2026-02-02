@@ -1,6 +1,7 @@
 import { logReaderStream } from "./streams/logReader";
 import amqp from "amqplib";
 import { logger } from "dc-logger";
+import { parse } from "csv-parse";
 
 import "./cache/updater"; // Import the updater to start the caching
 import { ServerStateStream } from "./streams/serverState";
@@ -23,10 +24,11 @@ async function main() {
 
     const serverState = new ServerStateStream();
     const logReader = new logReaderStream(localClient);
+    const parser = parse({ columns: true, skip_empty_lines: true, trim: true, cast: true, delimiter: ";", relax_column_count: true });
     const logParser = new LogParserStream();
     const accumulateRanges = new AccumulateRanges();
     const debounceRanges = new DebounceStream(300);
-    serverState.pipe(logReader).pipe(logParser).pipe(accumulateRanges).pipe(debounceRanges).pipe(merger);
+    serverState.pipe(logReader).pipe(parser).pipe(logParser).pipe(accumulateRanges).pipe(debounceRanges).pipe(merger);
 
     const multicastRecv = new MulticastStream(connection);
     const multicastAccumulate = new MulticastAccumulate();

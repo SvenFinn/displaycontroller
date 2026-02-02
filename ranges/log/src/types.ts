@@ -1,4 +1,5 @@
-import { InternalRange } from "dc-ranges-types"
+import { Hit, Index, InternalRange, RangeId } from "dc-ranges-types"
+import { createIs } from "typia"
 
 export type LogMessage = LogLine | {
     action: "reset",
@@ -6,37 +7,31 @@ export type LogMessage = LogLine | {
 
 export type LogLine = {
     action: "insert" | "delete",
-    rangeId: number,
+    rangeId: RangeId,
     targetId: number,
     shooter: {
         name: string,
-        id: number,
+        id: Index,
         team: string,
         club: string,
         class: {
             name: string,
-            id: number,
+            id: Index,
         },
     },
     discipline: {
         name: string,
-        id: number,
+        id: Index,
     },
     round: {
         name: string,
-        id: number,
+        id: Index,
     },
-    hit: {
-        id: number,
-        x: number,
-        y: number,
-        divisor: number,
-        innerRing: boolean,
-        rings: number,
-    },
+    hit: Hit,
     timestamp: Date,
-
 }
+
+export const isLogLine = createIs<LogLine>()
 
 export type LogInternalRange = InternalRange & {
     targetId: number
