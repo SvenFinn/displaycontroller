@@ -4,7 +4,7 @@ import { logger } from "dc-logger";
 import * as fs from "fs";
 import { Duplex } from "stream";
 
-export class logReaderStream extends Duplex {
+export class LogTailStream extends Duplex {
     private sshThread: ChildProcess | null = null;
     private localClient: LocalClient;
     private serverState: boolean = false;

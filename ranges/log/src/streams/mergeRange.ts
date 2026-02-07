@@ -10,7 +10,6 @@ import { logger } from "dc-logger";
 export class RangeMerger extends Transform {
     private multicastStates: Map<number, TTLHandler<MulticastInternalRange>> = new Map();
     private logStates: Map<number, LogInternalRange> = new Map();
-    private targetIdBlacklist: Set<number> = new Set();
     private freeTimeout: number = 30 * 60 * 1000;
 
     constructor(localClient: LocalClient) {

@@ -1,45 +1,35 @@
-import { InternalRange } from "dc-ranges-types"
+import { isValid, parse } from "date-fns"
+import { logger } from "dc-logger"
+import { Hit, Index, Integer, InternalDiscipline, InternalRange, InternalShooter, INVALID_HIT_POS, RangeId, ShooterId, UnsignedInteger } from "dc-ranges-types"
+import { createIs } from "typia"
 
-export type LogMessage = LogLine | {
+export type ResetAction = {
     action: "reset",
 }
 
-export type LogLine = {
-    action: "insert" | "delete",
-    rangeId: number,
-    targetId: number,
-    shooter: {
-        name: string,
-        id: number,
-        team: string,
-        club: string,
-        class: {
-            name: string,
-            id: number,
-        },
-    },
-    discipline: {
-        name: string,
-        id: number,
-    },
-    round: {
-        name: string,
-        id: number,
-    },
-    hit: {
-        id: number,
-        x: number,
-        y: number,
-        divisor: number,
-        innerRing: boolean,
-        rings: number,
-    },
-    timestamp: Date,
-
+export type RawLogLine = {
+    action: "line",
+    parts: string[],
 }
 
+export type RawLogMessage = ResetAction | RawLogLine
+
+export type LogMessage = LogLine | ResetAction
+
+export type LogLine = {
+    action: "insert" | "delete",
+    rangeId: RangeId,
+    targetId: string,
+    shooterId: ShooterId
+    discipline: InternalDiscipline
+    hit: Hit,
+    timestamp: Date,
+}
+
+export const isLogLine = createIs<LogLine>()
+
 export type LogInternalRange = InternalRange & {
-    targetId: number
+    targetId: string
     last_update: Date
 }
 
