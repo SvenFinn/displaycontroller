@@ -11,14 +11,14 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@types/node": "^25.0.9",
+        "@types/node": "^25.2.1",
         "typescript": "^5.9.3"
     },
     "dependencies": {
         "dc-db-local": "file:../database/local",
         "dc-db-smdb": "file:../database/smdb",
         "dc-logger": "file:../logger",
-        "dotenv": "^17.2.3",
+        "dotenv": "^17.2.4",
         "socket.io-client": "^4.8.3"
     }
 }
