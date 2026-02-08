@@ -1,4 +1,3 @@
-import { Transform } from "stream";
 import { TTLHandler } from "dc-ranges-ttl";
 import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "dc-ranges-types";
 import { LogInternalRange, MulticastInternalRange } from "../types";
@@ -6,14 +5,15 @@ import { LocalClient } from "dc-db-local";
 import { isSameShooter } from "../cache/shooter";
 import { getDisciplineId } from "../cache/overrides";
 import { logger } from "dc-logger";
+import { TypedTransform } from "dc-streams";
 
-export class RangeMerger extends Transform {
+export class RangeMerger extends TypedTransform<InternalRange, InternalRange> {
     private multicastStates: Map<number, TTLHandler<MulticastInternalRange>> = new Map();
     private logStates: Map<number, LogInternalRange> = new Map();
     private freeTimeout: number = 30 * 60 * 1000;
 
     constructor(localClient: LocalClient) {
-        super({ objectMode: true });
+        super();
         this._getFreeTimeout(localClient);
     }
 

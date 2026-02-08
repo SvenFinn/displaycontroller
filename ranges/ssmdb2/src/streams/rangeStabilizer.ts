@@ -1,19 +1,20 @@
 import { UnsignedInteger } from "dc-ranges-types";
-import { Transform, TransformCallback } from "stream";
+import { TransformCallback } from "stream";
 import { logger } from "dc-logger";
 import { SSMDB2InternalRange } from "../types";
+import { TypedTransform } from "dc-streams";
 
 type RangeStabilize = {
     data: SSMDB2InternalRange;
     timeout: NodeJS.Timeout;
 };
 
-export class StabilizerStream extends Transform {
+export class StabilizerStream extends TypedTransform<SSMDB2InternalRange, SSMDB2InternalRange> {
     private readonly ranges: Map<UnsignedInteger, RangeStabilize> = new Map();
     private readonly resetTime: number;
 
     constructor(resetTime: number) {
-        super({ objectMode: true });
+        super();
         this.resetTime = resetTime;
     }
 

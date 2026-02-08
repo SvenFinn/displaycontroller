@@ -1,12 +1,12 @@
-import { Transform } from "stream";
 import { logger } from "dc-logger";
 import { RawLogMessage } from "../types";
 import { parse } from "csv-parse/sync";
+import { TypedTransform } from "dc-streams";
 
 
-export class CsvLineStream extends Transform {
+export class CsvLineStream extends TypedTransform<string, RawLogMessage> {
     constructor() {
-        super({ objectMode: true });
+        super();
     }
 
     _transform(line: string, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
