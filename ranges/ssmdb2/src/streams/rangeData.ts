@@ -1,23 +1,24 @@
-import { Transform, TransformCallback } from "stream";
+import { TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
 import { Hits, INVALID_HIT_POS, UnsignedInteger } from "dc-ranges-types";
 import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 import { getLocalMs } from "../utils";
 import { SSMDB2InternalRange } from "../types";
+import { TypedTransform } from "dc-streams";
 
-export class RangeDataStream extends Transform {
+export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRange> {
     private readonly prisma: Ssmdb2Client;
     private readonly timeoutMs: number;
 
     constructor(prisma: Ssmdb2Client, timeoutMs: number = 20000) {
-        super({ objectMode: true });
+        super();
         this.prisma = prisma;
         this.timeoutMs = timeoutMs;
     }
 
     async _transform(
-        chunk: any,
+        chunk: string[],
         encoding: BufferEncoding,
         callback: TransformCallback,
     ): Promise<void> {

@@ -1,8 +1,8 @@
 import { isValid, parse } from "date-fns";
-import { Transform } from "node:stream";
-import { isLogLine, LogLine, RawLogMessage } from "../types";
+import { isLogLine, LogLine, LogMessage, RawLogMessage } from "../types";
 import { logger } from "dc-logger";
 import { Index, INVALID_HIT_POS, RangeId, ShooterId, UnsignedInteger } from "dc-ranges-types";
+import { TypedTransform } from "dc-streams";
 
 const LOG_LINE_PARTS = {
     RANGE_ID: 0,
@@ -22,9 +22,9 @@ const LOG_LINE_PARTS = {
 }
 const EXPECTED_COLUMN_COUNT = 30;
 
-export class LogLineStream extends Transform {
+export class LogLineStream extends TypedTransform<RawLogMessage, LogMessage> {
     constructor() {
-        super({ objectMode: true });
+        super();
     }
 
     private transformAction(action: string): "insert" | "delete" {

@@ -1,18 +1,18 @@
 import { InternalRange, InternalShooter } from "dc-ranges-types";
-import { Transform } from "stream";
 import { isSameShooter } from "../cache/shooter";
 import { MulticastInternalRange } from "../types";
+import { TypedTransform } from "dc-streams";
 
 type ShooterSince = {
     shooter: InternalShooter | null,
     since: Date,
 }
 
-export class MulticastAccumulate extends Transform {
+export class MulticastAccumulate extends TypedTransform<InternalRange, MulticastInternalRange> {
     private shooters: Map<number, ShooterSince> = new Map();
 
     constructor() {
-        super({ objectMode: true });
+        super();
     }
 
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {

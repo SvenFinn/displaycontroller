@@ -1,16 +1,16 @@
 import { ChildProcess, spawn } from "child_process";
 import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
+import { TypedDuplex } from "dc-streams";
 import * as fs from "fs";
-import { Duplex } from "stream";
 
-export class LogTailStream extends Duplex {
+export class LogTailStream extends TypedDuplex<boolean, string> {
     private sshThread: ChildProcess | null = null;
     private localClient: LocalClient;
     private serverState: boolean = false;
 
     constructor(prisma: LocalClient) {
-        super({ objectMode: true });
+        super();
         this.localClient = prisma;
     }
 
