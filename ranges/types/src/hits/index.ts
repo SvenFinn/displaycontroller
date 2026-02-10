@@ -1,11 +1,14 @@
-import { Index, UnsignedInteger, UnsignedNumber } from "../common/index.js";
+import { Maximum } from "typia/lib/tags/Maximum.js";
+import { Index, UnsignedNumber } from "../common/index.js";
+
+export type HitIndex = Index & Maximum<1000>;
 
 export type Hits = Array<Hit>;
 
 export type Hit = InvalidHit | ValidHit;
 
 export type BaseHit = {
-    id: Index;
+    id: HitIndex;
     valid: boolean;
 }
 

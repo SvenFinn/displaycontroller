@@ -20,12 +20,6 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
         }
     }
 
-    private normalizeHitIds(hits: Hits): void {
-        for (let i = 0; i < hits.length; i++) {
-            hits[i].id = i + 1;
-        }
-    }
-
     private addHitToRange(rangeData: LogInternalRange, chunk: LogLine): void {
         if (chunk.action !== "insert") return;
 
@@ -35,11 +29,22 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
         }
 
         const hits = rangeData.hits[roundId];
+        const insertId = chunk.hit.id;
 
-        const insertIndex = Math.max(0, Math.min(chunk.hit.id - 1, hits.length));
-        hits.splice(insertIndex, 0, chunk.hit);
+        // 1. Find insertion index BEFORE shifting
+        let insertIndex = hits.findIndex(hit => hit.id >= insertId);
+        if (insertIndex < 0) {
+            insertIndex = hits.length;
+        }
 
-        this.normalizeHitIds(hits);
+        for (const hit of hits) {
+            if (hit.id >= insertId) {
+                hit.id += 1;
+            }
+        }
+
+        hits.splice(insertIndex, 0, { ...chunk.hit });
+        hits.sort((a, b) => a.id - b.id);
     }
 
     private removeHitFromRange(rangeData: LogInternalRange, chunk: LogLine): void {
@@ -52,15 +57,28 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             return;
         }
 
-        const hitIndex = hits.findIndex(hit => hit.id === chunk.hit.id);
-        if (hitIndex === -1) {
-            logger.warn(`Trying to remove non-existing hit ${chunk.hit.id} from range ${chunk.rangeId}, round ${roundId}`);
-            return;
+        const deleteId = chunk.hit.id;
+
+        // 1. Try to remove hit with id = deleteId
+        const hitIndex = hits.findIndex(hit => hit.id === deleteId);
+        if (hitIndex !== -1) {
+            hits.splice(hitIndex, 1);
+        } else {
+            logger.warn(
+                `Deleting hole at id ${deleteId} in range ${chunk.rangeId}, round ${roundId}`
+            );
         }
 
-        hits.splice(hitIndex, 1);
-        this.normalizeHitIds(hits);
+        // 2. Always shift hits with id > deleteId
+        for (const hit of hits) {
+            if (hit.id > deleteId) {
+                hit.id -= 1;
+            }
+        }
+        hits.sort((a, b) => a.id - b.id);
+
     }
+
 
     _transform(chunk: LogMessage, encoding: BufferEncoding, callback: () => void): void {
         if (chunk.action === "reset") {
