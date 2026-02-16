@@ -1,4 +1,4 @@
-import { getSeries } from "@frontend/app/show/lib/ranges";
+import { getSeries } from "@frontend/app/show/lib/ranges/accumulate";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
 

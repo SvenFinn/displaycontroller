@@ -1,7 +1,6 @@
-import { Range } from "dc-ranges-types";
-import { getTotal } from "../../../../../lib/ranges";
 import styles from "./range.module.css"
 import { useAppSelector } from "../../ranges-store/store";
+import { getTotal } from "@frontend/app/show/lib/ranges/accumulate";
 
 export default function Total({ id }: { id: number }): React.JSX.Element {
     const total = useAppSelector((state => {

@@ -1,16 +1,24 @@
-import { Mode, Range } from "dc-ranges-types";
+import { Mode } from "dc-ranges-types";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
-import { getHitEval, HitEval } from "@frontend/app/show/lib/ranges";
 import ShotArrow from "@frontend/app/show/components/Ranges/Arrow";
 import React from "react";
+import { getHitsOfSeries, getLatestSeriesId } from "@frontend/app/show/lib/ranges";
+import { getHitEval } from "@frontend/app/show/lib/ranges/eval";
+import { HitEval } from "@frontend/app/show/lib/ranges/types";
 
 
 export default function ShotTable({ id }: { id: number }): React.JSX.Element {
     const hits = useAppSelector(state => {
         const range = state.ranges[id];
-        if (!range || !range.active) return [];
-        return range.hits[range.round] || [];
+        if (!range || !range.active || !range.discipline) return [];
+        const round = range.discipline.rounds[range.round];
+        if (!round) return [];
+        const hits = range.hits[range.round] || [];
+
+        const selectedHits = getHitsOfSeries(round, hits, getLatestSeriesId(round, hits));
+
+        return selectedHits.reverse();
     })
 
     const round = useAppSelector(state => {
@@ -20,9 +28,6 @@ export default function ShotTable({ id }: { id: number }): React.JSX.Element {
     })
 
     if (!round) return <></>;
-
-    const currentSumCount = hits.length % round.hitsPerSum || round.hitsPerSum;
-    const selectedHits = currentSumCount > 10 ? hits.slice(-10) : hits.slice(-currentSumCount);
 
     return (
         <div className={styles.shotTable} >
@@ -36,7 +41,7 @@ export default function ShotTable({ id }: { id: number }): React.JSX.Element {
                 }
             </div>
 
-            {selectedHits.reverse().map((hit, index) => {
+            {hits.map((hit, index) => {
                 if (!hit.valid) {
                     return (
                         <div className={styles.tableRow} key={index}>

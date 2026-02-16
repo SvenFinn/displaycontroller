@@ -67,18 +67,26 @@ function getSizeInternal(round: Round, gauge: UnsignedNumber, hits: Hits): [numb
 
 
 export function getSizeAuto(gauge: UnsignedNumber, round: Round | null, hits: Hits): [number, number] | null {
-    let startingIndex = 0;
-    if (round && hits.length < round.maxHits) {
-        const hitsPerView = round.hitsPerView;
-        startingIndex = Math.floor((hits.length - 1) / hitsPerView) * hitsPerView;
+    let selectedHits = hits;
+    const maxHitId = Math.max(...hits.map(h => h.id));
 
+    if (round && maxHitId < round.maxHits) {
+        const latestSeriesId =
+            Math.floor((maxHitId - 1) / round.hitsPerView);
+
+        selectedHits = hits.filter(
+            hit =>
+                Math.floor((hit.id - 1) / round.hitsPerView) ===
+                latestSeriesId
+        );
     }
-    const hitsCopy = hits.slice(startingIndex).filter(hit => hit.valid);
-    if (hitsCopy.length === 0 || round?.mode.mode == "fullHidden") {
+    const validHits = selectedHits.filter((hit) => hit.valid) as Array<ValidHit>;
+    if (validHits.length === 0 || round?.mode.mode == "fullHidden") {
         return null;
     }
-    const sizes = [Math.max(...hitsCopy.map(hit => Math.abs(hit.x))),
-    Math.max(...hitsCopy.map(hit => Math.abs(hit.y)))];
+
+    const sizes = [Math.max(...validHits.map(hit => Math.abs(hit.x))),
+    Math.max(...validHits.map(hit => Math.abs(hit.y)))];
     return sizes.map((s) => s * 2 + gauge) as [number, number];
 }
 
