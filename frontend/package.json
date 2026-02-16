@@ -12,10 +12,10 @@
         "@emotion/cache": "^11.14.0",
         "@emotion/react": "^11.14.0",
         "@reduxjs/toolkit": "^2.11.2",
-        "@rjsf/core": "^6.2.5",
-        "@rjsf/react-bootstrap": "^6.2.5",
-        "@rjsf/utils": "^6.2.5",
-        "@rjsf/validator-ajv8": "^6.2.5",
+        "@rjsf/core": "^6.3.1",
+        "@rjsf/react-bootstrap": "^6.3.1",
+        "@rjsf/utils": "^6.3.1",
+        "@rjsf/validator-ajv8": "^6.3.1",
         "bootstrap": "^5.3.8",
         "dc-ranges-types": "file:../ranges/types",
         "dc-screens-types": "file:../screens/types",
@@ -33,8 +33,8 @@
         "socket.io-client": "^4.8.3"
     },
     "devDependencies": {
-        "@types/node": "^25.2.1",
-        "@types/react": "^19.2.13",
+        "@types/node": "^25.2.3",
+        "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "@types/smallest-enclosing-circle": "^1.0.3",
         "typescript": "~5.9.3"
