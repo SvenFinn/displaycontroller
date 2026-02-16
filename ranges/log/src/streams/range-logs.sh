@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -euo pipefail
+set +m
 
 # This script is used to monitor the log files of the Meyton Shootmaster software.
 # It will print the new lines of the log files to the console.
@@ -17,7 +18,8 @@ cleanup() {
     # If a tail process is running, kill it
     if [ -n "$tail_pid" ]; then
         kill "$tail_pid" 2>/dev/null
-        wait "$tail_pid" 2>/dev/null
+        wait "$tail_pid" 2>/dev/null || true
+        tail_pid=
     fi
     exit 0
 }
@@ -34,7 +36,8 @@ while true; do
         # If a tail process is running, kill it
         if [ -n "$tail_pid" ]; then
             kill "$tail_pid" 2>/dev/null
-            wait "$tail_pid" 2>/dev/null
+            wait "$tail_pid" 2>/dev/null || true
+            tail_pid=
         fi
 
         # Update the tail count and start a new tail process
