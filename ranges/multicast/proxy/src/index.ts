@@ -27,7 +27,7 @@ async function main() {
     client.on("listening", function () {
         client.setMulticastTTL(128);
         try {
-            client.addMembership("2224.0.0.1");
+            client.addMembership("224.0.0.1");
         } catch (e) {
         }
         const address = client.address();
