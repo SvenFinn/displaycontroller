@@ -1,8 +1,6 @@
-import { getTotal } from "@frontend/app/show/lib/ranges";
+import { getTotal } from "@frontend/app/show/lib/ranges/accumulate";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
-
-
 
 export function HitTotal({ id }: { id: number }): React.JSX.Element {
     const total = useAppSelector((state) => {
