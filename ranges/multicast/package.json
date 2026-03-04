@@ -16,10 +16,13 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
+        "@types/ahocorasick": "^1.0.0",
+        "ahocorasick": "^1.0.2",
         "amqplib": "^0.10.9",
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
         "dc-ranges-types": "file:../types",
+        "dc-streams": "file:../../streams",
         "dotenv": "^17.3.1"
     }
 }

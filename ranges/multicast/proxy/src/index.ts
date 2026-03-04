@@ -17,10 +17,8 @@ const MESSAGE_MIN_LENGTH = parseInt(process.env.MULTICAST_MSG_MIN_LENGTH);
 async function main() {
     const connection = await amqp.connect("amqp://localhost");
     const channel = await connection.createChannel();
-    await channel.assertQueue("ranges.multicast.proxy", {
+    await channel.assertExchange("ranges.multicast.proxy", "fanout", {
         durable: false,
-        autoDelete: true,
-        messageTtl: 30000
     });
 
     const client = createSocket("udp4");
@@ -52,10 +50,10 @@ async function main() {
         const proxiedMessage: RangeProxyType = {
             ip: remote.address,
             mac: senderMac,
-            message: Buffer.from(messageStr).toString("base64")
+            message: messageStr,
         }
         logger.debug(`Received message from ${remote.address}`);
-        channel.sendToQueue("ranges.multicast.proxy", Buffer.from(JSON.stringify(proxiedMessage)));
+        channel.publish("ranges.multicast.proxy", "", Buffer.from(JSON.stringify(proxiedMessage)));
     });
     client.on("error", function (error) {
         logger.error(error);

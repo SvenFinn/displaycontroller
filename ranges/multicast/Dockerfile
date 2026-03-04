@@ -27,11 +27,18 @@ COPY --from=range-types . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM deps-logger AS deps-streams
+WORKDIR /app/streams
+COPY --from=streams . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM base AS local-deps
 WORKDIR /app
 
 COPY --from=deps-logger /app/logger /app/logger
 COPY --from=deps-local-db /app/database/local /app/database/local
+COPY --from=deps-streams /app/streams /app/streams
 COPY --from=deps-ranges-types /app/ranges/types /app/ranges/types
 
 FROM local-deps AS deps
