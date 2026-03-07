@@ -11,6 +11,3 @@ CREATE TABLE "public"."KnownRanges" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "KnownRanges_rangeId_key" ON "public"."KnownRanges"("rangeId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "KnownRanges_lastIp_key" ON "public"."KnownRanges"("lastIp");

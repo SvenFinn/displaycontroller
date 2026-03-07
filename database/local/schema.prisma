@@ -58,7 +58,7 @@ enum CacheTypes {
 model KnownRanges {
     macAddress String   @id
     rangeId    Int?     @unique
-    lastIp     String?  @unique @db.Inet
+    lastIp     String?  @db.Inet
     createdAt  DateTime @default(now())
     updatedAt  DateTime @default(now()) @updatedAt
 }
