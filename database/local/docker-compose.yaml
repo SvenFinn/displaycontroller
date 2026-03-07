@@ -19,7 +19,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
   dc-db-migrate:
     container_name: dc-db-migrate
     image: ghcr.io/svenfinn/dc-db-migrate:${APP_VERSION}
