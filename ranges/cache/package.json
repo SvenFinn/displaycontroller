@@ -18,7 +18,7 @@
         "dotenv": "^17.3.1"
     },
     "devDependencies": {
-        "@types/node": "^25.2.3",
+        "@types/node": "^25.3.5",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.9.3"
     }

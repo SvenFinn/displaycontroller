@@ -12,8 +12,8 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@types/node": "^25.2.3",
-        "prisma": "^7.4.0",
+        "@types/node": "^25.3.5",
+        "prisma": "^7.4.2",
         "typescript": "^5.9.3"
     },
     "files": [

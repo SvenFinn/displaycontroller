@@ -10,13 +10,13 @@
         "generate": "npx prisma generate --no-hints"
     },
     "devDependencies": {
-        "@types/node": "^25.2.3",
-        "prisma": "^7.4.0",
+        "@types/node": "^25.3.5",
+        "prisma": "^7.4.2",
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@prisma/adapter-mariadb": "^7.4.0",
-        "@prisma/client": "^7.4.0",
+        "@prisma/adapter-mariadb": "^7.4.2",
+        "@prisma/client": "^7.4.2",
         "dc-db-local": "file:../local",
         "dotenv": "^17.3.1"
     },
