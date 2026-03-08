@@ -11,7 +11,7 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             rangeId: chunk.rangeId,
             targetId: chunk.targetId,
             discipline: chunk.discipline,
-            shooter: chunk.shooterId || null, // Id is 0 if free
+            shooter: chunk.shooterId ? { type: "byId", id: chunk.shooterId } : null,
             hits: [],
             startListId: null,
             source: "log",
@@ -53,7 +53,7 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
         const roundId = chunk.discipline.roundId;
         const hits = rangeData.hits[roundId];
         if (!hits) {
-            logger.warn(`Trying to remove hit from non-existing round ${roundId} in range ${chunk.rangeId}`);
+            logger.warn(`Trying to remove hit from non - existing round ${roundId} in range ${chunk.rangeId} `);
             return;
         }
 
@@ -65,7 +65,7 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             hits.splice(hitIndex, 1);
         } else {
             logger.warn(
-                `Deleting hole at id ${deleteId} in range ${chunk.rangeId}, round ${roundId}`
+                `Deleting hole at id ${deleteId} in range ${chunk.rangeId}, round ${roundId} `
             );
         }
 
@@ -99,14 +99,14 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             this.ranges.set(chunk.rangeId, rangeData);
         }
 
-        rangeData.shooter = chunk.shooterId || null;
+        rangeData.shooter = chunk.shooterId ? { type: "byId", id: chunk.shooterId } : null;
         rangeData.discipline = chunk.discipline;
         rangeData.last_update = chunk.timestamp;
         if (chunk.action === "insert") {
-            logger.info(`Adding hit ${chunk.hit.id} to range ${chunk.rangeId}`);
+            logger.info(`Adding hit ${chunk.hit.id} to range ${chunk.rangeId} `);
             this.addHitToRange(rangeData, chunk);
         } else {
-            logger.info(`Removing hit ${chunk.hit.id} from range ${chunk.rangeId}`);
+            logger.info(`Removing hit ${chunk.hit.id} from range ${chunk.rangeId} `);
             this.removeHitFromRange(rangeData, chunk);
         }
         this.push(structuredClone(rangeData));

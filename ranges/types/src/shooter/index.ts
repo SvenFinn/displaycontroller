@@ -1,17 +1,37 @@
-import { createIs } from "typia";
-import { Index, UnsignedInteger } from "../common/index.js";
+import { Index } from "../common/index.js";
 
 export type ShooterId = Index;
 
-export type Shooter = {
-    id: ShooterId | null; // Null = Can't be determined uniquely
+type ShooterName = {
     firstName: string;
     lastName: string;
 }
 
-export type InternalShooter = ShooterId | InternalShooterByName;
+export type Shooter = {
+    id: ShooterId | null; // Null = Can't be determined uniquely
+} & ShooterName;
+
+export type ShooterFree = {
+    type: "free";
+}
+
+export type ShooterOccupied = {
+    type: "occupied";
+} & Shooter;
+
+export type RangeShooter = ShooterFree | ShooterOccupied;
+
+export type InternalShooter = InternalShooterFree | InternalShooterById | InternalShooterByName;
+
+export type InternalShooterFree = {
+    type: "free";
+}
+
+export type InternalShooterById = {
+    type: "byId";
+    id: ShooterId;
+}
 
 export type InternalShooterByName = {
-    firstName: string,
-    lastName: string,
-}
+    type: "byName";
+} & ShooterName;

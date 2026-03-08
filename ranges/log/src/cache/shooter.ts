@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { isShooter, mergeMaps, isShooterId, isInternalShooterByName, InternalShooter, ShooterId, InternalShooterByName } from "dc-ranges-types";
+import { isShooter, mergeMaps, InternalShooter, ShooterId, InternalShooterByName } from "dc-ranges-types";
 
 export const shooterMap = new Map<ShooterId, InternalShooterByName>();
 
@@ -17,35 +17,24 @@ export async function updateShooters(client: LocalClient) {
         if (shooter.value.id === null) {
             continue;
         }
-        shooterTempMap.set(shooter.value.id, { firstName: shooter.value.firstName, lastName: shooter.value.lastName });
+        shooterTempMap.set(shooter.value.id, { type: "byName", firstName: shooter.value.firstName, lastName: shooter.value.lastName });
     }
     mergeMaps(shooterMap, shooterTempMap);
 }
 
 export function isSameShooter(shooterOne: InternalShooter | null, shooterTwo: InternalShooter | null): boolean {
-    if (shooterOne === null && shooterTwo === null) {
-        return true;
-    } else if (shooterOne === null || shooterTwo === null) {
+    if (shooterOne === null || shooterTwo === null) return shooterOne === null && shooterTwo === null;
+    if (shooterOne.type === "free" || shooterTwo.type === "free") return shooterOne.type === shooterTwo.type;
+
+    if (shooterOne.type === "byId" && shooterTwo.type === "byId") {
+        return shooterOne.id === shooterTwo.id;
+    }
+
+    const shooterOneByName = shooterOne.type === "byId" ? shooterMap.get(shooterOne.id) : shooterOne;
+    const shooterTwoByName = shooterTwo.type === "byId" ? shooterMap.get(shooterTwo.id) : shooterTwo;
+    if (!shooterOneByName || !shooterTwoByName) {
         return false;
     }
-    const isShooterOneById = isShooterId(shooterOne);
-    const isShooterTwoById = isShooterId(shooterTwo);
-    if (isShooterOneById && isShooterTwoById) {
-        return shooterOne === shooterTwo;
-    } else if (isInternalShooterByName(shooterOne) && isInternalShooterByName(shooterTwo)) {
-        return shooterOne.firstName === shooterTwo.firstName && shooterOne.lastName === shooterTwo.lastName;
-    } else if (isShooterOneById && isInternalShooterByName(shooterTwo)) {
-        const shooter = shooterMap.get(shooterOne);
-        if (!shooter) {
-            return false;
-        }
-        return shooter.firstName === shooterTwo.firstName && shooter.lastName === shooterTwo.lastName;
-    } else if (isShooterTwoById && isInternalShooterByName(shooterOne)) {
-        const shooter = shooterMap.get(shooterTwo);
-        if (!shooter) {
-            return false;
-        }
-        return shooter.firstName === shooterOne.firstName && shooter.lastName === shooterOne.lastName;
-    }
-    return false;
+
+    return shooterOneByName.firstName === shooterTwoByName.firstName && shooterOneByName.lastName === shooterTwoByName.lastName;
 }

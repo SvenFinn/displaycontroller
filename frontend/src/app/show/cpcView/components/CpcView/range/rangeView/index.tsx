@@ -7,9 +7,13 @@ export function RangeView({ id }: { id: number }): React.JSX.Element {
     const range = useAppSelector(state => state.ranges[id]);
     if (!range) return <></>;
     if (!range.active) return <></>;
-    let shooterName = "- - - Frei - - -";
+    let shooterName = "Nicht identifizierbar";
     if (range.shooter) {
-        shooterName = `${range.shooter.lastName}, ${range.shooter.firstName}`;
+        if (range.shooter.type === "free") {
+            shooterName = "- - - Frei - - -";
+        } else {
+            shooterName = `${range.shooter.lastName}, ${range.shooter.firstName}`;
+        }
     }
 
     return (
