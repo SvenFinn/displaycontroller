@@ -1,11 +1,21 @@
 import { TypedTransform } from "dc-streams"
 import { Candidate, CandidateDiscipline, isOverride, PacketCandidates } from "../types";
-import { InternalDiscipline, InternalRange } from "dc-ranges-types";
+import { InternalDiscipline, InternalRange, InternalShooter } from "dc-ranges-types";
 import { logger } from "dc-logger";
 
 export class RangeDataConverter extends TypedTransform<PacketCandidates, InternalRange> {
     private resolveCandidate<T>(candidates: Candidate<T>[]): T | null {
         if (candidates.length !== 1) {
+            return null;
+        }
+        return candidates[0].data;
+    }
+
+    private resolveShooter(candidates: Candidate<InternalShooter>[]): InternalShooter | null {
+        if (candidates.length === 0) {
+            return { type: "free" };
+        }
+        if (candidates.length > 1) {
             return null;
         }
         return candidates[0].data;
@@ -33,7 +43,7 @@ export class RangeDataConverter extends TypedTransform<PacketCandidates, Interna
             rangeId: chunk.id,
             discipline: this.resolveDiscipline(chunk.disciplineCandidates),
             startListId: this.resolveCandidate(chunk.startListCandidates),
-            shooter: this.resolveCandidate(chunk.shooterCandidates),
+            shooter: this.resolveShooter(chunk.shooterCandidates),
             hits: [],
             source: "multicast",
             ttl: 20000

@@ -24,11 +24,12 @@ export async function updatePotentialShooters(localClient: LocalClient) {
         const name = `${shooter.lastName}, ${shooter.firstName}`;
         const existing = shooters.get(name);
         if (!existing) {
-            shooters.set(name, shooter.id);
+            shooters.set(name, { type: "byId", id: shooter.id });
             continue;
         }
         if (typeof existing === "number") {
             shooters.set(name, {
+                type: "byName",
                 firstName: shooter.firstName,
                 lastName: shooter.lastName
             });

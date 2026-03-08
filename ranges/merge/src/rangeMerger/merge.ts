@@ -1,5 +1,5 @@
 import { TTLHandler } from "dc-ranges-ttl";
-import { ActiveRange, InactiveRange, Source } from "dc-ranges-types";
+import { ActiveRange, InactiveRange, RangeShooter, Source } from "dc-ranges-types";
 import { InternalRange, Discipline, Shooter, StartList, Hits, Hit } from "dc-ranges-types";
 import { getDiscipline } from "../cache/disciplines";
 import { getShooter } from "../cache/shooters";
@@ -22,7 +22,7 @@ function mergeDiscipline(sourceData: SourceData): Discipline | null {
     return getDiscipline(getFirstNotNull(disciplines) || null);
 }
 
-function mergeShooter(sourceData: SourceData): Shooter | null {
+function mergeShooter(sourceData: SourceData): RangeShooter | null {
     const shooters = sourceData.map((source) => source.getMessage()?.shooter);
     return getShooter(getFirstNotNull(shooters) || null);
 }

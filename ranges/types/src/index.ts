@@ -6,7 +6,7 @@ import { Layout, LayoutChess, LayoutDart, LayoutEaster, LayoutRectangle, LayoutR
 import { Round, Rounds } from './discipline/round/index.js';
 import { Mode } from './discipline/round/mode.js';
 import { Zoom } from './discipline/round/zoom.js';
-import { InternalShooter, InternalShooterByName, Shooter, ShooterId } from './shooter/index.js';
+import { InternalShooter, InternalShooterByName, RangeShooter, Shooter, ShooterId } from './shooter/index.js';
 import { StartList } from './startList/index.js';
 import { UnsignedInteger, ColorCode, Index, Integer, RangeId, UnsignedNumber } from './common/index.js';
 export type Range = InactiveRange | ActiveRange;
@@ -24,7 +24,7 @@ export type ActiveRange = BaseRange & {
     // targetId: number;
     round: number;
 
-    shooter: Shooter | null;
+    shooter: RangeShooter | null;
     startList: StartList | null;
     discipline: Discipline | null;
     hits: Array<Hits>;
@@ -88,7 +88,8 @@ export {
     UnsignedNumber,
     OverrideDiscipline,
     Shooter,
-    ShooterId
+    ShooterId,
+    RangeShooter
 }
 
 // The ShootMaster software represents a invalid hit as the maximum 32-bit integer value.

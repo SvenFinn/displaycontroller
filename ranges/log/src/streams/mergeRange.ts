@@ -89,7 +89,7 @@ export class RangeMerger extends TypedTransform<InternalRange, InternalRange> {
         }
         // If range is free and the last shot was more than freeTimeout ago, consider it free
         // Do not blacklist target, as the shooter might not have left the range yet
-        if (logState.shooter === null && logState.last_update.getTime() < Date.now() - this.freeTimeout) return null;
+        if ((logState.shooter === null || logState.shooter.type === "free") && logState.last_update.getTime() < Date.now() - this.freeTimeout) return null;
 
         // We now have a valid state to merge
         return {

@@ -74,7 +74,7 @@ export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRang
             targetId: targetId,
             rangeId: data.rangeId,
             startListId: data.startListId,
-            shooter: data.shooterId ? Number(data.shooterId) : null,
+            shooter: data.shooterId ? { type: "byId", id: Number(data.shooterId) } : { type: "free" }, // Shooter can't be null, so 0 = free
             hits: hits,
             discipline: getDisciplineId(
                 data.disciplineId,
