@@ -660,11 +660,11 @@ model Shooter {
     image       Bytes?   @map("SchuetzenFoto") @db.MediumBlob
 
     shooterFilters FilterShooter[]
-    club           Club               @relation(fields: [clubId], references: [id], map: "Schuetze_ibfk_1")
-    nation         Country            @relation(fields: [nationShort], references: [short], map: "Schuetze_ibfk_2")
+    club           Club             @relation(fields: [clubId], references: [id], map: "Schuetze_ibfk_1")
+    nation         Country          @relation(fields: [nationShort], references: [short], map: "Schuetze_ibfk_2")
     seedingLists   SeedingList[]
     startListEntry StartListEntry[]
-    clubShooters   Vereinszuordnung[]
+    clubShooters   ClubAssoc[]
 
     @@index([nationShort], map: "LandesKuerzel")
     @@index([lastName], map: "Nachname")
@@ -804,14 +804,14 @@ model Club {
     teams            Team[]
     shooters         Shooter[]
     startListEntries StartListEntry[]
-    union            Union              @relation(fields: [unionId], references: [id], map: "Verein_ibfk_1")
-    clubShooter      Vereinszuordnung[]
+    union            Union            @relation(fields: [unionId], references: [id], map: "Verein_ibfk_1")
+    clubShooter      ClubAssoc[]
 
     @@index([unionId], map: "VerbandsID")
     @@map("Verein")
 }
 
-model Vereinszuordnung {
+model ClubAssoc {
     shooterId BigInt @map("SportpassID")
     clubId    Int    @map("VereinsID")
 
@@ -823,11 +823,8 @@ model Vereinszuordnung {
     @@map("Vereinszuordnung")
 }
 
-// Contains version numbers of the database
 model Version {
-    Versionsnummer Int
-
-    @@ignore
+    version Int @unique @map("Versionsnummer") @db.Int
 }
 
 model Zeit {
