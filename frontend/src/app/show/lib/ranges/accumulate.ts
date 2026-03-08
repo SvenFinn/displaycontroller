@@ -2,6 +2,7 @@ import { Hits, Round, UnsignedNumber } from "dc-ranges-types";
 import smallestEnclosingCircle from "smallest-enclosing-circle";
 import { floor, round as mRound } from "../math";
 import { getHitsOfSeries, getLatestSeriesId } from ".";
+import { getHitEval } from "./eval";
 
 export function getSeries(round: Round | null, gauge: UnsignedNumber, hits: Hits): Array<string> {
     if (!round) return [];
@@ -14,6 +15,63 @@ export function getSeries(round: Round | null, gauge: UnsignedNumber, hits: Hits
         series.push(accumulateHits(seriesHits, round, gauge, false));
     }
     return series;
+}
+
+export function getExtrapolated(round: Round | null, hits: Hits): string | null {
+    // This does not use the same extrapolation method as the ShootMaster system,
+    // but it provides a reasonable estimate.
+
+    const MIN_HITS_FOR_EXTRAPOLATION = 8;
+
+    if (!round) return null;
+    if (!round.counts) return null;
+
+    const mode = round.mode.mode;
+    if (mode != "rings" && mode != "ringsDiv" && mode != "hundred" && mode != "decimal" && mode != "integerDecimal") return null;
+
+    if (hits.length == 0) return null;
+    if (hits.length >= round.maxHits) return null;
+
+    const validHits = hits.filter((hit) => hit.valid);
+    if (validHits.length < MIN_HITS_FOR_EXTRAPOLATION) {
+        return null;
+    }
+
+    let hitValues: number[] = [];
+    let decimals: number = 0;
+    switch (round.mode.mode) {
+        case "rings":
+        case "ringsDiv":
+            decimals = round.mode.decimals;
+            hitValues = validHits.map((hit) => floor(hit.rings, decimals));
+            break;
+        case "hundred":
+            decimals = 0;
+            hitValues = validHits.map((hit) => Math.floor(hit.rings) * 10);
+            break;
+        case "decimal":
+            decimals = 0;
+            hitValues = validHits.map((hit) => Math.floor(hit.rings * 10) % 10);
+            break;
+        case "integerDecimal":
+            decimals = 0;
+            hitValues = validHits.map((hit) => {
+                const integer = Math.floor(hit.rings);
+                const decimal = Math.floor((hit.rings - integer) * 10);
+                return integer * decimal;
+            });
+            break;
+        default:
+            return null;
+    }
+
+    const sum = hitValues.reduce((sum, value) => sum + value, 0);
+
+    const average = sum / hitValues.length;
+
+    const extrapolatedValue = sum + average * (round.maxHits - hits.length);
+
+    return mRound(extrapolatedValue, decimals || 0).toFixed(decimals || 0);
 }
 
 export function getTotal(round: Round | null, gauge: UnsignedNumber, hits: Hits): string {

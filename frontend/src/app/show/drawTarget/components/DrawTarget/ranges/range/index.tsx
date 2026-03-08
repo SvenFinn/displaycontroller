@@ -37,7 +37,7 @@ export default function Range({ highlightAssign, id }: DrawTargetRangeProps): Re
             <CurrentHit id={id} />
             <DrawRange id={id} />
             <SeriesList id={id} />
-            <Total id={id} />
+            <Total id={id} extrapolate={false} />
         </div>
     );
 }
