@@ -89,7 +89,6 @@ function checkServerCompatibility(serverState: AdvServerState): boolean {
         return false;
     }
     if (!serverState.services.smdb) {
-        logger.warn("SMDB service is not available");
         return false;
     }
     if (!process.env.MAX_SM_VERSION || !process.env.MIN_SM_VERSION) {
@@ -119,12 +118,12 @@ function checkServerCompatibility(serverState: AdvServerState): boolean {
 async function checkDatabaseAvailability(): Promise<boolean> {
     const client = await createSMDBClient(prismaClient);
     try {
-        await client.$connect();
-        await client.$disconnect();
+        await client.version.findFirst();
         return true;
     }
     catch (e) {
-        logger.error("Error while checking database availability: " + e);
         return false;
+    } finally {
+        await client.$disconnect().catch();
     }
 }
