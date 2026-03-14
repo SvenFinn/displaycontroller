@@ -24,7 +24,10 @@ export function isOverride(discipline: CandidateDiscipline): discipline is Candi
 
 export type CandidateDiscipline = CandidateBaseDiscipline | CandidateOverrideDiscipline;
 
-export type CandidateStartList = Index;
+export type CandidateStartList = {
+    id: Index;
+    hasOverrideDisciplines: boolean;
+};
 
 export type Matcher<T> = {
     matcher: AhoCorasick;
@@ -36,4 +39,10 @@ export type PacketCandidates = {
     disciplineCandidates: Candidate<CandidateDiscipline>[];
     startListCandidates: Candidate<CandidateStartList>[];
     shooterCandidates: Candidate<InternalShooter>[];
+}
+
+export type ResolvedPacketCandidates = PacketCandidates & {
+    discipline: CandidateDiscipline | null;
+    startList: CandidateStartList | null;
+    shooter: InternalShooter | null;
 }

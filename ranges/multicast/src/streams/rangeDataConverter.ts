@@ -1,49 +1,47 @@
 import { TypedTransform } from "dc-streams"
-import { Candidate, CandidateDiscipline, isOverride, PacketCandidates } from "../types";
-import { InternalDiscipline, InternalRange, InternalShooter } from "dc-ranges-types";
-import { logger } from "dc-logger";
+import { isOverride, ResolvedPacketCandidates } from "../types";
+import { Index, InternalDiscipline, InternalRange, InternalShooter } from "dc-ranges-types";
 
-export class RangeDataConverter extends TypedTransform<PacketCandidates, InternalRange> {
-    private resolveCandidate<T>(candidates: Candidate<T>[]): T | null {
-        if (candidates.length !== 1) {
-            return null;
+export class RangeDataConverter extends TypedTransform<ResolvedPacketCandidates, InternalRange> {
+
+    private resolveShooter(chunk: ResolvedPacketCandidates): InternalShooter | null {
+        if (chunk.shooterCandidates.length > 0) {
+            return null; // ambiguous, cannot resolve
         }
-        return candidates[0].data;
+        if (chunk.shooter) {
+            return chunk.shooter;
+        }
+        return { type: "free" };
+
     }
 
-    private resolveShooter(candidates: Candidate<InternalShooter>[]): InternalShooter | null {
-        if (candidates.length === 0) {
-            return { type: "free" };
-        }
-        if (candidates.length > 1) {
+    private resolveDiscipline(chunk: ResolvedPacketCandidates): InternalDiscipline | null {
+        const discipline = chunk.discipline;
+        if (!discipline) {
             return null;
         }
-        return candidates[0].data;
-    }
-
-    private resolveDiscipline(candidates: Candidate<CandidateDiscipline>[]): InternalDiscipline | null {
-        const candidate = this.resolveCandidate(candidates);
-        if (!candidate) {
-            return null;
-        }
-        if (isOverride(candidate)) {
+        if (isOverride(discipline)) {
             return {
-                overrideId: candidate.overrideId,
-                roundId: candidate.roundId,
+                overrideId: discipline.overrideId,
+                roundId: discipline.roundId,
             };
         }
         return {
-            disciplineId: candidate.disciplineId,
-            roundId: candidate.roundId,
+            disciplineId: discipline.disciplineId,
+            roundId: discipline.roundId,
         };
     }
 
-    _transform(chunk: PacketCandidates, encoding: BufferEncoding, callback: () => void): void {
+    private resolveStartList(chunk: ResolvedPacketCandidates): Index | null {
+        return chunk.startList ? chunk.startList.id : null;
+    }
+
+    _transform(chunk: ResolvedPacketCandidates, encoding: BufferEncoding, callback: () => void): void {
         const range: InternalRange = {
             rangeId: chunk.id,
-            discipline: this.resolveDiscipline(chunk.disciplineCandidates),
-            startListId: this.resolveCandidate(chunk.startListCandidates),
-            shooter: this.resolveShooter(chunk.shooterCandidates),
+            discipline: this.resolveDiscipline(chunk),
+            startListId: this.resolveStartList(chunk),
+            shooter: this.resolveShooter(chunk),
             hits: [],
             source: "multicast",
             ttl: 20000

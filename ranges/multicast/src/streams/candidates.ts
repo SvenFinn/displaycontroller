@@ -36,14 +36,15 @@ export class CandidateExtractor extends TypedTransform<IdentifiedRange, PacketCa
 
     _transform(chunk: IdentifiedRange, encoding: BufferEncoding, callback: TransformCallback): void {
         logger.info(`Received packet from range ${chunk.id}`);
+        logger.debug(`Packet content: ${chunk.packet}`);
 
         const disciplineCandidates = this.findCandidates(chunk.packet, potentialDisciplines);
         const startListCandidates = this.findCandidates(chunk.packet, potentialStartLists);
         const shooterCandidates = this.findCandidates(chunk.packet, potentialShooters);
 
-        logger.debug(`Found ${disciplineCandidates.length} discipline candidates: ${disciplineCandidates.map(c => c.match).join(", ")}`);
-        logger.debug(`Found ${startListCandidates.length} start list candidates: ${startListCandidates.map(c => c.match).join(", ")}`);
-        logger.debug(`Found ${shooterCandidates.length} shooter candidates: ${shooterCandidates.map(c => c.match).join(", ")}`);
+        logger.debug(`Found ${disciplineCandidates.length} discipline candidates: ${disciplineCandidates.map(c => `${c.match} (${c.start},${c.end})`).join(", ")}`);
+        logger.debug(`Found ${startListCandidates.length} start list candidates: ${startListCandidates.map(c => `${c.match} (${c.start},${c.end})`).join(", ")}`);
+        logger.debug(`Found ${shooterCandidates.length} shooter candidates: ${shooterCandidates.map(c => `${c.match} (${c.start},${c.end})`).join(", ")}`);
 
         const candidates: PacketCandidates = {
             id: chunk.id,

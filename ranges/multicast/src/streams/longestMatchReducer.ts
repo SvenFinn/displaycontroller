@@ -1,10 +1,10 @@
 import { TypedTransform } from "dc-streams";
-import { Candidate, PacketCandidates } from "../types";
+import { Candidate, PacketCandidates, ResolvedPacketCandidates } from "../types";
 
-export class LongestMatchReducer extends TypedTransform<PacketCandidates, PacketCandidates> {
-    private reduceToLongestMatch<T>(candidates: Candidate<T>[]): Candidate<T>[] {
+export class LongestMatchReducer extends TypedTransform<PacketCandidates, ResolvedPacketCandidates> {
+    private reduceToLongestMatch<T>(candidates: Candidate<T>[]): T | null {
         if (candidates.length === 0) {
-            return [];
+            return null;
         }
 
         let longest = candidates[0];
@@ -16,19 +16,23 @@ export class LongestMatchReducer extends TypedTransform<PacketCandidates, Packet
                 longestLength = len;
             }
         }
-        return [longest];
+        return longest.data;
     }
 
     _transform(chunk: PacketCandidates, encoding: BufferEncoding, callback: () => void): void {
-        const disciplineCandidates = this.reduceToLongestMatch(chunk.disciplineCandidates);
-        const startListCandidates = this.reduceToLongestMatch(chunk.startListCandidates);
-        const shooterCandidates = this.reduceToLongestMatch(chunk.shooterCandidates);
+        const discipline = this.reduceToLongestMatch(chunk.disciplineCandidates);
+        const startList = this.reduceToLongestMatch(chunk.startListCandidates);
+        const shooter = this.reduceToLongestMatch(chunk.shooterCandidates);
 
-        const reduced: PacketCandidates = {
+        const reduced: ResolvedPacketCandidates = {
             id: chunk.id,
-            disciplineCandidates,
-            startListCandidates,
-            shooterCandidates
+            disciplineCandidates: [],
+            startListCandidates: [],
+            shooterCandidates: [],
+            discipline,
+            startList,
+            shooter
+
         };
         this.push(reduced);
         callback();
