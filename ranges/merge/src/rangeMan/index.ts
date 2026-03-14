@@ -45,8 +45,8 @@ export class RangeManager {
             logger.error("Namespace not set in RangeManager");
             return;
         }
-        this.namespace.to(`range:${data.id}`).volatile.emit('data', data);
-        this.namespace.to('all').volatile.emit('data', data);
+        this.namespace.to(`range:${data.id}`).emit('data', data);
+        this.namespace.to('all').emit('data', data);
 
     }
     public getRangeData(rangeId: number): Range {
