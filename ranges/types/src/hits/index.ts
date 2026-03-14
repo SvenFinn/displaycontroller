@@ -1,7 +1,7 @@
-import { Maximum } from "typia/lib/tags/Maximum.js";
+import { tags } from "typia";
 import { Index, UnsignedNumber } from "../common/index.js";
 
-export type HitIndex = Index & Maximum<1000>;
+export type HitIndex = Index & tags.Maximum<1000>;
 
 export type Hits = Array<Hit>;
 
