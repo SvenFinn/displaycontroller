@@ -1,13 +1,12 @@
 import { TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
 import { Hits, INVALID_HIT_POS, UnsignedInteger } from "dc-ranges-types";
-import { getDisciplineId } from "../cache/disciplines";
 import { logger } from "dc-logger";
 import { getLocalMs } from "../utils";
 import { SSMDB2InternalRange } from "../types";
 import { TypedTransform } from "dc-streams";
 
-export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRange> {
+export class DbQueryStream extends TypedTransform<string[], SSMDB2InternalRange> {
     private readonly prisma: Ssmdb2Client;
     private readonly timeoutMs: number;
 
@@ -74,14 +73,9 @@ export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRang
             targetId: targetId,
             rangeId: data.rangeId,
             startListId: data.startListId,
-            shooter: data.shooterId ? { type: "byId", id: Number(data.shooterId) } : { type: "free" }, // Shooter can't be null, so 0 = free
+            shooter: Number(data.shooterId) || null,
             hits: hits,
-            discipline: getDisciplineId(
-                data.disciplineId,
-                hits.length === 0 ? 0 : hits.length - 1,
-            ),
-            source: "ssmdb2",
-            ttl: data.timestamp.getTime() - getLocalMs() + this.timeoutMs,
+            disciplineId: data.disciplineId,
         };
     }
 
@@ -99,8 +93,8 @@ export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRang
             const roundId = roundIdHasOffByOneBug
                 ? hit.roundId - 1
                 : hit.roundId;
-            if (result[roundId] === undefined) {
-                result[roundId] = [];
+            while (result.length <= roundId) {
+                result.push([]);
             }
             if (hit.x >= INVALID_HIT_POS[0] && hit.y >= INVALID_HIT_POS[1]) {
                 result[roundId]?.push({
@@ -121,6 +115,5 @@ export class RangeDataStream extends TypedTransform<string[], SSMDB2InternalRang
         }
         return result
             .map((round) => round?.sort((a, b) => a.id - b.id))
-            .map((round) => (round === undefined ? [] : round));
     }
 }
