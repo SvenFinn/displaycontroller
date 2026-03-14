@@ -21,10 +21,11 @@ export class CandidateExtractor extends TypedTransform<IdentifiedRange, PacketCa
                     continue;
                 }
 
-                const end = position + needle.length;
+                // Position is the index of the end of the match, we need to calculate the start index.
+                const start = position - needle.length;
                 candidates.push(...data.map(candidateData => ({
-                    start: position,
-                    end,
+                    start,
+                    end: position,
                     data: candidateData,
                     match: needle
                 })));
@@ -39,6 +40,10 @@ export class CandidateExtractor extends TypedTransform<IdentifiedRange, PacketCa
         const disciplineCandidates = this.findCandidates(chunk.packet, potentialDisciplines);
         const startListCandidates = this.findCandidates(chunk.packet, potentialStartLists);
         const shooterCandidates = this.findCandidates(chunk.packet, potentialShooters);
+
+        logger.debug(`Found ${disciplineCandidates.length} discipline candidates: ${disciplineCandidates.map(c => c.match).join(", ")}`);
+        logger.debug(`Found ${startListCandidates.length} start list candidates: ${startListCandidates.map(c => c.match).join(", ")}`);
+        logger.debug(`Found ${shooterCandidates.length} shooter candidates: ${shooterCandidates.map(c => c.match).join(", ")}`);
 
         const candidates: PacketCandidates = {
             id: chunk.id,
