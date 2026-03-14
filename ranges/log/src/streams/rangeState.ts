@@ -99,7 +99,7 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             this.ranges.set(chunk.rangeId, rangeData);
         }
 
-        rangeData.shooter = chunk.shooterId ? { type: "byId", id: chunk.shooterId } : null;
+        rangeData.shooter = chunk.shooterId ? { type: "byId", id: chunk.shooterId } : { type: "free" };
         rangeData.discipline = chunk.discipline;
         rangeData.last_update = chunk.timestamp;
         if (chunk.action === "insert") {
