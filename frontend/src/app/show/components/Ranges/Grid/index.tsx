@@ -13,10 +13,10 @@ export default function Grid({ rows, columns, children, className }: GridProps):
     return (
         <BoundingBoxCss className={className} >
             <div style={{
-                gridTemplateRows: `repeat(${rows}, 1fr)`,
-                gridTemplateColumns: `repeat(${columns}, 1fr)`,
-                fontSize: `calc(calc(var(--height, 0px) * var(--font-height-ratio)) / ${rows})`,
-            }} className={styles.grid}>
+                "--rows": rows,
+                "--columns": columns,
+            } as React.CSSProperties
+            } className={styles.grid}>
                 {children}
             </div>
         </BoundingBoxCss>
