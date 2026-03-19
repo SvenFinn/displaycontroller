@@ -60,7 +60,6 @@ app.post('/api/screens/next', (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).send('Internal server error');
     }
-    res.end();
 });
 
 app.post('/api/screens/previous', (req: Request, res: Response) => {
@@ -70,7 +69,6 @@ app.post('/api/screens/previous', (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).send('Internal server error');
     }
-    res.end();
 });
 
 app.post('/api/screens/resolve', async (req: Request, res: Response) => {
@@ -87,7 +85,8 @@ app.post('/api/screens/resolve', async (req: Request, res: Response) => {
         const resolvedScreens = await resolveScreen(screen);
         res.status(200).send(resolvedScreens);
     } catch (error) {
-        res.status(500).send(`Internal server error: ${error}`);
+        logger.error(error);
+        res.status(500).send('Internal server error');
     }
 });
 
@@ -163,6 +162,10 @@ app.put('/api/screens/:screenId', async (req: Request, res: Response) => {
         return;
     }
     const screenId = Number(req.params.screenId);
+    if (!req.body || !isDbScreen(req.body)) {
+        res.status(400).send('Invalid screen data');
+        return;
+    }
     try {
         await localClient.screens.upsert({
             where: {
