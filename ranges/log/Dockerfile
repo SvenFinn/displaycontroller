@@ -23,9 +23,9 @@ RUN npm ci --loglevel=info && \
     export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
-FROM base AS deps-ranges-ttl
-WORKDIR /app/ranges/ttl
-COPY --from=range-ttl . .
+FROM base AS deps-ttl
+WORKDIR /app/lib/ttl
+COPY --from=ttl . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
@@ -47,7 +47,7 @@ WORKDIR /app
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-streams /app/lib/streams /app/lib/streams
 COPY --from=deps-local-db /app/database/local /app/database/local
-COPY --from=deps-ranges-ttl /app/ranges/ttl /app/ranges/ttl
+COPY --from=deps-ttl /app/lib/ttl /app/lib/ttl
 COPY --from=deps-ranges-types /app/ranges/types /app/ranges/types
 
 FROM local-deps AS deps

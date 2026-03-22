@@ -20,7 +20,7 @@
         "amqplib": "^0.10.9",
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges-ttl": "file:../ttl",
+        "dc-ttl": "file:../../lib/ttl",
         "dc-ranges-types": "file:../types",
         "dotenv": "^17.3.1",
         "express": "^5.2.1",
