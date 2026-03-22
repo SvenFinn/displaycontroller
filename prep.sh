@@ -10,6 +10,7 @@ cd "$(dirname "$0")"
 # This script loops through all directories in the src folder and runs npm install on folders that contain a package.json file.
 
 function install_dependencies() {
+    local folder="$1"
     echo "Installing dependencies in $folder"
     cd "$folder"
     rm -rf node_modules
@@ -50,6 +51,10 @@ function generate_proxy_certs() {
 }
 
 npx npm-check-updates --upgrade --loglevel=info --deep
+
+install_dependencies ./lib/logger
+
+traverse_folder ./lib
 
 traverse_folder .
 

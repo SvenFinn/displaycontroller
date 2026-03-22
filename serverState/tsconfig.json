@@ -5,7 +5,8 @@
         "moduleResolution": "NodeNext",
         "strict": true,
         "outDir": "./dist",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts"
