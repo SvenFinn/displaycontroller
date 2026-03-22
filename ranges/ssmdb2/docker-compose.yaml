@@ -21,7 +21,7 @@ services:
         - range-types=../types
         - table-watcher=../../database/tableWatcher
         - logger=../../lib/logger
-        - streams=../../streams
+        - streams=../../lib/streams
     networks:
       - displaycontroller
     depends_on:

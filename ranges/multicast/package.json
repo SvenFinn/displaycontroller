@@ -22,7 +22,7 @@
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges-types": "file:../types",
-        "dc-streams": "file:../../streams",
+        "dc-streams": "file:../../lib/streams",
         "dotenv": "^17.3.1"
     }
 }

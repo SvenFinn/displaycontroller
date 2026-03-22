@@ -21,7 +21,7 @@
         "dc-db-ssmdb2": "file:../../database/ssmdb2",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges-types": "file:../types",
-        "dc-streams": "file:../../streams",
+        "dc-streams": "file:../../lib/streams",
         "dc-table-watcher": "file:../../database/tableWatcher",
         "dotenv": "^17.3.1"
     }

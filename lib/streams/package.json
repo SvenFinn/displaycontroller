@@ -20,6 +20,6 @@
     },
     "dependencies": {
         "amqplib": "^0.10.9",
-        "dc-logger": "file:../lib/logger"
+        "dc-logger": "file:../logger"
     }
 }
