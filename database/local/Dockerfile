@@ -31,8 +31,8 @@ RUN apk add --no-cache --update netcat-openbsd nano
 RUN adduser -D display-user && chown -R display-user /app
 USER display-user
 
-COPY --from=build /app/dist ./
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./package.json
+COPY --from=build --chown=display-user /app/dist ./
+COPY --from=deps --chown=display-user /app/node_modules ./node_modules
+COPY --from=deps --chown=display-user /app/package.json ./package.json
 
 CMD ["sh", "entrypoint.sh"]
