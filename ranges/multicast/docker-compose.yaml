@@ -20,7 +20,7 @@ services:
         - local-db=../../database/local
         - range-types=../types
         - logger=../../lib/logger
-        - streams=../../streams
+        - streams=../../lib/streams
     networks:
       - displaycontroller
     depends_on:

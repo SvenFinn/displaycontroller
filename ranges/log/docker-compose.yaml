@@ -20,7 +20,7 @@ services:
         - range-types=../types
         - range-ttl=../ttl
         - logger=../../lib/logger
-        - streams=../../streams
+        - streams=../../lib/streams
     networks:
       - displaycontroller
     depends_on:
