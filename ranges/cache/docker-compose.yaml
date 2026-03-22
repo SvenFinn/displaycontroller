@@ -14,7 +14,7 @@ services:
         - smdb=../../database/smdb
         - table-watcher=../../database/tableWatcher
         - range-types=../types
-        - logger=../../logger
+        - logger=../../lib/logger
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}

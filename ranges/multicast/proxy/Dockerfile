@@ -6,7 +6,7 @@ WORKDIR /app
 
 FROM base AS local-deps
 
-WORKDIR /app/logger
+WORKDIR /app/lib/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build

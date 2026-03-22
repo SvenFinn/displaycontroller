@@ -6,7 +6,7 @@ ARG SELF_DB_USER
 ARG SELF_DB_PASS
 
 FROM base AS deps-logger
-WORKDIR /app/logger
+WORKDIR /app/lib/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
@@ -33,7 +33,7 @@ RUN npm ci --loglevel=info && \
 FROM base AS local-deps
 WORKDIR /app
 
-COPY --from=deps-logger /app/logger /app/logger
+COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/database/local /app/database/local
 COPY --from=deps-screens-types /app/screens/types /app/screens/types
 COPY --from=deps-ranges-types /app/ranges/types /app/ranges/types

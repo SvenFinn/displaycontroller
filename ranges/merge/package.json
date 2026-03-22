@@ -19,7 +19,7 @@
     "dependencies": {
         "amqplib": "^0.10.9",
         "dc-db-local": "file:../../database/local",
-        "dc-logger": "file:../../logger",
+        "dc-logger": "file:../../lib/logger",
         "dc-ranges-ttl": "file:../ttl",
         "dc-ranges-types": "file:../types",
         "dotenv": "^17.3.1",

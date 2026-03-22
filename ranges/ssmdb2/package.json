@@ -19,7 +19,7 @@
         "amqplib": "^0.10.9",
         "dc-db-local": "file:../../database/local",
         "dc-db-ssmdb2": "file:../../database/ssmdb2",
-        "dc-logger": "file:../../logger",
+        "dc-logger": "file:../../lib/logger",
         "dc-ranges-types": "file:../types",
         "dc-streams": "file:../../streams",
         "dc-table-watcher": "file:../../database/tableWatcher",

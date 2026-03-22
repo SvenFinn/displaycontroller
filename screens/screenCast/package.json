@@ -11,7 +11,7 @@
     "description": "",
     "dependencies": {
         "amqplib": "^0.10.9",
-        "dc-logger": "file:../../logger",
+        "dc-logger": "file:../../lib/logger",
         "dc-screens-types": "file:../types",
         "socket.io": "^4.8.3"
     },

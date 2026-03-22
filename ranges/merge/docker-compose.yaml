@@ -17,7 +17,7 @@ services:
         - local-db=../../database/local
         - range-types=../types
         - range-ttl=../ttl
-        - logger=../../logger
+        - logger=../../lib/logger
     networks:
       - displaycontroller
     depends_on:

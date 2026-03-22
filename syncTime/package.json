@@ -17,7 +17,7 @@
     "dependencies": {
         "dc-db-local": "file:../database/local",
         "dc-db-smdb": "file:../database/smdb",
-        "dc-logger": "file:../logger",
+        "dc-logger": "file:../lib/logger",
         "dotenv": "^17.3.1",
         "socket.io-client": "^4.8.3"
     }
