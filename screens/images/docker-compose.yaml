@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: Dockerfile
       additional_contexts:
-        - logger=../../logger
+        - logger=../../lib/logger
         - files-utils=../utils/files
     volumes:
       - images_data:/app/files

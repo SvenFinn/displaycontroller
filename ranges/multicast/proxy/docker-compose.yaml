@@ -10,7 +10,7 @@ services:
       args:
         - MULTICAST_MSG_MIN_LENGTH=${MULTICAST_MSG_MIN_LENGTH}
       additional_contexts:
-        - logger=../../../logger
+        - logger=../../../lib/logger
     depends_on:
       dc-rabbitmq:
         condition: service_healthy

@@ -13,7 +13,7 @@ ARG CACHE_REFRESH_INTERVAL
 
 FROM base AS deps-logger
 
-WORKDIR /app/logger
+WORKDIR /app/lib/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
@@ -46,7 +46,7 @@ RUN npm ci --loglevel=info && \
 FROM base AS local-deps
 WORKDIR /app
 
-COPY --from=deps-logger /app/logger /app/logger
+COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/database/local /app/database/local
 COPY --from=deps-smdb /app/database/smdb /app/database/smdb
 COPY --from=deps-table-watcher /app/database/tableWatcher /app/database/tableWatcher

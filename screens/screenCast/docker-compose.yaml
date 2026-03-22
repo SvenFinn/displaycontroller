@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: Dockerfile
       additional_contexts:
-        - logger=../../logger
+        - logger=../../lib/logger
         - screen-types=../types
     depends_on:
       dc-rabbitmq:

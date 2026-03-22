@@ -13,7 +13,7 @@
         "amqplib": "^0.10.9",
         "dc-db-local": "file:../database/local",
         "dc-db-smdb": "file:../database/smdb",
-        "dc-logger": "file:../logger",
+        "dc-logger": "file:../lib/logger",
         "dc-screens-types": "file:../screens/types",
         "dotenv": "^17.3.1",
         "express": "^5.2.1",

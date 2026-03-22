@@ -13,7 +13,7 @@ services:
         - local-db=../database/local
         - smdb=../database/smdb
         - screen-types=../screens/types
-        - logger=../logger
+        - logger=../lib/logger
       args:
         - MIN_SM_VERSION=${MIN_SM_VERSION}
         - MAX_SM_VERSION=${MAX_SM_VERSION}

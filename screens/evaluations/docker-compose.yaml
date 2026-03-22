@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - local-db=../../database/local
-        - logger=../../logger
+        - logger=../../lib/logger
         - files-utils=../utils/files
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

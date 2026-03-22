@@ -19,7 +19,7 @@ services:
         - local-db=../../database/local
         - range-types=../types
         - range-ttl=../ttl
-        - logger=../../logger
+        - logger=../../lib/logger
         - streams=../../streams
     networks:
       - displaycontroller
