@@ -12,16 +12,16 @@
     "dependencies": {
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
-        "dotenv": "^17.2.3",
+        "dotenv": "^17.2.4",
         "express": "^5.2.1",
         "express-rate-limit": "^8.2.1",
-        "jsdom": "^27.4.0",
+        "jsdom": "^28.0.0",
         "socket.io-client": "^4.8.3"
     },
     "devDependencies": {
         "@types/express": "^5.0.6",
         "@types/jsdom": "^27.0.0",
-        "@types/node": "^25.0.9",
+        "@types/node": "^25.2.1",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.9.3"
     }
