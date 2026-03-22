@@ -13,7 +13,7 @@
         "amqplib": "^0.10.9",
         "csv-parse": "^6.1.0",
         "date-fns": "^4.1.0",
-        "dc-db-local": "file:../../database/local",
+        "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
         "dc-ttl": "file:../../lib/ttl",
         "dc-ranges-types": "file:../types",

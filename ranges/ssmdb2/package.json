@@ -17,12 +17,12 @@
     },
     "dependencies": {
         "amqplib": "^0.10.9",
-        "dc-db-local": "file:../../database/local",
-        "dc-db-ssmdb2": "file:../../database/ssmdb2",
+        "dc-db-local": "file:../../lib/database/local",
+        "dc-db-ssmdb2": "file:../../lib/database/ssmdb2",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges-types": "file:../types",
         "dc-streams": "file:../../lib/streams",
-        "dc-table-watcher": "file:../../database/tableWatcher",
+        "dc-table-watcher": "file:../../lib/database/tableWatcher",
         "dotenv": "^17.3.1"
     }
 }

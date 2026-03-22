@@ -1,5 +1,6 @@
 include:
   - ./pgadmin/docker-compose.yaml
+  - ./migrate/docker-compose.yaml
 
 services:
   dc-database:
@@ -20,22 +21,6 @@ services:
       retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql
-  dc-db-migrate:
-    container_name: dc-db-migrate
-    image: ghcr.io/svenfinn/dc-db-migrate:${APP_VERSION}
-    networks:
-      - displaycontroller
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - SELF_DB_HOST=${SELF_DB_HOST}
-        - SELF_DB_USER=${SELF_DB_USER}
-        - SELF_DB_PASS=${SELF_DB_PASS}
-        - SELF_DB_NAME=${SELF_DB_NAME}
-    depends_on:
-      dc-database:
-        condition: service_healthy
 
 volumes:
   postgres_data:

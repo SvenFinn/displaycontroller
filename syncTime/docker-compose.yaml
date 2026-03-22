@@ -8,8 +8,8 @@ services:
       context: .
       dockerfile: Dockerfile
       additional_contexts:
-        - local-db=../database/local
-        - smdb-db=../database/smdb
+        - local-db=../lib/database/local
+        - smdb-db=../lib/database/smdb
         - logger=../lib/logger
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

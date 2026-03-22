@@ -16,10 +16,10 @@ services:
         - SM_DB_PASS=${SM_DB_PASS}
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
-        - local-db=../../database/local
-        - ssmdb2=../../database/ssmdb2
+        - local-db=../../lib/database/local
+        - ssmdb2=../../lib/database/ssmdb2
         - range-types=../types
-        - table-watcher=../../database/tableWatcher
+        - table-watcher=../../lib/database/tableWatcher
         - logger=../../lib/logger
         - streams=../../lib/streams
     networks:

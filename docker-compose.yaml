@@ -2,7 +2,7 @@ name: displaycontroller
 
 include:
   - proxy/docker-compose.yaml
-  - database/local/docker-compose.yaml
+  - database/docker-compose.yaml
   - serverState/docker-compose.yaml
   - syncTime/docker-compose.yaml
   - screens/docker-compose.yaml

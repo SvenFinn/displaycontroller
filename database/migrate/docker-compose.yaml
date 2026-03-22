@@ -1,0 +1,19 @@
+services:
+  dc-db-migrate:
+    container_name: dc-db-migrate
+    image: ghcr.io/svenfinn/dc-db-migrate:${APP_VERSION}
+    networks:
+      - displaycontroller
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SELF_DB_HOST=${SELF_DB_HOST}
+        - SELF_DB_USER=${SELF_DB_USER}
+        - SELF_DB_PASS=${SELF_DB_PASS}
+        - SELF_DB_NAME=${SELF_DB_NAME}
+      additional_contexts:
+        - local-db=../../lib/database/local
+    depends_on:
+      dc-database:
+        condition: service_healthy
