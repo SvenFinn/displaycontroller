@@ -10,12 +10,12 @@
     "author": "Sven Finn",
     "license": "ISC",
     "dependencies": {
-        "body-parser": "^2.2.0",
+        "body-parser": "^2.2.2",
         "dc-logger": "file:../../logger",
         "dotenv": "^17.2.2",
         "express": "^5.1.0",
         "express-fileupload": "^1.5.2",
-        "express-rate-limit": "^8.1.0",
+        "express-rate-limit": "^8.1.1",
         "pdf2pic": "^3.2.0"
     },
     "devDependencies": {

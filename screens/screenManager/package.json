@@ -11,7 +11,7 @@
     "description": "",
     "dependencies": {
         "amqplib": "^0.10.9",
-        "body-parser": "^2.2.0",
+        "body-parser": "^2.2.2",
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../logger",
         "dc-ranges-types": "file:../../ranges/types",

@@ -15,7 +15,7 @@
         "dotenv": "^17.2.2",
         "eventsource": "^4.0.0",
         "express": "^5.1.0",
-        "express-rate-limit": "^8.1.0",
+        "express-rate-limit": "^8.1.1",
         "jsdom": "^27.0.0"
     },
     "devDependencies": {
