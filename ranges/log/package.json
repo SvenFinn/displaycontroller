@@ -15,7 +15,7 @@
         "date-fns": "^4.1.0",
         "dc-db-local": "file:../../database/local",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges-ttl": "file:../ttl",
+        "dc-ttl": "file:../../lib/ttl",
         "dc-ranges-types": "file:../types",
         "dc-streams": "file:../../lib/streams",
         "dotenv": "^17.3.1",

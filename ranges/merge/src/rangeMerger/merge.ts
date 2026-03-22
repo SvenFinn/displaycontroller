@@ -1,4 +1,4 @@
-import { TTLHandler } from "dc-ranges-ttl";
+import { TTLHandler } from "dc-ttl";
 import { ActiveRange, InactiveRange, RangeShooter, Source } from "dc-ranges-types";
 import { InternalRange, Discipline, Shooter, StartList, Hits, Hit } from "dc-ranges-types";
 import { getDiscipline } from "../cache/disciplines";

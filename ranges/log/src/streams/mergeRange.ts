@@ -1,4 +1,4 @@
-import { TTLHandler } from "dc-ranges-ttl";
+import { TTLHandler } from "dc-ttl";
 import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "dc-ranges-types";
 import { LogInternalRange, MulticastInternalRange } from "../types";
 import { LocalClient } from "dc-db-local";
