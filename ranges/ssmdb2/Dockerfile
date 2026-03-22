@@ -18,20 +18,20 @@ RUN npm ci --loglevel=info && \
     npm run build;
 
 FROM base AS deps-local-db
-WORKDIR /app/database/local
+WORKDIR /app/lib/database/local
 COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
     export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
 FROM deps-local-db AS deps-ssmdb2
-WORKDIR /app/database/ssmdb2
+WORKDIR /app/lib/database/ssmdb2
 COPY --from=ssmdb2 . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
 FROM deps-logger AS deps-table-watcher
-WORKDIR /app/database/tableWatcher
+WORKDIR /app/lib/database/tableWatcher
 COPY --from=table-watcher . .
 RUN npm ci --loglevel=info && \
     npm run build;
@@ -53,9 +53,9 @@ WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-streams /app/lib/streams /app/lib/streams
-COPY --from=deps-local-db /app/database/local /app/database/local
-COPY --from=deps-ssmdb2 /app/database/ssmdb2 /app/database/ssmdb2
-COPY --from=deps-table-watcher /app/database/tableWatcher /app/database/tableWatcher
+COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
+COPY --from=deps-ssmdb2 /app/lib/database/ssmdb2 /app/lib/database/ssmdb2
+COPY --from=deps-table-watcher /app/lib/database/tableWatcher /app/lib/database/tableWatcher
 COPY --from=deps-range-types /app/ranges/types /app/ranges/types
 
 FROM local-deps AS deps

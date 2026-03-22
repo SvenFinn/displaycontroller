@@ -20,14 +20,14 @@ RUN npm ci --loglevel=info && \
     npm run build;
 
 FROM base AS deps-local-db
-WORKDIR /app/database/local
+WORKDIR /app/lib/database/local
 COPY --from=local-db . .
 RUN npm ci --loglevel=info && \
     export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
 FROM deps-local-db AS deps-smdb
-WORKDIR /app/database/smdb
+WORKDIR /app/lib/database/smdb
 COPY --from=smdb . .
 RUN npm ci --loglevel=info && \
     npm run build;
@@ -42,8 +42,8 @@ FROM base AS local-deps
 WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
-COPY --from=deps-local-db /app/database/local /app/database/local
-COPY --from=deps-smdb /app/database/smdb /app/database/smdb
+COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
+COPY --from=deps-smdb /app/lib/database/smdb /app/lib/database/smdb
 COPY --from=deps-screens-types /app/screens/types /app/screens/types
 
 FROM local-deps AS deps

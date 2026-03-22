@@ -16,7 +16,7 @@ services:
         - SM_SSH_PASS=${SM_SSH_PASS}
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
-        - local-db=../../database/local
+        - local-db=../../lib/database/local
         - range-types=../types
         - ttl=../../lib/ttl
         - logger=../../lib/logger

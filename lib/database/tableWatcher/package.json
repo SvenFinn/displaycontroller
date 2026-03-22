@@ -20,7 +20,7 @@
         "dist"
     ],
     "dependencies": {
-        "dc-logger": "file:../../lib/logger",
+        "dc-logger": "file:../../logger",
         "socket.io-client": "^4.8.3"
     }
 }

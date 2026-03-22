@@ -9,20 +9,21 @@ ARG SELF_DB_PASS
 
 FROM base AS deps
 
-COPY package.json package-lock.json schema.prisma ./
+COPY --from=local-db package.json package-lock.json schema.prisma ./
 RUN npm ci --omit=dev --loglevel=info;
 
 FROM base AS build
 
-COPY package.json package-lock.json schema.prisma ./
+COPY --from=local-db package.json package-lock.json schema.prisma ./
 RUN npm ci --loglevel=info;
 
-COPY . .
+COPY --from=local-db . .
 RUN export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build && \
     echo "SELF_DB_URL=postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" > dist/.env;
-COPY migrations dist/migrations
-COPY src/entrypoint.sh prisma.config.ts schema.prisma dist/
+COPY --from=local-db migrations dist/migrations
+COPY --from=local-db prisma.config.ts schema.prisma dist/
+COPY entrypoint.sh dist/
 
 FROM base AS final
 
