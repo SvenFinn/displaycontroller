@@ -12,7 +12,8 @@
             "@shared/files": [
                 "../utils/files"
             ]
-    }
+        },
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts"
