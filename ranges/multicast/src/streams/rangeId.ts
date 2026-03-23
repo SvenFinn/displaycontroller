@@ -39,11 +39,13 @@ export class RangeIdentifier extends TypedTransform<RangeProxyType, IdentifiedRa
         const parts = rangeIp.split(".");
         if (parts.length !== 4) {
             logger.warn(`Invalid IP ${rangeIp} for range with mac ${rangeMac}`);
+            return null
         }
 
         const candidate = parseInt(parts[3], 10);
         if (isNaN(candidate)) {
             logger.warn(`Invalid IP ${rangeIp} for range with mac ${rangeMac}`);
+            return null
         }
 
         const exists = await this.prismaClient.knownRanges.findUnique({
