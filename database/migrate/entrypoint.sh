@@ -26,3 +26,5 @@ if [ -n "$diff" ]; then
     echo "$diff" >&2
     exit 1
 fi
+
+node ./seed.js
