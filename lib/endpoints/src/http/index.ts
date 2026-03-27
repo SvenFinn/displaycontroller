@@ -20,5 +20,5 @@ export const isResponse = createIs<Response<unknown>>();
 export const isHttpError = createIs<HttpError>();
 
 export { request } from "./request";
-export { createEndpointHandler } from "./handler";
+export { registerEndpoint } from "./handler";
 export { Endpoint } from "./endpoint";

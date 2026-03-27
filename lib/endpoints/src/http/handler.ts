@@ -5,9 +5,9 @@ import { Endpoint, GetEndpoint, MutatingEndpoint } from "./endpoint";
 export type MutatingRequestHandler<P extends object, Q extends object, B, RB> = (params: P, query: Q, body: B) => Promise<RB | Response<RB> | undefined>;
 export type GetRequestHandler<P extends object, Q extends object, RB> = (params: P, query: Q) => Promise<RB | Response<RB> | undefined>;
 
-export function createEndpointHandler<P extends object, Q extends object, RB>(app: Express, endpoint: GetEndpoint<P, Q, RB>, handler: GetRequestHandler<P, Q, RB>): void;
-export function createEndpointHandler<P extends object, Q extends object, B, RB>(app: Express, endpoint: MutatingEndpoint<P, Q, B, RB>, handler: MutatingRequestHandler<P, Q, B, RB>): void;
-export function createEndpointHandler<P extends object, Q extends object, B, RB>(app: Express, endpoint: Endpoint<P, Q, B, RB>, handler: GetRequestHandler<P, Q, RB> | MutatingRequestHandler<P, Q, B, RB>): void {
+export function registerEndpoint<P extends object, Q extends object, RB>(app: Express, endpoint: GetEndpoint<P, Q, RB>, handler: GetRequestHandler<P, Q, RB>): void;
+export function registerEndpoint<P extends object, Q extends object, B, RB>(app: Express, endpoint: MutatingEndpoint<P, Q, B, RB>, handler: MutatingRequestHandler<P, Q, B, RB>): void;
+export function registerEndpoint<P extends object, Q extends object, B, RB>(app: Express, endpoint: Endpoint<P, Q, B, RB>, handler: GetRequestHandler<P, Q, RB> | MutatingRequestHandler<P, Q, B, RB>): void {
     const { method, request } = endpoint;
     const expressHandler = async (req: ExpressRequest, res: ExpressResponse) => {
         const { params, query, body } = req;
