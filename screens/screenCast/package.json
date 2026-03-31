@@ -10,7 +10,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "amqplib": "^0.10.9",
+        "amqplib": "^1.0.3",
         "dc-logger": "file:../../lib/logger",
         "dc-screens-types": "file:../types",
         "socket.io": "^4.8.3"

@@ -15,7 +15,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@prisma/adapter-mariadb": "^7.5.0",
+        "@prisma/adapter-mariadb": "^7.6.0",
         "@prisma/client": "^7.5.0",
         "dc-db-local": "file:../local",
         "dotenv": "^17.3.1"
