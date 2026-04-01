@@ -1,42 +1,23 @@
 import express, { Express, Request } from "express";
 import * as fs from "fs";
-import * as nodePath from "path";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
 import { scanDirectory } from "@shared/files/scanDir";
+import { resolveSafePath } from "@shared/files/helpers";
 import { logger } from "dc-logger";
 import bodyParser from "body-parser";
 import { rateLimit } from "express-rate-limit";
+import sanitizeFilename from "sanitize-filename";
 
-const basePath = nodePath.resolve(`/app/files`);
-
-/**
- * Resolves a user-supplied path relative to basePath and verifies it stays
- * within basePath. Returns null if the resolved path would escape basePath.
- */
-function resolveSafePath(userInput: string): string | null {
-    const resolved = nodePath.resolve(basePath, userInput);
-    if (resolved !== basePath && !resolved.startsWith(basePath + nodePath.sep)) {
-        return null;
-    }
-    return resolved;
-}
-
-/**
- * Sanitizes a filename by removing path separators, null bytes, and other
- * characters that could be used for path traversal or injection attacks.
- */
-function sanitizeFileName(name: string): string {
-    return nodePath.basename(name).replace(/[\0]/g, '_');
-}
+const basePath = `/app/files`;
 
 if (!fs.existsSync(basePath)) {
     logger.debug("Creating base path");
     fs.mkdirSync(basePath, { recursive: true });
 }
-if (!fs.existsSync(nodePath.join(basePath, "icon.png"))) {
+if (!fs.existsSync(`${basePath}/icon.png`)) {
     logger.debug("Creating icon.png");
-    fs.copyFileSync(nodePath.join(__dirname, "img", "icon.png"), nodePath.join(basePath, "icon.png"));
+    fs.copyFileSync(`${__dirname}/img/icon.png`, `${basePath}/icon.png`);
 }
 
 const app: Express = express();
@@ -59,7 +40,7 @@ app.set("trust proxy", 1);
 app.get("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`GET ${path}`);
-    const realPath = resolveSafePath(path);
+    const realPath = resolveSafePath(basePath, path);
     if (!realPath) {
         logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(404).sendFile("img/404.png", { root: __dirname });
@@ -95,7 +76,7 @@ async function handleFiles(files: fileUpload.FileArray, path: string) {
 }
 
 async function handleFile(file: fileUpload.UploadedFile, path: string) {
-    const safeFileName = sanitizeFileName(file.name);
+    const safeFileName = sanitizeFilename(file.name);
     if (file.mimetype === "application/pdf") {
         logger.info("Converting PDF to images");
         let minDimension = 1920;
@@ -137,7 +118,7 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
 app.post("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`POST ${path}`);
-    const realPath = resolveSafePath(path);
+    const realPath = resolveSafePath(basePath, path);
     if (!realPath) {
         logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
@@ -184,7 +165,7 @@ app.post("/api/images{/*files}", async (req: Request, res) => {
 app.delete("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`DELETE ${path}`);
-    const realPath = resolveSafePath(path);
+    const realPath = resolveSafePath(basePath, path);
     if (!realPath) {
         logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
@@ -219,7 +200,7 @@ app.delete("/api/images{/*files}", async (req: Request, res) => {
 app.put("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`PUT ${path}`);
-    const realPath = resolveSafePath(path);
+    const realPath = resolveSafePath(basePath, path);
     if (!realPath) {
         logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
@@ -258,7 +239,7 @@ app.put("/api/images{/*files}", async (req: Request, res) => {
         });
         return;
     }
-    const realDestination = resolveSafePath(destination);
+    const realDestination = resolveSafePath(basePath, destination);
     if (!realDestination) {
         logger.warn(`SECURITY: Path traversal attempt detected in destination. Destination: ${destination}, IP: ${req.ip}`);
         res.status(400).send({

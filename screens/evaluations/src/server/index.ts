@@ -2,6 +2,7 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import { logger } from "dc-logger";
 import { scanDirectory } from "@shared/files/scanDir";
+import { resolveSafePath } from "@shared/files/helpers";
 import { rateLimit } from "express-rate-limit";
 import { htmlPath } from "../constants";
 
@@ -20,15 +21,15 @@ app.set("trust proxy", 1);
 app.get("/api/evaluations{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`GET ${path}`);
-    if (path.includes("..")) {
-        logger.info("Found .. in path");
+    const realPath = resolveSafePath(htmlPath, path);
+    if (!realPath) {
+        logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(404).send({
             code: 404,
             message: "Invalid path",
         });
         return;
     }
-    const realPath = `${htmlPath}/${path}`;
     if (!fs.existsSync(realPath)) {
         logger.info("File not found");
         res.status(404).send({

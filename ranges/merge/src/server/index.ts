@@ -7,6 +7,8 @@ import { Server } from 'socket.io';
 import { isStartList } from 'dc-ranges-types';
 
 const app: Express = express();
+// Parse JSON request bodies so that POST/PUT handlers can read req.body fields
+// (e.g. rangeId in POST /api/ranges/known/:rangeMac).
 app.use(express.json());
 const server = createServer(app);
 const io = new Server(server, {
