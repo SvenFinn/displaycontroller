@@ -18,7 +18,7 @@
     "dependencies": {
         "@types/ahocorasick": "^1.0.0",
         "ahocorasick": "^1.0.2",
-        "amqplib": "^0.10.9",
+        "amqplib": "^1.0.3",
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges-types": "file:../types",

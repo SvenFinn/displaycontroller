@@ -50,7 +50,7 @@ function generate_proxy_certs() {
     )
 }
 
-npx npm-check-updates --upgrade --loglevel=info --deep
+npx npm-check-updates --upgrade --loglevel=info --deep --reject /typescript/
 
 install_dependencies ./lib/logger
 
