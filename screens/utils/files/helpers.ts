@@ -1,3 +1,4 @@
+import * as nodePath from "path";
 import { DirectoryListing, isDirectoryListing } from ".";
 
 export function flattenFileList(listing: DirectoryListing, path: string = ""): string[] {
@@ -7,6 +8,18 @@ export function flattenFileList(listing: DirectoryListing, path: string = ""): s
         }
         return flattenFileList(item.files, `${path}/${item.name}`);
     });
+}
+
+/**
+ * Resolves a user-supplied path relative to basePath and verifies it stays
+ * within basePath. Returns null if the resolved path would escape basePath.
+ */
+export function resolveSafePath(basePath: string, userInput: string): string | null {
+    const resolved = nodePath.resolve(basePath, userInput);
+    if (resolved !== basePath && !resolved.startsWith(basePath + nodePath.sep)) {
+        return null;
+    }
+    return resolved;
 }
 
 export function sanitizePath(path: string): string | null {

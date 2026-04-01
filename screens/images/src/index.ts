@@ -3,9 +3,11 @@ import * as fs from "fs";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
 import { scanDirectory } from "@shared/files/scanDir";
+import { resolveSafePath } from "@shared/files/helpers";
 import { logger } from "dc-logger";
 import bodyParser from "body-parser";
 import { rateLimit } from "express-rate-limit";
+import sanitizeFilename from "sanitize-filename";
 
 const basePath = `/app/files`;
 
@@ -15,7 +17,6 @@ if (!fs.existsSync(basePath)) {
 }
 if (!fs.existsSync(`${basePath}/icon.png`)) {
     logger.debug("Creating icon.png");
-
     fs.copyFileSync(`${__dirname}/img/icon.png`, `${basePath}/icon.png`);
 }
 
@@ -39,12 +40,12 @@ app.set("trust proxy", 1);
 app.get("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`GET ${path}`);
-    if (path.includes("..")) {
-        logger.info("Found .. in path");
+    const realPath = resolveSafePath(basePath, path);
+    if (!realPath) {
+        logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(404).sendFile("img/404.png", { root: __dirname });
         return;
     }
-    const realPath = `${basePath}/${path}`;
     if (!fs.existsSync(realPath)) {
         logger.info("File not found");
         res.status(404).sendFile("img/404.png", { root: __dirname });
@@ -75,6 +76,7 @@ async function handleFiles(files: fileUpload.FileArray, path: string) {
 }
 
 async function handleFile(file: fileUpload.UploadedFile, path: string) {
+    const safeFileName = sanitizeFilename(file.name);
     if (file.mimetype === "application/pdf") {
         logger.info("Converting PDF to images");
         let minDimension = 1920;
@@ -83,13 +85,13 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
             minDimension = Math.min(...screenResolution.filter((v) => !isNaN(v)), minDimension);
         }
         logger.debug(`Using resolution ${minDimension}`);
-        if (fs.existsSync(`${path}/${file.name}`)) {
-            fs.rmSync(`${path}/${file.name}`, { recursive: true });
+        if (fs.existsSync(`${path}/${safeFileName}`)) {
+            fs.rmSync(`${path}/${safeFileName}`, { recursive: true });
         }
-        fs.mkdirSync(`${path}/${file.name}`);
+        fs.mkdirSync(`${path}/${safeFileName}`);
         const pdf = fromPath(file.tempFilePath, {
             density: 300,
-            savePath: path + "/" + file.name,
+            savePath: path + "/" + safeFileName,
             saveFilename: "page",
             width: minDimension,
             height: minDimension,
@@ -105,26 +107,26 @@ async function handleFile(file: fileUpload.UploadedFile, path: string) {
                 continue;
             }
             const fileNumber = img.page.toString().padStart(digitNumber, "0");
-            const path = img.path.split("/").slice(0, -1).join("/");
-            await fs.promises.rename(img.path, `${path}/page-${fileNumber}.png`);
+            const imgDir = img.path.split("/").slice(0, -1).join("/");
+            await fs.promises.rename(img.path, `${imgDir}/page-${fileNumber}.png`);
         }
     } else {
-        await file.mv(`${path}/${file.name}`);
+        await file.mv(`${path}/${safeFileName}`);
     }
 }
 
 app.post("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`POST ${path}`);
-    if (path.includes("..")) {
-        logger.info("Found .. in path");
+    const realPath = resolveSafePath(basePath, path);
+    if (!realPath) {
+        logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
             code: 400,
             message: "Invalid path",
         })
         return;
     }
-    const realPath = `${basePath}/${path}`;
     let created = false;
     if (!fs.existsSync(realPath)) {
         logger.debug("Creating folder");
@@ -163,14 +165,15 @@ app.post("/api/images{/*files}", async (req: Request, res) => {
 app.delete("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`DELETE ${path}`);
-    if (path.includes("..")) {
+    const realPath = resolveSafePath(basePath, path);
+    if (!realPath) {
+        logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
             code: 400,
             message: "Invalid path",
         })
         return;
     }
-    const realPath = `${basePath}/${path}`;
     if (!fs.existsSync(realPath)) {
         res.status(404).send({
             code: 404,
@@ -197,14 +200,15 @@ app.delete("/api/images{/*files}", async (req: Request, res) => {
 app.put("/api/images{/*files}", async (req: Request, res) => {
     const path = (req.params.files as unknown as string[] || []).join("/");
     logger.info(`PUT ${path}`);
-    if (path.includes("..")) {
+    const realPath = resolveSafePath(basePath, path);
+    if (!realPath) {
+        logger.warn(`SECURITY: Path traversal attempt detected. Path: ${path}, IP: ${req.ip}`);
         res.status(400).send({
             code: 400,
             message: "Invalid path",
         })
         return;
     }
-    const realPath = `${basePath}/${path}`;
     if (!fs.existsSync(realPath)) {
         res.status(404).send({
             code: 404,
@@ -235,14 +239,15 @@ app.put("/api/images{/*files}", async (req: Request, res) => {
         });
         return;
     }
-    if (destination.includes("..")) {
+    const realDestination = resolveSafePath(basePath, destination);
+    if (!realDestination) {
+        logger.warn(`SECURITY: Path traversal attempt detected in destination. Destination: ${destination}, IP: ${req.ip}`);
         res.status(400).send({
             code: 400,
             message: "Invalid new path",
         })
         return;
     }
-    const realDestination = `${basePath}/${destination}`;
     if (realPath === realDestination) {
         res.status(400).send({
             code: 400,

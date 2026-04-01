@@ -7,6 +7,9 @@ import { Server } from 'socket.io';
 import { isStartList } from 'dc-ranges-types';
 
 const app: Express = express();
+// Parse JSON request bodies so that POST/PUT handlers can read req.body fields
+// (e.g. rangeId in POST /api/ranges/known/:rangeMac).
+app.use(express.json());
 const server = createServer(app);
 const io = new Server(server, {
     path: '/api/ranges/ws'
@@ -19,10 +22,15 @@ io.on('connection', (socket) => {
     let ranges: number[] | null = null;
 
     if (handshakeRanges) {
-        const rawRanges = Array.isArray(handshakeRanges) ? handshakeRanges : JSON.parse(handshakeRanges);
-        ranges = rawRanges
-            .map((r: any) => parseInt(r.toString()))
-            .filter((n: number) => !isNaN(n));
+        try {
+            const rawRanges = Array.isArray(handshakeRanges) ? handshakeRanges : JSON.parse(handshakeRanges);
+            ranges = rawRanges
+                .map((r: any) => parseInt(r.toString()))
+                .filter((n: number) => !isNaN(n));
+        } catch (error) {
+            logger.warn(`Invalid ranges JSON in handshake: ${error}`);
+            ranges = null;
+        }
     }
     setTimeout(() => {
         rangeManager.addSocket(socket, ranges);
@@ -67,7 +75,7 @@ app.get('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
 
 app.post('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
     const rangeMac: string = req.params.rangeMac;
-    const rangeId = parseInt(req.body);
+    const rangeId = parseInt(req.body?.rangeId);
     if (isNaN(rangeId)) {
         res.status(400).send('Invalid range ID');
         return;
