@@ -15,7 +15,7 @@
   "dependencies": {
     "dc-endpoints": "file:../../lib/endpoints",
     "dc-ranges-types": "file:../types",
-    "typia": "^12.0.1"
+    "typia": "^12.0.2"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
