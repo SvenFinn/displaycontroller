@@ -4,7 +4,9 @@ import { logger } from "dc-logger";
 import { rangeManager } from '../rangeMan';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { isStartList } from 'dc-ranges-types';
+import { isStartList, StartList } from 'dc-ranges-types';
+import { registerEndpoint } from 'dc-endpoints';
+import { createOrUpdateKnownRange, deleteKnownRange, getActiveRanges, getAllKnownRanges, getAllStartLists, getFreeRanges, getKnownRange, getRange } from 'dc-ranges-endpoints';
 
 const app: Express = express();
 const server = createServer(app);
@@ -35,22 +37,21 @@ io.on('connection', (socket) => {
 
 const localClient: LocalClient = createLocalClient();
 
-app.get('/api/ranges', async (req: Request, res: Response) => {
-    res.status(200).send(rangeManager.getActiveRanges());
+registerEndpoint(app, getActiveRanges, async (params, query) => {
+    return rangeManager.getActiveRanges();
 });
 
-app.get('/api/ranges/free', async (req: Request, res: Response) => {
-    const freeRanges = rangeManager.getFreeRanges();
-    res.status(200).send(freeRanges);
+registerEndpoint(app, getFreeRanges, async (params, query) => {
+    return rangeManager.getFreeRanges();
 });
 
-app.get('/api/ranges/known', async (req: Request, res: Response) => {
+registerEndpoint(app, getAllKnownRanges, async (params, query) => {
     const knownRanges = await localClient.knownRanges.findMany();
-    res.status(200).send(knownRanges);
+    return knownRanges;
 });
 
-app.get('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
-    const rangeMac: string = req.params.rangeMac;
+registerEndpoint(app, getKnownRange, async (params, query) => {
+    const rangeMac = params.rangeMac;
     const knownRange = await localClient.knownRanges.findUnique(
         {
             where: {
@@ -59,19 +60,18 @@ app.get('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
         }
     );
     if (knownRange) {
-        res.status(200).send(knownRange);
+        return knownRange;
     } else {
-        res.status(404).send('Range not found');
+        return {
+            code: 404,
+            message: "Range not found"
+        };
     }
 });
 
-app.post('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
-    const rangeMac: string = req.params.rangeMac;
-    const rangeId = parseInt(req.body);
-    if (isNaN(rangeId)) {
-        res.status(400).send('Invalid range ID');
-        return;
-    }
+registerEndpoint(app, createOrUpdateKnownRange, async (params, query, body) => {
+    const rangeMac = params.rangeMac;
+    const rangeId = body.rangeId;
     const knownRange = await localClient.knownRanges.upsert({
         where: {
             macAddress: rangeMac,
@@ -84,47 +84,53 @@ app.post('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
             rangeId: rangeId,
         },
     });
-    res.status(200).send(knownRange);
+    return knownRange;
 });
 
-app.delete('/api/ranges/known/:rangeMac', async (req: Request, res: Response) => {
-    const rangeMac: string = req.params.rangeMac;
+registerEndpoint(app, deleteKnownRange, async (params, query) => {
+    const rangeMac = params.rangeMac;
     const knownRange = await localClient.knownRanges.delete({
         where: {
             macAddress: rangeMac,
         },
     });
-    res.status(200).send(knownRange);
+    return knownRange;
 });
 
-app.get('/api/ranges/start-lists', async (req: Request, res: Response) => {
-    logger.info("GET /api/ranges/start-lists");
+registerEndpoint(app, getAllStartLists, async (params, query) => {
     const startListsDb = await localClient.cache.findMany({
         where: {
             type: "startList",
         },
     });
-    const startLists = startListsDb
-        .map(sl => sl.value)
-        .filter(isStartList);
-    res.status(200).send(startLists);
+    let startLists: StartList[] = [];
+    for (const entry of startListsDb) {
+        try {
+            // @ts-ignore - prisma has ass types
+            const parsed = JSON.parse(entry.value);
+            if (isStartList(parsed)) {
+                startLists.push(parsed);
+            } else {
+                logger.warn(`Cache entry with key ${entry.key} is not a valid StartList`);
+            }
+        } catch (e) {
+            logger.warn(`Cache entry with key ${entry.key} has invalid JSON`);
+        }
+    }
+    return startLists;
 });
 
-app.get('/api/ranges/:rangeId', async (req: Request, res: Response) => {
-    logger.info("GET /api/ranges/:range");
-    const range: number = parseInt(req.params.rangeId);
-    if (isNaN(range)) {
-        res.status(400).send('Invalid range ID');
-        return;
+registerEndpoint(app, getRange, async (params) => {
+    const rangeId = parseInt(params.rangeId);
+    if (isNaN(rangeId)) {
+        return {
+            code: 400,
+            message: "Invalid range ID"
+        };
     }
-    const rangeData = rangeManager.getRangeData(range);
-    if (rangeData) {
-        res.status(200).send(rangeData);
-    } else {
-        res.status(404).send('Range not found');
-    }
-});
+    return rangeManager.getRangeData(rangeId);
 
+});
 
 server.listen(80, () => {
     logger.info('Listening on port 80');

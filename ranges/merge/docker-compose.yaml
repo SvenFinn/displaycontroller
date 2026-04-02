@@ -15,9 +15,11 @@ services:
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
         - local-db=../../lib/database/local
-        - range-types=../types
+        - ranges-types=../types
         - ttl=../../lib/ttl
         - logger=../../lib/logger
+        - endpoints=../../lib/endpoints
+        - ranges-endpoints=../endpoints
     networks:
       - displaycontroller
     depends_on:
@@ -28,4 +30,4 @@ services:
       dc-db-migrate:
         condition: service_completed_successfully
     environment:
-      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_LEVEL=debug

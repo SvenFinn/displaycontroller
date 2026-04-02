@@ -17,7 +17,7 @@ if (!process.env.CACHE_REFRESH_INTERVAL) {
 const refreshInterval = parseInt(process.env.CACHE_REFRESH_INTERVAL);
 
 async function update() {
-    logger.info("Updating cache")
+    logger.info("Updating caches")
     await Promise.all([
         updateDisciplines(client),
         updateOverrides(client),
