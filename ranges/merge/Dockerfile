@@ -29,7 +29,22 @@ RUN npm ci --loglevel=info && \
 
 FROM base AS deps-ranges-types
 WORKDIR /app/ranges/types
-COPY --from=range-types . .
+COPY --from=ranges-types . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
+FROM deps-logger AS deps-endpoints
+WORKDIR /app/lib/endpoints
+COPY --from=endpoints . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
+FROM deps-ranges-types AS deps-ranges-endpoints
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
+
+WORKDIR /app/ranges/endpoints
+
+COPY --from=ranges-endpoints . . 
 RUN npm ci --loglevel=info && \
     npm run build;
 
@@ -39,7 +54,9 @@ WORKDIR /app
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-ttl /app/lib/ttl /app/lib/ttl
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-ranges-types /app/ranges/types /app/ranges/types
+COPY --from=deps-ranges-endpoints /app/ranges/endpoints /app/ranges/endpoints
 
 FROM local-deps AS deps
 
