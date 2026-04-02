@@ -17,9 +17,9 @@
     ],
     "devDependencies": {
         "ts-patch": "^3.3.0",
-        "typescript": "~5.9.3"
+        "typescript": "~6.0.2"
     },
     "dependencies": {
-        "typia": "^12.0.1"
+        "typia": "^12.0.2"
     }
 }
