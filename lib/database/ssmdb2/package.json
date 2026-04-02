@@ -16,7 +16,7 @@
         "@prisma/adapter-mariadb": "^7.6.0",
         "@prisma/client": "^7.6.0",
         "dc-db-local": "file:../local",
-        "dotenv": "^17.3.1"
+        "dotenv": "^17.4.0"
     },
     "devDependencies": {
         "@types/node": "^25.5.0",

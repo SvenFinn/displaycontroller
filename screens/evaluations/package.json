@@ -12,7 +12,7 @@
     "dependencies": {
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
-        "dotenv": "^17.3.1",
+        "dotenv": "^17.4.0",
         "express": "^5.2.1",
         "express-rate-limit": "^8.3.2",
         "jsdom": "^29.0.1",

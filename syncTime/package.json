@@ -18,7 +18,7 @@
         "dc-db-local": "file:../lib/database/local",
         "dc-db-smdb": "file:../lib/database/smdb",
         "dc-logger": "file:../lib/logger",
-        "dotenv": "^17.3.1",
+        "dotenv": "^17.4.0",
         "socket.io-client": "^4.8.3"
     }
 }
