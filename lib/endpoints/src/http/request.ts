@@ -1,19 +1,19 @@
 import { compile } from "path-to-regexp";
-import { isHttpError, Response } from ".";
-import { Endpoint, GetEndpoint, MutatingEndpoint } from "./endpoint";
+import { isHttpError, Response } from "./index.js";
+import { Endpoint, GetEndpoint, MutatingEndpoint } from "./endpoint.js";
 
-export type GetRequest<P extends object, Q extends object> = {
+export type GetRequest<P, Q> = {
     params: P;
     query: Q;
 };
 
-export type MutatingRequest<P extends object, Q extends object, B> = GetRequest<P, Q> & {
+export type MutatingRequest<P, Q, B> = GetRequest<P, Q> & {
     body: B;
 };
 
-export async function request<P extends object, Q extends object, RB>(endpoint: GetEndpoint<P, Q, RB>, params: P, query: Q): Promise<Response<RB>>;
-export async function request<P extends object, Q extends object, B, RB>(endpoint: MutatingEndpoint<P, Q, B, RB>, params: P, query: Q, body: B): Promise<Response<RB>>;
-export async function request<P extends object, Q extends object, B, RB>(endpoint: Endpoint<P, Q, B, RB>, params: P, query: Q, body?: B): Promise<Response<RB>> {
+export async function request<P, Q, RB>(endpoint: GetEndpoint<P, Q, RB>, params: P, query: Q): Promise<Response<RB>>;
+export async function request<P, Q, B, RB>(endpoint: MutatingEndpoint<P, Q, B, RB>, params: P, query: Q, body: B): Promise<Response<RB>>;
+export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, params: P, query: Q, body?: B): Promise<Response<RB>> {
     const { method, request, response } = endpoint;
     if (!request.isParams(params)) {
         return {
@@ -34,10 +34,10 @@ export async function request<P extends object, Q extends object, B, RB>(endpoin
         }
     }
     const searchParams = new URLSearchParams(
-        Object.entries(query).map(([k, v]) => [k, String(v)])
+        Object.entries(query || {}).map(([k, v]) => [k, String(v)])
     );
     const toPath = compile(request.path);
-    const resolvedPath = toPath(params);
+    const resolvedPath = toPath(params || undefined);
     const queryString = searchParams.toString();
     const url = queryString ? `${resolvedPath}?${queryString}` : resolvedPath;
     const result = await fetch(url, {

@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "declaration": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "outDir": "./dist",
+    "declaration": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
     "plugins": [
       {
         "transform": "typia/lib/transform"
       }
-    ]
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "src/**/*.ts"

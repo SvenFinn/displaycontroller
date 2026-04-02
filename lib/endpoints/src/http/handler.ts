@@ -1,16 +1,26 @@
-import { isHttpError, isResponse, Response } from ".";
+import { isHttpError, isResponse, Response } from "./index.js";
 import { Express, Request as ExpressRequest, Response as ExpressResponse } from "express";
-import { Endpoint, GetEndpoint, MutatingEndpoint } from "./endpoint";
+import { Endpoint, GetEndpoint, MutatingEndpoint } from "./endpoint.js";
+import { logger } from "dc-logger";
 
-export type MutatingRequestHandler<P extends object, Q extends object, B, RB> = (params: P, query: Q, body: B) => Promise<RB | Response<RB> | undefined>;
-export type GetRequestHandler<P extends object, Q extends object, RB> = (params: P, query: Q) => Promise<RB | Response<RB> | undefined>;
+function normalizeEmptyObject<T>(obj: T): T | undefined {
+    if (typeof obj === 'object' && obj !== null && Object.keys(obj).length === 0) {
+        return undefined;
+    }
+    return obj;
+}
 
-export function registerEndpoint<P extends object, Q extends object, RB>(app: Express, endpoint: GetEndpoint<P, Q, RB>, handler: GetRequestHandler<P, Q, RB>): void;
-export function registerEndpoint<P extends object, Q extends object, B, RB>(app: Express, endpoint: MutatingEndpoint<P, Q, B, RB>, handler: MutatingRequestHandler<P, Q, B, RB>): void;
-export function registerEndpoint<P extends object, Q extends object, B, RB>(app: Express, endpoint: Endpoint<P, Q, B, RB>, handler: GetRequestHandler<P, Q, RB> | MutatingRequestHandler<P, Q, B, RB>): void {
+export type MutatingRequestHandler<P, Q, B, RB> = (params: P, query: Q, body: B) => Promise<RB | Response<RB> | undefined>;
+export type GetRequestHandler<P, Q, RB> = (params: P, query: Q) => Promise<RB | Response<RB> | undefined>;
+
+export function registerEndpoint<P, Q, RB>(app: Express, endpoint: GetEndpoint<P, Q, RB>, handler: GetRequestHandler<P, Q, RB>): void;
+export function registerEndpoint<P, Q, B, RB>(app: Express, endpoint: MutatingEndpoint<P, Q, B, RB>, handler: MutatingRequestHandler<P, Q, B, RB>): void;
+export function registerEndpoint<P, Q, B, RB>(app: Express, endpoint: Endpoint<P, Q, B, RB>, handler: GetRequestHandler<P, Q, RB> | MutatingRequestHandler<P, Q, B, RB>): void {
     const { method, request } = endpoint;
     const expressHandler = async (req: ExpressRequest, res: ExpressResponse) => {
         const { params, query, body } = req;
+
+        logger.debug(`Received request for ${method} ${request.path} with params: ${JSON.stringify(params)}, query: ${JSON.stringify(query)}, body: ${JSON.stringify(body)}`);
         if (!request.isParams(params)) {
             res.status(400).send({
                 code: 400,
@@ -41,8 +51,10 @@ export function registerEndpoint<P extends object, Q extends object, B, RB>(app:
                 const h = handler as MutatingRequestHandler<P, Q, B, RB>;
                 result = await h(params, query, body);
             }
+            logger.debug(`Handler result for ${method} ${request.path}: ${JSON.stringify(result)}`);
 
             if (result === undefined) {
+                logger.debug(`No content to send for ${method} ${request.path}`);
                 return res.status(204).send();
             }
             if (isResponse(result)) {

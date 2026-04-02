@@ -19,6 +19,6 @@ export type HttpError = {
 export const isResponse = createIs<Response<unknown>>();
 export const isHttpError = createIs<HttpError>();
 
-export { request } from "./request";
-export { registerEndpoint } from "./handler";
-export { Endpoint } from "./endpoint";
+export { request } from "./request.js";
+export { registerEndpoint } from "./handler.js";
+export { GetEndpoint, MutatingEndpoint } from "./endpoint.js";
