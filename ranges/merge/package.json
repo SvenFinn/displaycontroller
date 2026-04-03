@@ -21,7 +21,6 @@
         "dc-db-local": "file:../../lib/database/local",
         "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges-endpoints": "file:../endpoints",
         "dc-ranges": "file:../ranges",
         "dc-ttl": "file:../../lib/ttl",
         "dotenv": "^17.4.0",

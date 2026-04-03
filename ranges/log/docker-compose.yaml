@@ -18,6 +18,7 @@ services:
       additional_contexts:
         - local-db=../../lib/database/local
         - ranges=../ranges
+        - endpoints=../../lib/endpoints
         - ttl=../../lib/ttl
         - logger=../../lib/logger
         - streams=../../lib/streams

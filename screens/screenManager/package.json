@@ -13,6 +13,7 @@
         "amqplib": "^1.0.3",
         "body-parser": "^2.2.2",
         "dc-db-local": "file:../../lib/database/local",
+        "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges": "file:../../ranges/ranges",
         "dc-screens-types": "file:../types",

@@ -10,6 +10,8 @@ services:
       context: .
       dockerfile: Dockerfile
       additional_contexts:
+        - logger=../lib/logger
+        - endpoints=../lib/endpoints
         - ranges=../ranges/ranges
         - screen-types=../screens/types
         - files-utils=../screens/utils/files
