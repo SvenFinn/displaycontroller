@@ -1,7 +1,7 @@
 import { LocalClient } from "dc-db-local";
-import { InternalDiscipline, mergeMaps } from "dc-ranges-types";
+import { Index, InternalDiscipline } from "dc-ranges-types";
 
-export const disciplineIdToObj = new Map<number, InternalDiscipline>();
+let disciplineIdToObj = new Map<Index, InternalDiscipline>();
 
 export async function updateDisciplines(client: LocalClient) {
     const overrides = await client.cache.findMany({
@@ -9,7 +9,7 @@ export async function updateDisciplines(client: LocalClient) {
             type: "overrideDiscipline"
         }
     });
-    const disciplineTempMap = new Map<number, InternalDiscipline>();
+    const disciplineTempMap = new Map<Index, InternalDiscipline>();
     for (const override of overrides) {
         disciplineTempMap.set(Number(override.key), {
             overrideId: Number(override.key),
@@ -28,10 +28,11 @@ export async function updateDisciplines(client: LocalClient) {
         });
 
     }
-    mergeMaps(disciplineIdToObj, disciplineTempMap);
+
+    disciplineIdToObj = disciplineTempMap;
 }
 
-export function getDisciplineId(id: number, round: number): InternalDiscipline | null {
+export function getDisciplineId(id: Index, round: Index): InternalDiscipline | null {
     const discipline = disciplineIdToObj.get(id) ?? null;
     if (discipline === null) {
         return null;

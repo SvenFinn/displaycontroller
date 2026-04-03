@@ -1,9 +1,9 @@
 import { LocalClient } from "dc-db-local";
-import { Discipline, isDiscipline, isOverrideDiscipline, InternalDiscipline, isInternalOverrideDiscipline, mergeMaps } from "dc-ranges-types";
+import { Discipline, isDiscipline, isOverrideDiscipline, InternalDiscipline, isInternalOverrideDiscipline, Index } from "dc-ranges-types";
 import { logger } from "dc-logger";
 
-export const disciplines = new Map<number, Discipline>();
-export const overrides = new Map<number, Discipline>();
+let disciplines = new Map<Index, Discipline>();
+let overrides = new Map<Index, Discipline>();
 
 export async function updateDisciplines(localClient: LocalClient) {
     const newDisciplines = await localClient.cache.findMany({
@@ -18,16 +18,18 @@ export async function updateDisciplines(localClient: LocalClient) {
         }
         disciplineTempMap.set(discipline.value.id, discipline.value);
     }
-    mergeMaps(disciplines, disciplineTempMap);
+
+    disciplines = disciplineTempMap;
 }
 
 export async function updateOverrides(localClient: LocalClient) {
+    const newOverridesMap = new Map<Index, Discipline>();
+
     const newOverrides = await localClient.cache.findMany({
         where: {
             type: "overrideDiscipline",
         },
     });
-    overrides.clear();
     for (const overrideDb of newOverrides) {
         const override = overrideDb.value;
         if (!isOverrideDiscipline(override)) {
@@ -52,8 +54,10 @@ export async function updateOverrides(localClient: LocalClient) {
         const discipline = disciplineDb.value;
         discipline.color = override.color;
         discipline.name = override.name;
-        overrides.set(override.id, discipline);
+        newOverridesMap.set(override.id, discipline);
     }
+
+    overrides = newOverridesMap;
 }
 
 export function getDiscipline(internalDiscipline: InternalDiscipline | null): Discipline | null {

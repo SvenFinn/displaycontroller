@@ -1,8 +1,7 @@
 import { LocalClient } from "dc-db-local";
-import { StartList, isStartList, mergeMaps } from "dc-ranges-types";
-import { start } from "repl";
+import { Index, StartList, isStartList } from "dc-ranges-types";
 
-export const startLists = new Map<number, StartList>();
+let startLists = new Map<Index, StartList>();
 
 export async function updateStartLists(localClient: LocalClient) {
     const newStartLists = await localClient.cache.findMany({
@@ -10,17 +9,18 @@ export async function updateStartLists(localClient: LocalClient) {
             type: "startList",
         },
     });
-    const startListTempMap = new Map<number, StartList>();
+    const startListTempMap = new Map<Index, StartList>();
     for (const startList of newStartLists) {
         if (!isStartList(startList.value)) {
             continue;
         }
         startListTempMap.set(startList.value.id, startList.value);
     }
-    mergeMaps(startLists, startListTempMap);
+
+    startLists = startListTempMap;
 }
 
-export function getStartList(startListId: number | null): StartList | null {
+export function getStartList(startListId: Index | null): StartList | null {
     if (startListId == null) {
         return null;
     }
