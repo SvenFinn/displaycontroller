@@ -3,7 +3,7 @@ import starsPistol from "./starsLp.svg";
 import easter from "./easter.svg";
 import winter from "./winter.svg";
 
-import { Range, LayoutEaster, LayoutStars } from "dc-ranges-types";
+import { Range, LayoutEaster, LayoutStars } from "dc-ranges/types";
 import { LayoutInterface } from "..";
 
 

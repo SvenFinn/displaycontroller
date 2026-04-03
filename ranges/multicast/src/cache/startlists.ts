@@ -1,4 +1,4 @@
-import { Index, isOverrideDiscipline, isStartList } from "dc-ranges-types";
+import { Index, isOverrideDiscipline, isStartList } from "dc-ranges/types";
 import { CandidateStartList, Matcher } from "../types";
 import { LocalClient } from "dc-db-local";
 import { createMatcher } from "./matcher";

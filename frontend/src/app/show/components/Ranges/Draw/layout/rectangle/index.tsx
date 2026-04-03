@@ -1,4 +1,4 @@
-import { LayoutRectangle } from "dc-ranges-types";
+import { LayoutRectangle } from "dc-ranges/types";
 import { LayoutInterface } from "..";
 import { layoutRings } from "../rings";
 

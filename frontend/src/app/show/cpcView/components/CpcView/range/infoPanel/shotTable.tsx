@@ -1,4 +1,4 @@
-import { Mode } from "dc-ranges-types";
+import { Mode } from "dc-ranges/types";
 import { useAppSelector } from "../../ranges-store/store";
 import styles from "./infoPanel.module.css";
 import ShotArrow from "@frontend/app/show/components/Ranges/Arrow";

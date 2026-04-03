@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { Index, InternalDiscipline } from "dc-ranges-types";
+import { InternalDiscipline, Index } from "dc-ranges/types";
 
 let disciplineIdToObj = new Map<Index, InternalDiscipline>();
 

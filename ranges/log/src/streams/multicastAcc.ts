@@ -1,4 +1,4 @@
-import { InternalRange, InternalShooter } from "dc-ranges-types";
+import { InternalRange, InternalShooter } from "dc-ranges/types";
 import { isSameShooter } from "../cache/shooter";
 import { MulticastInternalRange } from "../types";
 import { TypedTransform } from "dc-streams";

@@ -1,5 +1,5 @@
 import { SmdbClient } from "dc-db-smdb";
-import { Layout, LayoutRings } from "dc-ranges-types";
+import { Layout, LayoutRings } from "dc-ranges/types";
 import { getCustomLayout } from "./custom";
 
 export async function getLayout(smdbClient: SmdbClient, layoutId: number): Promise<Layout | null> {

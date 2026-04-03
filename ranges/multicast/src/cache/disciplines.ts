@@ -1,8 +1,7 @@
-import { isDiscipline, isOverrideDiscipline } from "dc-ranges-types";
+import { isDiscipline, isOverrideDiscipline } from "dc-ranges/types";
 import { CandidateBaseDiscipline, CandidateDiscipline, CandidateOverrideDiscipline, Matcher } from "../types";
 import { LocalClient } from "dc-db-local";
 import { createMatcher } from "./matcher";
-import { logger } from "dc-logger";
 
 export let potentialDisciplines: Matcher<CandidateDiscipline> = createMatcher(new Map());
 

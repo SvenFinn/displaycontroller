@@ -1,4 +1,4 @@
-import { Round, UnsignedInteger, ValidHit } from "dc-ranges-types";
+import { Round, UnsignedInteger, ValidHit } from "dc-ranges/types";
 import { DividerHitEval, HitEval, RingsTargetHiddenHitEval } from "./types";
 import { floor, round as mRound } from "../math";
 

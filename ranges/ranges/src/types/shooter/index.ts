@@ -1,6 +1,4 @@
-import { Index } from "../common/index.js";
-
-export type ShooterId = Index;
+import { Index } from "../index.js";
 
 type ShooterName = {
     firstName: string;
@@ -8,7 +6,7 @@ type ShooterName = {
 }
 
 export type Shooter = {
-    id: ShooterId | null; // Null = Can't be determined uniquely
+    id: Index | null; // Null = Can't be determined uniquely
 } & ShooterName;
 
 export type ShooterFree = {
@@ -29,7 +27,7 @@ export type InternalShooterFree = {
 
 export type InternalShooterById = {
     type: "byId";
-    id: ShooterId;
+    id: Index;
 }
 
 export type InternalShooterByName = {

@@ -1,4 +1,4 @@
-import { UnsignedInteger } from "dc-ranges-types";
+import { UnsignedInteger } from "dc-ranges/types";
 import { TransformCallback } from "stream";
 import { logger } from "dc-logger";
 import { SSMDB2InternalRange } from "../types";

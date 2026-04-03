@@ -1,5 +1,5 @@
 import { tags } from "typia";
-import { Index, UnsignedNumber } from "../common/index.js";
+import { Index, UnsignedNumber } from "../index.js";
 
 export type HitIndex = Index & tags.Maximum<1000>;
 

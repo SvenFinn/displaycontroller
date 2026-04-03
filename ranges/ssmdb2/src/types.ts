@@ -1,4 +1,4 @@
-import { Hits, Index, UnsignedInteger } from "dc-ranges-types";
+import { Hits, Index, UnsignedInteger } from "dc-ranges/types";
 
 export type SSMDB2InternalRange = {
     rangeId: Index;

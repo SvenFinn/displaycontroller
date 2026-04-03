@@ -1,4 +1,4 @@
-import { InternalRange, Range } from "dc-ranges-types";
+import { InternalRange, Range } from "dc-ranges/types";
 import { RangeMerger } from "../rangeMerger";
 import { logger } from "dc-logger";
 import { Namespace, Socket } from "socket.io";

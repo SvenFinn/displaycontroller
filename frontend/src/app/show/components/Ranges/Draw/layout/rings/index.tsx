@@ -1,4 +1,4 @@
-import { LayoutRings, Range } from "dc-ranges-types";
+import { LayoutRings, Range } from "dc-ranges/types";
 import Ring from "./ring";
 import { LayoutInterface } from "..";
 

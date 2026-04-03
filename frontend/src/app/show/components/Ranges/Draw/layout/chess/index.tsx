@@ -1,4 +1,4 @@
-import { LayoutChess } from "dc-ranges-types";
+import { LayoutChess } from "dc-ranges/types";
 
 import chessFive from "./5x5.svg";
 import chessSix from "./6x6.svg";

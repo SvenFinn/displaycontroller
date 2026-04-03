@@ -1,4 +1,4 @@
-import { ValidHit } from "dc-ranges-types";
+import { ValidHit } from "dc-ranges/types";
 import { FaArrowUp } from "react-icons/fa6";
 
 interface ShotArrowProps {

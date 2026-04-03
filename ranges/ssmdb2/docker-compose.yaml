@@ -18,7 +18,7 @@ services:
       additional_contexts:
         - local-db=../../lib/database/local
         - ssmdb2=../../lib/database/ssmdb2
-        - range-types=../types
+        - ranges=../ranges
         - table-watcher=../../lib/database/tableWatcher
         - logger=../../lib/logger
         - streams=../../lib/streams

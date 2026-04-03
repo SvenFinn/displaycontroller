@@ -1,4 +1,4 @@
-import { UnsignedInteger } from "../../common/index.js";
+import { UnsignedInteger } from "../../index.js";
 
 export type Zoom = ZoomFixed | ZoomBase;
 

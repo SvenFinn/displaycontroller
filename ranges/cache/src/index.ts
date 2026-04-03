@@ -5,7 +5,7 @@ import { createSMDBClient, SmdbClient } from "dc-db-smdb";
 import { TableWatcher } from "dc-table-watcher"
 import { LocalClient, createLocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
-import { Discipline, StartList, Shooter, OverrideDiscipline } from "dc-ranges-types";
+import { Discipline, StartList, Shooter, OverrideDiscipline } from "dc-ranges/types";
 import { getOverrideDisciplines } from "./overrideDisciplines";
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });

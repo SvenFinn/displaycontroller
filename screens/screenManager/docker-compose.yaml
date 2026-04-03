@@ -11,7 +11,7 @@ services:
       dockerfile: ./Dockerfile
       additional_contexts:
         - local-db=../../lib/database/local
-        - ranges=../../ranges/types
+        - ranges=../../ranges/ranges
         - logger=../../lib/logger
         - file-utils=../utils/files
         - screen-types=../types

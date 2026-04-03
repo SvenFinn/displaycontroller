@@ -1,5 +1,5 @@
 import { idealTextColor } from "../../../../../lib/idealTextColor";
-import { LayoutRing } from "dc-ranges-types";
+import { LayoutRing } from "dc-ranges/types";
 
 interface RingsProps {
     ring: LayoutRing,

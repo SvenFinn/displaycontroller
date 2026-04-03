@@ -1,4 +1,4 @@
-import { Layout } from "dc-ranges-types";
+import { Layout } from "dc-ranges/types";
 
 export function getCustomLayout(layoutId: number): Layout | null {
     switch (layoutId) {

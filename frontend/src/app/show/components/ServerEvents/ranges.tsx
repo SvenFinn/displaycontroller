@@ -1,6 +1,6 @@
 "use client";
 
-import { isRange, Range } from "dc-ranges-types";
+import { isRange, Range } from "dc-ranges/types";
 import { useSocket } from "./base";
 import SocketProvider from "./base";
 import { useEffect, useMemo } from "react";

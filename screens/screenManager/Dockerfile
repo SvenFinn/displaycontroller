@@ -24,8 +24,8 @@ COPY --from=screen-types . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-ranges-types
-WORKDIR /app/ranges/types
+FROM base AS deps-ranges
+WORKDIR /app/ranges/ranges
 COPY --from=ranges . .
 RUN npm ci --loglevel=info && \
     npm run build;
@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-screens-types /app/screens/types /app/screens/types
-COPY --from=deps-ranges-types /app/ranges/types /app/ranges/types
+COPY --from=deps-ranges /app/ranges/ranges /app/ranges/ranges
 
 
 FROM local-deps AS deps

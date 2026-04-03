@@ -1,4 +1,4 @@
-import { UnsignedInteger, UnsignedNumber } from "../../common/index.js";
+import { UnsignedInteger, UnsignedNumber } from "../../index.js";
 
 export type Layout = LayoutRings | LayoutRectangle | LayoutDart | LayoutStars | LayoutChess | LayoutEaster;
 

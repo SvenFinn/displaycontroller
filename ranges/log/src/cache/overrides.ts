@@ -1,4 +1,4 @@
-import { Index, isOverrideDiscipline } from "dc-ranges-types";
+import { Index, isOverrideDiscipline } from "dc-ranges/types";
 import { LocalClient } from "dc-db-local";
 
 let overrideToDiscipline = new Map<Index, Index>();

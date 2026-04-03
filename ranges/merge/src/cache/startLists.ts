@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { Index, StartList, isStartList } from "dc-ranges-types";
+import { Index, StartList, isStartList } from "dc-ranges/types";
 
 let startLists = new Map<Index, StartList>();
 

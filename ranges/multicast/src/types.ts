@@ -1,5 +1,5 @@
 import AhoCorasick from "ahocorasick";
-import { Index, InternalShooter, RangeId, UnsignedInteger } from "dc-ranges-types";
+import { Index, InternalShooter, RangeId, UnsignedInteger } from "dc-ranges/types";
 
 export type Candidate<T> = {
     readonly start: UnsignedInteger,

@@ -1,7 +1,7 @@
 import { isValid, parse } from "date-fns";
 import { isLogLine, LogLine, LogMessage, RawLogMessage } from "../types";
 import { logger } from "dc-logger";
-import { Index, INVALID_HIT_POS, RangeId, ShooterId, UnsignedInteger } from "dc-ranges-types";
+import { Index, INVALID_HIT_POS, RangeId, UnsignedInteger } from "dc-ranges/types";
 import { TypedTransform } from "dc-streams";
 
 const LOG_LINE_PARTS = {
@@ -83,18 +83,18 @@ export class LogLineStream extends TypedTransform<RawLogMessage, LogMessage> {
 
             const line: LogLine = {
                 action: this.transformAction(parts[LOG_LINE_PARTS.ACTION]),
-                rangeId: this.intOrThrow(parts[LOG_LINE_PARTS.RANGE_ID]) as RangeId,
+                rangeId: this.intOrThrow(parts[LOG_LINE_PARTS.RANGE_ID]),
                 targetId: parts[LOG_LINE_PARTS.TARGET_ID],
-                shooterId: this.intOrThrow(parts[LOG_LINE_PARTS.SHOOTER_ID]) as ShooterId,
+                shooterId: this.intOrThrow(parts[LOG_LINE_PARTS.SHOOTER_ID]),
                 discipline: {
-                    disciplineId: this.intOrThrow(parts[LOG_LINE_PARTS.DISCIPLINE_ID]) as Index,
-                    roundId: this.intOrThrow(parts[LOG_LINE_PARTS.ROUND_ID]) as Index,
+                    disciplineId: this.intOrThrow(parts[LOG_LINE_PARTS.DISCIPLINE_ID]),
+                    roundId: this.intOrThrow(parts[LOG_LINE_PARTS.ROUND_ID]),
                 },
                 hit: {
-                    id: this.intOrThrow(parts[LOG_LINE_PARTS.HIT_ID]) as UnsignedInteger,
+                    id: this.intOrThrow(parts[LOG_LINE_PARTS.HIT_ID]),
                     x: hitX / 100,
                     y: hitY / 100,
-                    divisor: this.intOrThrow(parts[LOG_LINE_PARTS.DIVISOR]) as UnsignedInteger,
+                    divisor: this.intOrThrow(parts[LOG_LINE_PARTS.DIVISOR]),
                     rings: this.parseDeFloat(parts[LOG_LINE_PARTS.RINGS]),
                     innerTen: parts[LOG_LINE_PARTS.innerTen] === "IZ",
                     valid: hitX < INVALID_HIT_POS[0] && hitY < INVALID_HIT_POS[1],

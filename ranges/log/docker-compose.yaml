@@ -17,7 +17,7 @@ services:
         - CACHE_REFRESH_INTERVAL=${CACHE_REFRESH_INTERVAL}
       additional_contexts:
         - local-db=../../lib/database/local
-        - range-types=../types
+        - ranges=../ranges
         - ttl=../../lib/ttl
         - logger=../../lib/logger
         - streams=../../lib/streams

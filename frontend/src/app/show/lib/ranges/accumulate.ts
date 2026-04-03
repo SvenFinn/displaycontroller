@@ -1,4 +1,4 @@
-import { Hits, Round, UnsignedNumber } from "dc-ranges-types";
+import { Hits, Round, UnsignedNumber } from "dc-ranges/types";
 import smallestEnclosingCircle from "smallest-enclosing-circle";
 import { floor, round as mRound } from "../math";
 import { getHitsOfSeries, getLatestSeriesId } from ".";

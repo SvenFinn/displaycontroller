@@ -1,4 +1,4 @@
-import { ColorCode, Index, UnsignedNumber } from '../common/index.js';
+import { ColorCode, Index, UnsignedNumber } from '../index.js';
 import { Rounds } from './round/index.js';
 import { createIs } from "typia";
 

@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: Dockerfile
       additional_contexts:
-        - range-types=../ranges/types
+        - ranges=../ranges/ranges
         - screen-types=../screens/types
         - files-utils=../screens/utils/files
       args:

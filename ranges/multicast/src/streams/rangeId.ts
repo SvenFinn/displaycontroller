@@ -2,7 +2,7 @@ import { TypedTransform } from "dc-streams";
 import { RangeProxyType } from "../../proxy/src/types";
 import { LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
-import { RangeId } from "dc-ranges-types";
+import { RangeId } from "dc-ranges/types";
 
 export type IdentifiedRange = {
     id: RangeId;

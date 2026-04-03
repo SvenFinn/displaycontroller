@@ -5,7 +5,7 @@ import { RangeIdentifier } from './streams/rangeId';
 import { createLocalClient } from 'dc-db-local';
 import { CandidateExtractor } from './streams/candidates';
 import { RangeDataConverter } from './streams/rangeDataConverter';
-import { InternalRange } from 'dc-ranges-types';
+import { InternalRange } from 'dc-ranges/types';
 import "./cache";
 import { ConstraintSolver } from './streams/constraintSolver';
 import { ContainedCandidatesFilter } from './streams/overlapFilter';

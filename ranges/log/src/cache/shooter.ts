@@ -1,7 +1,7 @@
 import { LocalClient } from "dc-db-local";
-import { isShooter, InternalShooter, ShooterId, InternalShooterByName } from "dc-ranges-types";
+import { isShooter, InternalShooter, InternalShooterByName, Index } from "dc-ranges/types";
 
-let shooterMap = new Map<ShooterId, InternalShooterByName>();
+let shooterMap = new Map<Index, InternalShooterByName>();
 
 export async function updateShooters(client: LocalClient) {
     const shooters = await client.cache.findMany({
@@ -9,7 +9,7 @@ export async function updateShooters(client: LocalClient) {
             type: "shooter"
         }
     });
-    const shooterTempMap = new Map<ShooterId, InternalShooterByName>();
+    const shooterTempMap = new Map<Index, InternalShooterByName>();
     for (const shooter of shooters) {
         if (!isShooter(shooter.value)) {
             continue;

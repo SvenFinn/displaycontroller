@@ -1,6 +1,6 @@
 import { TypedTransform } from "dc-streams";
 import { SSMDB2InternalRange } from "../types";
-import { InternalRange } from "dc-ranges-types";
+import { InternalRange } from "dc-ranges/types";
 import { TransformCallback } from "node:stream";
 import { getDisciplineId } from "../cache/disciplines";
 
