@@ -36,7 +36,13 @@ COPY --from=table-watcher . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-ranges
+FROM deps-logger AS deps-endpoints
+WORKDIR /app/lib/endpoints
+COPY --from=endpoints . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
+FROM deps-endpoints AS deps-ranges
 WORKDIR /app/ranges/ranges
 COPY --from=ranges . .
 RUN npm ci --loglevel=info && \
@@ -56,6 +62,7 @@ COPY --from=deps-streams /app/lib/streams /app/lib/streams
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-ssmdb2 /app/lib/database/ssmdb2 /app/lib/database/ssmdb2
 COPY --from=deps-table-watcher /app/lib/database/tableWatcher /app/lib/database/tableWatcher
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-ranges /app/ranges/ranges /app/ranges/ranges
 
 FROM local-deps AS deps

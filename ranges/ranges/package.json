@@ -13,6 +13,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
+        "dc-endpoints": "file:../../lib/endpoints",
         "typia": "^12.0.2"
     },
     "devDependencies": {
@@ -29,6 +30,11 @@
             "import": "./dist/types/index.js",
             "require": "./dist/types/index.js",
             "types": "./dist/types/index.d.ts"
+        },
+        "./endpoints": {
+            "import": "./dist/endpoints/index.js",
+            "require": "./dist/endpoints/index.js",
+            "types": "./dist/endpoints/index.d.ts"
         }
     },
     "files": [

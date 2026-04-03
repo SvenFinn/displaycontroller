@@ -6,7 +6,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { isStartList, StartList } from 'dc-ranges/types';
 import { registerEndpoint } from 'dc-endpoints';
-import { createOrUpdateKnownRange, deleteKnownRange, getActiveRanges, getAllKnownRanges, getAllStartLists, getFreeRanges, getKnownRange, getRange } from 'dc-ranges-endpoints';
+import { createOrUpdateKnownRange, deleteKnownRange, getActiveRanges, getAllKnownRanges, getAllStartLists, getFreeRanges, getKnownRange, getRange } from 'dc-ranges/endpoints';
 
 const app: Express = express();
 const server = createServer(app);

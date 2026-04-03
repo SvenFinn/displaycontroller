@@ -1,6 +1,7 @@
 import { GetEndpoint, isEmpty, MutatingEndpoint } from "dc-endpoints";
-import { isRange, Range, RangeId, StartList } from "dc-ranges/types";
 import { createIs } from "typia";
+import { isRange, Range, RangeId } from "../types/index.js";
+import { StartList } from "../types/startList/index.js";
 
 type GetRangesResponse = Array<RangeId>;
 

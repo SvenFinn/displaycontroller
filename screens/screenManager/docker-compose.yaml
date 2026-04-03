@@ -12,6 +12,7 @@ services:
       additional_contexts:
         - local-db=../../lib/database/local
         - ranges=../../ranges/ranges
+        - endpoints=../../lib/endpoints
         - logger=../../lib/logger
         - file-utils=../utils/files
         - screen-types=../types

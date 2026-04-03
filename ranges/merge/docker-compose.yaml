@@ -19,7 +19,6 @@ services:
         - ttl=../../lib/ttl
         - logger=../../lib/logger
         - endpoints=../../lib/endpoints
-        - ranges-endpoints=../endpoints
     networks:
       - displaycontroller
     depends_on:
