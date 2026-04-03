@@ -1,6 +1,5 @@
 import { Discipline, InternalDiscipline, InternalOverrideDiscipline, NormInternalDiscipline, OverrideDiscipline } from './discipline/index.js';
 import { Hits, Hit, ValidHit } from './hits/index.js';
-import { mergeMaps } from './cache.js';
 import { createIs } from 'typia';
 import { Layout, LayoutChess, LayoutDart, LayoutEaster, LayoutRectangle, LayoutRing, LayoutRings, LayoutStars } from './discipline/round/layout.js';
 import { Round, Rounds } from './discipline/round/index.js';
@@ -60,7 +59,6 @@ export const isInternalRange = createIs<InternalRange>();
 
 export {
     Discipline,
-    mergeMaps,
     Hit,
     ValidHit,
     Hits,

@@ -1,7 +1,7 @@
-import { isOverrideDiscipline, mergeMaps } from "dc-ranges-types";
+import { Index, isOverrideDiscipline } from "dc-ranges-types";
 import { LocalClient } from "dc-db-local";
 
-const overrideToDiscipline = new Map<number, number>();
+let overrideToDiscipline = new Map<Index, Index>();
 
 export async function updateOverrides(client: LocalClient) {
     const overrides = await client.cache.findMany({
@@ -9,16 +9,17 @@ export async function updateOverrides(client: LocalClient) {
             type: "overrideDiscipline"
         }
     });
-    const overrideTempMap = new Map<number, number>();
+    const overrideTempMap = new Map<Index, Index>();
     for (const override of overrides) {
         if (!isOverrideDiscipline(override.value)) {
             continue;
         }
         overrideTempMap.set(override.value.id, Number(override.value.disciplineId));
     }
-    mergeMaps(overrideToDiscipline, overrideTempMap);
+
+    overrideToDiscipline = overrideTempMap;
 }
 
-export function getDisciplineId(overrideId: number): number | null {
+export function getDisciplineId(overrideId: Index): Index | null {
     return overrideToDiscipline.get(overrideId) ?? null;
 }

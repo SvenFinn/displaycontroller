@@ -1,7 +1,6 @@
 import { LocalClient } from "dc-db-local";
-import { mergeMaps } from "dc-ranges-types";
 
-export const ipAddresses = new Map<number, string>();
+let ipAddresses = new Map<number, string>();
 
 export async function updateIpAddresses(localClient: LocalClient) {
     const newDisciplines = await localClient.knownRanges.findMany({
@@ -23,7 +22,8 @@ export async function updateIpAddresses(localClient: LocalClient) {
         }
         ipAddressTempMap.set(ipAddress.rangeId, ipAddress.lastIp);
     }
-    mergeMaps(ipAddresses, ipAddressTempMap);
+
+    ipAddresses = ipAddressTempMap;
 }
 
 export function getIpAddress(rangeId: number): string | null {
