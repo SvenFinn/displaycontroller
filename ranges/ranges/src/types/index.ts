@@ -1,13 +1,25 @@
 import { Discipline, InternalDiscipline, InternalOverrideDiscipline, NormInternalDiscipline, OverrideDiscipline } from './discipline/index.js';
 import { Hits, Hit, ValidHit } from './hits/index.js';
-import { createIs } from 'typia';
+import { createIs, tags } from 'typia';
 import { Layout, LayoutChess, LayoutDart, LayoutEaster, LayoutRectangle, LayoutRing, LayoutRings, LayoutStars } from './discipline/round/layout.js';
 import { Round, Rounds } from './discipline/round/index.js';
 import { Mode } from './discipline/round/mode.js';
 import { Zoom } from './discipline/round/zoom.js';
-import { InternalShooter, InternalShooterByName, RangeShooter, Shooter, ShooterId } from './shooter/index.js';
+import { InternalShooter, InternalShooterByName, RangeShooter, Shooter } from './shooter/index.js';
 import { StartList } from './startList/index.js';
-import { UnsignedInteger, ColorCode, Index, Integer, RangeId, UnsignedNumber } from './common/index.js';
+
+export type Integer = number & tags.MultipleOf<1>;
+export type UnsignedNumber = number & tags.Minimum<0>;
+export type UnsignedInteger = Integer & UnsignedNumber;
+
+export type RangeId = Integer & tags.Minimum<1> & tags.Maximum<416>;
+export type Index = UnsignedInteger;
+
+export const isIndex = createIs<Index>();
+
+export type ColorCode = string & tags.MinLength<7> & tags.MaxLength<7>;
+
+
 export type Range = InactiveRange | ActiveRange;
 
 type BaseRange = {
@@ -50,7 +62,6 @@ export const isDiscipline = createIs<Discipline>();
 export const isStartList = createIs<StartList>();
 export const isOverrideDiscipline = createIs<OverrideDiscipline>();
 export const isShooter = createIs<Shooter>();
-export const isShooterId = createIs<ShooterId>();
 export const isInternalShooterByName = createIs<InternalShooterByName>();
 export const isInternalShooter = createIs<InternalShooter>();
 export const isInternalOverrideDiscipline = createIs<InternalOverrideDiscipline>();
@@ -78,15 +89,8 @@ export {
     InternalShooter,
     InternalShooterByName,
     StartList,
-    UnsignedInteger,
-    ColorCode,
-    Index,
-    Integer,
-    RangeId,
-    UnsignedNumber,
     OverrideDiscipline,
     Shooter,
-    ShooterId,
     RangeShooter
 }
 

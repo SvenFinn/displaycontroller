@@ -1,5 +1,5 @@
 import { ConditionNumber } from "dc-screens-types";
-import { isRange } from "dc-ranges-types"
+import { isRange } from "dc-ranges/types"
 import { logger } from "dc-logger";
 
 export async function range_free(condition: ConditionNumber): Promise<boolean> {

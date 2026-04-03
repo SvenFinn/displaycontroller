@@ -1,5 +1,5 @@
 import { LocalClient } from "dc-db-local";
-import { Discipline, isDiscipline, isOverrideDiscipline, InternalDiscipline, isInternalOverrideDiscipline, Index } from "dc-ranges-types";
+import { Discipline, isDiscipline, isOverrideDiscipline, InternalDiscipline, isInternalOverrideDiscipline, Index } from "dc-ranges/types";
 import { logger } from "dc-logger";
 
 let disciplines = new Map<Index, Discipline>();

@@ -1,4 +1,4 @@
-import { isStartList, StartList } from "dc-ranges-types";
+import { isStartList, StartList } from "dc-ranges/types";
 import styles from "./header.module.css";
 import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 import { memo, useEffect, useMemo, useState } from "react";

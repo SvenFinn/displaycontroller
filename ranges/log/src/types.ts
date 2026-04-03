@@ -1,6 +1,4 @@
-import { isValid, parse } from "date-fns"
-import { logger } from "dc-logger"
-import { Hit, Index, Integer, InternalDiscipline, InternalRange, InternalShooter, INVALID_HIT_POS, RangeId, ShooterId, UnsignedInteger } from "dc-ranges-types"
+import { Hit, Index, InternalDiscipline, InternalRange, RangeId } from "dc-ranges/types"
 import { createIs } from "typia"
 
 export type ResetAction = {
@@ -20,7 +18,7 @@ export type LogLine = {
     action: "insert" | "delete",
     rangeId: RangeId,
     targetId: string,
-    shooterId: ShooterId
+    shooterId: Index
     discipline: InternalDiscipline
     hit: Hit,
     timestamp: Date,

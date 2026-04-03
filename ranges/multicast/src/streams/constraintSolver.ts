@@ -1,7 +1,7 @@
 import { TypedTransform } from "dc-streams";
 import { Candidate, CandidateDiscipline, CandidateOverrideDiscipline, CandidateStartList, isOverride, PacketCandidates, ResolvedPacketCandidates } from "../types";
 import { TransformCallback } from "node:stream";
-import { StartList } from "dc-ranges-types";
+import { StartList } from "dc-ranges/types";
 import { logger } from "dc-logger";
 
 export class ConstraintSolver extends TypedTransform<PacketCandidates, ResolvedPacketCandidates> {

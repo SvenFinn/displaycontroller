@@ -1,4 +1,4 @@
-import { Index } from "../common/index.js"
+import { Index } from "../index.js";
 
 export type StartList = {
     id: Index;

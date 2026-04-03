@@ -1,6 +1,6 @@
 import { useAppSelector } from "../ranges-store/store";
 import HeaderComponent from "../../../../components/Ranges/Header";
-import { ActiveRange, StartList } from "dc-ranges-types";
+import { ActiveRange, StartList } from "dc-ranges/types";
 
 export default function Header(): React.JSX.Element {
     const startLists = useAppSelector((state) => {

@@ -21,7 +21,7 @@
         "amqplib": "^1.0.3",
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges-types": "file:../types",
+        "dc-ranges": "file:../ranges",
         "dc-streams": "file:../../lib/streams",
         "dotenv": "^17.4.0"
     }

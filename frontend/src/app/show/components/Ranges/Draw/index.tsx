@@ -1,6 +1,6 @@
 "use client";
 
-import { ActiveRange, ColorCode, Range, Round } from "dc-ranges-types";
+import { ActiveRange, ColorCode, Range, Round } from "dc-ranges/types";
 import React, { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Layout, { getSizeAuto, getSize as getSizeLayout } from "./layout";
 import { DrawHits } from "./hits";

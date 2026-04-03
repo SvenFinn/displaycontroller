@@ -1,4 +1,4 @@
-import { InternalShooter, isShooter } from "dc-ranges-types";
+import { InternalShooter, isShooter } from "dc-ranges/types";
 import { Matcher } from "../types";
 import { LocalClient } from "dc-db-local";
 import { createMatcher } from "./matcher";

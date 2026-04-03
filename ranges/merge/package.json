@@ -22,7 +22,7 @@
         "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges-endpoints": "file:../endpoints",
-        "dc-ranges-types": "file:../types",
+        "dc-ranges": "file:../ranges",
         "dc-ttl": "file:../../lib/ttl",
         "dotenv": "^17.4.0",
         "express": "^5.2.1",

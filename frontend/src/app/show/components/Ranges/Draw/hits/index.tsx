@@ -1,5 +1,5 @@
 import { DrawHit } from "./hit"
-import { Hits, Range, Round, UnsignedNumber } from "dc-ranges-types";
+import { Hits, Range, Round, UnsignedNumber } from "dc-ranges/types";
 import TargetCircle from "./targetCircle";
 import { memo } from "react";
 import { compareJSON } from "..";

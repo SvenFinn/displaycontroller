@@ -13,7 +13,7 @@ services:
         - local-db=../../lib/database/local
         - smdb=../../lib/database/smdb
         - table-watcher=../../lib/database/tableWatcher
-        - range-types=../types
+        - ranges=../ranges
         - logger=../../lib/logger
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

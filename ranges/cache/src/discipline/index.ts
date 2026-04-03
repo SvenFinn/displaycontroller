@@ -1,4 +1,4 @@
-import { Discipline, Round, Rounds, Mode, Zoom } from "dc-ranges-types";
+import { Discipline, Round, Rounds, Mode, Zoom } from "dc-ranges/types";
 import { SmdbClient } from "dc-db-smdb";
 import { getLayout } from "./layout";
 

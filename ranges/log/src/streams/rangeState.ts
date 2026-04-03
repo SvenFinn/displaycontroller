@@ -1,6 +1,6 @@
 import { LogInternalRange, LogLine, LogMessage } from "../types";
 import { logger } from "dc-logger";
-import { Hits, RangeId } from "dc-ranges-types";
+import { Hits, RangeId } from "dc-ranges/types";
 import { TypedTransform } from "dc-streams";
 
 export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRange> {

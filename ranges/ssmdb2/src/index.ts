@@ -4,7 +4,7 @@ import { TableWatcherStream } from "./streams/tableWatcher";
 import { StabilizerStream } from "./streams/rangeStabilizer";
 import { RabbitMqWriter } from "dc-streams";
 import amqp from "amqplib";
-import { InternalRange } from "dc-ranges-types";
+import { InternalRange } from "dc-ranges/types";
 import { DbQueryStream } from "./streams/dbQuery";
 import { RangeDataTranslator } from "./streams/rangeDataTranslator";
 

@@ -1,4 +1,4 @@
-import { Hits, Index, Integer, Range, Round } from "dc-ranges-types";
+import { Hits, Index, Integer, Range, Round } from "dc-ranges/types";
 
 export function getRoundName(data: Range, roundId?: Index): string | null {
     if (!data.active) return null;

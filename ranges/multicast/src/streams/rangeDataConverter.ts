@@ -1,6 +1,6 @@
 import { TypedTransform } from "dc-streams"
 import { isOverride, ResolvedPacketCandidates } from "../types";
-import { Index, InternalDiscipline, InternalRange, InternalShooter } from "dc-ranges-types";
+import { Index, InternalDiscipline, InternalRange, InternalShooter } from "dc-ranges/types";
 
 export class RangeDataConverter extends TypedTransform<ResolvedPacketCandidates, InternalRange> {
 

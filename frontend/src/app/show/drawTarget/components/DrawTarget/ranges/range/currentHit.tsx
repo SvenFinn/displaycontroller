@@ -1,6 +1,6 @@
 import styles from "./range.module.css"
 import ShotArrowW from "./ShotArrow";
-import { Hit, Round } from "dc-ranges-types";
+import { Hit, Round } from "dc-ranges/types";
 import { useAppSelector } from "../../ranges-store/store";
 import { ScaleText } from "@frontend/app/components/base/ScaleText";
 import { getHitEval } from "@frontend/app/show/lib/ranges/eval";

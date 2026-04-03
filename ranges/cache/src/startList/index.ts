@@ -1,5 +1,5 @@
 import { SmdbClient } from "dc-db-smdb";
-import { StartList } from "dc-ranges-types";
+import { StartList } from "dc-ranges/types";
 
 export async function getStartListCache(smdbCLient: SmdbClient): Promise<Array<StartList>> {
     const startListsDb = await smdbCLient.startList.findMany({

@@ -1,4 +1,4 @@
-import { ColorCode, Hit, Hits, Layout, Mode, Range, Round, UnsignedInteger, UnsignedNumber, ValidHit, Zoom } from "dc-ranges-types";
+import { ColorCode, Hit, Hits, Layout, Mode, Range, Round, UnsignedInteger, UnsignedNumber, ValidHit, Zoom } from "dc-ranges/types";
 import { memo, useMemo } from "react";
 import { layoutRings } from "./rings";
 import { layoutDart } from "./dart";

@@ -1,4 +1,4 @@
-import { Range, InternalRange } from "dc-ranges-types";
+import { Range, InternalRange } from "dc-ranges/types";
 import { EventEmitter } from "events";
 import { TTLHandler } from "dc-ttl";
 import { mergeRange } from "./merge";

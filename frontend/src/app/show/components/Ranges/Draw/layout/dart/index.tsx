@@ -1,4 +1,4 @@
-import { LayoutDart } from "dc-ranges-types";
+import { LayoutDart } from "dc-ranges/types";
 import dart from "./dartboard.svg";
 import { LayoutInterface } from "..";
 

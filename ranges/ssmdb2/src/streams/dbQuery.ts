@@ -1,6 +1,6 @@
 import { TransformCallback } from "stream";
 import { Ssmdb2Client } from "dc-db-ssmdb2";
-import { Hits, INVALID_HIT_POS, UnsignedInteger } from "dc-ranges-types";
+import { Hits, INVALID_HIT_POS, UnsignedInteger } from "dc-ranges/types";
 import { logger } from "dc-logger";
 import { getLocalMs } from "../utils";
 import { SSMDB2InternalRange } from "../types";

@@ -14,7 +14,7 @@
         "body-parser": "^2.2.2",
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges-types": "file:../../ranges/types",
+        "dc-ranges": "file:../../ranges/ranges",
         "dc-screens-types": "file:../types",
         "dotenv": "^17.4.0",
         "express": "^5.2.1",

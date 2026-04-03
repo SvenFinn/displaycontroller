@@ -10,7 +10,7 @@ import { CsvLineStream } from "./streams/csvLines";
 import { LogLineStream } from "./streams/logLine";
 import { RangeStateStream } from "./streams/rangeState";
 import { DebounceTransform, RabbitMqReceiver, RabbitMqWriter } from "dc-streams";
-import { InternalRange, isInternalRange } from "dc-ranges-types";
+import { InternalRange, isInternalRange } from "dc-ranges/types";
 
 
 async function main() {

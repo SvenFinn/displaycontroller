@@ -1,4 +1,4 @@
-import { Index, UnsignedInteger } from "../../common/index.js";
+import { Index, UnsignedInteger } from "../../index.js";
 import { Layout } from "./layout.js";
 import { Mode } from "./mode.js";
 import { Zoom } from "./zoom.js";

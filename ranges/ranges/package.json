@@ -1,5 +1,5 @@
 {
-    "name": "dc-ranges-types",
+    "name": "dc-ranges",
     "version": "1.0.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -18,6 +18,18 @@
     "devDependencies": {
         "ts-patch": "^3.3.0",
         "typescript": "~5.9.3"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./types": {
+            "import": "./dist/types/index.js",
+            "require": "./dist/types/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
     },
     "files": [
         "dist"

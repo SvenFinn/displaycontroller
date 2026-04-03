@@ -1,4 +1,4 @@
-import { Index, UnsignedInteger, UnsignedNumber } from "dc-ranges-types"
+import { Index, UnsignedInteger, UnsignedNumber } from "dc-ranges/types"
 
 export type BaseHitEval = {
     id: Index

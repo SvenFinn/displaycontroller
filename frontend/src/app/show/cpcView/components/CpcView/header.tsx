@@ -1,6 +1,6 @@
 import Header from "@frontend/app/show/components/Ranges/Header";
 import { useAppSelector } from "./ranges-store/store";
-import { StartList } from "dc-ranges-types";
+import { StartList } from "dc-ranges/types";
 
 export function CpcHeader() {
     const startLists = useAppSelector((state) => {

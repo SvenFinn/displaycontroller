@@ -1,4 +1,4 @@
-import { Hit, Layout } from "dc-ranges-types";
+import { Hit, Layout } from "dc-ranges/types";
 import { idealTextColor } from "../../../../lib/idealTextColor";
 import { getHitColor } from "../layout";
 import { memo } from "react";
