@@ -19,10 +19,10 @@
         "pg": "^8.20.0"
     },
     "devDependencies": {
-        "@types/node": "^25.5.0",
+        "@types/node": "^25.5.2",
         "@types/pg": "^8.20.0",
         "prisma": "^7.6.0",
-        "typescript": "^5.9.3"
+        "typescript": "^6.0.2"
     },
     "files": [
         "dist",
