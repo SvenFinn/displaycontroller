@@ -1,5 +1,5 @@
 {
-    "name": "dc-server-state",
+    "name": "dc-server-state-runner",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
@@ -11,10 +11,12 @@
     "description": "",
     "dependencies": {
         "amqplib": "^1.0.3",
-        "dc-db-local": "file:../lib/database/local",
-        "dc-db-smdb": "file:../lib/database/smdb",
-        "dc-logger": "file:../lib/logger",
-        "dc-screens-types": "file:../screens/types",
+        "dc-db-local": "file:../../lib/database/local",
+        "dc-db-smdb": "file:../../lib/database/smdb",
+        "dc-logger": "file:../../lib/logger",
+        "dc-screens-types": "file:../../screens/types",
+        "dc-server-state": "file:../contract",
+        "dc-endpoints": "file:../../lib/endpoints",
         "dotenv": "^17.4.0",
         "express": "^5.2.1",
         "semver": "^7.7.4",

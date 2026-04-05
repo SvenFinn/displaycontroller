@@ -1,8 +1,10 @@
+export type ServerCompatible = boolean;
+
 export type AdvServerState = AdvServerStateOnline | AdvServerStateOffline;
 
 type AdvServerStateOnline = {
     online: true;
-    compatible: boolean;
+    compatible: ServerCompatible;
     version: string;
     services: {
         ssmdb2: boolean;

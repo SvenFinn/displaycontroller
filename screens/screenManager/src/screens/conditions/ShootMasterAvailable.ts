@@ -1,18 +1,14 @@
 import { ConditionNone } from "dc-screens-types";
 import { logger } from "dc-logger";
+import { request } from "dc-endpoints";
+import { getServerState } from "dc-server-state/endpoints";
 
 export async function shootmaster_available(condition: ConditionNone): Promise<boolean> {
-    const serverStateReq = await fetch("http://server-state:80/api/serverState");
-    if (serverStateReq.status !== 200) {
+    const serverState = await request("http://server-state:80", getServerState);
+
+    if (serverState.type === "error" || !serverState.body) {
         logger.warn("Failed to fetch server state");
         return false;
     }
-    try {
-        const serverState = await serverStateReq.json();
-        return serverState;
-    }
-    catch (e) {
-        logger.error(`Failed to parse server state: ${e}`);
-        return false;
-    }
+    return serverState.body;
 }

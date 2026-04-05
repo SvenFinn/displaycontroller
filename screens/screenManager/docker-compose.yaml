@@ -16,6 +16,7 @@ services:
         - logger=../../lib/logger
         - file-utils=../utils/files
         - screen-types=../types
+        - server-state=../../serverState/contract
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}
         - SELF_DB_USER=${SELF_DB_USER}

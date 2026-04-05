@@ -17,6 +17,7 @@
         "dc-logger": "file:../../lib/logger",
         "dc-ranges": "file:../../ranges/ranges",
         "dc-screens-types": "file:../types",
+        "dc-server-state": "file:../../serverState/contract",
         "dotenv": "^17.4.0",
         "express": "^5.2.1",
         "socket.io": "^4.8.3"

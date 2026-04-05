@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { createLocalClient } from "dc-db-local";
-import { AdvServerState } from "./types";
+import { AdvServerState } from "dc-server-state/types";
 import { logger } from "dc-logger";
 import semver from "semver";
 import dotenv from "dotenv";
