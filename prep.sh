@@ -16,6 +16,7 @@ function install_dependencies() {
     rm -rf node_modules
     rm -rf dist
     npm install --loglevel=info
+    npm audit fix --loglevel=info || true
     if grep -q '"types":' package.json; then
         npm run build --loglevel=info
     fi
