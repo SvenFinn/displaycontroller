@@ -88,10 +88,6 @@ export function registerEndpoint<P, Q, B, RB>(app: Express, endpoint: Endpoint<P
                 });
             }
         } catch (e) {
-            if (isHttpError(e)) {
-                res.status(e.code).send(e);
-                return;
-            }
             res.status(500).send({
                 code: 500,
                 message: "Internal server error",
