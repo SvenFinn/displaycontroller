@@ -6,6 +6,8 @@ import CreateableSelect from "react-select/creatable";
 import styles from "./ranges.module.css";
 import Grid from "@frontend/app/show/components/Ranges/Grid";
 import { useHost } from "@frontend/app/hooks/useHost";
+import { request } from "dc-endpoints";
+import { getActiveRanges } from "dc-ranges/endpoints";
 
 interface Value {
     label: string;
@@ -51,19 +53,21 @@ export default function RangesGrid(props: WidgetProps) {
     useEffect(() => {
         if (!host) return;
         async function fetchRanges() {
-            const url = `${host}/api/ranges`;
-            const response = await fetch(url);
-            if (!response.ok) {
-                console.error("Failed to fetch ranges");
+            const ranges = await request(host, getActiveRanges);
+            if (ranges.type === "error" || !ranges.body) {
+                setOptions([{ label: "None", value: null }]);
                 return;
             }
-            const data = await response.json() as Array<number | null>;
-            data.push(null);
-            setOptions(data.map(range => ({
+            const rangesData: Array<number | null> = ranges.body;
+            rangesData.push(null);
+            setOptions(rangesData.map(range => ({
                 label: range === null ? "None" : range.toString(),
                 value: range
-            })
-            ));
+            })).sort((a, b) => {
+                if (a.value === null) return 1; // Place null at the end
+                if (b.value === null) return -1;
+                return a.value - b.value; // Sort numerically
+            }));
         }
         fetchRanges();
     }, [host]);

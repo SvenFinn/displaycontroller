@@ -105,16 +105,10 @@ registerEndpoint(app, getAllStartLists, async (params, query) => {
     });
     let startLists: StartList[] = [];
     for (const entry of startListsDb) {
-        try {
-            // @ts-ignore - prisma has ass types
-            const parsed = JSON.parse(entry.value);
-            if (isStartList(parsed)) {
-                startLists.push(parsed);
-            } else {
-                logger.warn(`Cache entry with key ${entry.key} is not a valid StartList`);
-            }
-        } catch (e) {
-            logger.warn(`Cache entry with key ${entry.key} has invalid JSON`);
+        if (isStartList(entry.value)) {
+            startLists.push(entry.value);
+        } else {
+            logger.warn(`Cache entry with key ${entry.key} is not a valid StartList`);
         }
     }
     return startLists;

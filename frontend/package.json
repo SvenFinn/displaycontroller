@@ -17,6 +17,7 @@
         "@rjsf/utils": "^6.4.2",
         "@rjsf/validator-ajv8": "^6.4.2",
         "bootstrap": "^5.3.8",
+        "dc-endpoints": "file:../lib/endpoints",
         "dc-ranges": "file:../ranges/ranges",
         "dc-screens-types": "file:../screens/types",
         "mime": "^4.1.0",
