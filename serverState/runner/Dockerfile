@@ -19,6 +19,12 @@ COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM deps-logger AS deps-endpoints
+WORKDIR /app/lib/endpoints
+COPY --from=endpoints . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM base AS deps-local-db
 WORKDIR /app/lib/database/local
 COPY --from=local-db . .
@@ -38,28 +44,36 @@ COPY --from=screen-types . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
+FROM deps-endpoints AS deps-server-state-contract
+WORKDIR /app/serverState/contract
+COPY --from=server-state-contract  . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM base AS local-deps
 WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-smdb /app/lib/database/smdb /app/lib/database/smdb
+COPY --from=deps-server-state-contract /app/serverState/contract /app/serverState/contract
 COPY --from=deps-screens-types /app/screens/types /app/screens/types
 
 FROM local-deps AS deps
 
-WORKDIR /app/checkServer
+WORKDIR /app/serverState/runner
 COPY package.json package-lock.json ./
 RUN npm i --omit=dev --loglevel=info --install-links;
 
 FROM local-deps AS build
 
-WORKDIR /app/checkServer
+WORKDIR /app/serverState/runner
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
 
-WORKDIR /app/checkServer
+WORKDIR /app/serverState/runner
 
 COPY . .
 RUN npm run build && \
@@ -80,8 +94,8 @@ WORKDIR /app
 RUN adduser -D display-user && chown -R display-user /app
 USER display-user
 
-COPY --from=build /app/checkServer/dist ./
-COPY --from=deps /app/checkServer/node_modules ./node_modules
+COPY --from=build /app/serverState/runner/dist ./
+COPY --from=deps /app/serverState/runner/node_modules ./node_modules
 
 EXPOSE 80
 

@@ -1,4 +1,4 @@
-import { AdvServerState } from "./types";
+import { AdvServerState } from "dc-server-state/types";
 import { logger } from "dc-logger";
 import { Screen } from "dc-screens-types";
 import amqp from "amqplib";

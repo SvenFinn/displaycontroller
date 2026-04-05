@@ -1,8 +1,10 @@
 import express, { Request, Response, Express } from "express";
-import { AdvServerState } from "./types";
+import { AdvServerState } from "dc-server-state/types";
 import { logger } from "dc-logger";
 import http from "http";
 import { Server as IOServer } from "socket.io";
+import { registerEndpoint } from "dc-endpoints";
+import { getFullServerState, getServerState } from "dc-server-state/endpoints";
 
 const app: Express = express();
 // HTTP server (used for both express and socket.io)
@@ -16,12 +18,12 @@ let serverInf: AdvServerState = {
     online: false
 };
 
-app.get("/api/serverState", (req: Request, res: Response) => {
-    res.status(200).send(serverInf.online ? serverInf.compatible : false);
+registerEndpoint(app, getServerState, async (params, query) => {
+    return serverInf.online ? serverInf.compatible : false;
 });
 
-app.get("/api/serverState/full", (req: Request, res: Response) => {
-    res.status(200).send(serverInf);
+registerEndpoint(app, getFullServerState, async (params, query) => {
+    return serverInf;
 });
 
 export function updateServerState(newServerInf: AdvServerState) {

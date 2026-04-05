@@ -1,6 +1,6 @@
 import { checkServerAvailable, checkServiceAvailability } from "./checkServer";
 import { updateServerState } from "./webServer";
-import { AdvServerState } from "./types";
+import { AdvServerState } from "dc-server-state/types";
 import { logger } from "dc-logger";
 import amqp from "amqplib";
 import { sendSystemScreen } from "./screens";
