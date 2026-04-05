@@ -9,6 +9,8 @@ import { registerEndpoint } from 'dc-endpoints';
 import { createOrUpdateKnownRange, deleteKnownRange, getActiveRanges, getAllKnownRanges, getAllStartLists, getFreeRanges, getKnownRange, getRange } from 'dc-ranges/endpoints';
 
 const app: Express = express();
+app.use(express.json());
+
 const server = createServer(app);
 const io = new Server(server, {
     path: '/api/ranges/ws'
