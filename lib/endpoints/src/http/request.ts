@@ -11,24 +11,29 @@ export type MutatingRequest<P, Q, B> = GetRequest<P, Q> & {
     body: B;
 };
 
-export async function request<P, Q, RB>(endpoint: GetEndpoint<P, Q, RB>, params: P, query: Q): Promise<Response<RB>>;
-export async function request<P, Q, B, RB>(endpoint: MutatingEndpoint<P, Q, B, RB>, params: P, query: Q, body: B): Promise<Response<RB>>;
-export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, params: P, query: Q, body?: B): Promise<Response<RB>> {
+export async function request<RB>(baseUrl: string, endpoint: GetEndpoint<void, void, RB>): Promise<Response<RB>>;
+export async function request<P, RB>(baseUrl: string, endpoint: GetEndpoint<P, void, RB>, params: P): Promise<Response<RB>>;
+export async function request<P, Q, RB>(baseUrl: string, endpoint: GetEndpoint<P, Q, RB>, params: P, query: Q): Promise<Response<RB>>;
+export async function request<P, Q, B, RB>(baseUrl: string, endpoint: MutatingEndpoint<P, Q, B, RB>, params: P, query: Q, body: B): Promise<Response<RB>>;
+export async function request<P, Q, B, RB>(baseUrl: string, endpoint: Endpoint<P, Q, B, RB>, params?: P, query?: Q, body?: B): Promise<Response<RB>> {
     const { method, request, response } = endpoint;
     if (!request.isParams(params)) {
         return {
+            type: "error",
             code: 400,
             message: "Path parameters could not be validated locally"
         }
     }
     if (!request.isQuery(query)) {
         return {
+            type: "error",
             code: 400,
             message: "Query parameters could not be validated locally"
         }
     }
     if (method !== 'GET' && !request.isBody(body)) {
         return {
+            type: "error",
             code: 400,
             message: "Request body could not be validated locally"
         }
@@ -39,7 +44,9 @@ export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, para
     const toPath = compile(request.path);
     const resolvedPath = toPath(params || undefined);
     const queryString = searchParams.toString();
-    const url = queryString ? `${resolvedPath}?${queryString}` : resolvedPath;
+    const relativeUrl = queryString ? `${resolvedPath}?${queryString}` : resolvedPath;
+    const url = new URL(relativeUrl, baseUrl);
+
     const result = await fetch(url, {
         method,
         body: method === 'GET' ? undefined : JSON.stringify(body),
@@ -50,7 +57,9 @@ export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, para
     if (result.ok) {
         if (result.status === 204 || result.status === 205) {
             return {
-                code: result.status
+                type: "success",
+                code: result.status,
+                body: null
             };
         }
         let responseBody: unknown;
@@ -58,17 +67,20 @@ export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, para
             responseBody = await result.json();
         } catch (e) {
             return {
+                type: "error",
                 code: 500,
                 message: "Response body is not valid JSON"
             };
         }
         if (response.isResponseBody(responseBody)) {
             return {
+                type: "success",
                 code: result.status,
                 body: responseBody
             };
         } else {
             return {
+                type: "error",
                 code: 500,
                 message: "Response body could not be validated locally"
             };
@@ -78,6 +90,7 @@ export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, para
             const errorBody = await result.json();
             if (!isHttpError(errorBody)) {
                 return {
+                    type: "error",
                     code: 500,
                     message: "Error response body could not be validated locally"
                 };
@@ -85,6 +98,7 @@ export async function request<P, Q, B, RB>(endpoint: Endpoint<P, Q, B, RB>, para
             return errorBody;
         } catch (e) {
             return {
+                type: "error",
                 code: 500,
                 message: "Error response body is not valid JSON"
             };

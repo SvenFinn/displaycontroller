@@ -1,23 +1,14 @@
 import { ConditionNumber } from "dc-screens-types";
 import { isRange } from "dc-ranges/types"
 import { logger } from "dc-logger";
+import { request } from "dc-endpoints";
+import { getRange } from "dc-ranges/endpoints";
 
 export async function range_online(condition: ConditionNumber): Promise<boolean> {
-    const rangeReq = await fetch(`http://ranges:80/api/ranges/${condition.number}`);
-    if (rangeReq.status !== 200) {
-        logger.warn("Failed to fetch online ranges");
+    const range = await request("http://ranges:80", getRange, { rangeId: condition.number.toString() });
+    if (range.type === "error" || !range.body) {
+        logger.warn("Failed to fetch range");
         return false;
     }
-    try {
-        const range = await rangeReq.json();
-        if (!isRange(range)) {
-            logger.warn("Invalid range response");
-            return false;
-        }
-        return range.active;
-    }
-    catch (e) {
-        logger.error(`Failed to parse range response: ${e}`);
-        return false;
-    }
+    return range.body.active;
 }

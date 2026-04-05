@@ -3,15 +3,13 @@ import { createIs, tags } from "typia";
 export type Response<RB> = SuccessfulResponse<RB> | HttpError;
 
 export type SuccessfulResponse<RB> = {
-    code: Exclude<number & tags.Minimum<100> & tags.ExclusiveMaximum<300> & tags.MultipleOf<1>, 204 | 205>;
-    body: RB;
-} | NoBodySuccessfulResponse;
-
-type NoBodySuccessfulResponse = {
-    code: 204 | 205;
-};
+    type: "success";
+    code: number & tags.Minimum<200> & tags.ExclusiveMaximum<300> & tags.MultipleOf<1>;
+    body: RB | null;
+}
 
 export type HttpError = {
+    type: "error";
     code: number & tags.Minimum<300> & tags.ExclusiveMaximum<600> & tags.MultipleOf<1>;
     message: string;
 };

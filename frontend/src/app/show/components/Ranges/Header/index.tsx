@@ -4,6 +4,8 @@ import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 import { memo, useEffect, useMemo, useState } from "react";
 import { compareJSON } from "../Draw";
 import { useHost } from "@frontend/app/hooks/useHost";
+import { request } from "dc-endpoints";
+import { getAllStartLists } from "dc-ranges/endpoints";
 
 interface HeaderProps {
     startLists: Array<StartList>;
@@ -22,25 +24,14 @@ export const Header = memo(function HeaderMemoized({ startLists }: HeaderProps):
         }
 
         async function fetchDefaultNames() {
-            try {
-                const response = await fetch(`${host}/api/ranges/start-lists`);
-                if (!response.ok) {
-                    throw new Error("Could not fetch default start lists");
-                }
-                const data: any = await response.json();
-                if (!Array.isArray(data)) {
-                    throw new Error("Invalid data format for default start lists");
-                }
-                for (const item of data) {
-                    if (!isStartList(item)) {
-                        throw new Error("Invalid start list item");
-                    }
-                }
-                const activeStartLists = data.filter((sl: StartList) => sl.active);
-                setDefaultNames(activeStartLists.map((sl: StartList) => sl.name));
-            } catch (error) {
-                console.error("Error fetching default start lists:", error);
+            const startLists = await request(host, getAllStartLists);
+            if (startLists.type === "error" || !startLists.body) {
+                console.error("Failed to fetch default start lists");
+                setDefaultNames([]);
+                return;
             }
+            const activeStartLists = startLists.body.filter((sl: StartList) => sl.active);
+            setDefaultNames(activeStartLists.map((sl: StartList) => sl.name));
         }
 
         fetchDefaultNames();

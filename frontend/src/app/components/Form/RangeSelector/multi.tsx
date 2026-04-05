@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import SelectWithCustom from "../SelectWithCustom";
 import { WidgetProps } from "@rjsf/utils";
-import { JSONSchema7TypeName } from "json-schema";
 import { useHost } from "@frontend/app/hooks/useHost";
+import { request } from "dc-endpoints";
+import { getActiveRanges } from "dc-ranges/endpoints";
 
 export default function MultiRangeSelector(props: WidgetProps) {
     const [ranges, setRanges] = useState<number[]>([]);
@@ -13,14 +13,12 @@ export default function MultiRangeSelector(props: WidgetProps) {
     }
 
     async function fetchRanges() {
-        const url = `${host}/api/ranges`;
-        const response = await fetch(url);
-        if (!response.ok) {
-            console.error("Failed to fetch ranges");
+        const ranges = await request(host, getActiveRanges);
+        if (ranges.type === "error" || !ranges.body) {
+            setRanges([]);
             return;
         }
-        const data = await response.json();
-        setRanges(data);
+        setRanges(ranges.body);
     }
 
     useEffect(() => {
