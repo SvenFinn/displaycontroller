@@ -1,47 +1,35 @@
 import { TTLHandler } from "dc-ttl";
 import { InternalDiscipline, InternalRange, isInternalOverrideDiscipline, isNormInternalDiscipline } from "dc-ranges/types";
 import { LogInternalRange, MulticastInternalRange } from "../types";
-import { LocalClient } from "dc-db-local";
 import { isSameShooter } from "../cache/shooter";
 import { getDisciplineId } from "../cache/overrides";
 import { logger } from "dc-logger";
 import { TypedTransform } from "dc-streams";
 
-export class RangeMerger extends TypedTransform<InternalRange, InternalRange> {
+export class RangeMerger extends TypedTransform<MulticastInternalRange | LogInternalRange, InternalRange> {
     private multicastStates: Map<number, TTLHandler<MulticastInternalRange>> = new Map();
-    private logStates: Map<number, LogInternalRange> = new Map();
-    private freeTimeout: number = 30 * 60 * 1000;
+    private logStates: Map<number, TTLHandler<LogInternalRange>> = new Map();
 
-    constructor(localClient: LocalClient) {
-        super();
-        this._getFreeTimeout(localClient);
-    }
 
-    private async _getFreeTimeout(localClient: LocalClient) {
-        this.freeTimeout = ((await localClient.parameter.findUniqueOrThrow({
-            where: {
-                key: "FREE_RANGE_SHOT_TIMEOUT",
-            }
-        })).numValue || 30 * 60 * 1000);
-    }
-
-    _transform(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
+    _transform(chunk: MulticastInternalRange | LogInternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
         if (chunk.source == "multicast") {
-            const multicastChunk = chunk as MulticastInternalRange;
-            logger.debug(`Received multicast range ${multicastChunk.rangeId}`);
-            if (this.multicastStates.has(multicastChunk.rangeId)) {
-                this.multicastStates.get(multicastChunk.rangeId)?.setMessage(multicastChunk);
-            } else {
-                const handler = new TTLHandler<MulticastInternalRange>();
-                handler.setMessage(multicastChunk);
-                this.multicastStates.set(multicastChunk.rangeId, handler);
+            logger.debug(`Received multicast range ${chunk.rangeId}`);
+            let entry = this.multicastStates.get(chunk.rangeId);
+            if (!entry) {
+                entry = new TTLHandler<MulticastInternalRange>();
+                this.multicastStates.set(chunk.rangeId, entry);
             }
+            entry.setMessage(chunk);
         } else {
-            logger.debug(`Received log range ${chunk.rangeId}`);
-            this.logStates.set(chunk.rangeId, chunk as LogInternalRange);
+            let entry = this.logStates.get(chunk.rangeId);
+            if (!entry) {
+                entry = new TTLHandler<LogInternalRange>();
+                this.logStates.set(chunk.rangeId, entry);
+            }
+            entry.setMessage(chunk);
         }
         logger.debug(`Merging range ${chunk.rangeId}`);
-        const merged = this.mergeStates(this.multicastStates.get(chunk.rangeId)?.getMessage() || null, this.logStates.get(chunk.rangeId) || null);
+        const merged = this.mergeStates(this.multicastStates.get(chunk.rangeId)?.getMessage() || null, this.logStates.get(chunk.rangeId)?.getMessage() || null);
         if (merged !== null) {
             this.push(merged);
         }
@@ -87,9 +75,6 @@ export class RangeMerger extends TypedTransform<InternalRange, InternalRange> {
         if (multicastState.onRangeSince > logState.last_update) {
             return null;
         }
-        // If range is free and the last shot was more than freeTimeout ago, consider it free
-        // Do not blacklist target, as the shooter might not have left the range yet
-        if ((logState.shooter === null || logState.shooter.type === "free") && logState.last_update.getTime() < Date.now() - this.freeTimeout) return null;
 
         // We now have a valid state to merge
         return {
@@ -99,7 +84,7 @@ export class RangeMerger extends TypedTransform<InternalRange, InternalRange> {
             startListId: multicastState.startListId,
             discipline: this.getDiscipline(multicastState.discipline, logState.discipline),
             source: "log",
-            ttl: logState.ttl
+            ttl: Math.min(multicastState.ttl, logState.ttl),
         }
     }
 }

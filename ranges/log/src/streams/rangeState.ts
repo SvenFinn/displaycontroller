@@ -1,10 +1,41 @@
+import { LocalClient } from "dc-db-local";
 import { LogInternalRange, LogLine, LogMessage } from "../types";
 import { logger } from "dc-logger";
 import { Hits, RangeId } from "dc-ranges/types";
 import { TypedTransform } from "dc-streams";
 
+const LOG_TTL = 15000; // 15 seconds
+
 export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRange> {
     private ranges: Map<RangeId, LogInternalRange> = new Map();
+    private freeTimeout: number = 30 * 60 * 1000;
+
+    constructor(localClient: LocalClient) {
+        super();
+        this.getFreeTimeout(localClient);
+        setInterval(() => this.ttlReemit(), LOG_TTL / 3 * 2);
+    }
+
+    private ttlReemit() {
+        for (const rangeData of this.ranges.values()) {
+            if (rangeData.shooter?.type === "free" && (Date.now() - rangeData.last_update.getTime()) > this.freeTimeout) {
+                // If range is free and the last shot was more than freeTimeout ago, no longer emit it
+                // As we hav no other way to know if a free range is still active
+                // We do not remove it, because the shooter might still be there
+                continue;
+            }
+            this.push(structuredClone(rangeData));
+        }
+    }
+
+    private async getFreeTimeout(localClient: LocalClient) {
+        this.freeTimeout = ((await localClient.parameter.findUniqueOrThrow({
+            where: {
+                key: "FREE_RANGE_SHOT_TIMEOUT",
+            }
+        })).numValue || 30 * 60 * 1000);
+    }
+
 
     private createEmptyRange(chunk: LogLine): LogInternalRange {
         return {
@@ -15,7 +46,7 @@ export class RangeStateStream extends TypedTransform<LogMessage, LogInternalRang
             hits: [],
             startListId: null,
             source: "log",
-            ttl: 15000,
+            ttl: LOG_TTL,
             last_update: chunk.timestamp,
         }
     }

@@ -18,13 +18,13 @@ async function main() {
     const connection = await amqp.connect("amqp://rabbitmq");
     const localClient = createLocalClient();
 
-    const rangeMerger = new RangeMerger(localClient);
+    const rangeMerger = new RangeMerger();
 
     const serverState = new ServerStateStream();
     const logTail = new LogTailStream(localClient);
     const csvLines = new CsvLineStream();
     const logLines = new LogLineStream();
-    const rangeState = new RangeStateStream();
+    const rangeState = new RangeStateStream(localClient);
     const rangeDebounce = new DebounceTransform((value: InternalRange) => value.rangeId.toString(), 300);
     serverState
         .pipe(logTail)

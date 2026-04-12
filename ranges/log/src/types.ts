@@ -29,8 +29,10 @@ export const isLogLine = createIs<LogLine>()
 export type LogInternalRange = InternalRange & {
     targetId: string
     last_update: Date
+    source: "log"
 }
 
 export type MulticastInternalRange = InternalRange & {
     onRangeSince: Date
+    source: "multicast"
 }

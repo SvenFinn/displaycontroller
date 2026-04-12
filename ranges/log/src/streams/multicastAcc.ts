@@ -2,6 +2,7 @@ import { InternalRange, InternalShooter } from "dc-ranges/types";
 import { isSameShooter } from "../cache/shooter";
 import { MulticastInternalRange } from "../types";
 import { TypedTransform } from "dc-streams";
+import { logger } from "dc-logger";
 
 type ShooterSince = {
     shooter: InternalShooter | null,
@@ -16,6 +17,11 @@ export class MulticastAccumulate extends TypedTransform<InternalRange, Multicast
     }
 
     _transform(chunk: InternalRange, encoding: BufferEncoding, callback: (error?: Error | null, data?: any) => void): void {
+        if (chunk.source !== "multicast") {
+            logger.warn(`Received non-multicast range in MulticastAccumulate: ${chunk.rangeId}`);
+            return callback();
+        }
+
         if (!this.shooters.has(chunk.rangeId)) {
             this.shooters.set(chunk.rangeId, {
                 shooter: chunk.shooter,
@@ -32,6 +38,7 @@ export class MulticastAccumulate extends TypedTransform<InternalRange, Multicast
 
         const range: MulticastInternalRange = {
             ...chunk,
+            source: "multicast",
             onRangeSince: this.shooters.get(chunk.rangeId)!.since,
         }
 

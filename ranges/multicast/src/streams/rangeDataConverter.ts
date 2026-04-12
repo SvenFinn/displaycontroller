@@ -44,7 +44,7 @@ export class RangeDataConverter extends TypedTransform<ResolvedPacketCandidates,
             shooter: this.resolveShooter(chunk),
             hits: [],
             source: "multicast",
-            ttl: 20000
+            ttl: 15000
         };
         this.push(range);
         callback();
