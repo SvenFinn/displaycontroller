@@ -15,10 +15,10 @@
         "dc-logger": "file:../../lib/logger",
         "dc-ranges": "file:../contract",
         "dc-table-watcher": "file:../../lib/database/tableWatcher",
-        "dotenv": "^17.4.0"
+        "dotenv": "^17.4.2"
     },
     "devDependencies": {
-        "@types/node": "^25.5.0",
+        "@types/node": "^25.6.0",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.9.3"
     }

@@ -17,7 +17,7 @@
         "dc-screens-types": "file:../../screens/types",
         "dc-server-state": "file:../contract",
         "dc-endpoints": "file:../../lib/endpoints",
-        "dotenv": "^17.4.0",
+        "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "semver": "^7.7.4",
         "socket.io": "^4.8.3"
@@ -25,7 +25,7 @@
     "devDependencies": {
         "@types/amqplib": "^0.10.8",
         "@types/express": "^5.0.6",
-        "@types/node": "^25.5.0",
+        "@types/node": "^25.6.0",
         "@types/semver": "^7.7.1",
         "typescript": "^5.9.3"
     }

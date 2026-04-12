@@ -13,14 +13,14 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@prisma/adapter-mariadb": "^7.6.0",
-        "@prisma/client": "^7.6.0",
+        "@prisma/adapter-mariadb": "^7.7.0",
+        "@prisma/client": "^7.7.0",
         "dc-db-local": "file:../local",
-        "dotenv": "^17.4.0"
+        "dotenv": "^17.4.2"
     },
     "devDependencies": {
-        "@types/node": "^25.5.0",
-        "prisma": "^7.6.0",
+        "@types/node": "^25.6.0",
+        "prisma": "^7.7.0",
         "typescript": "^5.9.3"
     },
     "files": [
