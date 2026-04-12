@@ -38,6 +38,11 @@ export default function InfoStr({ id }: { id: number }): React.JSX.Element {
             case "fixed":
                 zoomStr = `Z${zoom.value}`;
                 break;
+            default:
+                const exhaustiveCheck: never = zoom;
+                // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                console.warn(`No string defined for zoom mode: ${zoom.mode}`);
+                zoomStr = "Z?";
         }
     }
 

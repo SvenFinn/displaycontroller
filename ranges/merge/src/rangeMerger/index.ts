@@ -2,6 +2,7 @@ import { Range, InternalRange } from "dc-ranges/types";
 import { EventEmitter } from "events";
 import { TTLHandler } from "dc-ttl";
 import { mergeRange } from "./merge";
+import { logger } from "dc-logger";
 
 export class RangeMerger extends EventEmitter {
     private readonly rangeId: number;
@@ -40,7 +41,9 @@ export class RangeMerger extends EventEmitter {
                 this.sourceData[2].setMessage(sourceData);
                 break;
             default:
-                throw new Error(`Unknown source ${sourceData.source}`);
+                const exhaustiveCheck: never = sourceData.source;
+                // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                logger.warn(`Unknown source ${sourceData.source} for range data with id ${sourceData.rangeId}`);
         }
     }
 

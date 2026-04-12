@@ -1,12 +1,7 @@
 import { ScreenId } from './common.js';
-import { BaseDbScreen, BaseScreenAvailable } from './base.js';
+import { BaseScreenAvailable } from './base.js';
 
 export type SystemMessageScreen = BaseScreenAvailable & {
-    type: "systemMessage";
-    options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
-}
-
-export type SystemMessageDbScreen = BaseDbScreen & {
     type: "systemMessage";
     options: Ssmdb2MessageOptions | IncompatibleMessageOptions | InvalidScreenOptions | SMDBAccessMessageOptions;
 }

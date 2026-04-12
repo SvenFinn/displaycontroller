@@ -56,7 +56,9 @@ function getHit(round: Round, hit?: Hit): string | null {
         case "ringsDiv":
             return prefix + `${hitEval.rings} ${hitEval.divider}`;
         default:
-            const _exhaustive: never = hitEval;
-            return _exhaustive;
+            const exhaustiveCheck: never = hitEval;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No hitEval kind defined for kind: ${hitEval.kind}`);
+            return prefix + "Unbekannt";
     }
 }

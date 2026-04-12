@@ -18,9 +18,10 @@ export type ActionRunnerProps = {
     actionCallbacks: ActionsCallbacks;
     files: DirectoryListing;
 };
-
 export default function ActionsRunner({ actionCallbacks, selectedFiles, action, closeDialog, clipboard, currentPath, files }: ActionRunnerProps) {
     switch (action) {
+        case undefined:
+            return <></>;
         case "downloadAction":
             return <Download selectedFiles={selectedFiles} closeDialog={closeDialog} actionCallbacks={actionCallbacks} />;
         case "deleteAction":
@@ -36,7 +37,7 @@ export default function ActionsRunner({ actionCallbacks, selectedFiles, action, 
         case "uploadAction":
             return <Upload actionCallbacks={actionCallbacks} currentPath={currentPath} closeDialog={closeDialog} />;
         default:
+            const exhaustiveCheck: never = action;
             return <></>;
     }
 }
-

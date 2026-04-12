@@ -1,6 +1,7 @@
 import { Discipline, Round, Rounds, Mode, Zoom } from "dc-ranges/types";
 import { SmdbClient } from "dc-db-smdb";
 import { getLayout } from "./layout";
+import { logger } from "dc-logger";
 
 export async function getDisciplineCache(smdbClient: SmdbClient): Promise<Array<Discipline>> {
     const disciplinesDb = await smdbClient.discipline.findMany({
@@ -139,7 +140,8 @@ function getMode(mode: number): Mode {
         case 14: // decimal * integer part
             return { mode: "integerDecimal" };
         default:
-            throw new Error("Invalid mode");
+            logger.warn(`No mode defined for mode id: ${mode}`);
+            return { mode: "rings", decimals: 1 };
     }
 }
 
@@ -156,6 +158,7 @@ function getZoom(zoom: number): Zoom {
         case 4:
             return { mode: "fixed", value: 4 };
         default:
-            throw new Error("Invalid zoom");
+            logger.warn(`No zoom defined for zoom id: ${zoom}`);
+            return { mode: "none" };
     }
 }

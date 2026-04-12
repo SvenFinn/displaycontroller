@@ -35,7 +35,7 @@ export type LayoutStars = {
 export type LayoutChess = {
     mode: "chess";
     type: "rifle" | "pistol";
-    size: UnsignedNumber;
+    size: 5 | 6 | 7 | 10;
 }
 
 export type LayoutEaster = {

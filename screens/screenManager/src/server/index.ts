@@ -262,10 +262,6 @@ app.post("/api/screens", async (req: Request, res: Response) => {
         return;
     }
     const screen = req.body;
-    if (screen.type == "systemMessage" || screen.type == "screenCast") {
-        res.status(400).send('Cannot create systemMessage or screenCast screens via API');
-        return;
-    }
     try {
 
         const newScreen = await localClient.$transaction(async (tx) => {

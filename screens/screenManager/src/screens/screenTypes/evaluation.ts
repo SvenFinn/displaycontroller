@@ -1,6 +1,5 @@
 import { Screens } from ".";
 import { EvaluationDbScreen } from "dc-screens-types";
-import { isDirectoryListing } from "@shared/files";
 import { logger } from "dc-logger";
 import { createFileList } from "@shared/files/helpers";
 

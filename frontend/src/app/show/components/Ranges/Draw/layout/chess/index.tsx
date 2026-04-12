@@ -23,8 +23,12 @@ export const layoutChess: LayoutInterface<LayoutChess> = {
                 case 7:
                     return [90, 90];
                 default:
+                    const exhaustiveCheck: never = layout.size;
+                    // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                    console.warn(`No size defined for chess layout size: ${layout.size}`);
                     return [0, 0];
             }
+
         } else if (layout.type === "pistol") {
             switch (layout.size) {
                 case 5:
@@ -34,6 +38,9 @@ export const layoutChess: LayoutInterface<LayoutChess> = {
                 case 7:
                     return [125, 125];
                 default:
+                    const exhaustiveCheck: never = layout.size;
+                    // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                    console.warn(`No size defined for chess layout size: ${layout.size}`);
                     return [0, 0];
             }
         }
@@ -44,11 +51,15 @@ export const layoutChess: LayoutInterface<LayoutChess> = {
 
         const srcs = (() => {
             switch (layout.size) {
-                case 5: chessFive.src;
-                case 6: chessSix.src;
-                case 7: chessSeven.src;
-                case 10: chessTen.src;
-                default: return "";
+                case 5: return chessFive.src;
+                case 6: return chessSix.src;
+                case 7: return chessSeven.src;
+                case 10: return chessTen.src;
+                default:
+                    const exhaustiveCheck: never = layout.size;
+                    // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                    console.warn(`No image defined for chess layout size: ${layout.size}`);
+                    return "";
             }
         })();
 

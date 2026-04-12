@@ -1,3 +1,4 @@
+import { logger } from "dc-logger";
 import { Layout } from "dc-ranges/types";
 
 export function getCustomLayout(layoutId: number): Layout | null {
@@ -178,6 +179,7 @@ export function getCustomLayout(layoutId: number): Layout | null {
                 mode: "winter",
             };
         default:
+            logger.warn(`No custom layout defined for layout id: ${layoutId}`);
             return null;
     }
 }

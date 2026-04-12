@@ -4,7 +4,6 @@ import drawTarget from "./drawTarget";
 import evaluation from "./evaluation";
 import imageViewer from "./imageViewer";
 import { logger } from "dc-logger";
-import systemMessage from "./systemMessage";
 import embed from "./embed";
 
 export async function resolveScreen(screen: DbScreen): Promise<Array<Screen> | undefined> {
@@ -17,13 +16,12 @@ export async function resolveScreen(screen: DbScreen): Promise<Array<Screen> | u
             return await imageViewer(screen);
         case "drawTarget":
             return await drawTarget(screen);
-        case "systemMessage":
-            return await systemMessage(screen);
         case "embed":
             return await embed(screen);
         default:
-            const screenWType = screen as any;
-            logger.warn(`Screen ${screenWType?.id || "unknown"} has an unknown type ${screenWType?.type || "unknown"}`);
+            const exhaustiveCheck: never = screen;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            logger.warn(`Screen ${screen?.id} has an unknown type ${screen?.type}`);
             return undefined;
     }
 }

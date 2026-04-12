@@ -40,6 +40,10 @@ export function getDefaultOptions(screen: DbScreen): DbScreen {
                     url: "",
                 }
             };
+        default:
+            const exhaustiveCheck: never = screen;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No default options defined for screen type: ${screen.type}`);
+            return screen;
     }
-    return screen // Fallback, should not happen
 }

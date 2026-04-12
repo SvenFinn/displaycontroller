@@ -17,7 +17,8 @@ export type InternalActions = {
     action: ActionKey | undefined;
 }
 
-export type ActionKey = keyof InternalActions;
+// Expands to: "cutAction" | "copyAction" | "deleteAction" | "downloadAction" | "createFolderAction" | "renameAction" | "uploadAction"
+export type ActionKey = Exclude<keyof InternalActions, "action" | "clipboard" | "closeDialog" | "pasteAction">;
 
 export function useActions(actions: ActionsCallbacks, currentPath: string, selectedFiles: string[], setSelectedFiles: (files: string[]) => void): InternalActions {
     const [action, setAction] = useState<ActionKey | undefined>(undefined);

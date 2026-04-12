@@ -36,7 +36,9 @@ export async function checkCondition(localClient: LocalClient, screen: DbScreen)
             case "ranges_online_count":
                 return ranges_online_count(condition);
             default:
-                logger.warn(`Invalid condition type: ${(condition as any).type}`);
+                const exhaustiveCheck: never = condition;
+                // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                logger.warn(`Invalid condition type: ${condition.type}`);
                 return Promise.resolve(false);
         }
     }));
@@ -46,6 +48,8 @@ export async function checkCondition(localClient: LocalClient, screen: DbScreen)
         case "or":
             return conditions.some(c => c);
         default:
+            const exhaustiveCheck: never = screen.conditions.mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
             logger.warn(`Invalid condition mode: ${screen.conditions.mode}`);
             return false;
     }

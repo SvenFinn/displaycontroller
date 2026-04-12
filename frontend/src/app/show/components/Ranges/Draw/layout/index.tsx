@@ -23,7 +23,11 @@ export function getLayout(layout: Layout): LayoutInterface<any> | null {
         case "easter":
         case "winter": return layoutStars;
         case "rectangle": return layoutRectangle;
-        default: return null;
+        default:
+            const exhaustiveCheck: never = layout;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No layout interface defined for layout mode: ${layout.mode}`);
+            return null;
     }
 }
 
@@ -61,6 +65,9 @@ function getSizeInternal(round: Round, gauge: UnsignedNumber, hits: Hits): [numb
         case "none":
             return layoutInterface.getSizeNone(layout);
         default:
+            const exhaustiveCheck: never = zoom;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No size calculation defined for zoom mode: ${zoom.mode}`);
             return [0, 0];
     }
 }

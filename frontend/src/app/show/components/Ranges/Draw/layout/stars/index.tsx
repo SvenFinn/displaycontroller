@@ -30,9 +30,15 @@ export const layoutStars: LayoutInterface<LayoutStars | LayoutEaster> = {
                     case "rifle":
                         return <image href={starsRifle.src} x={-176 / 2} y={-176 / 2} width={176} height={176} />
                     default:
+                        const exhaustiveCheck: never = layout.type;
+                        // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                        console.warn(`No render defined for stars layout type: ${layout.type}`);
                         return <></>;
                 }
             default:
+                const exhaustiveCheck: never = layout;
+                // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+                console.warn(`No render defined for layout mode: ${layout.mode}`);
                 return <></>;
         }
     }

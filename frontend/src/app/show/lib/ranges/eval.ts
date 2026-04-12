@@ -82,6 +82,9 @@ export function getHitEval(round: Round, hit?: ValidHit): HitEval | null {
             }
 
         default:
+            const exhaustiveCheck: never = round.mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No hit evaluation defined for mode: ${round.mode.mode}`);
             return null;
     }
 }

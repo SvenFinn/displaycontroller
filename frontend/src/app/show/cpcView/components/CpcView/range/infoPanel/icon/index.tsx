@@ -60,6 +60,9 @@ export default function ModeIcon({ id, className }: { id: number, className?: st
         case "integerDecimal":
             return <img src={integerDecimalSVG.src} alt="IntegerDecimal" className={className} />;
         default:
+            const exhaustiveCheck: never = mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No icon defined for mode: ${mode.mode}`);
             return <></>;
     }
 }

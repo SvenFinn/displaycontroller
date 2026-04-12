@@ -27,7 +27,6 @@ export function getExtrapolated(round: Round | null, hits: Hits): string | null 
     if (!round.counts) return null;
 
     const mode = round.mode.mode;
-    if (mode != "rings" && mode != "ringsDiv" && mode != "hundred" && mode != "decimal" && mode != "integerDecimal") return null;
 
     if (hits.length == 0) return null;
     if (hits.length >= round.maxHits) return null;
@@ -61,7 +60,17 @@ export function getExtrapolated(round: Round | null, hits: Hits): string | null 
                 return integer * decimal;
             });
             break;
+        case "circle":
+        case "fullHidden":
+        case "hidden":
+        case "divider":
+        case "target":
+            // Extrapolation for these modes is not defined, as it would require more complex methods and the results would be highly unreliable.
+            return null;
         default:
+            const exhaustiveCheck: never = round.mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No extrapolation defined for mode: ${round.mode.mode}`);
             return null;
     }
 
@@ -137,6 +146,9 @@ function accumulateHits(hits: Hits, round: Round, gauge: UnsignedNumber, isTotal
             }
 
         default:
+            const exhaustiveCheck: never = round.mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No accumulation defined for mode: ${round.mode.mode}`);
             return "???";
     }
 

@@ -99,8 +99,9 @@ function evalToColumns(hitEval: HitEval): Array<string> {
             columns.push(hitEval.rings);
             break;
         default:
-            const _never: never = hitEval;
-            return _never;
+            const exhaustiveCheck: never = hitEval;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No columns defined for hitEval kind: ${hitEval.kind}`);
     }
     return columns;
 }
@@ -135,6 +136,11 @@ function getColumns(mode: Mode): Array<string> {
         case "integerDecimal":
             columns.push("Wert")
             columns.push("Ring");
+            break;
+        default:
+            const exhaustiveCheck: never = mode;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No columns defined for mode: ${mode.mode}`);
             break;
     }
     if (mode.mode !== "hidden" && mode.mode !== "fullHidden") {

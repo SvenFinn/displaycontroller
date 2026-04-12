@@ -38,6 +38,9 @@ function getMessage(options: SystemMessageScreen["options"]) {
         case "SMDBAccess":
             return <SmdbAccess />
         default:
+            const exhaustiveCheck: never = options;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            console.warn(`No message component defined for system message type: ${options.type}`);
             return <h1>Unknown system message</h1>
     }
 }

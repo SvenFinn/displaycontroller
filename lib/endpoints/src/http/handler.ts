@@ -110,5 +110,9 @@ export function registerEndpoint<P, Q, B, RB>(app: Express, endpoint: Endpoint<P
         case 'PATCH':
             app.patch(request.path, expressHandler);
             break;
+        default:
+            const exhaustiveCheck: never = method;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            logger.warn(`Unsupported HTTP method: ${method}`);
     }
 }

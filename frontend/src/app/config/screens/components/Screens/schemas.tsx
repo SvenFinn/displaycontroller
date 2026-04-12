@@ -19,6 +19,8 @@ export function getUiSchema(data: DbScreen): UiSchema {
         case "embed":
             return getEmbedLUiSchema(data.options);
         default:
+            const exhaustiveCheck: never = data;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
             console.warn(`No UI schema defined for screen type: ${data.type}`);
             return {};
     }
@@ -37,6 +39,8 @@ export function getSchema(data: DbScreen): RJSFSchema {
         case "embed":
             return embedSchema;
         default:
+            const exhaustiveCheck: never = data;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
             console.warn(`No schema defined for screen type: ${data.type}`);
             return { type: "object", properties: {} };
     }

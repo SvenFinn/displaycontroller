@@ -4,16 +4,16 @@ import { EmbedDbScreen, EmbedScreen, EmbedOptions } from "./embed.js";
 import { DrawTargetScreen, DrawTargetDbScreen, DrawTargetOptions, isDrawTargetOptions } from "./drawTarget.js";
 import { EvaluationScreen, EvaluationDbScreen, EvaluationOptions, isEvaluationOptions } from "./evaluation.js";
 import { ViewerScreen, ViewerDbScreen, ViewerOptions, isViewerOptions } from "./imageViewer.js";
-import { SystemMessageDbScreen, SystemMessageScreen } from "./systemMessage.js";
+import { SystemMessageScreen } from "./systemMessage.js";
 import { ConditionNone, ConditionNumber, ConditionMinMax } from "./conditions/base.js";
 import { createIs } from "typia";
-import { ScreenCastDbScreen, ScreenCastScreen } from "./screenCast.js";
+import { ScreenCastScreen } from "./screenCast.js";
 
 export type ScreenAvailable = ViewerScreen | CpcViewScreen | DrawTargetScreen | EvaluationScreen | SystemMessageScreen | EmbedScreen | ScreenCastScreen;
 
 export type Screen = ScreenAvailable | ScreenUnavailable;
 
-export type DbScreen = ViewerDbScreen | CpcViewDbScreen | DrawTargetDbScreen | EvaluationDbScreen | SystemMessageDbScreen | EmbedDbScreen | ScreenCastDbScreen;
+export type DbScreen = ViewerDbScreen | CpcViewDbScreen | DrawTargetDbScreen | EvaluationDbScreen | EmbedDbScreen;
 
 export const isDbScreen = createIs<DbScreen>();
 export const isScreen = createIs<Screen>();
@@ -38,7 +38,6 @@ export {
     EvaluationScreen,
     EvaluationOptions,
     isEvaluationOptions,
-    SystemMessageDbScreen,
     SystemMessageScreen,
     EmbedDbScreen,
     EmbedScreen,

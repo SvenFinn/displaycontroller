@@ -68,7 +68,9 @@ export function getScreenComponent(screen: ScreenAvailable, setIsReady: () => vo
         case "screenCast":
             return <ScreenCastViewer onReady={setIsReady} />;
         default:
+            const exhaustiveCheck: never = screen;
             setTimeout(setIsReady, 500);
-            return <h1>Unknown type: {String((screen as any)?.type)}</h1>;
+            // @ts-ignore - This is to satisfy the exhaustive check, it should never be reached
+            return <h1>Unknown type: {String(screen?.type)}</h1>;
     }
 }
