@@ -34,8 +34,8 @@ RUN npm ci --loglevel=info && \
     npm run build;
 
 FROM deps-endpoints AS deps-ranges
-WORKDIR /app/ranges/ranges
-COPY --from=ranges . .
+WORKDIR /app/ranges/contract
+COPY --from=ranges-contract . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
@@ -46,7 +46,7 @@ COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-ttl /app/lib/ttl /app/lib/ttl
 COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
-COPY --from=deps-ranges /app/ranges/ranges /app/ranges/ranges
+COPY --from=deps-ranges /app/ranges/contract /app/ranges/contract
 
 FROM local-deps AS deps
 

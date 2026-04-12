@@ -12,7 +12,7 @@ services:
       additional_contexts:
         - logger=../lib/logger
         - endpoints=../lib/endpoints
-        - ranges=../ranges/ranges
+        - ranges-contract=../ranges/contract
         - screen-types=../screens/types
         - files-utils=../screens/utils/files
       args:

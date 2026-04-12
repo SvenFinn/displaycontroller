@@ -11,7 +11,7 @@ services:
       dockerfile: ./Dockerfile
       additional_contexts:
         - local-db=../../lib/database/local
-        - ranges=../../ranges/ranges
+        - ranges-contract=../../ranges/contract
         - endpoints=../../lib/endpoints
         - logger=../../lib/logger
         - file-utils=../utils/files

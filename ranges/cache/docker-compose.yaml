@@ -13,7 +13,7 @@ services:
         - local-db=../../lib/database/local
         - smdb=../../lib/database/smdb
         - table-watcher=../../lib/database/tableWatcher
-        - ranges=../ranges
+        - ranges-contract=../contract
         - endpoints=../../lib/endpoints
         - logger=../../lib/logger
       args:

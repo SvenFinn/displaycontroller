@@ -13,7 +13,7 @@
         "dc-db-local": "file:../../lib/database/local",
         "dc-db-smdb": "file:../../lib/database/smdb",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges": "file:../ranges",
+        "dc-ranges": "file:../contract",
         "dc-table-watcher": "file:../../lib/database/tableWatcher",
         "dotenv": "^17.4.0"
     },

@@ -15,7 +15,7 @@
         "dc-db-local": "file:../../lib/database/local",
         "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
-        "dc-ranges": "file:../../ranges/ranges",
+        "dc-ranges": "file:../../ranges/contract",
         "dc-screens-types": "file:../types",
         "dc-server-state": "file:../../serverState/contract",
         "dotenv": "^17.4.0",

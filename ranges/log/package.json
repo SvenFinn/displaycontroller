@@ -16,7 +16,7 @@
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
         "dc-ttl": "file:../../lib/ttl",
-        "dc-ranges": "file:../ranges",
+        "dc-ranges": "file:../contract",
         "dc-streams": "file:../../lib/streams",
         "dotenv": "^17.4.0",
         "socket.io-client": "^4.8.3",

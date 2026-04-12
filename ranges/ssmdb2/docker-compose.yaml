@@ -19,7 +19,7 @@ services:
         - local-db=../../lib/database/local
         - ssmdb2=../../lib/database/ssmdb2
         - endpoints=../../lib/endpoints
-        - ranges=../ranges
+        - ranges-contract=../contract
         - table-watcher=../../lib/database/tableWatcher
         - logger=../../lib/logger
         - streams=../../lib/streams
