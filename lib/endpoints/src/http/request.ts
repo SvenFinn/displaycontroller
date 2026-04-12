@@ -47,7 +47,7 @@ export async function request<P, Q, B, RB>(baseUrl: string, endpoint: Endpoint<P
     const relativeUrl = queryString ? `${resolvedPath}?${queryString}` : resolvedPath;
     const url = new URL(relativeUrl, baseUrl);
 
-    const result = await fetch(url, {
+    const result = await fetchWithRetry(url, {
         method,
         body: method === 'GET' ? undefined : JSON.stringify(body),
         headers: method === 'GET' ? undefined : {
@@ -91,17 +91,33 @@ export async function request<P, Q, B, RB>(baseUrl: string, endpoint: Endpoint<P
             if (!isHttpError(errorBody)) {
                 return {
                     type: "error",
-                    code: 500,
-                    message: "Error response body could not be validated locally"
+                    code: result.status,
+                    message: result.statusText
                 };
             }
             return errorBody;
         } catch (e) {
             return {
                 type: "error",
-                code: 500,
-                message: "Error response body is not valid JSON"
+                code: result.status,
+                message: result.statusText
             };
         }
+    }
+}
+
+async function fetchWithRetry(input: URL, init: RequestInit, retryDelay: number = 3000): Promise<globalThis.Response> {
+    // Retry requests that failed with gateway errors (502, 503, 504)
+    // And network errors (fetch throws with no response at all)
+    while (true) {
+        try {
+            const res = await fetch(input, init);
+            if (![502, 503, 504].includes(res.status)) {
+                return res;
+            }
+        } catch (err) {
+            // Network error, retry
+        }
+        await new Promise(r => setTimeout(r, retryDelay));
     }
 }
