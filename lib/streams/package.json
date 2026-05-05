@@ -19,7 +19,7 @@
         "typescript": "~5.9.3"
     },
     "dependencies": {
-        "amqplib": "^1.0.3",
+        "amqplib": "^1.0.5",
         "dc-logger": "file:../logger"
     }
 }
