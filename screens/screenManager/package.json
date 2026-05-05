@@ -10,7 +10,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "amqplib": "^1.0.3",
+        "amqplib": "^1.0.5",
         "body-parser": "^2.2.2",
         "dc-db-local": "file:../../lib/database/local",
         "dc-endpoints": "file:../../lib/endpoints",
@@ -26,7 +26,7 @@
         "@types/amqplib": "^0.10.8",
         "@types/express": "^5.0.6",
         "@types/node": "^25.6.0",
-        "tsc-alias": "^1.8.16",
+        "tsc-alias": "^1.8.17",
         "typescript": "^5.9.3"
     }
 }
