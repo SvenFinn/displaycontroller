@@ -29,10 +29,10 @@ serverState.on("data", async (data: boolean) => {
         logger.warn("EVALUATION_SYNC_INTERVAL not set, using default 60000ms");
     }
     if (serverState && !interval) {
-        await sync(htmlPath);
         interval = setInterval(async () => {
             await sync(htmlPath);
         }, intervalMs?.numValue || 60000);
+        await sync(htmlPath);
     }
 });
 
