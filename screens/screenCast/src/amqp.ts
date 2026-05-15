@@ -37,7 +37,7 @@ async function main() {
     const connection = await amqp.connect("amqp://rabbitmq");
     const channel = await connection.createChannel();
     await channel.assertQueue("screens.systemScreens", {
-        durable: false,
+        durable: true,
         autoDelete: true,
         messageTtl: 10000
     });
