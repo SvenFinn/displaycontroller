@@ -5,7 +5,7 @@ import { rangeManager } from '../rangeMan';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { isStartList, StartList } from 'dc-ranges/types';
-import { registerEndpoint } from 'dc-endpoints';
+import { registerEndpoint } from 'dc-endpoints/server';
 import { createOrUpdateKnownRange, deleteKnownRange, getActiveRanges, getAllKnownRanges, getAllStartLists, getFreeRanges, getKnownRange, getRange } from 'dc-ranges/endpoints';
 
 const app: Express = express();

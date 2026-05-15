@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { WidgetProps } from "@rjsf/utils";
 import { useHost } from "@frontend/app/hooks/useHost";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getActiveRanges } from "dc-ranges/endpoints";
 
 export default function MultiRangeSelector(props: WidgetProps) {

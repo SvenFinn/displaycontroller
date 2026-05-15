@@ -1,6 +1,6 @@
 import { ConditionNone } from "dc-screens-types";
 import { logger } from "dc-logger";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getActiveRanges, getFreeRanges } from "dc-ranges/endpoints";
 
 export async function all_ranges_free(condition: ConditionNone): Promise<boolean> {

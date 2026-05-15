@@ -6,7 +6,7 @@ import CreateableSelect from "react-select/creatable";
 import styles from "./ranges.module.css";
 import Grid from "@frontend/app/show/components/Ranges/Grid";
 import { useHost } from "@frontend/app/hooks/useHost";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getActiveRanges } from "dc-ranges/endpoints";
 
 interface Value {

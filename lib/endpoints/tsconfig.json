@@ -1,20 +1,18 @@
 {
-  "compilerOptions": {
-    "target": "ES2023",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "skipLibCheck": true,
-    "plugins": [
-      {
-        "transform": "typia/lib/transform"
-      }
-    ],
-    "strictNullChecks": true
-  },
-  "include": [
-    "src/**/*.ts"
-  ]
+    "compilerOptions": {
+        "target": "ES2023",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "strict": true,
+        "outDir": "./dist",
+        "declaration": true,
+        "skipLibCheck": true,
+        "plugins": [
+            {
+                "transform": "typia/lib/transform",
+            },
+        ],
+        "strictNullChecks": true,
+    },
+    "include": ["src/**/*.ts"],
 }

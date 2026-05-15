@@ -1,7 +1,7 @@
 import { ConditionNumber } from "dc-screens-types";
 import { isRange } from "dc-ranges/types"
 import { logger } from "dc-logger";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getRange } from "dc-ranges/endpoints";
 
 export async function range_online(condition: ConditionNumber): Promise<boolean> {

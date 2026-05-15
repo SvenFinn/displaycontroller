@@ -4,7 +4,7 @@ import { HeightAsFontSize } from "@frontend/app/components/base/BoundingBoxCss";
 import { memo, useEffect, useMemo, useState } from "react";
 import { compareJSON } from "../Draw";
 import { useHost } from "@frontend/app/hooks/useHost";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getAllStartLists } from "dc-ranges/endpoints";
 
 interface HeaderProps {

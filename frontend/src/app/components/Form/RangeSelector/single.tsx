@@ -3,7 +3,7 @@ import SelectWithCustom from "../SelectWithCustom";
 import { WidgetProps } from "@rjsf/utils";
 import { JSONSchema7TypeName } from "json-schema";
 import { useHost } from "@frontend/app/hooks/useHost";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getActiveRanges } from "dc-ranges/endpoints";
 
 export default function SingleRangeSelector(props: WidgetProps) {

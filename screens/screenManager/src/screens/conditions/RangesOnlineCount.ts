@@ -1,6 +1,6 @@
 import { ConditionMinMax } from "dc-screens-types";
 import { logger } from "dc-logger";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getActiveRanges } from "dc-ranges/endpoints";
 
 export async function ranges_online_count(condition: ConditionMinMax): Promise<boolean> {

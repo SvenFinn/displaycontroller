@@ -1,6 +1,6 @@
 import { ConditionNone } from "dc-screens-types";
 import { logger } from "dc-logger";
-import { request } from "dc-endpoints";
+import { request } from "dc-endpoints/client";
 import { getServerState } from "dc-server-state/endpoints";
 
 export async function shootmaster_available(condition: ConditionNone): Promise<boolean> {

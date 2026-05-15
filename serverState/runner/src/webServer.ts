@@ -3,7 +3,7 @@ import { AdvServerState } from "dc-server-state/types";
 import { logger } from "dc-logger";
 import http from "http";
 import { Server as IOServer } from "socket.io";
-import { registerEndpoint } from "dc-endpoints";
+import { registerEndpoint } from "dc-endpoints/server";
 import { getFullServerState, getServerState } from "dc-server-state/endpoints";
 
 const app: Express = express();
