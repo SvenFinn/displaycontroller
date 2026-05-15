@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-PROXY_NAME="%PROXY_NAME%"
 APP_PORT="%APP_PORT%"
+APP_PAGE="http://localhost:$APP_PORT/show"
 
 cd "$(dirname "$0")" || exit 1
 
@@ -43,14 +43,12 @@ function start_docker {
     docker_pid=$!
 }
 
-function wait_for_proxy {
+function wait_for_app {
     while true; do
-        local status
-        status=$(docker inspect --format='{{.State.Health.Status}}' "$PROXY_NAME" 2>/dev/null || echo "starting")
-        if [ "$status" = "healthy" ]; then
+        if curl -s --max-time 2 "$APP_PAGE" > /dev/null; then
             break
         fi
-        sleep 1
+        sleep 2
     done
 }
 
@@ -103,7 +101,7 @@ function main {
     check_update
     get_screen_resolution
     start_docker
-    wait_for_proxy
+    wait_for_app
     start_chromium
 
     # Wait for either process to exit
