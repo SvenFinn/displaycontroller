@@ -6,7 +6,9 @@
         "strict": true,
         "outDir": "./dist",
         "declaration": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "rootDir": "src",
+        "types": ["node"]
     },
     "include": [
         "src/**/*.ts"

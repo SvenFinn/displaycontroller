@@ -7,12 +7,14 @@
         "outDir": "./dist",
         "declaration": true,
         "skipLibCheck": true,
+        "rootDir": "src",
         "plugins": [
             {
                 "transform": "typia/lib/transform",
             },
         ],
         "strictNullChecks": true,
+        "types": ["node"],
     },
     "include": ["src/**/*.ts"],
 }

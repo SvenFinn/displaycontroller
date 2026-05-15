@@ -11,7 +11,9 @@
       }
     ],
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "rootDir": "src",
+    "strictNullChecks": true,
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts"

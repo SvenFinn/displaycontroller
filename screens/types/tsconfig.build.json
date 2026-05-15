@@ -7,7 +7,8 @@
     "strict": true,
     "outDir": "./dist",
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "rootDir": "generated"
   },
   "include": [
     "generated/**/*.ts"

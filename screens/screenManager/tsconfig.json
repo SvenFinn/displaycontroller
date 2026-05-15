@@ -13,7 +13,9 @@
                 "../utils/files"
             ]
         },
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "rootDir": "..",
+        "types": ["node"]
     },
     "include": [
         "src/**/*.ts"

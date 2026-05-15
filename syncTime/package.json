@@ -11,8 +11,8 @@
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@types/node": "^25.6.0",
-        "typescript": "^5.9.3"
+        "@types/node": "^25.8.0",
+        "typescript": "^6.0.3"
     },
     "dependencies": {
         "dc-db-local": "file:../lib/database/local",

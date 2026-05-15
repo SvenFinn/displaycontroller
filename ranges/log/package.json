@@ -4,13 +4,13 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "ts-patch install && tsc && tsc-alias"
+        "build": "ts-patch install && tsc"
     },
     "author": "Sven Finn",
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "amqplib": "^1.0.3",
+        "amqplib": "^2.0.1",
         "csv-parse": "^6.2.1",
         "date-fns": "^4.1.0",
         "dc-db-local": "file:../../lib/database/local",
@@ -20,13 +20,12 @@
         "dc-streams": "file:../../lib/streams",
         "dotenv": "^17.4.2",
         "socket.io-client": "^4.8.3",
-        "typia": "^12.0.2"
+        "typia": "^12.1.1"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.8",
-        "@types/node": "^25.6.0",
-        "ts-patch": "^3.3.0",
-        "tsc-alias": "^1.8.16",
-        "typescript": "~5.9.3"
+        "@types/node": "^25.8.0",
+        "ts-patch": "^4.0.1",
+        "typescript": "~6.0.3"
     }
 }
