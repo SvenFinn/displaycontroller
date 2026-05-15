@@ -125,13 +125,12 @@ function install_finished(){
 # Check if the script is running as root
 if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
-    sudo -n true 2>/dev/null
-    if [ $? -eq 1 ]; then
-        pkexec --keep-cwd "$0" "$@"
-    else
+    if sudo -n true 2>/dev/null; then
         sudo "$0" "$@"
+    else
+        pkexec --keep-cwd "$0" "$@"
     fi
-    exit
+    exit $?
 fi
 
 # Check if dialog is installed

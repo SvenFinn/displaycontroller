@@ -219,16 +219,17 @@ function run_update_step(){
 
 }
 
+
+
 # Check if the script is running as root
 if [ "$EUID" -ne 0 ]; then
     # Check if sudo requires a password
-    sudo -n true 2>/dev/null
-    if [ $? -eq 1 ]; then
-        pkexec --keep-cwd "$0" "$@"
-    else
+    if sudo -n true 2>/dev/null; then
         sudo "$0" "$@"
+    else
+        pkexec --keep-cwd "$0" "$@"
     fi
-    exit
+    exit $?
 fi
 
 step_nr=1
