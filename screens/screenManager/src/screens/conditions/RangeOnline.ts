@@ -1,4 +1,4 @@
-import { ConditionNumber } from "dc-screens-types";
+import { ConditionNumber } from "dc-screens/types";
 import { isRange } from "dc-ranges/types"
 import { logger } from "dc-logger";
 import { request } from "dc-endpoints/client";

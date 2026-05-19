@@ -13,7 +13,7 @@ services:
         - logger=../lib/logger
         - endpoints=../lib/endpoints
         - ranges-contract=../ranges/contract
-        - screen-types=../screens/types
+        - screens-contract=../screens/contract
         - files-utils=../screens/utils/files
       args:
         - APP_PORT=${APP_PORT}

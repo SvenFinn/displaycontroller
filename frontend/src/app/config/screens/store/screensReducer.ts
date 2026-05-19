@@ -1,6 +1,6 @@
 import { getHost } from '@frontend/app/hooks/useHost';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { DbScreen, isDbScreen } from 'dc-screens-types';
+import { DbScreen, isDbScreen } from 'dc-screens/types';
 import { RootState } from './store';
 import { getDefaultOptions } from './default';
 

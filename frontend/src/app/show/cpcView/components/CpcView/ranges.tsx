@@ -1,4 +1,4 @@
-import { CpcViewOptions } from "dc-screens-types"
+import { CpcViewOptions } from "dc-screens/types"
 import RangeGrid from "@frontend/app/show/components/Ranges/Grid";
 import CpcViewRange from "./range";
 import styles from "./ranges.module.css";

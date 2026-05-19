@@ -16,7 +16,7 @@
         "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
         "dc-ranges": "file:../../ranges/contract",
-        "dc-screens-types": "file:../types",
+        "dc-screens": "file:../contract",
         "dc-server-state": "file:../../serverState/contract",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",

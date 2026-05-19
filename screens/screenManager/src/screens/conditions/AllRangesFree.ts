@@ -1,4 +1,4 @@
-import { ConditionNone } from "dc-screens-types";
+import { ConditionNone } from "dc-screens/types";
 import { logger } from "dc-logger";
 import { request } from "dc-endpoints/client";
 import { getActiveRanges, getFreeRanges } from "dc-ranges/endpoints";

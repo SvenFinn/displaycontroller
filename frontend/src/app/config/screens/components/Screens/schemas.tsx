@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 import { getUiSchema as getEmbedLUiSchema, schema as embedSchema } from "@frontend/app/show/embed/components/EmbedEdit";
 import { getUiSchema as getCpcViewUiSchema, schema as cpcViewSchema } from "@frontend/app/show/cpcView/components/CpcViewEdit";
 import { getUiSchema as getDrawTargetUiSchema, schema as drawTargetSchema } from "@frontend/app/show/drawTarget/components/DrawTargetEdit";

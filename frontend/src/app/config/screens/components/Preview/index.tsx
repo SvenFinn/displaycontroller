@@ -1,6 +1,6 @@
 import LocalScreen from "@frontend/app/show/components/LocalScreen";
 import styles from "./preview.module.css";
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 
 export function Preview({ screen }: { screen: DbScreen | null }) {
     if (!screen) {

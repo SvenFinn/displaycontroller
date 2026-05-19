@@ -1,6 +1,6 @@
 import amqp from "amqplib";
 import { logger } from "dc-logger";
-import { Screen } from "dc-screens-types";
+import { Screen } from "dc-screens/types";
 
 const MAX_DB_NUM = 2147483647;
 

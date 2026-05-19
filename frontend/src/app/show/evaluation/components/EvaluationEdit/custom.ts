@@ -1,7 +1,6 @@
 import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import { schema as baseSchema, getUiSchema as getBaseUiSchema } from '.';
-import { EvaluationOptions } from 'dc-screens-types';
-import { isEvaluationOptions } from 'dc-screens-types/dist/evaluation';
+import { EvaluationOptions, isEvaluationOptions } from 'dc-screens/types';
 
 export const schema: RJSFSchema = {
     ...baseSchema,

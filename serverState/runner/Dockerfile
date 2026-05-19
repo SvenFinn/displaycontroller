@@ -38,9 +38,9 @@ COPY --from=smdb . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-screens-types
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
+FROM base AS deps-screens
+WORKDIR /app/screens/contract
+COPY --from=screens-contract . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
@@ -58,7 +58,7 @@ COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
 COPY --from=deps-smdb /app/lib/database/smdb /app/lib/database/smdb
 COPY --from=deps-server-state-contract /app/serverState/contract /app/serverState/contract
-COPY --from=deps-screens-types /app/screens/types /app/screens/types
+COPY --from=deps-screens /app/screens/contract /app/screens/contract
 
 FROM local-deps AS deps
 

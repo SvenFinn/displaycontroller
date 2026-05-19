@@ -1,5 +1,5 @@
 {
-    "name": "dc-screens-types",
+    "name": "dc-screens",
     "version": "1.0.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -15,6 +15,13 @@
     "files": [
         "dist"
     ],
+    "exports": {
+        "./types": {
+            "import": "./dist/types/index.js",
+            "require": "./dist/types/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
+    },
     "devDependencies": {
         "ts-patch": "^4.0.1",
         "typescript": "~6.0.3"

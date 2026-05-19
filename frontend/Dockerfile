@@ -20,10 +20,10 @@ COPY --from=endpoints . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-screen-types
+FROM base AS deps-screens
 
-WORKDIR /app/screens/types
-COPY --from=screen-types . .
+WORKDIR /app/screens/contract
+COPY --from=screens-contract . .
 RUN npm ci --loglevel=info && \
     npm run build
 
@@ -38,7 +38,7 @@ WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
-COPY --from=deps-screen-types /app/screens/types /app/screens/types
+COPY --from=deps-screens /app/screens/contract /app/screens/contract
 COPY --from=deps-ranges /app/ranges/contract /app/ranges/contract
 
 FROM local-deps AS deps

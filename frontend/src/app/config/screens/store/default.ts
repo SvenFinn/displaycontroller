@@ -1,4 +1,4 @@
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 
 export function getDefaultOptions(screen: DbScreen): DbScreen {
     switch (screen.type) {

@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { EmbedOptions } from "dc-screens-types";
+import { EmbedOptions } from "dc-screens/types";
 
 export const schema: RJSFSchema = {
     type: "object",

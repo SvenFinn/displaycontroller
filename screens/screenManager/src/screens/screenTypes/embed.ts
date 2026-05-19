@@ -1,5 +1,5 @@
 import { Screens } from ".";
-import { EmbedDbScreen } from "dc-screens-types";
+import { EmbedDbScreen } from "dc-screens/types";
 
 export default async function embed(screen: EmbedDbScreen): Promise<Screens> {
     return [

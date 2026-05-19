@@ -12,7 +12,7 @@
     "dependencies": {
         "amqplib": "^2.0.1",
         "dc-logger": "file:../../lib/logger",
-        "dc-screens-types": "file:../types",
+        "dc-screens": "file:../contract",
         "socket.io": "^4.8.3"
     },
     "devDependencies": {

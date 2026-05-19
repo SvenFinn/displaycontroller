@@ -1,6 +1,6 @@
 "use client";
 
-import { EvaluationScreen } from "dc-screens-types";
+import { EvaluationScreen } from "dc-screens/types";
 import styles from "./evaluation.module.css";
 import { useEffect, useState } from "react";
 import { useHost } from "@frontend/app/hooks/useHost";

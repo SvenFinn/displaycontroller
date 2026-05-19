@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewerScreen } from "dc-screens-types";
+import { ViewerScreen } from "dc-screens/types";
 import styles from "./imageViewer.module.css"
 import { useHost } from "@frontend/app/hooks/useHost";
 

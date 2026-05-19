@@ -1,6 +1,6 @@
 "use client";
 
-import { CpcViewOptions } from "dc-screens-types";
+import { CpcViewOptions } from "dc-screens/types";
 import { store, useAppSelector } from "./ranges-store/store";
 import { Provider } from "react-redux";
 import { useEffect } from "react";

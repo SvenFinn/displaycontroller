@@ -19,7 +19,7 @@
         "bootstrap": "^5.3.8",
         "dc-endpoints": "file:../lib/endpoints",
         "dc-ranges": "file:../ranges/contract",
-        "dc-screens-types": "file:../screens/types",
+        "dc-screens": "file:../screens/contract",
         "mime": "^4.1.0",
         "next": "^16.2.6",
         "raw-loader": "^4.0.2",

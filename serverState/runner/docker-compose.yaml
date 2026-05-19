@@ -12,7 +12,7 @@ services:
       additional_contexts:
         - local-db=../../lib/database/local
         - smdb=../../lib/database/smdb
-        - screen-types=../../screens/types
+        - screens-contract=../../screens/contract
         - logger=../../lib/logger
         - endpoints=../../lib/endpoints
         - server-state-contract=../contract

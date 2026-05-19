@@ -1,10 +1,10 @@
 import { createLocalClient, LocalClient } from "dc-db-local";
 import { logger } from "dc-logger";
-import { isDbScreen, isScreen, Screen, ScreenAvailable } from "dc-screens-types";
+import { isDbScreen, isScreen, Screen, ScreenAvailable } from "dc-screens/types";
 import { EventEmitter } from "node:stream";
 import { resolveScreen } from "./screenTypes";
 import { loadNextScreen } from "./screens";
-import { ScreenUnavailable } from "dc-screens-types/dist/base";
+import { ScreenUnavailable } from "dc-screens/types";
 
 enum Direction {
     Next = 0,

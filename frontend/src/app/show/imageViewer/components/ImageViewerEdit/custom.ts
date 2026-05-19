@@ -1,6 +1,6 @@
 import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import { schema as baseSchema, getUiSchema as getBaseUiSchema } from '.';
-import { isViewerOptions, ViewerOptions } from 'dc-screens-types';
+import { isViewerOptions, ViewerOptions } from 'dc-screens/types';
 
 export const schema: RJSFSchema = {
     ...baseSchema,

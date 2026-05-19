@@ -15,7 +15,7 @@ services:
         - endpoints=../../lib/endpoints
         - logger=../../lib/logger
         - file-utils=../utils/files
-        - screen-types=../types
+        - screens-contract=../contract
         - server-state=../../serverState/contract
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

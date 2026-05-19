@@ -1,6 +1,6 @@
 "use client";
 
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 import ScreenEdit from "./components/Screens";
 import ColumnResize from "@frontend/app/components/ColumnResize";
 import { ScreenList } from "./components/ScreenList";

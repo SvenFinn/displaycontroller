@@ -3,7 +3,7 @@
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useSocket } from "./base";
 import SocketProvider from "./base";
-import { isScreen, Screen } from "dc-screens-types";
+import { isScreen, Screen } from "dc-screens/types";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLastMessage } from "@frontend/app/components/SocketRegistry";

@@ -1,6 +1,6 @@
 "use client";
 
-import { ScreenAvailable } from "dc-screens-types";
+import { ScreenAvailable } from "dc-screens/types";
 import DrawTarget from "../../../drawTarget/components/DrawTarget";
 import { useCallback, useMemo, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../store/store";

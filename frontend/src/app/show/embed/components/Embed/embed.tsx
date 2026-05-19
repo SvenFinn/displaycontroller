@@ -1,4 +1,4 @@
-import { EmbedOptions } from "dc-screens-types";
+import { EmbedOptions } from "dc-screens/types";
 import styles from "./embed.module.css"
 
 interface EmbedProps {

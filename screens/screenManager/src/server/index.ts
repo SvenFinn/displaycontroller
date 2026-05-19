@@ -4,7 +4,7 @@ import { logger } from "dc-logger";
 import { createLocalClient, LocalClient } from 'dc-db-local';
 import { screenManager } from '../screens/screenManager';
 import { resolveScreen } from '../screens/screenTypes';
-import { DbScreen, isDbScreen, Screen } from 'dc-screens-types';
+import { DbScreen, isDbScreen, Screen } from 'dc-screens/types';
 import BodyParser from 'body-parser';
 import http from 'http';
 import { Server as IOServer } from 'socket.io';

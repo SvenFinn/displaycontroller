@@ -1,5 +1,5 @@
 import { useHost } from "@frontend/app/hooks/useHost";
-import { DbScreen, isScreen, Screen } from "dc-screens-types";
+import { DbScreen, isScreen, Screen } from "dc-screens/types";
 import { useEffect, useRef, useState } from "react";
 import { getScreenComponent } from "../Screens/ShowScreen";
 import Show from "../Show";

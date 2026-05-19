@@ -1,6 +1,6 @@
 "use client";
 
-import { CpcViewOptions, isCpcViewOptions } from "dc-screens-types";
+import { CpcViewOptions, isCpcViewOptions } from "dc-screens/types";
 import SingleEdit from "../components/SingleEdit";
 import { schema, getUiSchema } from "./components/CpcViewEdit";
 import LocalScreen from "../components/LocalScreen";

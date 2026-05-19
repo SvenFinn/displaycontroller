@@ -4,7 +4,7 @@ import FormWrapper from "@frontend/app/components/Form"
 import { getUiSchema as getConditionUiSchema, schema as conditionSchema } from "./Conditions/schema"
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import { getSchema as getScreensSchema, getUiSchema as getScreensUiSchema } from "./schemas";
-import { DbScreen, isDbScreen } from "dc-screens-types";
+import { DbScreen, isDbScreen } from "dc-screens/types";
 import styles from "./screenEdit.module.css";
 
 interface ScreenEditProps {

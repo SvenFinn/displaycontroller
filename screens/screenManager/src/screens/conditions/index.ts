@@ -1,4 +1,4 @@
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 import { all_ranges_free } from "./AllRangesFree";
 import { shootmaster_available } from "./ShootMasterAvailable";
 import { range_free } from "./RangeFree";

@@ -1,4 +1,4 @@
-import { isScreen, Screen } from "dc-screens-types";
+import { isScreen, Screen } from "dc-screens/types";
 import { logger } from "dc-logger";
 import { sendSocketIOResponse } from "../server";
 import amqp from "amqplib"

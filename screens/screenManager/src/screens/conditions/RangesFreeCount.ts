@@ -1,4 +1,4 @@
-import { ConditionMinMax } from "dc-screens-types";
+import { ConditionMinMax } from "dc-screens/types";
 import { logger } from "dc-logger";
 import { request } from "dc-endpoints/client";
 import { getFreeRanges } from "dc-ranges/endpoints";

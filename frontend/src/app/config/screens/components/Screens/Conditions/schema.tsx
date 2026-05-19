@@ -1,5 +1,5 @@
 import { RJSFSchema, UiSchema } from "@rjsf/utils";
-import { Conditions } from "dc-screens-types/dist/conditions";
+import { Conditions } from "dc-screens/types";
 
 export const schema: RJSFSchema = {
     title: "Bedingungen",

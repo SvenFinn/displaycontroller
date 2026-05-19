@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - logger=../../lib/logger
-        - screen-types=../types
+        - screens-contract=../contract
     depends_on:
       dc-rabbitmq:
         condition: service_healthy

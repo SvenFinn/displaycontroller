@@ -1,4 +1,4 @@
-import { DbScreen } from "dc-screens-types";
+import { DbScreen } from "dc-screens/types";
 import Select from "react-select";
 import styles from "./screenList.module.css";
 import { FaPlus } from "react-icons/fa6";
