@@ -1,4 +1,4 @@
-export { GetEndpoint, MutatingEndpoint } from "./http/endpoint.js";
+export { GetEndpoint, MutatingEndpoint, MutatingMultiPartEndpoint } from "./http/endpoint.js";
 export { HttpError, Response, isHttpError, isResponse, SuccessfulResponse } from "./http/index.js";
 
 export type Empty = undefined;

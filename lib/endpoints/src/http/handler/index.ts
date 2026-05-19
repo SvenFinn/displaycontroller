@@ -5,6 +5,7 @@ import { logger } from "dc-logger";
 import multer from "multer";
 import { decodeRequest } from "./decoder.js";
 import { sendResponse } from "./sender.js";
+import rateLimit from "express-rate-limit";
 
 export type FileMutatingRequestHandler<P, Q, B, RB> = (params: P, query: Q, body: B, files: Express.Multer.File[]) => Promise<RB | Response<RB> | undefined>;
 export type MutatingRequestHandler<P, Q, B, RB> = (params: P, query: Q, body: B) => Promise<RB | Response<RB> | undefined>;
@@ -52,6 +53,15 @@ export function registerEndpoint<P, Q, B, RB>(app: Express, endpoint: Endpoint<P
     const { request, method } = endpoint;
 
     const handlers: RequestHandler[] = [];
+
+    handlers.push(rateLimit({
+        windowMs: 1 * 60 * 1000, // 1 minute
+        max: 100, // Limit each IP to 100 requests per windowMs
+        message: {
+            code: 429,
+            message: "Too many requests",
+        },
+    }));
 
     if (method !== "GET") {
         if ("acceptedMimeTypes" in request) {
