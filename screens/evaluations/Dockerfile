@@ -23,11 +23,18 @@ RUN npm ci --loglevel=info && \
     export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
+FROM base AS deps-screens
+WORKDIR /app/screens/contract
+COPY --from=screens-contract . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
 FROM base AS local-deps
 WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
+COPY --from=deps-screens /app/screens/contract /app/screens/contract
 
 FROM local-deps AS deps
 
@@ -36,9 +43,6 @@ COPY package.json package-lock.json ./
 RUN npm i --omit=dev --loglevel=info --install-links;
 
 FROM local-deps AS build
-
-WORKDIR /app/screens/utils/files
-COPY --from=files-utils . .
 
 WORKDIR /app/screens/evaluations
 
@@ -75,4 +79,4 @@ ENV LOG_LEVEL=info
 USER root
 ENTRYPOINT [ "/app/entrypoint.sh" ]
 
-CMD ["node", "/app/evaluations/src/index.js"]
+CMD ["node", "/app/index.js"]

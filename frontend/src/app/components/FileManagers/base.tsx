@@ -1,4 +1,4 @@
-import { DirectoryListing, isDirectoryListing } from "@shared/files";
+import { DirectoryListing, isDirectoryListing } from "dc-screens/files";
 import { useEffect, useState } from "react";
 import FileManager from "./FileManager";
 

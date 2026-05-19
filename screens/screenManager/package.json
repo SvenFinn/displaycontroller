@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc && tsc-alias"
+        "build": "tsc"
     },
     "author": "",
     "license": "ISC",
@@ -26,7 +26,6 @@
         "@types/amqplib": "^0.10.8",
         "@types/express": "^5.0.6",
         "@types/node": "^25.8.0",
-        "tsc-alias": "^1.8.17",
         "typescript": "^6.0.3"
     }
 }

@@ -1,4 +1,4 @@
-import { DirectoryListing, isDirectoryListing } from ".";
+import { DirectoryListing, isDirectoryListing } from "./index.js";
 
 export function flattenFileList(listing: DirectoryListing, path: string = ""): string[] {
     return listing.flatMap((item) => {

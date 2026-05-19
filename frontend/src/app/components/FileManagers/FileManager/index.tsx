@@ -1,5 +1,5 @@
 
-import { DirectoryListing } from "@shared/files";
+import { DirectoryListing } from "dc-screens/files";
 import { use, useState } from "react";
 import ColumnResize from "../../ColumnResize";
 import FolderTree from "./FolderTree";

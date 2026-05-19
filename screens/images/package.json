@@ -5,13 +5,14 @@
     "main": "src/index.ts",
     "scripts": {
         "test": "nodemon src/index.ts",
-        "build": "tsc && tsc-alias"
+        "build": "tsc"
     },
     "author": "Sven Finn",
     "license": "ISC",
     "dependencies": {
         "body-parser": "^2.2.2",
         "dc-logger": "file:../../lib/logger",
+        "dc-screens": "file:../contract",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "express-fileupload": "^1.5.2",
@@ -22,7 +23,6 @@
         "@types/express": "^5.0.6",
         "@types/express-fileupload": "^1.5.1",
         "@types/node": "^25.8.0",
-        "tsc-alias": "^1.8.17",
         "typescript": "^6.0.3"
     }
 }

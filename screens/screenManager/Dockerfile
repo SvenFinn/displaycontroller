@@ -52,7 +52,6 @@ COPY --from=deps-server-state /app/serverState/contract /app/serverState/contrac
 COPY --from=deps-screens /app/screens/contract /app/screens/contract
 COPY --from=deps-ranges /app/ranges/contract /app/ranges/contract
 
-
 FROM local-deps AS deps
 
 WORKDIR /app/screens/screenManager
@@ -65,9 +64,6 @@ WORKDIR /app/screens/screenManager
 
 COPY package.json package-lock.json ./
 RUN npm i --loglevel=info;
-
-WORKDIR /app/screens/utils/files
-COPY --from=file-utils . .
 
 WORKDIR /app/screens/screenManager
 

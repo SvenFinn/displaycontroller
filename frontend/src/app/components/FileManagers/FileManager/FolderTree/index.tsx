@@ -3,7 +3,7 @@
 import { useState } from "react";
 import styles from "./FolderTree.module.css";
 import { FaChevronDown, FaChevronRight, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
-import { DirectoryListing, Folder } from "@shared/files";
+import { DirectoryListing, Folder } from "dc-screens/files";
 
 type FolderTreeProps = {
     files: DirectoryListing;

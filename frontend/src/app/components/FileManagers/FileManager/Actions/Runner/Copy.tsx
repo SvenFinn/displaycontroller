@@ -1,4 +1,4 @@
-import { DirectoryListing } from "@shared/files";
+import { DirectoryListing } from "dc-screens/files";
 import { ActionsCallbacks } from "../CallbackWrapper";
 import ConflictResolution from "./ConflictResolution";
 

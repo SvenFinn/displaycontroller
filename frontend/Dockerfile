@@ -53,9 +53,6 @@ WORKDIR /app/frontend
 COPY package.json package-lock.json ./
 RUN npm ci --loglevel=info
 
-WORKDIR /app/screens/utils/files
-COPY --from=files-utils . .
-
 WORKDIR /app/frontend
 COPY . .
 RUN export NEXT_PUBLIC_APP_PORT=$APP_PORT && \

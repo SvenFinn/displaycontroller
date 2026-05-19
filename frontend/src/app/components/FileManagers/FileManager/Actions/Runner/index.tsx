@@ -1,6 +1,6 @@
 import { ActionsCallbacks } from "../CallbackWrapper";
 import { ActionKey } from "../hook";
-import { DirectoryListing } from "@shared/files";
+import { DirectoryListing } from "dc-screens/files";
 import Download from "./Download";
 import Delete from "./Delete";
 import Cut from "./Cut";

@@ -26,12 +26,6 @@
     "paths": {
       "@frontend/*": [
         "./src/*"
-      ],
-      "@shared/files": [
-        "../screens/utils/files"
-      ],
-      "@shared/files/*": [
-        "../screens/utils/files/*"
       ]
     },
     "strictNullChecks": true

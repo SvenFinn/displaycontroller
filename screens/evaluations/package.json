@@ -5,13 +5,14 @@
     "main": "src/index.ts",
     "scripts": {
         "test": "nodemon src/index.ts",
-        "build": "tsc && tsc-alias && cp src/rewrite/assets/replacement.css dist/evaluations/src/rewrite/assets && cp src/rewrite/assets/client-script.js dist/evaluations/src/rewrite/assets"
+        "build": "tsc && cp src/rewrite/assets/replacement.css dist/rewrite/assets && cp src/rewrite/assets/client-script.js dist/rewrite/assets"
     },
     "author": "Sven Finn",
     "license": "ISC",
     "dependencies": {
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
+        "dc-screens": "file:../contract",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "express-rate-limit": "^8.5.2",

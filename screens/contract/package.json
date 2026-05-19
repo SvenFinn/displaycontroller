@@ -20,6 +20,16 @@
             "import": "./dist/types/index.js",
             "require": "./dist/types/index.js",
             "types": "./dist/types/index.d.ts"
+        },
+        "./files": {
+            "import": "./dist/files/index.js",
+            "require": "./dist/files/index.js",
+            "types": "./dist/files/index.d.ts"
+        },
+        "./files/scanDir": {
+            "import": "./dist/files/scanDir.js",
+            "require": "./dist/files/scanDir.js",
+            "types": "./dist/files/scanDir.d.ts"
         }
     },
     "devDependencies": {
@@ -27,6 +37,7 @@
         "typescript": "~6.0.3"
     },
     "dependencies": {
+        "@types/node": "^25.9.0",
         "typia": "^12.1.1"
     }
 }

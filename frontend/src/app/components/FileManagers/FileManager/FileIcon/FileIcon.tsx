@@ -1,4 +1,4 @@
-import { File, Folder } from "@shared/files";
+import { File, Folder } from "dc-screens/files";
 import { FaRegFileAudio, FaRegFileExcel, FaRegFileImage, FaRegFilePdf, FaRegFilePowerpoint, FaRegFileVideo, FaRegFileWord, FaRegFileZipper, FaRegFileCode, FaRegFile, FaRegFolderOpen } from "react-icons/fa6";
 import mime from "mime";
 

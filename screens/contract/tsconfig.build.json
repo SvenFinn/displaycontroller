@@ -8,7 +8,8 @@
     "outDir": "./dist",
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "rootDir": "generated"
+    "rootDir": "generated",
+    "types": ["node"],
   },
   "include": [
     "generated/**/*.ts"

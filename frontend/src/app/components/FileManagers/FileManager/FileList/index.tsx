@@ -1,4 +1,4 @@
-import { DirectoryListing, Folder } from "@shared/files";
+import { DirectoryListing, Folder } from "dc-screens/files";
 import styles from "./FileList.module.css";
 import FileListEntry from "./FileListEntry";
 import BreadCrumb from "./BreadCrumb";

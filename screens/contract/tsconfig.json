@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "rootDir": "src",
     "strictNullChecks": true,
-    "importsNotUsedAsValues": "remove"
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts"

@@ -1,4 +1,4 @@
-import { Folder, File } from "@shared/files"
+import { Folder, File } from "dc-screens/files"
 import FileIcon from "../FileIcon/FileIcon";
 import { useState } from "react";
 import styles from "./FileList.module.css";

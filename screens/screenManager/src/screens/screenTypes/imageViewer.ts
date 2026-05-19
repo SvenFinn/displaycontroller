@@ -1,8 +1,7 @@
 import { Screens } from ".";
 import { ViewerDbScreen } from "dc-screens/types";
 import { logger } from "dc-logger";
-import { isDirectoryListing } from "@shared/files";
-import { createFileList } from "@shared/files/helpers";
+import { createFileList } from "dc-screens/files";
 
 export default async function imageViewer(screen: ViewerDbScreen): Promise<Screens> {
     if (!screen.options.path) {

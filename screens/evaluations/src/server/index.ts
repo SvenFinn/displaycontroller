@@ -1,7 +1,7 @@
 import express, { Express, Request } from "express";
 import * as fs from "fs";
 import { logger } from "dc-logger";
-import { scanDirectory } from "@shared/files/scanDir";
+import { scanDirectory } from "dc-screens/files/scanDir";
 import { rateLimit } from "express-rate-limit";
 import { htmlPath } from "../constants";
 

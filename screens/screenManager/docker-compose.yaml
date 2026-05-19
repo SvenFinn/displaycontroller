@@ -14,7 +14,6 @@ services:
         - ranges-contract=../../ranges/contract
         - endpoints=../../lib/endpoints
         - logger=../../lib/logger
-        - file-utils=../utils/files
         - screens-contract=../contract
         - server-state=../../serverState/contract
       args:

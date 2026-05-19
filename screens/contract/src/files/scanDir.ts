@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { DirectoryListing } from ".";
+import { DirectoryListing } from "./index.js";
 
 export async function scanDirectory(path: string): Promise<DirectoryListing> {
     if (!await fileExists(path)) {

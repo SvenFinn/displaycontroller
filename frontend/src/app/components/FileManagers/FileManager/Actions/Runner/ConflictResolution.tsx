@@ -1,6 +1,5 @@
 import Dialog from "@frontend/app/components/Dialog";
-import { DirectoryListing } from "@shared/files";
-import { flattenFileList } from "@shared/files/helpers";
+import { DirectoryListing, flattenFileList } from "dc-screens/files";
 import { useEffect, useState } from "react";
 
 export function getConflicts(files: DirectoryListing, clipboard: Array<string>, currentPath: string): Array<string> {

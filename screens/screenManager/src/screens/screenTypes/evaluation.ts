@@ -1,7 +1,7 @@
 import { Screens } from ".";
 import { EvaluationDbScreen } from "dc-screens/types";
 import { logger } from "dc-logger";
-import { createFileList } from "@shared/files/helpers";
+import { createFileList } from "dc-screens/files";
 
 
 export default async function evaluation(screen: EvaluationDbScreen): Promise<Screens> {

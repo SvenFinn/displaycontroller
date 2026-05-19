@@ -2,12 +2,24 @@ FROM node:alpine AS base
 
 WORKDIR /app
 
-FROM base AS local-deps
+FROM base AS deps-logger
 
 WORKDIR /app/lib/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build
+
+FROM base AS deps-screens
+WORKDIR /app/screens/contract
+COPY --from=screens-contract .  .
+RUN npm ci --loglevel=info && \
+    npm run build
+
+FROM base AS local-deps
+WORKDIR /app
+
+COPY --from=deps-logger /app/lib/logger /app/lib/logger
+COPY --from=deps-screens /app/screens/contract /app/screens/contract
 
 FROM local-deps AS deps
 
@@ -16,9 +28,6 @@ COPY package.json package-lock.json ./
 RUN npm i --omit=dev --loglevel=info --install-links
 
 FROM local-deps AS build
-
-WORKDIR /app/screens/utils/files
-COPY --from=files-utils . .
 
 WORKDIR /app/screens/images
 
@@ -58,4 +67,4 @@ ENV NODE_ENV=production
 ENV LOG_LEVEL=info
 ENTRYPOINT [ "/app/entrypoint.sh" ]
 
-CMD ["node", "./images/src/index.js"]
+CMD ["node", "./index.js"]
