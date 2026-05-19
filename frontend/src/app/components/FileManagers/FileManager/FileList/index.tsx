@@ -79,7 +79,7 @@ function getEntriesOfPath(files: DirectoryListing, path: string): DirectoryListi
         if (!folder) {
             return [];
         }
-        currentFiles = folder.files;
+        currentFiles = folder.children;
     }
     return currentFiles;
 }

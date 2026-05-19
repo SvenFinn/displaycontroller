@@ -11,6 +11,7 @@ services:
       dockerfile: Dockerfile
       additional_contexts:
         - logger=../../lib/logger
+        - endpoints=../../lib/endpoints
         - screens-contract=../contract
     depends_on:
       dc-rabbitmq:

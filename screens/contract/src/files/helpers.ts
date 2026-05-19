@@ -5,8 +5,20 @@ export function flattenFileList(listing: DirectoryListing, path: string = ""): s
         if (item.type === "file") {
             return `${path}/${item.name}`;
         }
-        return flattenFileList(item.files, `${path}/${item.name}`);
+        return flattenFileList(item.children, `${path}/${item.name}`);
     });
+}
+
+export function getAccessPaths(listing: DirectoryListing): string[] {
+    const paths: string[] = [];
+    for (const item of listing) {
+        if (item.type === "file") {
+            paths.push(item.accessPath);
+        } else if (item.type === "folder") {
+            paths.push(...getAccessPaths(item.children));
+        }
+    }
+    return paths;
 }
 
 export function sanitizePath(path: string): string | null {

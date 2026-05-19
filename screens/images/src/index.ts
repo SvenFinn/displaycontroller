@@ -2,7 +2,7 @@ import express, { Express, Request } from "express";
 import * as fs from "fs";
 import fileUpload from "express-fileupload";
 import { fromPath } from "pdf2pic";
-import { scanDirectory } from "dc-screens/files/scanDir";
+import { createDirectoryListing, resolveSafePath } from "dc-screens/files/scanDir";
 import { logger } from "dc-logger";
 import bodyParser from "body-parser";
 import { rateLimit } from "express-rate-limit";
@@ -37,25 +37,23 @@ app.use(rateLimit({
 app.set("trust proxy", 1);
 
 app.get("/api/images{/*files}", async (req: Request, res) => {
-    const path = (req.params.files as unknown as string[] || []).join("/");
-    logger.info(`GET ${path}`);
-    if (path.includes("..")) {
-        logger.info("Found .. in path");
+    const path = resolveSafePath((req.params.files as unknown as string[] || []).join("/"), basePath);
+    if (!path) {
+        logger.info("Invalid path");
         res.status(404).sendFile("img/404.png", { root: __dirname });
         return;
     }
-    const realPath = `${basePath}/${path}`;
-    if (!fs.existsSync(realPath)) {
+    if (!fs.existsSync(path)) {
         logger.info("File not found");
         res.status(404).sendFile("img/404.png", { root: __dirname });
         return
     }
-    if (fs.lstatSync(realPath).isDirectory()) {
+    if (fs.lstatSync(path).isDirectory()) {
         logger.info("Scanning directory");
-        res.status(200).send(await scanDirectory(realPath));
+        res.status(200).send(await createDirectoryListing(path, "/api/images"));
         return;
     } else {
-        res.status(200).sendFile(realPath);
+        res.status(200).sendFile(path);
     }
 });
 

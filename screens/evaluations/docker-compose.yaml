@@ -12,6 +12,7 @@ services:
       additional_contexts:
         - local-db=../../lib/database/local
         - logger=../../lib/logger
+        - endpoints=../../lib/endpoints
         - screens-contract=../contract
       args:
         - SELF_DB_HOST=${SELF_DB_HOST}

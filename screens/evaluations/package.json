@@ -11,11 +11,11 @@
     "license": "ISC",
     "dependencies": {
         "dc-db-local": "file:../../lib/database/local",
+        "dc-endpoints": "file:../../lib/endpoints",
         "dc-logger": "file:../../lib/logger",
         "dc-screens": "file:../contract",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
-        "express-rate-limit": "^8.5.2",
         "jsdom": "^29.1.1",
         "socket.io-client": "^4.8.3"
     },
@@ -23,7 +23,6 @@
         "@types/express": "^5.0.6",
         "@types/jsdom": "^28.0.3",
         "@types/node": "^25.8.0",
-        "tsc-alias": "^1.8.17",
         "typescript": "^6.0.3"
     }
 }

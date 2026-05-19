@@ -23,7 +23,13 @@ RUN npm ci --loglevel=info && \
     export SELF_DB_URL="postgresql://$SELF_DB_USER:$SELF_DB_PASS@$SELF_DB_HOST:5432/$SELF_DB_NAME" && \
     npm run build;
 
-FROM base AS deps-screens
+FROM deps-logger AS deps-endpoints
+WORKDIR /app/lib/endpoints
+COPY --from=endpoints . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
+FROM deps-endpoints AS deps-screens
 WORKDIR /app/screens/contract
 COPY --from=screens-contract . .
 RUN npm ci --loglevel=info && \
@@ -34,6 +40,7 @@ WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
 COPY --from=deps-local-db /app/lib/database/local /app/lib/database/local
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-screens /app/screens/contract /app/screens/contract
 
 FROM local-deps AS deps

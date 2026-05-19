@@ -30,6 +30,11 @@
             "import": "./dist/files/scanDir.js",
             "require": "./dist/files/scanDir.js",
             "types": "./dist/files/scanDir.d.ts"
+        },
+        "./endpoints": {
+            "import": "./dist/endpoints/index.js",
+            "require": "./dist/endpoints/index.js",
+            "types": "./dist/endpoints/index.d.ts"
         }
     },
     "devDependencies": {
@@ -38,6 +43,7 @@
     },
     "dependencies": {
         "@types/node": "^25.9.0",
+        "dc-endpoints": "file:../../lib/endpoints",
         "typia": "^12.1.1"
     }
 }

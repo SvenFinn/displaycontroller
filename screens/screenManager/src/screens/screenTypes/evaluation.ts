@@ -1,25 +1,31 @@
 import { Screens } from ".";
 import { EvaluationDbScreen } from "dc-screens/types";
 import { logger } from "dc-logger";
-import { createFileList } from "dc-screens/files";
+import { request } from "dc-endpoints/client";
+import { getEvaluations } from "dc-screens/endpoints";
+import { getAccessPaths } from "dc-screens/files";
 
 
 export default async function evaluation(screen: EvaluationDbScreen): Promise<Screens> {
     if (!screen.options.path) {
         return [];
     }
-    let fileList: string[];
-    try {
-        fileList = await createFileList(screen.options.path, new URL("http://evaluations/api/evaluations/"));
-    } catch (e) {
-        logger.error(`Failed to fetch files for screen ${screen.id}`);
+
+    const response = await request("http://evaluations", getEvaluations, {
+        pathSegments: screen.options.path.split("/").filter(segment => segment.length > 0)
+    });
+
+    if (response.type === "error") {
+        logger.error(`Failed to fetch evaluation metadata for screen ${screen.id}: ${response.message}`);
         return [];
     }
-    if (fileList.length < 1) return [];
-    // Length of fileList is larger than 1, so this map always
-    // returns at least one element
-    // @ts-ignore
-    return fileList.map((file: string, index: number) => {
+    if (!response.body) {
+        logger.error(`Failed to fetch evaluation metadata for screen ${screen.id}: No response body`);
+        return [];
+    }
+    const files = getAccessPaths(response.body);
+
+    return files.map((file: string, index: number) => {
         return {
             available: true,
             id: screen.id,

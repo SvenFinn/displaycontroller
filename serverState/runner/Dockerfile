@@ -38,7 +38,7 @@ COPY --from=smdb . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-screens
+FROM deps-endpoints AS deps-screens
 WORKDIR /app/screens/contract
 COPY --from=screens-contract . .
 RUN npm ci --loglevel=info && \

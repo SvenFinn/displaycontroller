@@ -13,7 +13,12 @@ interface EvaluationProps {
 export default function Evaluation({ options, onReady }: EvaluationProps) {
     const host = useHost();
 
-    const evaluationUrl = `${host}/api/evaluations/${options.path}`;
+    if (!host) {
+        return "";
+    }
+
+    const evaluationUrl = new URL(options.path, host).toString();
+
     return (
         <div className={styles.evaluation}>
             <iframe src={evaluationUrl} onLoad={onReady} className={styles.evaluation} />

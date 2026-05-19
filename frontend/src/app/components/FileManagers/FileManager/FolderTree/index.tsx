@@ -75,7 +75,7 @@ function getFoldersInPath(files: DirectoryListing, path: string): Array<string> 
         if (folder === "") continue;
         const foundFolder = currentFiles.find(file => file.name === folder && file.type === "folder") as Folder | undefined;
         if (!foundFolder) return [];
-        currentFiles = foundFolder.files;
+        currentFiles = foundFolder.children;
     }
     const folders = new Set<string>();
     for (const file of currentFiles) {

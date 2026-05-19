@@ -3,13 +3,18 @@ FROM node:alpine AS base
 WORKDIR /app
 
 FROM base AS deps-logger
-
 WORKDIR /app/lib/logger
 COPY --from=logger . .
 RUN npm ci --loglevel=info && \
     npm run build;
 
-FROM base AS deps-screens
+FROM deps-logger AS deps-endpoints
+WORKDIR /app/lib/endpoints
+COPY --from=endpoints . .
+RUN npm ci --loglevel=info && \
+    npm run build;
+
+FROM deps-endpoints AS deps-screens
 WORKDIR /app/screens/contract
 COPY --from=screens-contract . .
 RUN npm ci --loglevel=info && \
@@ -19,6 +24,7 @@ FROM base AS local-deps
 WORKDIR /app
 
 COPY --from=deps-logger /app/lib/logger /app/lib/logger
+COPY --from=deps-endpoints /app/lib/endpoints /app/lib/endpoints
 COPY --from=deps-screens /app/screens/contract /app/screens/contract
 
 FROM local-deps AS deps
