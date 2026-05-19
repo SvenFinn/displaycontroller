@@ -72,36 +72,36 @@ table.resultStatus {
 table.result {
     border-collapse: separate;
     border-spacing: 0;
+}
 
-    th,
-    td {
-        padding: 5px;
-        border-right: 1px solid black;
-    }
+table.result th,
+table.result td {
+    padding: 5px;
+    border-right: 1px solid black;
+}
 
-    /* left border */
-    th:first-child,
-    td:first-child {
-        border-left: 1px solid black;
-    }
+/* left border */
+table.result th:first-child,
+table.result td:first-child {
+    border-left: 1px solid black;
+}
 
-    tbody tr:last-child td {
-        border-bottom: 1px solid black;
-    }
+table.result tbody tr:last-child td {
+    border-bottom: 1px solid black;
+}
 
-    thead {
-        position: sticky;
-        top: 0;
-        z-index: 2;
-        background: DarkGray;
-    }
+table.result thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: DarkGray;
+}
 
-    /* top border for header */
-    thead th {
-        border-top: 1px solid black;
-    }
+/* top border for header */
+table.result thead th {
+    border-top: 1px solid black;
+}
 
-    thead tr:last-child th:first-child {
-        border-left: none;
-    }
+table.result thead tr:last-child th:first-child {
+    border-left: none;
 }
