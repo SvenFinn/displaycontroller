@@ -12,7 +12,7 @@
     "dependencies": {
         "amqplib": "^2.0.1",
         "csv-parse": "^6.2.1",
-        "date-fns": "^4.1.0",
+        "date-fns": "^4.2.1",
         "dc-db-local": "file:../../lib/database/local",
         "dc-logger": "file:../../lib/logger",
         "dc-ttl": "file:../../lib/ttl",
