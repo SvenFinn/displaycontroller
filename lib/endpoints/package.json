@@ -22,7 +22,7 @@
         "dc-logger": "file:../logger",
         "express": "^5.2.1",
         "express-rate-limit": "^8.5.2",
-        "multer": "^2.1.1",
+        "multer": "^2.2.0",
         "path-to-regexp": "^8.4.2",
         "typia": "^12.1.1"
     },
