@@ -17,9 +17,9 @@
         "@rjsf/utils": "^6.5.2",
         "@rjsf/validator-ajv8": "^6.5.2",
         "bootstrap": "^5.3.8",
-        "dc-endpoints": "file:../lib/endpoints",
-        "dc-ranges": "file:../ranges/contract",
-        "dc-screens": "file:../screens/contract",
+        "dc-endpoints": "workspace:*",
+        "dc-ranges": "workspace:*",
+        "dc-screens": "workspace:*",
         "mime": "^4.1.0",
         "next": "^16.2.6",
         "raw-loader": "^4.0.2",
@@ -34,6 +34,7 @@
         "socket.io-client": "^4.8.3"
     },
     "devDependencies": {
+        "@types/json-schema": "^7.0.15",
         "@types/node": "^25.8.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",

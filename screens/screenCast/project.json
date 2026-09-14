@@ -1,0 +1,7 @@
+{
+  "name": "dc-screencast",
+  "implicitDependencies": [
+    "dc-logger",
+    "dc-screens"
+  ]
+}

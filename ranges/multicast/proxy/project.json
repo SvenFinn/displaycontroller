@@ -1,0 +1,6 @@
+{
+  "name": "dc-multicast-proxy",
+  "implicitDependencies": [
+    "dc-logger"
+  ]
+}

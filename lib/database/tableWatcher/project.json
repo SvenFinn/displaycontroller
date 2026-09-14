@@ -1,0 +1,6 @@
+{
+  "name": "dc-table-watcher",
+  "implicitDependencies": [
+    "dc-logger"
+  ]
+}

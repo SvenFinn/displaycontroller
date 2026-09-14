@@ -1,0 +1,10 @@
+{
+  "name": "dc-ranges-log",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-logger",
+    "dc-ranges",
+    "dc-streams",
+    "dc-ttl"
+  ]
+}

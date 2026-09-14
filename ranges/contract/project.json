@@ -1,0 +1,6 @@
+{
+  "name": "dc-ranges",
+  "implicitDependencies": [
+    "dc-endpoints"
+  ]
+}

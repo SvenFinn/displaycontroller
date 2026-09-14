@@ -1,0 +1,10 @@
+{
+  "name": "dc-ranges-cache",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-db-smdb",
+    "dc-logger",
+    "dc-ranges",
+    "dc-table-watcher"
+  ]
+}

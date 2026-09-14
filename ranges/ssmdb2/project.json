@@ -1,0 +1,11 @@
+{
+  "name": "dc-ranges-ssmdb2",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-db-ssmdb2",
+    "dc-logger",
+    "dc-ranges",
+    "dc-streams",
+    "dc-table-watcher"
+  ]
+}

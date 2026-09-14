@@ -1,0 +1,6 @@
+{
+  "name": "dc-screens",
+  "implicitDependencies": [
+    "dc-endpoints"
+  ]
+}

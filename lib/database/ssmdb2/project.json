@@ -1,0 +1,6 @@
+{
+  "name": "dc-db-ssmdb2",
+  "implicitDependencies": [
+    "dc-db-local"
+  ]
+}

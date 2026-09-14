@@ -1,0 +1,11 @@
+{
+  "name": "dc-server-state-runner",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-db-smdb",
+    "dc-endpoints",
+    "dc-logger",
+    "dc-screens",
+    "dc-server-state"
+  ]
+}

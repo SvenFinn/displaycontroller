@@ -1,0 +1,6 @@
+{
+  "name": "dc-streams",
+  "implicitDependencies": [
+    "dc-logger"
+  ]
+}

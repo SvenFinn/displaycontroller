@@ -18,10 +18,10 @@
         "@types/ahocorasick": "^1.0.0",
         "ahocorasick": "^1.0.2",
         "amqplib": "^2.0.1",
-        "dc-db-local": "file:../../lib/database/local",
-        "dc-logger": "file:../../lib/logger",
-        "dc-ranges": "file:../contract",
-        "dc-streams": "file:../../lib/streams",
+        "dc-db-local": "workspace:*",
+        "dc-logger": "workspace:*",
+        "dc-ranges": "workspace:*",
+        "dc-streams": "workspace:*",
         "dotenv": "^17.4.2"
     }
 }

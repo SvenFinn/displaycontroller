@@ -43,7 +43,7 @@
     },
     "dependencies": {
         "@types/node": "^25.9.0",
-        "dc-endpoints": "file:../../lib/endpoints",
+        "dc-endpoints": "workspace:*",
         "typia": "^12.1.1"
     }
 }

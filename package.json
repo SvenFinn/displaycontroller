@@ -3,16 +3,16 @@
   "private": true,
   "packageManager": "pnpm@9.12.2",
   "scripts": {
-    "build": "nx run-many -t build --all",
-    "build:affected": "nx affected -t build",
+    "build": "SELF_DB_URL=${SELF_DB_URL:-postgresql://postgres@localhost:5432/displaycontroller} nx run-many -t build --all",
+    "build:affected": "SELF_DB_URL=${SELF_DB_URL:-postgresql://postgres@localhost:5432/displaycontroller} nx affected -t build",
     "graph": "nx graph",
-    "lint": "nx run frontend-next:lint",
     "reset": "nx reset"
   },
   "dependencies": {
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
-    "nx": "^21.4.1"
+    "nx": "^21.4.1",
+    "pnpm": "^9.12.2"
   }
 }

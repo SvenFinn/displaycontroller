@@ -1,0 +1,8 @@
+{
+  "name": "frontend-next",
+  "implicitDependencies": [
+    "dc-endpoints",
+    "dc-ranges",
+    "dc-screens"
+  ]
+}

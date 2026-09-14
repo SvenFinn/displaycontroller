@@ -1,0 +1,9 @@
+{
+  "name": "dc-multicast",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-logger",
+    "dc-ranges",
+    "dc-streams"
+  ]
+}

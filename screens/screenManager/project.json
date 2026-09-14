@@ -1,0 +1,11 @@
+{
+  "name": "dc-screen-manager",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-endpoints",
+    "dc-logger",
+    "dc-ranges",
+    "dc-screens",
+    "dc-server-state"
+  ]
+}

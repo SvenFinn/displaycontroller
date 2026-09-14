@@ -1,0 +1,7 @@
+{
+  "name": "dc-images",
+  "implicitDependencies": [
+    "dc-logger",
+    "dc-screens"
+  ]
+}

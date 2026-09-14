@@ -11,8 +11,8 @@
     "description": "",
     "dependencies": {
         "amqplib": "^2.0.1",
-        "dc-logger": "file:../../lib/logger",
-        "dc-screens": "file:../contract",
+        "dc-logger": "workspace:*",
+        "dc-screens": "workspace:*",
         "socket.io": "^4.8.3"
     },
     "devDependencies": {

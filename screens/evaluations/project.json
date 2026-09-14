@@ -1,0 +1,9 @@
+{
+  "name": "dc-evaluations",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-endpoints",
+    "dc-logger",
+    "dc-screens"
+  ]
+}

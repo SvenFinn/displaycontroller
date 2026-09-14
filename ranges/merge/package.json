@@ -17,11 +17,11 @@
     },
     "dependencies": {
         "amqplib": "^2.0.1",
-        "dc-db-local": "file:../../lib/database/local",
-        "dc-endpoints": "file:../../lib/endpoints",
-        "dc-logger": "file:../../lib/logger",
-        "dc-ranges": "file:../contract",
-        "dc-ttl": "file:../../lib/ttl",
+        "dc-db-local": "workspace:*",
+        "dc-endpoints": "workspace:*",
+        "dc-logger": "workspace:*",
+        "dc-ranges": "workspace:*",
+        "dc-ttl": "workspace:*",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "socket.io": "^4.8.3"

@@ -1,0 +1,6 @@
+{
+  "name": "dc-endpoints",
+  "implicitDependencies": [
+    "dc-logger"
+  ]
+}

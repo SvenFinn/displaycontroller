@@ -1,0 +1,8 @@
+{
+  "name": "dc-sync-time",
+  "implicitDependencies": [
+    "dc-db-local",
+    "dc-db-smdb",
+    "dc-logger"
+  ]
+}

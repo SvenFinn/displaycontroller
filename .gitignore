@@ -139,4 +139,4 @@ swagger-output.json
 *.run
 
 certs
-.nx/cache
+.nx/

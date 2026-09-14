@@ -1,0 +1,6 @@
+{
+  "name": "dc-server-state",
+  "implicitDependencies": [
+    "dc-endpoints"
+  ]
+}
