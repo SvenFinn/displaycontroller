@@ -1,0 +1,36 @@
+name: Workspace Build (Nx + pnpm)
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build all projects
+        run: pnpm nx run-many -t build --all --parallel=3
+
+      - name: Lint frontend
+        run: pnpm nx run frontend-next:lint

@@ -1,5 +1,18 @@
 {
+  "name": "displaycontroller",
+  "private": true,
+  "packageManager": "pnpm@9.12.2",
+  "scripts": {
+    "build": "nx run-many -t build --all",
+    "build:affected": "nx affected -t build",
+    "graph": "nx graph",
+    "lint": "nx run frontend-next:lint",
+    "reset": "nx reset"
+  },
   "dependencies": {
     "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "nx": "^21.4.1"
   }
 }

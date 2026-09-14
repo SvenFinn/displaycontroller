@@ -1,0 +1,8 @@
+packages:
+  - frontend
+  - lib/**
+  - ranges/**
+  - screens/**
+  - serverState/**
+  - syncTime
+  - utils/recorder
