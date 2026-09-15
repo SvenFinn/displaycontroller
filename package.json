@@ -1,7 +1,7 @@
 {
   "name": "displaycontroller",
   "private": true,
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "build": "SELF_DB_URL=${SELF_DB_URL:-postgresql://postgres@localhost:5432/displaycontroller} nx run-many -t build --all",
     "build:affected": "SELF_DB_URL=${SELF_DB_URL:-postgresql://postgres@localhost:5432/displaycontroller} nx affected -t build",
@@ -12,7 +12,7 @@
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
-    "nx": "^21.4.1",
-    "pnpm": "^9.12.2"
+    "nx": "^22.7.7",
+    "pnpm": "^10.34.5"
   }
 }
